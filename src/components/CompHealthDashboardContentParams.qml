@@ -440,8 +440,8 @@ Item{
                     property real valueNum: model.value
                     property string valueString: model.value_string
                     property string sourceID: model.source
-                    property real valueMin: model.min
-                    property real valueMax: model.max
+                    property real valueMin: model.min ? model.min : 1
+                    property real valueMax: model.max ? model.max : -1
                     property int valueSeverity: model.severity
 
                     height: gridView.cellHeight - 61

@@ -77,7 +77,6 @@
         <file>ImgParamHeadingIndicator.qml</file>
         <file>ImgParamTurnCoordinator.qml</file>
         <file>ImgParamVerticalSpeedIndicator.qml</file>
-        <file>Main.qml</file>
         <file>Overlay_MessageBox_Info.qml</file>
         <file>Popup_Chat_AI.qml</file>
         <file>PopupManualPdfPicker.qml</file>
