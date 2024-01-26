@@ -5,6 +5,7 @@ Item {
     id: compNotificationsPanel
 
     property alias listHeight: listAlerts.height
+    property int pixelsizeBreadcrumbBtns: 40
 
     height: 413
     width: 589
@@ -40,7 +41,7 @@ Item {
             delegate: CompExpandableBtnBreadcrumb{
 
                 width: parent.width
-
+                labelMain.font.pixelSize: compNotificationsPanel.pixelsizeBreadcrumbBtns
                 //appSourceName: myModelData ? myModelData.appSource : '?'
                 titleText: model ? model.title : '?'
                 titleIconSource: ''

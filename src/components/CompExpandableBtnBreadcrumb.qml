@@ -3,6 +3,8 @@ import QtQuick.Controls 2.12
 
 Rectangle{
     id: compExpandableBtnBreadcrumbRoot
+
+    property alias labelMain: lbl
     property int myIndex: index
     property var myModelData: model
     property alias titleIconSource: icon.source
