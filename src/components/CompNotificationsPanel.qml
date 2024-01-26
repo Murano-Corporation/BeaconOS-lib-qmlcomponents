@@ -3,6 +3,9 @@ import QtQuick.Controls 2.12
 
 Item {
     id: compNotificationsPanel
+
+    property alias listHeight: listAlerts.height
+
     height: 413
     width: 589
 
