@@ -453,7 +453,7 @@ Item{
                     paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : "")
                     units: model.unit
                     severity: valueSeverity
-                    valueText: valueString
+                    valueText: SingletonUtils.convertNumberToString(value, 'f', 0)
                     stepSize: 0.01
 
                     MouseArea{

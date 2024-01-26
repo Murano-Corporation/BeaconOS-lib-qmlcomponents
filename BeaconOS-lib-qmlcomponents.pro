@@ -30,3 +30,5 @@ RESOURCES += \
 ##LIBRARY - QML COMPONENTS
 #LIB_QMLCOMPONENTS_QML_DIR = $$PWD/../../libraries/BeaconOS-lib-qmlcomponents/src/components/beaconos_lib_qmlcomponents.qrc
 #RESOURCES += $${LIB_QMLCOMPONENTS_QML_DIR}
+
+
