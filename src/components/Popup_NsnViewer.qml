@@ -9,6 +9,10 @@ Popup {
     property color colorBG: "#80ffffff"
     property alias colorTitleText: lblTitle.color
     property alias titleText: lblTitle.text
+    property alias btnHeight: btnClose.height
+    property alias btnWidth: btnClose.width
+    property alias listNsnValuesHeight: listNsnValues.height
+    property alias listNsnValuesSpacing: listNsnValues.spacing
     property real minimumWidth: 600
     property real minimumHeight: 300
     property var nsnDetails: TableModelNsnDetails
