@@ -60,11 +60,12 @@ Item{
     Item{
         id: contentsGroup
 
-        width: Math.min(Math.max(btnIcon.width, btnLbl.width), parent.width)
+        width: parent.width
         height: btnLbl.y + btnLbl.height
         anchors{
             centerIn: parent
         }
+
 
         CompImageIcon {
             id: btnIcon
@@ -84,12 +85,15 @@ Item{
             id: btnLbl
             text: compHealthContextNavBtn.text
 
-            width: Math.min(btnLbl.implicitWidth, compHealthContextNavBtn.width)
-            horizontalAlignment: "AlignHCenter"
-
+            //width: Math.min(btnLbl.implicitWidth, compHealthContextNavBtn.width)
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
             anchors{
-                horizontalCenter: btnIcon.horizontalCenter
+                left: parent.left
+                leftMargin: 20
+                right: parent.right
+                rightMargin: 20
                 top: compHealthContextNavBtn.iconUrl === "" ? undefined : btnIcon.bottom
                 topMargin: (compHealthContextNavBtn.iconUrl === "" ? 0 : 28)
                 //centerIn: (compHealthContextNavBtn.iconUrl === "" ? parent : undefined)
@@ -124,3 +128,9 @@ Item{
 
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/
