@@ -380,7 +380,7 @@ Item{
         ScrollBar.vertical: ScrollBar{
             policy:  ScrollBar.AsNeeded
             width: 8
-            topInset: 51
+            //topInset: 51
             topPadding: 51
         }
 
@@ -440,8 +440,8 @@ Item{
                     property real valueNum: model.value
                     property string valueString: model.value_string
                     property string sourceID: model.source
-                    property real valueMin: model.min ? model.min : 1
-                    property real valueMax: model.max ? model.max : -1
+                    property real valueMin: model.min ? model.min : -1
+                    property real valueMax: model.max ? model.max : 1
                     property int valueSeverity: model.severity
 
                     height: gridView.cellHeight - 61
@@ -521,6 +521,35 @@ Item{
                 }
             }
 
+            DelegateChoice{
+                roleValue: 6
+                CompParamView_LED{
+                    property bool isMultiSystemPresent: model.is_multisystem_present
+                    property string sourceID: model.source
+
+                    paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                    valueText: model.value
+
+                    height: gridView.cellHeight - 61
+                    width: gridView.cellWidth - 75
+                }
+            }
+
+            DelegateChoice{
+                roleValue: 7
+                CompParamView_LED{
+                    property bool isMultiSystemPresent: model.is_multisystem_present
+                    property string sourceID: model.source
+
+                    isOnBad: true
+
+                    paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                    valueText: model.value
+
+                    height: gridView.cellHeight - 61
+                    width: gridView.cellWidth - 75
+                }
+            }
         }
 
         delegate: delChooser;
@@ -613,3 +642,9 @@ Item{
     //}
 
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+##^##*/
