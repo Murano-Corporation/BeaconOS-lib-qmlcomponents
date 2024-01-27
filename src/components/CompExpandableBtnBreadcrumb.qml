@@ -5,6 +5,7 @@ Rectangle{
     id: compExpandableBtnBreadcrumbRoot
 
     property alias labelMain: lbl
+    property alias labelLink: textHTML
     property int myIndex: index
     property var myModelData: model
     property alias titleIconSource: icon.source
@@ -281,6 +282,7 @@ Rectangle{
             textFormat: "RichText"
             wrapMode: "WordWrap"
             text: compExpandableBtnBreadcrumbRoot.contents_formatted
+            //font.pixelSize: 20
             focus: true
             onLinkActivated: {
                 var l = link

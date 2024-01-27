@@ -5,7 +5,8 @@ Item {
     id: compNotificationsPanel
 
     property alias listHeight: listAlerts.height
-    property int pixelsizeBreadcrumbBtns: 35
+    property int pixelsizeBreadcrumbBtns: 40
+    property int pixelsizeLink: 30
 
     height: 413
     width: 589
@@ -42,6 +43,7 @@ Item {
 
                 width: parent.width
                 labelMain.font.pixelSize: compNotificationsPanel.pixelsizeBreadcrumbBtns
+                labelLink.font.pixelSize: compNotificationsPanel.pixelsizeLink
                 //appSourceName: myModelData ? myModelData.appSource : '?'
                 titleText: model ? model.title : '?'
                 titleIconSource: ''
