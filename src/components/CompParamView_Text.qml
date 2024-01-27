@@ -83,9 +83,13 @@ Item{
         id: lblValue
 
         anchors{
-            centerIn: rectContents
+            fill: rectContents
+            margins: 10
         }
 
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
         font{
             pixelSize: 32
             weight: Font.Normal
