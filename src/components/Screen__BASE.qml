@@ -5,6 +5,7 @@ Item {
 
     property bool bCanLeaveScreen: true
     property bool bAttemptingToLeaveScreen: false;
+    property bool bOverRideOverLaySettings: true
 
 
     Connections{
@@ -31,7 +32,8 @@ Item {
 
     Component.onCompleted:{
         console.log("Parent level on completed")
-        setOverlayDefaults()
+        if(bOverRideOverLaySettings)
+            setOverlayDefaults();
     }
 
     function setOverlayDefaults(){
