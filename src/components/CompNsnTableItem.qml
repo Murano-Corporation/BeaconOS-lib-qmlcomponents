@@ -8,6 +8,8 @@ Item{
 
     property string keyName: "Key Name"
     property string value: "My Value"
+    property alias labelName: lblName
+    property alias labelValue: lblValue
     property real keyWidth: 200
     property real radius: 10
     property real listLongestKeyWidth: 200

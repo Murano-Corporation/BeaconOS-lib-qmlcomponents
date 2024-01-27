@@ -13,6 +13,9 @@ Popup {
     property alias btnWidth: btnClose.width
     property alias listNsnValuesHeight: listNsnValues.height
     property alias listNsnValuesSpacing: listNsnValues.spacing
+    property int labelNameSize : 30
+    property int labelValueSize: 30
+
     property real minimumWidth: 600
     property real minimumHeight: 300
     property var nsnDetails: TableModelNsnDetails
@@ -248,6 +251,9 @@ Popup {
 
                     height: listNsnValues.rowHeight
                     width: listNsnValues.width
+
+                    labelName.font.pixelSize: 30
+                    labelValue.font.pixelSize: 30
 
                     listLongestKeyWidth: listNsnValues.longestKeyNameWidth
 
