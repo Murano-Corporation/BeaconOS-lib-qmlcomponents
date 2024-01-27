@@ -84,5 +84,6 @@
         <file>PopupPleaseWait.qml</file>
         <file>Screen__BASE.qml</file>
         <file>Util_HtmlFormatter.qml</file>
+        <file>CompParamView_LED.qml</file>
     </qresource>
 </RCC>
