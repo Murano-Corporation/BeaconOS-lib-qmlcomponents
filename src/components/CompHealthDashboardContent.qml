@@ -251,8 +251,6 @@ Item {
 
     }
 
-
-
     Rectangle{
         id: groupContentBg
 
