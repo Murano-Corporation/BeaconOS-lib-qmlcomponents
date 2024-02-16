@@ -110,11 +110,11 @@ Item{
     Connections{
         target: LiveGraphController
 
-        onSignal_RemovePoints: function(index, count){
+        function onSignal_RemovePoints(index, count){
             removePoints(index, count)
         }
 
-        onSignal_RemoveAllPoints: function(){
+        function onSignal_RemoveAllPoints(){
             clear()
         }
     }

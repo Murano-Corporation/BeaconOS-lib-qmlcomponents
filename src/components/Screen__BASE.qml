@@ -11,7 +11,7 @@ Item {
     Connections{
         target: SingletonScreenManager
 
-        onSignal_AttemptingToLeaveScreen: {
+        function onSignal_AttemptingToLeaveScreen(){
 
             if(bCanLeaveScreen === true)
             {

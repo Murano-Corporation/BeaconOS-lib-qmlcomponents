@@ -295,7 +295,7 @@ Item{
                     Connections{
                         target: tableView
 
-                        onColumnWidthsUpdated:{
+                        function onColumnWidthsUpdated(){
                             width = tableView.listOfColumnWidthsCurrent[index]
                         }
                     }

@@ -47,7 +47,7 @@ Item {
                 //appSourceName: myModelData ? myModelData.appSource : '?'
                 titleText: model ? model.title : '?'
                 titleIconSource: ''
-                contents: model.Parameters.data
+                contents: model.data
                 listQuickActions: model.Parameters.responses
 
                 onChatWithAiClicked: {

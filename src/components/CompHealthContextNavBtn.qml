@@ -37,7 +37,7 @@ Item{
     Connections{
         target: SeverityHandler
 
-        onSignal_AlertCountsChanged: function(sPath, iCount)
+        function onSignal_AlertCountsChanged(sPath, iCount)
         {
             if(sPath !== myHierarchyPath)
             {
