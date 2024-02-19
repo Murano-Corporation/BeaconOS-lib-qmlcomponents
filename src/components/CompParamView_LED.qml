@@ -15,9 +15,9 @@ Item{
     property bool isOn: {
 
         isUnknownValueText = false
-        if(valueText === "1" || valueText === "On" || valueText === "Enabled" || valueText === "Enable")
+        if(valueText === "1" || valueText === "On" || valueText === "Enabled" || valueText === "Enable" || valueText === "Active")
             return true
-        else if(valueText === "0" || valueText === "Off" || valueText === "Disabled" || valueText === "Disable")
+        else if(valueText === "0" || valueText === "Off" || valueText === "Disabled" || valueText === "Disable" || valueText === "Inactive")
             return false
         else
         {

@@ -402,7 +402,6 @@ Item{
 
             setGridBtnVisible(true)
             setListBtnVisible(true)
-
         }
 
         clip: true
@@ -413,8 +412,17 @@ Item{
             bottom: parent.bottom
         }
 
-        cellWidth: compHealthDashboardContentParams.targetData === 'params' ? 340 : (387 + cellPadding)
+        //Rectangle{
+        //    anchors.fill: parent
+        //
+        //    color: "#8000ffff"
+        //}
+
+        cellWidth: compHealthDashboardContentParams.targetData === 'params' ? 354.33 : (387 + cellPadding)
         cellHeight: compHealthDashboardContentParams.targetData === 'params' ? 355 : (375 + cellPadding)
+        //onCellWidthChanged:{
+        //    console.log("Width / 3 = " + width/3)
+        //}
         //targetData === 'gallery' 387, 375 : 340,355
         model: visible ? compHealthDashboardContentParams.dataModel : undefined
 
@@ -424,48 +432,60 @@ Item{
 
             DelegateChoice{
                 roleValue: 0; //UNKNOWN
-                CompHealthDashboardUnhandledType{}
+                CompHealthDashboardUnhandledType{
+
+                }
 
             }
 
             DelegateChoice{
                 roleValue: 1; //Gauge
-                CompParamView_Gauge {
 
-                    property var myModel: model
-                    property int myRow: model.row
-                    property bool isMultiSystemPresent: model.is_multisystem_present
-                    property var myIndexParent: model.parent
-                    property int dataValueType: model.data_value_type
-                    property real valueNum: model.value
-                    property string valueString: model.value_string
-                    property string sourceID: model.source
-                    property real valueMin: model.min ? model.min : -1
-                    property real valueMax: model.max ? model.max : 1
-                    property int valueSeverity: model.severity
+                Item{
+                    height: gridView.cellHeight
+                    width: gridView.cellWidth
 
-                    height: gridView.cellHeight - 61
-                    width: gridView.cellWidth - 75
+                    CompParamView_Gauge {
 
-                    value: valueNum
-                    min: valueMin
-                    max: valueMax
-                    paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : "")
-                    units: model.unit
-                    severity: valueSeverity
-                    valueText: SingletonUtils.convertNumberToString(value, 'f', 0)
-                    stepSize: 0.01
+                        property var myModel: model
+                        property int myRow: model.row
+                        property bool isMultiSystemPresent: model.is_multisystem_present
+                        property var myIndexParent: model.parent
+                        property int dataValueType: model.data_value_type
+                        property real valueNum: model.value
+                        property string valueString: model.value_string
+                        property string sourceID: model.source
+                        property real valueMin: model.min ? model.min : -1
+                        property real valueMax: model.max ? model.max : 1
+                        property int valueSeverity: model.severity
 
-                    MouseArea{
-                        anchors{
-                            fill: parent
-                        }
+                        height: gridView.cellHeight - 61
+                        width: gridView.cellWidth - 75
 
-                        onClicked: {
-                            compHealthDashboardContentParams.graphViewTarget  = parent.paramName
-                            compHealthDashboardContentParams.graphViewUnits = parent.units
+                        anchors.centerIn: parent
+
+                        value: valueNum
+                        min: valueMin
+                        max: valueMax
+                        paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : "")
+                        units: model.unit
+                        severity: valueSeverity
+                        valueText: SingletonUtils.convertNumberToString(value, 'f', 0)
+                        stepSize: 0.01
+
+                        MouseArea{
+                            anchors{
+                                fill: parent
+                            }
+
+                            onClicked: {
+                                compHealthDashboardContentParams.graphViewTarget  = parent.paramName
+                                compHealthDashboardContentParams.graphViewUnits = parent.units
+                            }
                         }
                     }
+
+
                 }
 
             }
@@ -473,49 +493,79 @@ Item{
             DelegateChoice{
                 roleValue: 2 //STATUS TEXT
 
-                CompParamView_Text {
-                    id: compParamView_Text
+                Item{
+                    height: gridView.cellHeight
+                    width: gridView.cellWidth
 
-                    property bool isMultiSystemPresent: model.is_multisystem_present
-                    property string sourceID: model.source
+                    CompParamView_Text {
+                        id: compParamView_Text
 
-                    paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
-                    valueText: model.value
+                        property bool isMultiSystemPresent: model.is_multisystem_present
+                        property string sourceID: model.source
 
-                    height: gridView.cellHeight - 61
-                    width: gridView.cellWidth - 75
+                        paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                        valueText: model.value
+
+                        height: gridView.cellHeight - 61
+                        width: gridView.cellWidth - 75
+                        anchors.centerIn: parent
+
+                    }
+
                 }
             }
 
             DelegateChoice{
                 roleValue: 3; //INDICATOR
-                CompHealthDashboardUnhandledType{}
+                CompHealthDashboardUnhandledType{
+
+                }
             }
 
             DelegateChoice{
                 roleValue: 4; //MTConnect...
-                CompHealthDashboardUnhandledType{}
+                CompHealthDashboardUnhandledType{
+
+
+                }
+
+
             }
 
             DelegateChoice{
                 roleValue: 5 //GALLERY ITEM
+                Item{
+                    height: gridView.cellHeight
+                    width: gridView.cellWidth
 
-                CompProcdImageItem{
-                    imgSourceName: model ? model.img_path : ''
+                    CompProcdImageItem{
+                        imgSourceName: model ? model.img_path : ''
 
-                    property int myIndex: model ? model.row : -1
-                    property string idPrefix: qsTr("IMG ")
-                    imgId: idPrefix + (myIndex <= 8 ? ("0"+ (myIndex+1)) : (myIndex+1))
+                        property int myIndex: model ? model.row : -1
+                        property string idPrefix: qsTr("IMG ")
+                        imgId: idPrefix + (myIndex <= 8 ? ("0"+ (myIndex+1)) : (myIndex+1))
 
-                    imgTimestamp: model ? model.timestamp_short : ''
+                        imgTimestamp: model ? model.timestamp_short : ''
 
-                    //result: model ? model.inference : ''
+                        //result: model ? model.inference : ''
 
-                    height: gridView.cellHeight - gridView.cellPadding
-                    width: gridView.cellWidth - gridView.cellPadding
+                        height: gridView.cellHeight - gridView.cellPadding
+                        width: gridView.cellWidth - gridView.cellPadding
+                        anchors.centerIn: parent
 
-                    onClicked: {
-                        compHealthDashboardContentParams.galleryInstanceId = myIndex
+                        onClicked: {
+                            compHealthDashboardContentParams.galleryInstanceId = myIndex
+                        }
+
+                        Rectangle{
+                            anchors{
+                                fill: parent
+
+                            }
+
+                            color: "#8000ff00"
+                        }
+
                     }
 
                 }
@@ -523,32 +573,52 @@ Item{
 
             DelegateChoice{
                 roleValue: 6
-                CompParamView_LED{
-                    property bool isMultiSystemPresent: model.is_multisystem_present
-                    property string sourceID: model.source
 
-                    paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
-                    valueText: model.value
+                Item{
+                    width: gridView.cellWidth
+                    height: gridView.cellHeight
 
-                    height: gridView.cellHeight - 61
-                    width: gridView.cellWidth - 75
+                    CompParamView_LED{
+                        property bool isMultiSystemPresent: model.is_multisystem_present
+                        property string sourceID: model.source
+
+                        paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                        valueText: model.value
+
+                        height: gridView.cellHeight - 61
+                        width: gridView.cellWidth - 75
+                        anchors.centerIn: parent
+
+
+                    }
+
                 }
+
             }
 
             DelegateChoice{
                 roleValue: 7
-                CompParamView_LED{
-                    property bool isMultiSystemPresent: model.is_multisystem_present
-                    property string sourceID: model.source
+                Item{
+                    height: gridView.cellHeight
+                    width: gridView.cellWidth
 
-                    isOnBad: true
+                    CompParamView_LED{
+                        property bool isMultiSystemPresent: model.is_multisystem_present
+                        property string sourceID: model.source
 
-                    paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
-                    valueText: model.value
+                        isOnBad: true
 
-                    height: gridView.cellHeight - 61
-                    width: gridView.cellWidth - 75
+                        paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                        valueText: model.value
+
+                        height: gridView.cellHeight - 61
+                        width: gridView.cellWidth - 75
+                        anchors.centerIn: parent
+
+                    }
+
                 }
+
             }
         }
 
