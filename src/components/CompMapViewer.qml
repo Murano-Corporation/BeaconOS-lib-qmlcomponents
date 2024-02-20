@@ -10,14 +10,34 @@ Item {
     property var selectedAssetDataModel: undefined
     property bool showAssets: true
     property bool captureMouseCoords: false
-    property int activeMapTypeIndex: 0
+    property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 4 : 0
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property real zoomCurrent
 
+    ListView{
+        id: listMapTypes
+        anchors{
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+
+        height: 64
+
+        orientation: ListView.Horizontal
+
+        model: map.supportedMapTypes
+
+        delegate: CompBtnBreadcrumb{
+            text: getSimpleMapNameString(model.name)
+
+            onClicked: compMapViewerRoot.activeMapTypeIndex = index
+        }
+    }
 
     onActiveMapTypeIndexChanged: {
-        console.log("Active map type index now: " + activeMapTypeIndex)
-        console.log("Supported map types count: " + map.supportedMapTypes.length)
+        //console.log("Active map type index now: " + activeMapTypeIndex)
+        //console.log("Supported map types count: " + map.supportedMapTypes.length)
         if(map.supportedMapTypes.length === 0)
                 {
                     console.error("NO SUPPORTED MAP TYPES");
@@ -34,6 +54,43 @@ Item {
         }
 
         map.activeMapType = map.supportedMapTypes[activeMapTypeIndex]
+    }
+
+    function getSimpleMapNameString(mapTypeName)
+    {
+
+        console.log("Map name: " + mapTypeName)
+        switch(mapTypeName)
+        {
+        case " ":
+            return qsTr("No Map")
+        case "mapbox://styles/mapbox/streets-v10":
+            return qsTr("Street")
+        case "mapbox://styles/mapbox/basic-v9":
+            return qsTr("Basic")
+        case "mapbox://styles/mapbox/bright-v9":
+            return qsTr("Bright")
+        case "mapbox://styles/mapbox/outdoors-v10":
+            return qsTr("Terrain")
+        case "mapbox://styles/mapbox/satellite-streets-v10":
+            return qsTr("Hybrid")
+        case "mapbox://styles/mapbox/light-v9":
+            return qsTr("Street (Light)")
+        case "mapbox://styles/mapbox/dark-v9":
+            return qsTr("Street (Dark)")
+        case "mapbox://styles/mapbox/satellite-v9":
+            return qsTr("Satellite")
+        case "mapbox://styles/mapbox/navigation-preview-day-v2":
+            return qsTr("Nav Preview (Day)")
+        case "mapbox://styles/mapbox/navigation-guidance-day-v2":
+            return qsTr("Nav Guidance (Day)")
+        case "mapbox://styles/mapbox/navigation-preview-night-v2":
+            return qsTr("Nav Preview (Night)")
+        case "mapbox://styles/mapbox/navigation-guidance-night-v2":
+            return qsTr("Nav Guidance (Night)")
+        }
+
+        return "?"
     }
 
     function setActiveMapTypeIndex(index)
@@ -123,31 +180,32 @@ Item {
         //map.addMapItem()
     }
 
-    Component.onCompleted: {
-        console.log("Available Map Types:")
-        console.log("Supported Plugin Service Providers " + mapPlugin.availableServiceProviders)
-
-        //for(var j = 0; j < map.supportedMapTypes.length; j++)
-        //{
-        //    var mapTypeCurrent = map.supportedMapTypes[j]
-        //    var typeName = mapTypeCurrent.name
-        //    var nightMode = mapTypeCurrent.night
-        //    var style = mapTypeCurrent.style
-        //    var description = mapTypeCurrent.description
-        //    var metaData = mapTypeCurrent.metadata
-        //    var isMobile = mapTypeCurrent.mobile
-        //    console.log(" - " + typeName)
-        //    console.log(" --- Description: " + description)
-        //    console.log(" --- IsNightMode: " + nightMode)
-        //    console.log(" --- IsMobile: " + isMobile)
-        //    console.log(" --- Style: " + style)
-        //    console.log(" --- MetaData: " + metaData)
-        //    console.log(" ")
-        //}
-
-
-
-    }
+   //Component.onCompleted: {
+   //    //console.log("Available Map Types:")
+   //    //console.log("Supported Plugin Service Providers " + mapPlugin.availableServiceProviders)
+   //
+   //    //for(var j = 0; j < map.supportedMapTypes.length; j++)
+   //    //{
+   //    //    var mapTypeCurrent = map.supportedMapTypes[j]
+   //    //    var typeName = mapTypeCurrent.name
+   //    //    var nightMode = mapTypeCurrent.night
+   //    //    var style = mapTypeCurrent.style
+   //    //    var description = mapTypeCurrent.description
+   //    //    var metaData = mapTypeCurrent.metadata
+   //    //    var isMobile = mapTypeCurrent.mobile
+   //    //    console.log(" - " + typeName)
+   //    //    console.log(" --- Description: " + description)
+   //    //    console.log(" --- IsNightMode: " + nightMode)
+   //    //    console.log(" --- IsMobile: " + isMobile)
+   //    //    console.log(" --- Style: " + style)
+   //    //    console.log(" --- MetaData: " + metaData)
+   //    //    console.log(" ")
+   //    //}
+   //
+   //
+   //
+   //}
+   //
 
     Plugin {
         id: mapPlugin
@@ -175,9 +233,9 @@ Item {
             value: "sk.eyJ1IjoiYWp0LW11cmFubyIsImEiOiJjbHFjbWQzOXkwM3BvMnhxdzh5M3ZmbDZiIn0.dGKKlVL8RAT4Od4-TtIEbg"
         }
 
-        onNameChanged: {
-            compMapViewerRoot.activeMapTypeIndex = 0
-        }
+        //onNameChanged: {
+        //    compMapViewerRoot.activeMapTypeIndex = 0
+        //}
 
         //Component.onCompleted:{
         //    console.log("Available Map Plugins: " + availableServiceProviders)
@@ -195,7 +253,13 @@ Item {
 
     Map {
         id: map
-        anchors.fill: parent
+        anchors{
+            top: listMapTypes.bottom
+            topMargin: 20
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
 
         onZoomLevelChanged: compMapViewerRoot.zoomCurrent = zoomLevel
         copyrightsVisible: false
