@@ -386,6 +386,18 @@ Item{
 
     }
 
+    Component {
+        id: highlight
+        Rectangle {
+            width: gridView.cellWidth; height: gridView.cellHeight
+            border {
+                width: 4
+                color: "#9287ED"
+            }
+            color: "Transparent"
+            radius: 5
+        }
+    }
 
     GridView {
         id: gridView
@@ -481,6 +493,7 @@ Item{
                             onClicked: {
                                 compHealthDashboardContentParams.graphViewTarget  = parent.paramName
                                 compHealthDashboardContentParams.graphViewUnits = parent.units
+                                gridView.currentIndex = index
                             }
                         }
                     }
