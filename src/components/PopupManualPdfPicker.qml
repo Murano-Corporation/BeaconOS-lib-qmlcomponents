@@ -338,7 +338,7 @@ Popup {
                 height: groupControls.btnHeight
                 width: groupControls.btnWidth
 
-                text: qsTr("Close")
+                text: qsTr("Back")
 
                 onClicked: {
                     popupManualPdfPicker.fileNameSelected = popupManualPdfPicker.fileNameOnOpen
