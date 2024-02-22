@@ -628,6 +628,10 @@ Item{
 
         delegate: delChooser;
 
+        highlight: highlight
+        highlightFollowsCurrentItem: true
+        focus: true
+
     }
 
 
