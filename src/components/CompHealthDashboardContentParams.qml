@@ -570,15 +570,6 @@ Item{
                             compHealthDashboardContentParams.galleryInstanceId = myIndex
                         }
 
-                        Rectangle{
-                            anchors{
-                                fill: parent
-
-                            }
-
-                            color: "#8000ff00"
-                        }
-
                     }
 
                 }
