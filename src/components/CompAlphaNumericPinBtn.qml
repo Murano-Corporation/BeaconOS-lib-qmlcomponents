@@ -15,44 +15,34 @@ CompNumpadBtn {
     signal alphaNumPinClicked(string txt)
 
     onCurrentPinBtnChanged: {
-        if(!currentPinBtn)
-        {
-            return
-        }
-
-        if(currentPinBtn === this)
-        {
-            return
-        }
-
-        optionsIndex = 0
+        //console.log("Resetting pin button options index for: " + compAlphaNumPinBtnRoot.text)
+        compAlphaNumPinBtnRoot.optionsIndex = 0
     }
 
     onOptionsIndexChanged: {
+        //console.log("Options index changed for " + compAlphaNumPinBtnRoot.text + " to " + optionsIndex)
+
         if(!updatingIndexInternal &&  optionsIndex >= listOfOptions.length)
         {
+            //console.log("Resetting " + compAlphaNumPinBtnRoot.text + " option index to 0")
             updatingIndexInternal = true
             optionsIndex = 0
             updatingIndexInternal = false
         }
     }
 
-
     onClicked: txt => {
                    if (numPinEntry === maxPinLength)
                    {
                        return
                    }
-
-                   compAlphaNumPinBtnRoot.alphaNumPinClicked(listOfOptions[optionsIndex])
-
-                   optionsIndex += 1
+                   var textOut = compAlphaNumPinBtnRoot.listOfOptions[compAlphaNumPinBtnRoot.optionsIndex]
+                   compAlphaNumPinBtnRoot.alphaNumPinClicked(textOut)
+                   compAlphaNumPinBtnRoot.optionsIndex += 1
 
                }
 
-
     text: listOfOptions[0]
-
 
     Row{
         anchors{
