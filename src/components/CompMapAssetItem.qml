@@ -9,6 +9,7 @@ MapQuickItem{
     property real lat: 0.0
     property real lon: 0.0
     property string assetType: 'TYPE'
+    property string assetID: 'ASSET_ID'
 
     signal centerOnPoint(var coords)
     signal fitViewportToVisibleMapItems()
@@ -18,11 +19,11 @@ MapQuickItem{
     coordinate: QtPositioning.coordinate(lat, lon)
     onCoordinateChanged: {
         sourceItem.coords = coordinate
-        //console.log("Coordinates now " + coordinate)
+        console.log("Coordinates now " + coordinate)
     }
 
     onAssetTypeChanged:{
-        sourceItem.assetTypeText = assetType
+        sourceItem.assetTypeText = assetID
     }
 
     sourceItem:
