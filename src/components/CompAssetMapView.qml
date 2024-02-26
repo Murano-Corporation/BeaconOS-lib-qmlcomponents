@@ -6,7 +6,7 @@ import QtPositioning 5.2
 Item {
     id: compAssetMapView
 
-    property bool showStyleControls: true
+    property bool showStyleControls: false
 
     CompMapViewer{
         id: mapView
