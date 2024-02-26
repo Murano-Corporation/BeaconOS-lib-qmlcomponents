@@ -1,6 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtLocation 5.12
-import QtPositioning 5.2
+import QtPositioning 5.12
 import QtQuick.Controls 2.12
 
 Item {
@@ -23,7 +23,8 @@ Item {
         }
 
         height: 64
-
+        spacing: 20
+        clip: true
         orientation: ListView.Horizontal
 
         model: map.supportedMapTypes
@@ -244,13 +245,6 @@ Item {
         //}
     }
 
-    //MapType{
-    //    id: mapTypeInfo
-    //
-    //    night: true
-    //    mobile: true
-    //}
-
     Map {
         id: map
         anchors{
@@ -291,13 +285,15 @@ Item {
 
         MapItemView{
             model: compMapViewerRoot.listAssets
+
+
             delegate: CompMapAssetItem {
                 id: compMapAssetItem
 
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-
+                assetID: model.asset_name
                 onCenterOnPoint: {
 
                     if(compMapViewerRoot.selectedAssetDataModel === model)

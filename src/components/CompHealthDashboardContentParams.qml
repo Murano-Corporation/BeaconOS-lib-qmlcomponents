@@ -167,9 +167,6 @@ Item{
     TableView{
         id: tableView
         property int selectedRow: -1
-        onSelectedRowChanged: {
-            console.log('Selected row now: ' + selectedRow)
-        }
 
         property color gridLineColor: "#4D4A5F"
         property var listOfColumnWidths: [600, 150, 150, 200, 200]
@@ -683,41 +680,6 @@ Item{
 
 
     }
-
-
-    //CompScrollView{
-    //    id: scrollViewRows
-
-    //    clip: true
-
-    //    anchors {
-    //        top: scrollViewHeaders.bottom
-    //        left: scrollViewHeaders.left
-    //        right: scrollViewHeaders.right
-    //        bottom: parent.bottom
-    //    }
-
-    //    ListView {
-    //        id: listRows
-
-    //        anchors{
-    //            top: scrollViewRows.top
-    //            left: scrollViewRows.left
-    //        }
-
-    //        model: compHealthDashboardContentParams.listOfParams
-
-    //        delegate: CompTableRowItemDelegate {
-    //            id: compTableRowItemDelegate
-
-    //            paramName: modelData.ParamName
-    //            value: modelData.scaled_val
-    //            min: modelData.min
-    //            max: modelData.max
-    //        }
-    //    }
-
-    //}
 
 }
 

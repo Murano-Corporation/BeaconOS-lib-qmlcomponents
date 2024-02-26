@@ -710,7 +710,7 @@ Item {
             id: compHealthDashboardContentParams
             anchors.fill: parent
 
-            visible: (compHealthDashboardContentRoot.contentState !== "context_nav")
+            visible: (compHealthDashboardContentRoot.contentState !== "context_nav" && compHealthDashboardContentRoot.contentState !== 'params_mtconnect')
             targetData: (visible ? (compHealthDashboardContentRoot.contentState) : "")
             view: compHealthDashboardContentRoot.paramViewMode
 
@@ -735,7 +735,34 @@ Item {
                                  }
         }
 
+        CompHealthDashboardContentMTConnect {
+            id: compHealthDashboardContentMTConnect
 
+            visible: compHealthDashboardContentRoot.contentState === 'params_mtconnect'
+            anchors.fill: parent
+
+            view: compHealthDashboardContentRoot.paramViewMode
+
+            onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
+
+            //onFloatingBreadCrumbNameChanged: {
+            //    compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
+            //}
+
+            onForceViewModeMaximized: {
+                compHealthDashboardContentRoot.forceViewModeMaximized()
+            }
+
+            onParamSelected: txt => compHealthDashboardContentRoot.paramNameSelected = txt
+
+            onSetGridBtnVisible: isVis => {
+                                     compHealthDashboardContentRoot.isBtnGridViewVisible = isVis
+                                 }
+
+            onSetListBtnVisible: isVis => {
+                                     compHealthDashboardContentRoot.isBtnListViewVisible = isVis
+                                 }
+        }
 
 
     }

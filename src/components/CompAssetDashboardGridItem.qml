@@ -19,18 +19,11 @@ Item {
         anchors.fill: parent
     }
 
-
-
-
     MouseArea {
         anchors.fill: parent
         
         onClicked: {
-            //TODO - Move this call to AssetInfo
-            MQTT.slot_SetCurrentBeacon(beaconID)
-            CameraController.slot_SetTargetBeaconId(beaconID)
-
-
+            SystemController.targetBeaconID = beaconID
             SingletonScreenManager.slot_GoToScreen("Health Dashboard", true)
         }
         
