@@ -15,7 +15,7 @@ Item {
     property int columns: 1
     property int rows: 1
     property int selectedRow: -1
-
+    property bool showRowNum: true
     /** POSSIBLE VALUES
       * - text = Only shows textual data
       * - image = Only shows image data
@@ -120,9 +120,25 @@ Item {
         CompLabel{
             id: textContent
 
-            visible: compHealthDashboardTableItemDel_Params_Root.dataType === 'text'
+            property string myText:{
+                if( !visible )
+                   return ''
 
-            text:  visible ? myData : ''
+                if( !myData )
+                    return ''
+
+                var ret = ''
+                if(  col === 0 && showRowNum )
+                    ret += "(" + row +") - "
+
+                ret += myData
+
+                return ret
+            }
+
+            visible: compHealthDashboardTableItemDel_Params_Root.dataType === 'text'
+            elide: Text.ElideRight
+            text:  myText
 
             anchors{
                 fill: parent

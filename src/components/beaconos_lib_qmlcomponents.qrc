@@ -85,5 +85,6 @@
         <file>Screen__BASE.qml</file>
         <file>Util_HtmlFormatter.qml</file>
         <file>CompParamView_LED.qml</file>
+        <file>CompHealthDashboardContentMTConnect.qml</file>
     </qresource>
 </RCC>
