@@ -30,6 +30,10 @@ Item {
             parent.clicked(text)
         }
 
+        onPressAndHold: {
+            optionsPopup.open()
+        }
+
         contentItem: Text {
             id: textComp
             anchors.centerIn: parent
@@ -55,7 +59,50 @@ Item {
       
     }
 
+    Popup {
+        id: optionsPopup
+        width: parent.width
+        height: parent.height
+        modal: true
+        anchors.centerIn:  parent
+        background: Item{}
 
-    
-    
+        Item{
+            id: popupContents
+
+            anchors.fill: parent
+        }
+        Row {
+            anchors.bottom: parent.top
+            anchors.horizontalCenter: popupContents.horizontalCenter
+            Repeater{
+                model: compAlphaNumPinBtnRoot.listOfOptions.length
+
+                Rectangle {
+                    color: "#000000"
+
+                    height: compNumpadBtnRoot.height
+                    width: compNumpadBtnRoot.width
+                    //border.width: 4
+
+                    CompLabel {
+                        text: compAlphaNumPinBtnRoot.listOfOptions[index]
+                        anchors.centerIn: parent
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
+                            //console.log("Clicked the mousearea to select the option")
+                            var textOut = compAlphaNumPinBtnRoot.listOfOptions[index]
+                            compAlphaNumPinBtnRoot.alphaNumPinClicked(textOut)
+                            optionsPopup.close()
+                        }
+                    }
+
+                }
+            }
+        }
+    }
 }
