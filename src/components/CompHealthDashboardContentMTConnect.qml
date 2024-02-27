@@ -5,12 +5,11 @@ Item {
     id: compHealthDashboardContentMTConnect
 
     property bool canShowGraphView: view === 'Graph' && graphViewTarget !== 'null'
-    property var listOfHeaders: ["Name", "Value", "Units","Min", "Max"]
-    property var listOfParams: TableModelHealthDashboard
     property string graphViewTarget: 'null'
     property string graphViewUnits: "UNITS"
     property string view: "List"
     property var dataModel: TableModelMTConnect
+    property string searchFieldText: ""
 
     signal forceViewType(string viewType)
     signal forceViewModeMaximized()
@@ -18,6 +17,10 @@ Item {
     signal setListBtnVisible(bool isVisible);
     signal paramSelected(string paramName);
 
+
+    onSearchFieldTextChanged: {
+        TableModelMTConnect.setSearchFieldText(searchFieldText)
+    }
 
     Item{
         id: groupFilters
@@ -118,9 +121,9 @@ Item {
             //update()
         }
 
-        onRowsChanged: {
-            console.log("Rows now " + rows)
-        }
+        //onRowsChanged: {
+        //    console.log("Rows now " + rows)
+        //}
 
         anchors{
             top: groupFilters.bottom
@@ -164,7 +167,7 @@ Item {
 
         delegate: CompHealthDashboardTableItemDel_Params {
             myModel: model
-
+            tableModelRef: tableView.model
             property int myRow: model.row
             property int myCol: model.column
             property var myData: model.value_string
