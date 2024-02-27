@@ -231,11 +231,11 @@ Item{
                 {
                     tableView.selectedRow = -1
                     compHealthDashboardContentParams.graphViewTarget= "null"
-                    compHealthDashboardContentParams.graphViewUnits="UNITS"
+                    compHealthDashboardContentParams.graphViewUnits= "UNITS"
                 } else {
                     tableView.selectedRow = myRow
                     compHealthDashboardContentParams.graphViewTarget = paramName
-                    compHealthDashboardContentParams.graphViewUnits=myModel.units
+                    compHealthDashboardContentParams.graphViewUnits= myModel.unit
                 }
 
             }
