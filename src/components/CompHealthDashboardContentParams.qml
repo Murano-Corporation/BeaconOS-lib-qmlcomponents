@@ -434,7 +434,7 @@ Item{
         //}
         //targetData === 'gallery' 387, 375 : 340,355
         model: visible ? compHealthDashboardContentParams.dataModel : undefined
-
+        onModelChanged: currentIndex = -1
         DelegateChooser{
             id: delChooser
             role: "data_type"
