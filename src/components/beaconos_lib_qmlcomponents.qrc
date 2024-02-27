@@ -60,7 +60,6 @@
         <file>CompRoundGlassBG.qml</file>
         <file>CompScrollView.qml</file>
         <file>CompTableHeaderItem.qml</file>
-        <file>CompTableRowItemDelegate.qml</file>
         <file>CompToolbar.qml</file>
         <file>CompToolbarBreadcrumbBtn.qml</file>
         <file>CompTooltip.qml</file>
