@@ -1,10 +1,10 @@
 import QtQuick 2.12
-
+import CONSTANTS 1.0
 import QtQuick.Controls 2.12
 
 Item {
     id: compHealthDashboardTableItemDel_Params_Root
-
+    required property var tableModelRef
     property var myModel: undefined
     property var myData: myModel.display
     property string paramName: myModel !== undefined ? myModel.ParamName ? myModel.ParamName : '' : ''
@@ -15,7 +15,7 @@ Item {
     property int columns: 1
     property int rows: 1
     property int selectedRow: -1
-    property bool showRowNum: true
+    property bool showRowNum: false
     /** POSSIBLE VALUES
       * - text = Only shows textual data
       * - image = Only shows image data
@@ -153,7 +153,7 @@ Item {
             rightPadding: 20
 
             verticalAlignment: "AlignVCenter"
-            horizontalAlignment: ((compHealthDashboardTableItemDel_Params_Root.col === 1) ? "AlignRight" : ((compHealthDashboardTableItemDel_Params_Root.col === 3 || compHealthDashboardTableItemDel_Params_Root.col === 4) ? "AlignHCenter" : "AlignLeft"))
+            horizontalAlignment: tableModelRef.headerData(col, Qt.Horizontal, Constants.DataRole_HeaderData_TextAlign)
         }
 
         Item{
