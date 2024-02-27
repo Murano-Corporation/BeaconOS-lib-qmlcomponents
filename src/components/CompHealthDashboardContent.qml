@@ -70,14 +70,14 @@ Item {
         }
     }
 
-    onParamViewModeChanged: {
-        console.log("ParamView Mode now: " + paramViewMode)
-
-
-    }
+    //onParamViewModeChanged: {
+    //    console.log("ParamView Mode now: " + paramViewMode)
+    //
+    //
+    //}
 
     onContextNavCompletenessCheckChanged: {
-        console.log("ContextNavComplete?: " + contextNavCompletenessCheck)
+        //console.log("ContextNavComplete?: " + contextNavCompletenessCheck)
 
         if(contextNavCompletenessCheck )
         {
@@ -112,7 +112,7 @@ Item {
 
     onContentStateChanged: {
 
-        console.log("Content State: " + contentState)
+        //console.log("Content State: " + contentState)
 
         if(contentState === 'gallery' || contentState === 'context_nav')
         {
@@ -742,7 +742,7 @@ Item {
             anchors.fill: parent
 
             view: compHealthDashboardContentRoot.paramViewMode
-
+            searchFieldText: compHealthDashboardContentRoot.searchFieldValue
             onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
 
             //onFloatingBreadCrumbNameChanged: {
@@ -762,6 +762,7 @@ Item {
             onSetListBtnVisible: isVis => {
                                      compHealthDashboardContentRoot.isBtnListViewVisible = isVis
                                  }
+
         }
 
 
