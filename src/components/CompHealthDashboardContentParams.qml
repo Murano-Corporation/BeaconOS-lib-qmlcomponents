@@ -212,6 +212,7 @@ Item{
 
         delegate: CompHealthDashboardTableItemDel_Params {
             myModel: model
+            tableModelRef: tableView.model
 
             property int myRow: model.row
             property int myCol: model.column
