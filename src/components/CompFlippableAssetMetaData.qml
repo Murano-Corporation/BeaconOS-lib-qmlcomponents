@@ -9,6 +9,10 @@ Flipable {
     property string assetDescription: AssetInfo.assetName
     property string assetSerialNumber:AssetInfo.serialNumber
     property string assetMeterialId: AssetInfo.materialID
+    property string beaconID: AssetInfo.beaconID
+    property string beaconLastSeen: AssetInfo.beaconLastSeen
+    property string beaconState: AssetInfo.beaconState
+    property string beaconLastSeenTxt: AssetInfo.beaconLastSeen ? AssetInfo.beaconLastSeen : "Now"
     property bool flipped: false
 
     height: 202
@@ -194,6 +198,102 @@ Flipable {
 
         CompGradientRect {
             anchors.fill: parent
+        }
+        Item{
+            id: imgBeaconInfoParent
+            anchors{
+                top: parent.top
+                topMargin: 27
+                left: parent.left
+                leftMargin: 36
+                bottom: parent.bottom
+                bottomMargin: 27
+            }
+            width: 237
+            ImgAssetNano {
+                id: imgBeaconInfo
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+            }
+        }
+        Item{
+            id: beaconInfo
+
+            anchors{
+                verticalCenter: parent.verticalCenter
+                left: imgBeaconInfoParent.right
+                leftMargin: 21
+            }
+
+            height: (lblAssetName.y + lblAssetMaterialId.height + lblAssetMaterialId.y)
+
+            CompLabel{
+                id: lblbeaconID
+                color: "White"
+                anchors{
+                    left: parent.right
+                    top: parent.top
+                }
+
+                text: compFlippableAssetMetaData.beaconID
+                font{
+                    pixelSize: 32
+
+                }
+
+            }
+
+            Rectangle{
+                id: separatorBack
+
+                anchors{
+                    left: lblbeaconID.left
+                    top: lblbeaconID.bottom
+                    topMargin: 17
+                }
+
+                width: 304
+                height: 2
+
+                radius: 1
+
+                color: "#33FFFFFF"
+            }
+
+            CompLabel{
+                id: lblbeaconLastSeen
+                color: "White"
+                anchors{
+                    left: lblbeaconID.left
+                    top: separatorBack.bottom
+                    topMargin: 10
+                }
+                text: qsTr("Beacon Last Seen: ") + compFlippableAssetMetaData.beaconLastSeenTxt
+
+                font{
+                    pixelSize: 14
+
+                    weight: Font.Light
+                }
+            }
+
+            CompLabel{
+                id: lblbeaconState
+                color: "White"
+                anchors{
+                    left: lblbeaconID.left
+                    top: lblbeaconLastSeen.bottom
+                    topMargin: 1
+                }
+
+                text: qsTr("Beacon State: ") + compFlippableAssetMetaData.beaconState
+                font{
+                    pixelSize: 14
+
+                    weight: Font.Light
+                }
+            }
+
         }
     }
 
