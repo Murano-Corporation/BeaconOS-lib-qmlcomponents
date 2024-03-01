@@ -14,6 +14,18 @@ Item {
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property real zoomCurrent
 
+    Component {
+        id: highlight
+        Rectangle {
+            width: listMapTypes.cellWidth; height: listMapTypes.cellHeight
+            border {
+                width: 4
+                color: "#9287ED"
+            }
+            color: "Transparent"
+            radius: 5
+        }
+    }
     ListView{
         id: listMapTypes
         anchors{
@@ -28,11 +40,25 @@ Item {
         orientation: ListView.Horizontal
 
         model: map.supportedMapTypes
+        onModelChanged: currentIndex = -1
 
         delegate: CompBtnBreadcrumb{
             text: getSimpleMapNameString(model.name)
 
-            onClicked: compMapViewerRoot.activeMapTypeIndex = index
+            onClicked: {
+                compMapViewerRoot.activeMapTypeIndex = index
+                listMapTypes.currentIndex = index
+            }
+        }
+
+        highlight: highlight
+        highlightFollowsCurrentItem: true
+        focus: true
+
+        ScrollBar.horizontal: ScrollBar{
+            policy:  ScrollBar.AsNeeded
+
+            height: ListView.height
         }
     }
 
