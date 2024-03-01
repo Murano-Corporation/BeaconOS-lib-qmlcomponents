@@ -5,8 +5,8 @@ Item {
     id: compNotificationsPanel
 
     property alias listHeight: listAlerts.height
-    property int pixelsizeBreadcrumbBtns: 40
-    property int pixelsizeLink: 30
+    property int pixelsizeBreadcrumbBtns: 30
+    property int pixelsizeLink: 20
 
     height: 413
     width: 589
