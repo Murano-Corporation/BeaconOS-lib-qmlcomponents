@@ -16,10 +16,19 @@ MapQuickItem{
 
     anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height * 0.5)
 
+    //onLatChanged: {
+    //    console.log("CompMapAssetItem:: " + assetID + " lat value now: " + lat)
+    //}
+    //
+    //onLonChanged: {
+    //    console.log("CompMapAssetItem:: " + assetID + " lon value now: " + lon)
+    //}
+
     coordinate: QtPositioning.coordinate(lat, lon)
     onCoordinateChanged: {
         sourceItem.coords = coordinate
-        console.log("Coordinates now " + coordinate)
+        //console.log("CompMapAssetItem::Coordinates now " + coordinate + " for BeaconID " + assetID)
+
     }
 
     onAssetTypeChanged:{

@@ -85,5 +85,21 @@
         <file>Util_HtmlFormatter.qml</file>
         <file>CompParamView_LED.qml</file>
         <file>CompHealthDashboardContentMTConnect.qml</file>
+        <file>CompBeaconOsInductScreen_SelectAssetItem.qml</file>
+        <file>Screen_Induct.qml</file>
+        <file>Subscreen_Induct_IdentifyViaBuNo.qml</file>
+        <file>Subscreen_Induct_Select.qml</file>
+        <file>Subscreen_Induct_Start.qml</file>
+        <file>CompBtnArrow.qml</file>
+        <file>Subscreen_Induct_SelectQuadrant.qml</file>
+        <file>CompProgressBar.qml</file>
+        <file>CompProgressBar_Circle.qml</file>
+        <file>CompBeaconOsInduct_QuadrantTag.qml</file>
+        <file>CompBeaconOsInduct_QuadrantCell.qml</file>
+        <file>CompRectangleMultiRadii.qml</file>
+        <file>Subscreen_Induct_SelectDoor.qml</file>
+        <file>Subscreen_Induct_Inspect.qml</file>
+        <file>CompBeaconOsInduct_InspectInfoPanel.qml</file>
+        <file>CompRepairScreenNavButton.qml</file>
     </qresource>
 </RCC>

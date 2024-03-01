@@ -163,7 +163,7 @@ Item {
 
             onCoordinateChanged: {
                 sourceItem.coords = coordinate
-                console.log("Coordinates now " + coordinate)
+                console.log("compClickableMapItem:: Coordinates now " + coordinate)
             }
 
             sourceItem: ImgAssetVehicle{
@@ -319,7 +319,7 @@ Item {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-                assetID: model.asset_name
+                assetID: model.Beacon_ID
                 onCenterOnPoint: {
 
                     if(compMapViewerRoot.selectedAssetDataModel === model)
