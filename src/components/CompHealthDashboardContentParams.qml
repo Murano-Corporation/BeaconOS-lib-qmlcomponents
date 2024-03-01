@@ -630,6 +630,13 @@ Item{
         highlightFollowsCurrentItem: true
         focus: true
 
+        ScrollBar.vertical: ScrollBar{
+            policy:  ScrollBar.AsNeeded
+            width: 8
+            //topInset: 51
+            topPadding: 51
+        }
+
     }
 
 

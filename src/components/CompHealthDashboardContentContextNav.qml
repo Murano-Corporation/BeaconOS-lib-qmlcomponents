@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 Item{
     id: compHealthDashboardContentContextNav
@@ -242,6 +243,12 @@ Item{
 
             anchors{
                 fill: parent
+            }
+            ScrollBar.vertical: ScrollBar{
+                policy:  ScrollBar.AsNeeded
+                width: 8
+                //topInset: 51
+                topPadding: 51
             }
         }
 
