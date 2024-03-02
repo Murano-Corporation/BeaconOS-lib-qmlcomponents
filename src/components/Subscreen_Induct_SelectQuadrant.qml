@@ -48,7 +48,8 @@ Item {
             bottom: parent.bottom
         }
 
-        Rectangle{
+        CompGradientRect
+        {
             id: rectBg
 
             anchors.fill: parent
@@ -64,16 +65,22 @@ Item {
             transform: Translate{
                 x: -100
             }
+
+            color: "#80ffffff"
         }
 
         Grid{
+            id: gridCells
+            //visible: false
+            property color colorIdle: "#40ffffff"
+            property color colorIdleAlt: "#20ffffff"
 
             anchors.fill: parent
 
             columns: 2
             CompBeaconOsInduct_QuadrantCell {
                 quadrantId: "Q1"
-                colorIdle: "#4000ffff"
+                colorIdle: gridCells.colorIdle
                 onClicked: {
                     subscreenInduct_SelectQuadrant_Root.quadrantSelected(quadrantId)
                 }
@@ -81,7 +88,7 @@ Item {
             CompBeaconOsInduct_QuadrantCell {
                 quadrantId: "Q2"
                 infoAlignedLeft: false
-                colorIdle: "#2000ffff"
+                colorIdle: gridCells.colorIdleAlt
                 onClicked: {
                     subscreenInduct_SelectQuadrant_Root.quadrantSelected(quadrantId)
                 }
@@ -91,7 +98,7 @@ Item {
                 quadrantId: "Q4"
                 infoAlignedLeft: true
                 infoAlignedTop: false
-                colorIdle: "#2000ffff"
+                colorIdle: gridCells.colorIdleAlt
                 onClicked: {
                     subscreenInduct_SelectQuadrant_Root.quadrantSelected(quadrantId)
                 }
@@ -100,7 +107,7 @@ Item {
                 quadrantId: "Q3"
                 infoAlignedLeft: false
                 infoAlignedTop: false
-                colorIdle: "#4000ffff"
+                colorIdle: gridCells.colorIdle
                 onClicked: {
                     subscreenInduct_SelectQuadrant_Root.quadrantSelected(quadrantId)
                 }

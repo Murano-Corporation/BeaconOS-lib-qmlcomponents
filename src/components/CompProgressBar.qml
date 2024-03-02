@@ -8,7 +8,7 @@ Item{
 
     property real percentComplete: 0.35
     property color colorBg: "#80000000"
-    property color colorComplete: "#00FFFF"
+    property color colorComplete: "#9287ED"
 
     anchors{
         top: lblTitle.top
@@ -81,3 +81,9 @@ Item{
 
 
 }
+
+/*##^##
+Designer {
+    D{i:0;formeditorZoom:0.5}
+}
+##^##*/

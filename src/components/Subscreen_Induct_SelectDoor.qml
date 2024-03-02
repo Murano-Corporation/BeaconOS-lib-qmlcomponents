@@ -68,10 +68,12 @@ Item {
             bottom: parent.bottom
         }
 
-        Rectangle{
+        Item {
             id: rectZoneSelect
 
-            radius: 42
+            CompGradientRect{
+                anchors.fill: parent
+            }
 
             anchors{
                 top: parent.top
@@ -98,9 +100,10 @@ Item {
 
             ListView{
                 id: listViewZones
-
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
                 model: subscreenInductSelectDoor_Root.listOfZones
-                spacing: 10
+                spacing: 32
                 anchors{
                     top:searchField.bottom
                     topMargin: 32
@@ -124,15 +127,15 @@ Item {
 
                         anchors.fill: parent
 
-                        color: "#05000000"
+                        color: "#10ffffff"
                     }
 
                     CompLabel{
                         id: lblZoneName
 
                         text: modelData.name
-                        color: "black"
-                        font.pixelSize: 16
+                        color: "white"
+                        font.pixelSize: 18
                         verticalAlignment: Text.AlignVCenter
 
                         anchors{
@@ -164,7 +167,7 @@ Item {
                             height: btnInspectZone.height
 
 
-                            color: "#000000"
+                            color: "white"
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: btnInspectZone.verticalCenter
                         }
@@ -177,7 +180,7 @@ Item {
                             height: btnInspectZone.height
                             width: height
                             source: "file:///usr/share/BeaconOS-lib-images/images/ReferenceFill.svg"
-                            color: "#A21A30"
+                            color: "#9287ED"
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
@@ -222,6 +225,9 @@ Item {
 
                             height: parent.height * 0.3
                             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
+
+                            iconColor: modelData.tags.length > 0 ? "#ffff00" : "#ffffff"
+
                             anchors.verticalCenter: parent.verticalCenter
 
                             onClicked: subscreenInductSelectDoor_Root.zoneSelected("TEST")
@@ -344,6 +350,6 @@ Item {
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;formeditorColor:"#4c4e50";formeditorZoom:0.33;height:914;width:1800}
+    D{i:0;autoSize:true;formeditorColor:"#4c4e50";formeditorZoom:0.5;height:914;width:1800}
 }
 ##^##*/

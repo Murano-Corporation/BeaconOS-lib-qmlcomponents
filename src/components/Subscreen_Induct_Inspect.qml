@@ -66,6 +66,10 @@ Item {
         Item{
             id: compBeaconOsInduct_InspectStepPanel
 
+            CompGradientRect{
+                anchors.fill: parent
+            }
+
             anchors{
                 top: parent.top
                 right: parent.right
@@ -80,8 +84,11 @@ Item {
 
                 anchors{
                     top: parent.top
+                    topMargin: 20
                     left: parent.left
+                    leftMargin: 20
                     right: parent.right
+                    rightMargin: 20
                 }
 
                 CompLabel{
@@ -91,11 +98,16 @@ Item {
 
                 }
 
-                Rectangle{
+                Item{
                     id: rectStepBg
 
                     width: parent.width
                     height: 142
+
+                    CompHealthPanelBg{
+                        anchors.fill: parent
+                    }
+
                     CompLabel{
                         id: lblStep_Value
 
@@ -107,7 +119,7 @@ Item {
 
                         text: "Inspect (RH & LH) door 22 substructure, attach sills and fastener holes, for corrosion."
                         font.pixelSize: 28
-                        color: "black"
+                        color: "white"
                         wrapMode: Text.WordWrap
                     }
                 }
@@ -120,23 +132,31 @@ Item {
                     top: colStep.bottom
                     topMargin: 40
                     left: parent.left
+                    leftMargin: 20
                     right: parent.right
+                    rightMargin: 20
                 }
 
                 text: "Document Discrepancies"
 
             }
 
-            Rectangle{
+            Item{
                 id: rectBG_Discrepancies
 
                 anchors{
                     top: lblDiscrepancy.bottom
                     left: parent.left
+                    leftMargin: 20
                     right: parent.right
+                    rightMargin: 20
                     bottom: rowButtons.top
                     bottomMargin: 40
 
+                }
+
+                CompHealthPanelBg{
+                    anchors.fill: parent
                 }
 
                 CompLabel{
@@ -144,11 +164,14 @@ Item {
 
                     anchors{
                         top: parent.top
+                        topMargin: 20
                         right: parent.right
+                        rightMargin: 40
                     }
 
                     text: "Save as Draft"
-                    color: "#00ffff"
+                    font.pixelSize: 28
+                    color: "#9287ED"
                 }
 
                 TextArea{
@@ -156,13 +179,23 @@ Item {
 
                     anchors{
                         top: btnSaveAsDraft.bottom
+                        topMargin: 20
                         left: parent.left
+                        leftMargin: 40
                         right: parent.right
+                        rightMargin: 40
+                        bottom: rowDiscrepancyControls.top
+                        bottomMargin: 32
                     }
 
-                    height: 64
+
 
                     placeholderText: "Add discrepancy note"
+                    color: "black"
+
+                    background: Rectangle{
+
+                    }
                 }
 
                 Row{
@@ -180,11 +213,11 @@ Item {
 
                     CompIconBtn{
                         id: btnAdd
-
+                        visible: false
                         height: 64
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
-
+                        iconColor: "#9287ED"
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -194,7 +227,7 @@ Item {
                         height: 64
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/CameraFill.svg"
-
+                        iconColor: "#9287ED"
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -204,7 +237,7 @@ Item {
                         height: 64
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/VideoFill.svg"
-
+                        iconColor: "#9287ED"
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -214,27 +247,27 @@ Item {
                         height: 64
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/MicrophoneFill.svg"
-
+                        iconColor: "#9287ED"
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
                     CompIconBtn{
                         id: btnImage
-
+                        visible: false
                         height: 64
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
-
+                        iconColor: "#9287ED"
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
                     CompIconBtn{
                         id: btnAttach
-
+                        visible: false
                         height: 64
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
-
+                        iconColor: "#9287ED"
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
@@ -247,8 +280,11 @@ Item {
                 spacing: 32
                 anchors{
                     left: parent.left
+                    leftMargin: 20
                     right: parent.right
+                    rightMargin: 20
                     bottom: parent.bottom
+                    bottomMargin: 20
                 }
 
                 CompBtnBreadcrumb{
@@ -283,6 +319,6 @@ Item {
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;formeditorColor:"#4c4e50";formeditorZoom:0.33;height:914;width:1800}
+    D{i:0;autoSize:true;formeditorColor:"#4c4e50";formeditorZoom:0.5;height:914;width:1800}
 }
 ##^##*/

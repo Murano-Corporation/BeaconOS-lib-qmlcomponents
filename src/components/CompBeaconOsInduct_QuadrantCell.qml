@@ -30,10 +30,10 @@ Item{
 
         anchors.fill: parent
 
-        tlRadius: compBeaconOsInduct_QuadrantCell.infoAlignedLeft && compBeaconOsInduct_QuadrantCell.infoAlignedTop ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0
-        trRadius: !compBeaconOsInduct_QuadrantCell.infoAlignedLeft && compBeaconOsInduct_QuadrantCell.infoAlignedTop ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0
-        brRadius: !compBeaconOsInduct_QuadrantCell.infoAlignedLeft && !compBeaconOsInduct_QuadrantCell.infoAlignedTop ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0
-        blRadius: compBeaconOsInduct_QuadrantCell.infoAlignedLeft && !compBeaconOsInduct_QuadrantCell.infoAlignedTop ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0
+        tlRadius: ((compBeaconOsInduct_QuadrantCell.infoAlignedLeft && compBeaconOsInduct_QuadrantCell.infoAlignedTop) ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0)
+        trRadius: ((!compBeaconOsInduct_QuadrantCell.infoAlignedLeft && compBeaconOsInduct_QuadrantCell.infoAlignedTop) ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0)
+        brRadius: ((!compBeaconOsInduct_QuadrantCell.infoAlignedLeft && !compBeaconOsInduct_QuadrantCell.infoAlignedTop) ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0)
+        blRadius: ((compBeaconOsInduct_QuadrantCell.infoAlignedLeft && !compBeaconOsInduct_QuadrantCell.infoAlignedTop) ? compBeaconOsInduct_QuadrantCell.cornerRadius : 0)
     }
 
     Row{
@@ -53,18 +53,26 @@ Item{
 
             text: "Q1"
 
-            color: "black"
+            color: "white"
+
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         CompBeaconOsInduct_QuadrantTag {
             id: compBeaconOsInduct_QuadrantTag
+
+            anchors.verticalCenter: parent.verticalCenter
         }
 
 
         CompProgressBar_Circle {
             id: compProgressBar_Circle
+
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
+
+
 
     MouseArea{
         anchors.fill: parent

@@ -7,11 +7,14 @@ ComboBox {
     property alias fontPixelSize: lblContent.font.pixelSize
     property color bgBorderColor: "#4DE9E9E9"
     property alias currentTextColor: lblContent.color
+    property string unselectedText: qsTr("Select")
+
+    textRole: "key"
 
     height: 41
     width: 183
 
-    displayText: currentIndex === -1 ? qsTr("Select") : textAt(currentIndex)
+    displayText: currentIndex === -1 ? unselectedText : textAt(currentIndex)
 
 
     background: Rectangle{
@@ -27,7 +30,7 @@ ComboBox {
 
 
 
-    contentItem: Label {
+    contentItem: CompLabel {
         id: lblContent
         color: "#80FFFFFF"
         text: comboFilters.displayText
@@ -38,9 +41,29 @@ ComboBox {
         elide: Label.ElideRight
         font{
             pixelSize: 20
-            family: "Lato"
-            weight: Font.Normal
         }
+    }
+
+    delegate: ItemDelegate{
+        width: comboFilters.width
+
+        contentItem: CompLabel{
+            text: model.key
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+            color: "#000000"
+
+            MouseArea{
+                anchors.fill: parent
+
+                onClicked: {
+                    comboFilters.currentIndex = index
+                    comboFilters.popup.close()
+                }
+            }
+        }
+
+        highlighted: comboFilters.highlightedIndex === index
     }
 }
 

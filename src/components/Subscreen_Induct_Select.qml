@@ -70,7 +70,9 @@ Item {
             id: lblResultsFound
 
             text: subscreenInduct_Select_Root.resultsString
-            font.pixelSize: 16
+            font.pixelSize: 20
+
+            anchors.verticalCenter: parent.verticalCenter
         }
 
         CompCombobox{

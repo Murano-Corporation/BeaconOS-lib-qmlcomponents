@@ -1,10 +1,11 @@
 import QtQuick 2.0
 
-Rectangle{
+Item{
     id: compBeaconOsInduct_InspectInfoPanel
 
-
-    color: "#CDDBE1"
+    CompHealthPanelBg{
+        anchors.fill: parent
+    }
 
     Item{
         id: groupTopControls
@@ -20,8 +21,8 @@ Rectangle{
         CompLabel{
             id: zoneName
 
-            text: "Door 22 (1 of 2)"
-            color: "black"
+            text: "Door 22   (1 of 2)"
+            color: "#9287ED"
 
             font.pixelSize: groupTopControls.height * 0.85
             verticalAlignment: Text.AlignVCenter
@@ -37,7 +38,7 @@ Rectangle{
             }
 
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
-
+            iconColor: "#9287ED"
             height: zoneName.height * 0.85
         }
 
@@ -45,7 +46,7 @@ Rectangle{
 
     Column{
         id: columnContents
-
+         property color colorText: "#80ffffff"
         anchors{
             top: groupTopControls.bottom
             topMargin: 70
@@ -55,7 +56,7 @@ Rectangle{
             bottomMargin: 100
         }
 
-        spacing: 35
+        spacing: 50
 
         Column{
             width: columnContents.width
@@ -65,7 +66,7 @@ Rectangle{
 
                 text: "Zone:"
                 font.weight: Font.Bold
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -74,7 +75,7 @@ Rectangle{
 
                 text: "18.10: Center Fuselage, Upper Right - Internal"
                 font.weight: Font.Light
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
         }
@@ -87,7 +88,7 @@ Rectangle{
 
                 text: "Work Unit Code:"
                 font.weight: Font.Bold
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -96,7 +97,7 @@ Rectangle{
 
                 text: "11B10, 11B52, 11B1S, 11B24, 11B35, 11B3F"
                 font.weight: Font.Light
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
         }
@@ -109,7 +110,7 @@ Rectangle{
 
                 text: "Work Unit Code:"
                 font.weight: Font.Bold
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -118,7 +119,7 @@ Rectangle{
 
                 text: "74A325034, 74A326101, 74A326108, 74A326110, 74A326128, 74A326130, 74A326306, 74A326309"
                 font.weight: Font.Light
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
 
                 width: parent.width
@@ -137,7 +138,7 @@ Rectangle{
                 width: parent.width * 0.33333
                 text: "FMDC:"
                 font.weight: Font.Bold
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -146,7 +147,7 @@ Rectangle{
                 width: parent.width * 0.33333
                 text: "RQMT NO.:"
                 font.weight: Font.Bold
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -155,7 +156,7 @@ Rectangle{
                 width: parent.width * 0.33333
                 text: "EFF:"
                 font.weight: Font.Bold
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -164,7 +165,7 @@ Rectangle{
 
                 text: "1B4MG"
                 font.weight: Font.Light
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -173,7 +174,7 @@ Rectangle{
 
                 text: "CF.022.R.SF.COR"
                 font.weight: Font.Light
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
 
@@ -182,10 +183,16 @@ Rectangle{
 
                 text: "E/F/G"
                 font.weight: Font.Light
-                color: "black"
+                color: columnContents.colorText
                 font.pixelSize: 30
             }
         }
     }
 
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;formeditorColor:"#4c4e50";height:480;width:640}
+}
+##^##*/

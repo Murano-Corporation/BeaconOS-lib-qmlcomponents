@@ -12,6 +12,11 @@ Item {
 
     property alias indexOfBuNoSelected: selectedAssetInfo.indexOfBuNoSelected
 
+    property var listOfBureauNumbers: ListModel{
+        ListElement{ key: "Select BuNo"; value: -1}
+        ListElement{ key: "168267"; value: 0}
+    }
+
     signal nextClicked()
     
     CompLabel{
@@ -25,7 +30,9 @@ Item {
     CompBeaconOsInductScreen_SelectAssetItem{
         id: selectedAssetInfo
 
+        listBureauNumbers: subscreenInduct_Identify_Root.listOfBureauNumbers
         showBureauCombo: true
+        allowAssetClick: false
         indexOfBuNoSelected: -1
         anchors{
             top: lblTitle.bottom
@@ -40,7 +47,7 @@ Item {
     CompIconBtn {
         id: btnNext
 
-        visible: (selectedAssetInfo.indexOfBuNoSelected === -1 ?  false : true)
+        visible: (selectedAssetInfo.indexOfBuNoSelected >= 1 ?  true : false)
 
         anchors{
             right: selectedAssetInfo.right
@@ -53,6 +60,10 @@ Item {
         width: height
 
         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
+        iconColor: "#9287ED"
+        onClicked: {
+            subscreenInduct_Identify_Root.nextClicked()
+        }
     }
 
 }

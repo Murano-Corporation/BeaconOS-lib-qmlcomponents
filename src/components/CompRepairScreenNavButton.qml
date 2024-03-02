@@ -16,80 +16,64 @@ Item{
         "Clicked!"
     }
 
-    Rectangle{
+    CompHealthContextNavBtn{
         id: rectBackground
-        radius: 36
+        text: parent.name
+        iconUrl: parent.iconPath
+
         anchors{
             fill: parent
         }
 
-        gradient: Gradient{
-            GradientStop{
-                position: 0.0
-                color: color1
-            }
-            GradientStop{
-                position: 0.75
-                color: color1
-            }
-            GradientStop{
-                position: 0.76
-                color: color2
-            }
-            GradientStop{
-                position: 1.00
-                color: color2
-            }
-        }
     }
 
 
-    CompImageIcon{
-        id: icon
-        visible: false
-        anchors{
-            fill: parent
-            topMargin: parent.height * 0.025
-            bottomMargin: parent.height * 0.25
-            leftMargin: parent.width * 0.20
-            rightMargin: parent.width * 0.20
-        }
+//    CompImageIcon{
+//        id: icon
+//        visible: false
+//        anchors{
+//            fill: parent
+//            topMargin: parent.height * 0.025
+//            bottomMargin: parent.height * 0.25
+//            leftMargin: parent.width * 0.20
+//            rightMargin: parent.width * 0.20
+//        }
 
-        source: iconPath
+//        source: iconPath
 
-        color: "white"
+//        color: "white"
 
-    }
+//    }
 
-    ColorOverlay {
+//    ColorOverlay {
 
-        id: colorOverlay
-        anchors.fill: icon
-        antialiasing: true
-        smooth: true
-        source: icon
-        color: "white"
+//        id: colorOverlay
+//        anchors.fill: icon
+//        antialiasing: true
+//        smooth: true
+//        source: icon
+//        color: "white"
 
-    }
-    //
+//    }
+//    //
 
-    CompLabel{
-        id: lblName
+//    CompLabel{
+//        id: lblName
 
-        text: name
-        color: "black"
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+//        text: name
+//        color: "black"
+//        horizontalAlignment: Text.AlignHCenter
+//        verticalAlignment: Text.AlignVCenter
 
-        font.capitalization: Font.AllUppercase
+//        font.capitalization: Font.AllUppercase
 
-        anchors{
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            top: icon.bottom
-        }
-    }
+//        anchors{
+//            left: parent.left
+//            right: parent.right
+//            bottom: parent.bottom
+//            top: icon.bottom
+//        }
+//    }
 
     MouseArea{
         anchors.fill: parent

@@ -19,7 +19,7 @@ Screen__BASE {
     signal signal_InductAsset();
     signal signal_StartInspect();
     signal signal_ContinueInspect();
-    
+
     anchors.fill: parent
 
     onSignal_InductAsset: {
@@ -56,7 +56,7 @@ Screen__BASE {
     {
         screenRepairRoot.zoneIdSelected = zoneId
 
-        setState("Inspection")
+        setState("Inspect")
     }
 
     function selectQuadrant(quadrantId)
@@ -117,8 +117,10 @@ Screen__BASE {
         }
     ]
 
-    CompBtnArrow {
+    CompBtnBreadcrumb {
         id: compBtnArrow
+
+        text: "BACK"
 
         anchors{
             top: parent.top
@@ -141,106 +143,124 @@ Screen__BASE {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
+            bottomMargin: 40
         }
 
-        Subscreen_Induct_Start{
-            visible: screenRepairRoot.state === "Start"
+        Loader{
+            active: screenRepairRoot.state === "Start"
             anchors.fill: parent
+            asynchronous: true
+            sourceComponent: Subscreen_Induct_Start{
 
-            onInductAssetClicked: {
-                console.log("It were clicked")
+                onInductAssetClicked: {
+                    console.log("It were clicked")
 
-                screenRepairRoot.setState("Select")
-            }
+                    screenRepairRoot.setState("Select")
+                }
 
-            onStartInspectClicked: {
-                console.log("It were clicked")
+                onStartInspectClicked: {
+                    console.log("It were clicked")
 
-                screenRepairRoot.setState("Select")
-            }
+                    screenRepairRoot.setState("Select")
+                }
 
-            onContinueInspectClicked: {
-                console.log("It were clicked")
+                onContinueInspectClicked: {
+                    console.log("It were clicked")
 
-                screenRepairRoot.setState("Select")
-            }
-        }
-
-        Subscreen_Induct_Select{
-            id: subscreen_Select
-
-            anchors.fill: parent
-
-            visible: screenRepairRoot.state === "Select"
-
-
-            onAssetSelected: {
-                screenRepairRoot.selectAsset(
-                            subscreen_Select.assetNameSelected,
-                            subscreen_Select.assetInductionDateSelected,
-                            subscreen_Select.assetDetailsSelected,
-                            subscreen_Select.assetImagePath
-                            )
+                    screenRepairRoot.setState("Select")
+                }
             }
         }
 
-        Subscreen_Induct_IdentifyViaBuNo{
-            id: subscreen_Identify
 
+
+        Loader{
+            active: screenRepairRoot.state === "Select"
+            asynchronous: true
             anchors.fill: parent
 
-            visible: screenRepairRoot.state === "Identify"
+            sourceComponent: Subscreen_Induct_Select{
+                id: subscreen_Select
 
-            onNextClicked: {
-                screenRepairRoot.selectBuNo(subscreen_Identify.indexOfBuNoSelected)
+                onAssetSelected: {
+                    screenRepairRoot.selectAsset(
+                                subscreen_Select.assetNameSelected,
+                                subscreen_Select.assetInductionDateSelected,
+                                subscreen_Select.assetDetailsSelected,
+                                subscreen_Select.assetImagePath
+                                )
+                }
             }
 
-            assetImagePath: screenRepairRoot.assetImagePath
-            assetName: screenRepairRoot.assetNameSelected
-            assetInductionDate: screenRepairRoot.assetInductionDateSelected
-            assetDetails: screenRepairRoot.assetDetailsSelected
         }
 
-        Subscreen_Induct_SelectQuadrant{
-            id: subscreenSelectQuadrant
-
+        Loader{
+            active: screenRepairRoot.state === "Identify"
             anchors.fill: parent
+            asynchronous: true
+            sourceComponent: Subscreen_Induct_IdentifyViaBuNo{
+                id: subscreen_Identify
 
-            visible: screenRepairRoot.state === "Select_Quadrant"
-            onQuadrantSelected: quadrantId => {
+                onNextClicked: {
+                    screenRepairRoot.selectBuNo(subscreen_Identify.indexOfBuNoSelected)
+                }
 
-                screenRepairRoot.selectQuadrant(quadrantId)
+                assetImagePath: screenRepairRoot.assetImagePath
+                assetName: screenRepairRoot.assetNameSelected
+                assetInductionDate: screenRepairRoot.assetInductionDateSelected
+                assetDetails: screenRepairRoot.assetDetailsSelected
+            }
+
+        }
+
+
+        Loader{
+            active: screenRepairRoot.state === "Select_Quadrant"
+            anchors.fill: parent
+            asynchronous: true
+            sourceComponent: Subscreen_Induct_SelectQuadrant{
+                id: subscreenSelectQuadrant
+
+                onQuadrantSelected: quadrantId => {
+
+                                        screenRepairRoot.selectQuadrant(quadrantId)
+                                    }
+            }
+
+        }
+
+        Loader{
+            active: screenRepairRoot.state === "Select_Zone"
+            anchors.fill: parent
+            asynchronous: true
+            sourceComponent: Subscreen_Induct_SelectDoor{
+                id: subscreenSelectZone
+
+                quadrantId: screenRepairRoot.selectedQuadrant
+                assetImgPath: screenRepairRoot.assetImagePath
+                assetName: screenRepairRoot.assetNameSelected
+
+                onZoneSelected: zone => {
+                                    screenRepairRoot.selectZoneId(zone)
+                                }
+
+            }
+
+        }
+
+        Loader{
+            anchors.fill: parent
+            asynchronous: true
+            active: screenRepairRoot.state === "Inspect"
+            sourceComponent: Subscreen_Induct_Inspect{
+                id: subscreenInspect
+                assetName: screenRepairRoot.assetNameSelected
+                quadrantId: screenRepairRoot.selectedQuadrant
+                zoneId:  screenRepairRoot.zoneIdSelected
+
             }
         }
 
-        Subscreen_Induct_SelectDoor{
-            id: subscreenSelectZone
-
-            anchors.fill: parent
-
-            visible: screenRepairRoot.state === "Select_Zone"
-
-            quadrantId: screenRepairRoot.selectedQuadrant
-            assetImgPath: screenRepairRoot.assetImagePath
-            assetName: screenRepairRoot.assetNameSelected
-
-            onZoneSelected: zone => {}
-
-        }
-
-        Subscreen_Induct_Inspect{
-            id: subscreenInspect
-
-
-            anchors.fill: parent
-
-            visible: screenRepairRoot.state === "Inspect"
-
-            assetName: screenRepairRoot.assetNameSelected
-            quadrantId: screenRepairRoot.selectedQuadrant
-            zoneId:  screenRepairRoot.zoneIdSelected
-
-        }
 
     }
 
