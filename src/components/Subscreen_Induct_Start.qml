@@ -36,7 +36,7 @@ Item {
 
             CompRepairScreenNavButton {
                 id: compRepairScreenNavButton
-                height: 594
+                height: 300
                 width: 550
 
                 name: modelData.name

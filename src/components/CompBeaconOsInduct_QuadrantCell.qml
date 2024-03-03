@@ -12,7 +12,7 @@ Item{
     property real cornerRadius: 42
     property bool infoAlignedLeft: true
     property bool infoAlignedTop: true
-    property color colorIdle : "#8000ffff"
+    property color colorIdle : "#809287ED"
 
 
 

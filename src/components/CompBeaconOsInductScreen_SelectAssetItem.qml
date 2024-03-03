@@ -15,7 +15,7 @@ Item{
     property var listBureauNumbers
 
     property int indexOfBuNoSelected: -1
-
+    property alias currentText: comboSelectBureauNumber.currentText
     signal assetClicked()
 
     CompGradientRect{

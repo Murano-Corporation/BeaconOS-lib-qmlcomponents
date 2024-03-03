@@ -3,6 +3,9 @@ import QtQuick 2.0
 Item{
     id: compBeaconOsInduct_InspectInfoPanel
 
+    property int fontSizeHeaders: 25
+    property int fontSizeContent: 25
+
     CompHealthPanelBg{
         anchors.fill: parent
     }
@@ -67,7 +70,7 @@ Item{
                 text: "Zone:"
                 font.weight: Font.Bold
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
             CompLabel{
@@ -76,7 +79,7 @@ Item{
                 text: "18.10: Center Fuselage, Upper Right - Internal"
                 font.weight: Font.Light
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
             }
         }
 
@@ -89,7 +92,7 @@ Item{
                 text: "Work Unit Code:"
                 font.weight: Font.Bold
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
             CompLabel{
@@ -98,7 +101,7 @@ Item{
                 text: "11B10, 11B52, 11B1S, 11B24, 11B35, 11B3F"
                 font.weight: Font.Light
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
             }
         }
 
@@ -111,7 +114,7 @@ Item{
                 text: "Work Unit Code:"
                 font.weight: Font.Bold
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
             CompLabel{
@@ -120,7 +123,7 @@ Item{
                 text: "74A325034, 74A326101, 74A326108, 74A326110, 74A326128, 74A326130, 74A326306, 74A326309"
                 font.weight: Font.Light
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
 
                 width: parent.width
 
@@ -139,7 +142,7 @@ Item{
                 text: "FMDC:"
                 font.weight: Font.Bold
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
             CompLabel{
@@ -148,7 +151,7 @@ Item{
                 text: "RQMT NO.:"
                 font.weight: Font.Bold
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
             CompLabel{
@@ -157,7 +160,7 @@ Item{
                 text: "EFF:"
                 font.weight: Font.Bold
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
             CompLabel{
@@ -166,7 +169,7 @@ Item{
                 text: "1B4MG"
                 font.weight: Font.Light
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
             }
 
             CompLabel{
@@ -175,7 +178,7 @@ Item{
                 text: "CF.022.R.SF.COR"
                 font.weight: Font.Light
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
             }
 
             CompLabel{
@@ -184,7 +187,7 @@ Item{
                 text: "E/F/G"
                 font.weight: Font.Light
                 color: columnContents.colorText
-                font.pixelSize: 30
+                font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
             }
         }
     }

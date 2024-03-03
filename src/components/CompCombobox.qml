@@ -52,7 +52,7 @@ ComboBox {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             color: "#000000"
-
+            font.pixelSize: 24
             MouseArea{
                 anchors.fill: parent
 

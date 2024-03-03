@@ -124,7 +124,7 @@ Item {
 
                         text: modelData.name
                         color: "white"
-                        font.pixelSize: 18
+                        font.pixelSize: 25
                         verticalAlignment: Text.AlignVCenter
 
                         anchors{
@@ -152,7 +152,7 @@ Item {
                             visible: modelData.isComplete
 
                             text: "View Work Order"
-                            font.pixelSize: height * 0.75
+                            font.pixelSize: 25
                             height: btnInspectZone.height
 
 
@@ -219,7 +219,7 @@ Item {
 
                             anchors.verticalCenter: parent.verticalCenter
 
-                            onClicked: subscreenInductSelectDoor_Root.zoneSelected("TEST")
+                            onClicked: subscreenInductSelectDoor_Root.zoneSelected("18.10 + 18.12")
 
                         }
                     }
@@ -233,7 +233,7 @@ Item {
             id: compBeaconOsInduct_ZoneHighlighter
 
             property color colorContrast: "#80000000"
-            property color colorFade: "#8000ffff"
+            property color colorFade: "#809287ED"
             property color colorAssetImg: "#818181"
 
             anchors{
@@ -244,10 +244,10 @@ Item {
             }
 
             width: rectZoneSelect.width
-            color: "#E6EAEE"
+            color: "transparent"
 
             border{
-                color: "#C0C2C4"
+                color: "transparent"
                 width: 4
             }
 

@@ -346,7 +346,7 @@ Screen__BASE {
                 visible: screenRepairRoot.state === "Identify"
 
                 onNextClicked: {
-                    screenRepairRoot.selectBuNo(subscreen_Identify.indexOfBuNoSelected)
+                    screenRepairRoot.selectBuNo(subscreen_Identify.currentText)
                 }
 
                 assetImagePath: screenRepairRoot.assetImagePath

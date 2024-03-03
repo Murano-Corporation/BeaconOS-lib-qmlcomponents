@@ -11,7 +11,7 @@ Item {
     property alias assetsInducted: selectedAssetInfo.assetsInducted
 
     property alias indexOfBuNoSelected: selectedAssetInfo.indexOfBuNoSelected
-
+    property alias currentText: selectedAssetInfo.currentText
     property var listOfBureauNumbers: ListModel{
         ListElement{ key: "Select BuNo"; value: -1}
         ListElement{ key: "168267"; value: 0}

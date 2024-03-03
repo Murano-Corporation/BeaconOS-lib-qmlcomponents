@@ -11,6 +11,9 @@ Item {
     property string zoneId: "18.10, 18.12"
     property string discrepancyNotes
 
+    property int fontSizeHeaders: 25
+    property int fontSizeContent: 25
+    property real iconButtonHeight: 32
 
     readonly property string title: assetName + " | " + quadrantId + " | " + zoneId
 
@@ -37,6 +40,9 @@ Item {
 
         CompBeaconOsInduct_InspectInfoPanel {
             id: compBeaconOsInduct_InspectInfoPanel
+
+            fontSizeContent: subscreenInduct_Inspect_Root.fontSizeContent
+            fontSizeHeaders: subscreenInduct_Inspect_Root.fontSizeHeaders
 
             anchors{
                 top: parent.top
@@ -83,6 +89,8 @@ Item {
 
                     text: "Inspection Step"
 
+                    font.pixelSize: subscreenInduct_Inspect_Root.fontSizeHeaders
+
                 }
 
                 Item{
@@ -105,7 +113,7 @@ Item {
                         }
 
                         text: "Inspect (RH & LH) door 22 substructure, attach sills and fastener holes, for corrosion."
-                        font.pixelSize: 28
+                        font.pixelSize: subscreenInduct_Inspect_Root.fontSizeContent
                         color: "white"
                         wrapMode: Text.WordWrap
                     }
@@ -125,6 +133,7 @@ Item {
                 }
 
                 text: "Document Discrepancies"
+                font.pixelSize: subscreenInduct_Inspect_Root.fontSizeHeaders
 
             }
 
@@ -157,7 +166,7 @@ Item {
                     }
 
                     text: "Save as Draft"
-                    font.pixelSize: 28
+                    font.pixelSize: subscreenInduct_Inspect_Root.fontSizeHeaders
                     color: "#9287ED"
                 }
 
@@ -179,7 +188,7 @@ Item {
 
                     placeholderText: "Add discrepancy note"
                     color: "black"
-
+                    font.pixelSize: subscreenInduct_Inspect_Root.fontSizeContent
                     background: Rectangle{
 
                     }
@@ -201,7 +210,7 @@ Item {
                     CompIconBtn{
                         id: btnAdd
                         visible: false
-                        height: 64
+                        height: subscreenInduct_Inspect_Root.iconButtonHeight
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
                         iconColor: "#9287ED"
@@ -211,7 +220,7 @@ Item {
                     CompIconBtn{
                         id: btnCamera
 
-                        height: 64
+                        height: subscreenInduct_Inspect_Root.iconButtonHeight
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/CameraFill.svg"
                         iconColor: "#9287ED"
@@ -221,7 +230,7 @@ Item {
                     CompIconBtn{
                         id: btnVideo
 
-                        height: 64
+                        height: subscreenInduct_Inspect_Root.iconButtonHeight
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/VideoFill.svg"
                         iconColor: "#9287ED"
@@ -231,7 +240,7 @@ Item {
                     CompIconBtn{
                         id: btnMic
 
-                        height: 64
+                        height: subscreenInduct_Inspect_Root.iconButtonHeight
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/MicrophoneFill.svg"
                         iconColor: "#9287ED"
@@ -241,7 +250,7 @@ Item {
                     CompIconBtn{
                         id: btnImage
                         visible: false
-                        height: 64
+                        height: subscreenInduct_Inspect_Root.iconButtonHeight
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
                         iconColor: "#9287ED"
@@ -251,7 +260,7 @@ Item {
                     CompIconBtn{
                         id: btnAttach
                         visible: false
-                        height: 64
+                        height: subscreenInduct_Inspect_Root.iconButtonHeight
 
                         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
                         iconColor: "#9287ED"
