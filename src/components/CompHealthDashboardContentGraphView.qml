@@ -188,7 +188,7 @@ Item{
         ValueAxis {
             id: axisYValue
 
-            //labelFormat: "d"
+            labelFormat: "%.2f"
             //tickCount: 3
 
             gridLineColor: chart.gridLineColor
