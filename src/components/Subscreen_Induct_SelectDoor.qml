@@ -44,25 +44,14 @@ Item {
 
     signal zoneSelected(string zoneId)
 
-    CompLabel{
-        id: lblTitle
 
-        anchors{
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
-
-        text: subscreenInductSelectDoor_Root.title
-        font.pixelSize: 38
-    }
 
     Item{
         id: groupContents
 
         anchors{
-            top: lblTitle.bottom
-            topMargin: 32
+            top: parent.top
+            topMargin: 16
             left: parent.left
             right: parent.right
             bottom: parent.bottom

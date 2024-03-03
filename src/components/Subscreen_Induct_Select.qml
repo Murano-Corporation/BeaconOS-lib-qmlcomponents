@@ -22,30 +22,18 @@ Item {
         subscreenInduct_Select_Root.assetDetailsSelected = details
         subscreenInduct_Select_Root.assetImagePath = imgPath
 
-        assetSelected()
+        subscreenInduct_Select_Root.assetSelected()
     }
 
-    CompLabel{
-        id: lblInstructions
-
-        anchors{
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
-
-        text: "Select Asset for Inspection"
-        font.pixelSize: 38
-    }
 
     CompCustomisableTextField{
         id: searchField
 
         anchors{
-            top: lblInstructions.bottom
-            topMargin: 32
-            left: lblInstructions.left
-            right: lblInstructions.right
+            top: parent.top
+            topMargin: 16
+            left: parent.left
+            right: parent.right
 
         }
 
@@ -97,7 +85,11 @@ Item {
         }
 
         onAssetClicked: {
-            subscreenInduct_Select_Root.selectAsset(assetName, inductionData, assetDetails, assetImagePath)
+            subscreenInduct_Select_Root.selectAsset(
+                        compBeaconOsInductScreen_SelectAssetItem.assetName,
+                        compBeaconOsInductScreen_SelectAssetItem.inductionData,
+                        compBeaconOsInductScreen_SelectAssetItem.assetDetails,
+                        compBeaconOsInductScreen_SelectAssetItem.assetImagePath)
         }
     }
 }

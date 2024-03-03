@@ -12,27 +12,16 @@ Item {
 
     signal quadrantSelected(string quadrantId)
 
-    CompLabel{
-        id: lblTitle
-
-        anchors{
-            top: parent.top
-            left: parent.left
-            right: compProgressBar.left
-        }
-
-        text: "Select Quadrant for Inspection"
-        font.pixelSize: 38
-    }
-
     CompProgressBar {
         id: compProgressBar
 
         anchors{
-            top: lblTitle.top
+            top: parent.top
             right: parent.right
-            bottom: lblTitle.bottom
+
         }
+
+        height: 32
     }
 
     Item{
@@ -41,8 +30,8 @@ Item {
         property string assetImagePath: "file:///usr/share/BeaconOS-lib-images/images/Induct_Asset_Growler.png"
 
         anchors{
-            top: lblTitle.bottom
-            topMargin: 32
+            top: compProgressBar.bottom
+            topMargin: 16
             left: parent.left
             right: parent.right
             bottom: parent.bottom

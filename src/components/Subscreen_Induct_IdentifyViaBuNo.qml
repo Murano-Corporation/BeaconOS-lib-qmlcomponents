@@ -19,13 +19,6 @@ Item {
 
     signal nextClicked()
     
-    CompLabel{
-        id: lblTitle
-
-        text: "Identify Aircraft via Bureau Number"
-
-        font.pixelSize: 38
-    }
 
     CompBeaconOsInductScreen_SelectAssetItem{
         id: selectedAssetInfo
@@ -35,8 +28,8 @@ Item {
         allowAssetClick: false
         indexOfBuNoSelected: -1
         anchors{
-            top: lblTitle.bottom
-            topMargin: 32
+            top: parent.top
+            topMargin: 16
             left: parent.left
             right: parent.right
             bottom: parent.bottom

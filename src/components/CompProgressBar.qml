@@ -10,12 +10,6 @@ Item{
     property color colorBg: "#80000000"
     property color colorComplete: "#9287ED"
 
-    anchors{
-        top: lblTitle.top
-        right: parent.right
-        bottom: lblTitle.bottom
-    }
-
     width: 800
 
     Rectangle{
