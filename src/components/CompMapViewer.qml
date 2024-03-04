@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtLocation 5.12
 import QtPositioning 5.12
 import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.0
 
 Item {
     id: compMapViewerRoot
@@ -66,10 +67,10 @@ Item {
         //console.log("Active map type index now: " + activeMapTypeIndex)
         //console.log("Supported map types count: " + map.supportedMapTypes.length)
         if(map.supportedMapTypes.length === 0)
-                {
-                    console.error("NO SUPPORTED MAP TYPES");
-                    return;
-                }
+        {
+            console.error("NO SUPPORTED MAP TYPES");
+            return;
+        }
         else if(activeMapTypeIndex <= -1)
         {
             activeMapTypeIndex = 0
@@ -207,32 +208,32 @@ Item {
         //map.addMapItem()
     }
 
-   //Component.onCompleted: {
-   //    //console.log("Available Map Types:")
-   //    //console.log("Supported Plugin Service Providers " + mapPlugin.availableServiceProviders)
-   //
-   //    //for(var j = 0; j < map.supportedMapTypes.length; j++)
-   //    //{
-   //    //    var mapTypeCurrent = map.supportedMapTypes[j]
-   //    //    var typeName = mapTypeCurrent.name
-   //    //    var nightMode = mapTypeCurrent.night
-   //    //    var style = mapTypeCurrent.style
-   //    //    var description = mapTypeCurrent.description
-   //    //    var metaData = mapTypeCurrent.metadata
-   //    //    var isMobile = mapTypeCurrent.mobile
-   //    //    console.log(" - " + typeName)
-   //    //    console.log(" --- Description: " + description)
-   //    //    console.log(" --- IsNightMode: " + nightMode)
-   //    //    console.log(" --- IsMobile: " + isMobile)
-   //    //    console.log(" --- Style: " + style)
-   //    //    console.log(" --- MetaData: " + metaData)
-   //    //    console.log(" ")
-   //    //}
-   //
-   //
-   //
-   //}
-   //
+    //Component.onCompleted: {
+    //    //console.log("Available Map Types:")
+    //    //console.log("Supported Plugin Service Providers " + mapPlugin.availableServiceProviders)
+    //
+    //    //for(var j = 0; j < map.supportedMapTypes.length; j++)
+    //    //{
+    //    //    var mapTypeCurrent = map.supportedMapTypes[j]
+    //    //    var typeName = mapTypeCurrent.name
+    //    //    var nightMode = mapTypeCurrent.night
+    //    //    var style = mapTypeCurrent.style
+    //    //    var description = mapTypeCurrent.description
+    //    //    var metaData = mapTypeCurrent.metadata
+    //    //    var isMobile = mapTypeCurrent.mobile
+    //    //    console.log(" - " + typeName)
+    //    //    console.log(" --- Description: " + description)
+    //    //    console.log(" --- IsNightMode: " + nightMode)
+    //    //    console.log(" --- IsMobile: " + isMobile)
+    //    //    console.log(" --- Style: " + style)
+    //    //    console.log(" --- MetaData: " + metaData)
+    //    //    console.log(" ")
+    //    //}
+    //
+    //
+    //
+    //}
+    //
 
     Plugin {
         id: mapPlugin
@@ -308,6 +309,81 @@ Item {
         //        console.log("--- Style: " + mapType.style)
         //    }
         //}
+
+        MouseArea
+        {
+            id:mouseArea_CoordGrabber
+
+            //enabled: compMapViewerRoot.captureMouseCoords
+            visible: enabled
+
+            anchors.fill: parent
+            //hoverEnabled: true
+            propagateComposedEvents: true
+            property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
+
+        }
+
+        MapItemView{
+            model: 1
+
+            delegate: MapQuickItem{
+
+                coordinate: mouseArea_CoordGrabber.coordinate
+                anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height)
+
+                sourceItem: Item
+                {
+                    width: lbl.width
+                    height: iconPoint.y + iconPoint.height
+
+                    CompLabel{
+                        id: lbl
+                        visible: false
+                        text: "lat: %1; lon:%2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
+
+                        font{
+                            pixelSize: 24
+                        }
+
+                        anchors{
+                            top: parent.top
+                            horizontalCenter: parent.horizontalCenter
+                        }
+
+                        horizontalAlignment: Text.AlignHCenter
+
+                    }
+
+                    DropShadow{
+                        anchors.fill: lbl
+                        source: lbl
+
+                        horizontalOffset: 0
+                        verticalOffset: 0
+                        color: "#000000"
+                        radius: 4
+                        samples: 16
+                        spread: 1.0
+                    }
+
+                    CompImageIcon{
+                        id: iconPoint
+
+                        anchors{
+                            top: lbl.bottom
+                            horizontalCenter: lbl.horizontalCenter
+                        }
+
+                        height: 32
+                        width: height
+
+                        source: "file:///usr/share/BeaconOS-lib-images/images/DownArrowFill.svg"
+                        color: "#9287ED"
+                    }
+                }
+            }
+        }
 
         MapItemView{
             model: compMapViewerRoot.listAssets
@@ -413,26 +489,6 @@ Item {
 
 
 
-    MouseArea
-    {
-        id:mouseArea_CoordGrabber
 
-        enabled: compMapViewerRoot.captureMouseCoords
-        visible: enabled
-
-        anchors.fill: map
-        hoverEnabled: true
-        property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
-        CompLabel
-        {
-            x: parent.mouseX - width
-            y: parent.mouseY - height - 5
-            text: "lat: %1; lon:%2".arg(parent.coordinate.latitude).arg(parent.coordinate.longitude)
-
-            font{
-                pixelSize: 12
-            }
-        }
-    }
 
 }
