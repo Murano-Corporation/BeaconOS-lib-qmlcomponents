@@ -2,7 +2,7 @@ import QtQuick 2.12
 
 import QtQuick.Controls 2.12
 import Qt.labs.qmlmodels 1.0
-
+import CONSTANTS 1.0
 Item{
     id: galleryInstanceViewRoot
 
@@ -31,11 +31,11 @@ Item{
 
         var modelIndex = TableModelCameraGallery.index(imageIndex, 0)
 
-        imageSource = TableModelCameraGallery.data(modelIndex, 260)
-        timestampLong = TableModelCameraGallery.data(modelIndex, 458)
-        timestampShort = TableModelCameraGallery.data(modelIndex, 457)
-        gpsCoords = TableModelCameraGallery.data(modelIndex, 265)
-        inference = TableModelCameraGallery.data(modelIndex, 259)
+        imageSource = TableModelCameraGallery.data(modelIndex, Constants.DataRole_ImgPath)
+        timestampLong = TableModelCameraGallery.data(modelIndex, Constants.DataRole_Timestamp_Long)
+        timestampShort = TableModelCameraGallery.data(modelIndex, Constants.DataRole_Timestamp_Short)
+        gpsCoords = TableModelCameraGallery.data(modelIndex, Constants.DataRole_GpsCoords)
+        inference = TableModelCameraGallery.data(modelIndex, Constants.DataRole_Inference)
 
     }
 
