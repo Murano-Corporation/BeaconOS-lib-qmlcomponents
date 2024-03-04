@@ -252,8 +252,8 @@ Popup {
                     height: listNsnValues.rowHeight
                     width: listNsnValues.width
 
-                    labelName.font.pixelSize: 30
-                    labelValue.font.pixelSize: 30
+                    labelName.font.pixelSize: 25
+                    labelValue.font.pixelSize: 25
 
                     listLongestKeyWidth: listNsnValues.longestKeyNameWidth
 
