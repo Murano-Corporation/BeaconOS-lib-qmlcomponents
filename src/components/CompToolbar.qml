@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import CONSTANTS 1.0
 
 Item {
     id: compToolbarRoot
@@ -155,6 +156,8 @@ Item {
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Help.svg"
             iconColor: btnIconColor
             iconHeight: btnIconSize
+
+            onClicked: ApplicationsController.slot_Request_OpenApp(Constants.ESourceUUID_Popup_Help, {})
         }
 
         CompIconBtn{

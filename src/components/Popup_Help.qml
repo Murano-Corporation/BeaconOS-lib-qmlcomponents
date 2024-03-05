@@ -15,10 +15,9 @@ Popup {
         color: "#80000000"
     }
 
-    CompHealthPanelBg{
+    CompPopupBG{
         id: rectBG
 
-        radius: 17
 
         anchors{
             fill: parent
@@ -89,6 +88,8 @@ Popup {
             }
 
             text: "Close"
+
+            onClicked: popupHelpRoot.close()
         }
     }
 
@@ -96,6 +97,6 @@ Popup {
 
 /*##^##
 Designer {
-    D{i:0;formeditorColor:"#4c4e50";formeditorZoom:0.33;height:1080;width:1920}
+    D{i:0;formeditorColor:"#4c4e50";formeditorZoom:0.66;height:1080;width:1920}
 }
 ##^##*/
