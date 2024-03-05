@@ -101,5 +101,6 @@
         <file>Subscreen_Induct_Inspect.qml</file>
         <file>CompBeaconOsInduct_InspectInfoPanel.qml</file>
         <file>CompRepairScreenNavButton.qml</file>
+        <file>Popup_Help.qml</file>
     </qresource>
 </RCC>
