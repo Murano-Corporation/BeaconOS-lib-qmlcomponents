@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtMultimedia 5.12
 
-Item {
+Comp__BASE {
     id: compAnimatedGradientBgRoot
 
     anchors.fill: parent

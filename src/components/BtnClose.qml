@@ -5,6 +5,7 @@ import Qt.labs.qmlmodels 1.0
 CompIconBtn{
     id: btnClose
 
+
     anchors{
     }
 

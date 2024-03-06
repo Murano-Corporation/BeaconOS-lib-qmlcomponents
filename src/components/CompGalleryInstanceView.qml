@@ -3,7 +3,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Qt.labs.qmlmodels 1.0
 import CONSTANTS 1.0
-Item{
+
+Comp__BASE{
     id: galleryInstanceViewRoot
 
     property int imageIndex: -1

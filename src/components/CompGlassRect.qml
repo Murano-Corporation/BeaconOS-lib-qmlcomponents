@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.12
 
-Item {
+Comp__BASE {
     id: compGlassRectRoot
 
     opacity: 0.5

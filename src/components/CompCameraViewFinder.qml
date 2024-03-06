@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-Item {
+Comp__BASE {
     id: compCameraViewFinderRoot
 
     property real viewFinderWidth: 137

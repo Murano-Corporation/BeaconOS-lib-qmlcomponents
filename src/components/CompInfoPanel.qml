@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQml 2.12
 
 
-Item {
+Comp__BASE {
     id: compInfoPanel
 
     height: 200

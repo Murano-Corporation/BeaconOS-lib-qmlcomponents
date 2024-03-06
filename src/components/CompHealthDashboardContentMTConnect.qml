@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-Item {
+Comp__BASE {
     id: compHealthDashboardContentMTConnect
 
     property bool canShowGraphView: view === 'Graph' && graphViewTarget !== 'null'

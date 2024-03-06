@@ -1,6 +1,6 @@
 import QtQuick 2.12
 
-Item{
+Comp__BASE {
     id: compHealthContextNavBtn
 
     property string text: "%TEXT%"

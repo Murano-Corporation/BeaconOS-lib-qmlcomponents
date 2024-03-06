@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtLocation 5.12
 import QtPositioning 5.2
 
-Item {
+Comp__BASE {
     id: compAssetMapView
 
     property bool showStyleControls: false

@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtCharts 2.3
 
-Item{
+Comp__BASE {
     id: compHealthDashboardContentGraphView
 
     property string valueUnits: "UNITS"

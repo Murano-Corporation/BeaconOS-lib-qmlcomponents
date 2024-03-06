@@ -1,6 +1,6 @@
 import QtQuick 2.12
 
-Item {
+Comp__BASE {
     id: compAssetAlertsPanel
     
     property var listOfAlerts: TableModelAlerts //[{"img_path": "file:///usr/share/BeaconOS-lib-images/images/Alert.svg", "title": "Something bad happened"}]

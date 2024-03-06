@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtGraphicalEffects 1.0
 
-Item{
+Comp__BASE {
     id: compGradientRectRoot
 
     property alias color1: gradientStop1.color

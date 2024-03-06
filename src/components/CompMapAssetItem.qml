@@ -3,7 +3,7 @@ import QtLocation 5.12
 import QtPositioning 5.2
 import QtGraphicalEffects 1.0
 
-MapQuickItem{
+Comp__BASE_MapQuickItem {
     id: compMapAssetItemRoot
 
     property real lat: 0.0
@@ -13,6 +13,7 @@ MapQuickItem{
 
     signal centerOnPoint(var coords)
     signal fitViewportToVisibleMapItems()
+
 
     anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height * 0.5)
 

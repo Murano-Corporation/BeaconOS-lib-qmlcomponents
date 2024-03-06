@@ -1,14 +1,12 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-Rectangle {
+Comp__BASE {
     id: compCustomisableTextField
     height: 41
     width: 638
 
-    radius: height * 0.5
 
-    color: "transparent"
     
     property alias text: txtfldSearch.text
     property alias placeholderText: txtfldSearch.placeholderText
@@ -19,8 +17,16 @@ Rectangle {
     
     signal enterPressed()
 
-    border{
-        color: "#4DE9E9E9"
+
+
+    Rectangle{
+        anchors.fill: parent
+        border{
+            color: "#4DE9E9E9"
+        }
+        radius: height * 0.5
+
+        color: "transparent"
     }
 
     CompImageIcon{

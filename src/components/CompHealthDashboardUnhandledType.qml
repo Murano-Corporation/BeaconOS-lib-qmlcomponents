@@ -3,7 +3,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import Qt.labs.qmlmodels 1.0
 
-Rectangle{
+Comp__BASE_Rectangle{
     id: compHealthDashboardUnhandledType
 
     height: gridView.cellHeight - 61

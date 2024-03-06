@@ -1,7 +1,6 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
 
-Label {
+Comp__BASE_Label {
     id: lblScreenName
 
     text: "Asset Dashboard"

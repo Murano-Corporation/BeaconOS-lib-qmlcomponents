@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.12
 
 
-Item{
+Comp__BASE{
     id: compBeaconOsInduct_QuadrantCell
 
     property alias quadrantId: lblQuadrantId.text

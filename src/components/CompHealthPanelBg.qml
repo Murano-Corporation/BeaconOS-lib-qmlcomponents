@@ -1,6 +1,6 @@
 import QtQuick 2.12
 
-Rectangle{
+Comp__BASE_Rectangle{
     anchors{
         fill: parent
     }

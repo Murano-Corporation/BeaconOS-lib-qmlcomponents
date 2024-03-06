@@ -1,7 +1,6 @@
 import QtQuick 2.15
-import Singletons 1.0
 
-Item {
+Comp__BASE {
     id: compHealthDashboardListItemRoot
     property string paramName: ""
 

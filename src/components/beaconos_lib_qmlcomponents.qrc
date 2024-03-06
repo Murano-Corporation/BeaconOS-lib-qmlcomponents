@@ -102,5 +102,16 @@
         <file>CompBeaconOsInduct_InspectInfoPanel.qml</file>
         <file>CompRepairScreenNavButton.qml</file>
         <file>Popup_Help.qml</file>
+        <file>Comp__BASE.qml</file>
+        <file>Comp__BASE_Rectangle.qml</file>
+        <file>Comp__BASE_Label.qml</file>
+        <file>Comp__BASE_MapQuickItem.qml</file>
+        <file>Comp__BASE_Button.qml</file>
+        <file>Comp__BASE_Tooltip.qml</file>
+        <file>Comp__BASE_Dialog.qml</file>
+        <file>Comp__BASE_Image.qml</file>
+        <file>Comp__BASE_Popup.qml</file>
+        <file>Comp__BASE_Flipable.qml</file>
+        <file>Comp__BASE_ComboBox.qml</file>
     </qresource>
 </RCC>

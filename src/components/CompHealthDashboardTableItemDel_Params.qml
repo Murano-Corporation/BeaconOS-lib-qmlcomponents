@@ -2,7 +2,7 @@ import QtQuick 2.12
 import CONSTANTS 1.0
 import QtQuick.Controls 2.12
 
-Item {
+Comp__BASE {
     id: compHealthDashboardTableItemDel_Params_Root
     required property var tableModelRef
     property var myModel: undefined

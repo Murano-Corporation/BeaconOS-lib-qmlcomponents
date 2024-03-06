@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 
-Item{
+Comp__BASE{
     id: compBeaconOsInductScreen_SelectAssetItem
 
     property string assetName: "F/A-18"
