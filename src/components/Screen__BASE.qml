@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Item {
+Comp__BASE {
     id: screenBaseRoot
 
     property bool bCanLeaveScreen: true

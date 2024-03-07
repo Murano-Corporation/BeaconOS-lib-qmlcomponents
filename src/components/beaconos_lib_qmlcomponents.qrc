@@ -113,5 +113,53 @@
         <file>Comp__BASE_Popup.qml</file>
         <file>Comp__BASE_Flipable.qml</file>
         <file>Comp__BASE_ComboBox.qml</file>
+        <file>CompButton.qml.autosave</file>
+        <file>CompCombobox.qml.autosave</file>
+        <file>CompConversationalAIChat.qml.autosave</file>
+        <file>CompExpandableBtnBreadcrumb.qml.autosave</file>
+        <file>CompMapViewer.qml.autosave</file>
+        <file>CompMessageHtml.qml.autosave</file>
+        <file>CompNotificationItem.qml.autosave</file>
+        <file>CompNotificationsPanel.qml.autosave</file>
+        <file>CompNsnTableItem.qml.autosave</file>
+        <file>CompParamView_Gauge.qml.autosave</file>
+        <file>CompParamView_LED.qml.autosave</file>
+        <file>CompParamView_Text.qml.autosave</file>
+        <file>CompPopupBG.qml.autosave</file>
+        <file>CompProcdImageItem.qml.autosave</file>
+        <file>CompProgressBar.qml.autosave</file>
+        <file>CompProgressBar_Circle.qml.autosave</file>
+        <file>CompRectRoundedBtn.qml.autosave</file>
+        <file>CompReferenceGridItem.qml.autosave</file>
+        <file>CompRepairScreenNavButton.qml.autosave</file>
+        <file>CompRoundGlassBG.qml.autosave</file>
+        <file>CompTableHeaderItem.qml.autosave</file>
+        <file>CompToolbar.qml.autosave</file>
+        <file>CompToolbarBreadcrumbBtn.qml.autosave</file>
+        <file>DlgYesNo.qml.autosave</file>
+        <file>ImgAssetGenerator.qml.autosave</file>
+        <file>ImgAssetGrowler.qml.autosave</file>
+        <file>ImgAssetNano.qml.autosave</file>
+        <file>ImgAssetVehicle.qml.autosave</file>
+        <file>ImgIconMapPos.qml.autosave</file>
+        <file>ImgParamAltimeter.qml.autosave</file>
+        <file>ImgParamAltitudeIndicator.qml.autosave</file>
+        <file>ImgParamHeadingIndicator.qml.autosave</file>
+        <file>ImgParamTurnCoordinator.qml.autosave</file>
+        <file>ImgParamVerticalSpeedIndicator.qml.autosave</file>
+        <file>Overlay_MessageBox_Info.qml.autosave</file>
+        <file>Popup_Chat_AI.qml.autosave</file>
+        <file>Popup_Help.qml.autosave</file>
+        <file>PopupManualPdfPicker.qml.autosave</file>
+        <file>Popup_NsnViewer.qml.autosave</file>
+        <file>PopupPleaseWait.qml.autosave</file>
+        <file>Screen_Camera_Delta.qml</file>
+        <file>Subscreen_Induct_IdentifyViaBuNo.qml.autosave</file>
+        <file>Subscreen_Induct_Inspect.qml.autosave</file>
+        <file>Subscreen_Induct_Select.qml.autosave</file>
+        <file>Subscreen_Induct_SelectDoor.qml.autosave</file>
+        <file>Subscreen_Induct_SelectQuadrant.qml.autosave</file>
+        <file>Subscreen_Induct_Start.qml.autosave</file>
+        <file>Screen_Camera_Omega.qml</file>
     </qresource>
 </RCC>
