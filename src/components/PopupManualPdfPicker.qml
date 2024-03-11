@@ -12,6 +12,12 @@ Popup {
     property rect mappedObj: Qt.rect(0,0,300,400)
     property string fileNameOnOpen
     property int viewMode: 0
+    //property int fileNameFontSize: 20
+    property alias lblTitleComp : lblTitle
+    property alias lblFileNameSize: listContents.fileNameFontSize
+    property alias groupControlscomp: groupControls
+    property alias btnCancelComp: btnCancel
+
 
     signal searchTextChanged(string text)
     signal itemSelected()
@@ -225,8 +231,10 @@ Popup {
 
             visible: popupManualPdfPicker.viewMode === 0
 
-            property real itemHeight: 64
+            property real itemHeight: 100
             property string fileNameHovered: ""
+            property real fileNameFontSize: 20
+
 
             clip: true
             focus: true
@@ -274,7 +282,7 @@ Popup {
                     text: model.display
 
                     font{
-                        pixelSize: 20
+                        pixelSize: listContents.fileNameFontSize
                     }
                 }
 
@@ -314,11 +322,11 @@ Popup {
         Item{
             id: groupControls
 
-            property real btnHeight: 60
+            //property real btnHeight: 60
             property real btnWidth: 200
             property real btnSpacing: 40
 
-            height: btnHeight
+            height: 60
 
             anchors{
                 left: lblTitle.left
@@ -330,13 +338,17 @@ Popup {
             CompBtnBreadcrumb{
                 id: btnCancel
 
+                enabled: (popupManualPdfPicker.fileNameOnOpen !== "")
+
                 anchors{
                     right: parent.right
                     bottom: parent.bottom
                 }
 
-                height: groupControls.btnHeight
+                height: groupControls.height
                 width: groupControls.btnWidth
+
+                font.pixelSize: 20
 
                 text: qsTr("Back")
 
@@ -361,6 +373,8 @@ Popup {
                 height: btnCancel.height
                 width: btnCancel.width
 
+                font.pixelSize: btnCancel.font.pixelSize
+
                 text: qsTr("Open")
 
                 //iconSource: "file:///usr/share/BeaconOS-lib-images/images/5G.svg"
@@ -376,3 +390,4 @@ Popup {
 
 
 }
+

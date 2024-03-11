@@ -10,6 +10,8 @@ Comp__BASE {
     property string assetState: "Active"
     property string beaconState: "Active"
     property string assetType: "Vehicle"
+    property alias itemWidth: compAssetDashboardGridItemRoot.width
+    property alias itemHeight: compAssetDashboardGridItemRoot.height
 
     width: 373
     height: 368
