@@ -113,5 +113,7 @@
         <file>Comp__BASE_Popup.qml</file>
         <file>Comp__BASE_Flipable.qml</file>
         <file>Comp__BASE_ComboBox.qml</file>
+        <file>Screen_Camera_Delta.qml</file>
+        <file>Screen_Camera_Omega.qml</file>
     </qresource>
 </RCC>
