@@ -6,8 +6,10 @@ ComboBox {
 
     property alias fontPixelSize: lblContent.font.pixelSize
     property color bgBorderColor: "#4DE9E9E9"
-    property alias currentTextColor: lblContent.color
+    property color currentTextColor: "#000000"
+    property real currentFontSize: 24
     property string unselectedText: qsTr("Select")
+    property alias valueFontSize: comboFilters.currentFontSize
 
     textRole: "key"
 
@@ -47,12 +49,19 @@ ComboBox {
     delegate: ItemDelegate{
         width: comboFilters.width
 
+        background: Rectangle {
+            width: parent.width
+            height: parent.height
+            color: "#9287ED"
+            anchors.bottom: parent.bottom
+        }
+
         contentItem: CompLabel{
             text: model.key
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            color: "#000000"
-            font.pixelSize: 24
+            color: currentTextColor
+            font.pixelSize: currentFontSize
             MouseArea{
                 anchors.fill: parent
 
