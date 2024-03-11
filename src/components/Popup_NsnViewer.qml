@@ -40,20 +40,20 @@ Popup {
     Connections{
         target: DatabaseController
 
-        onSignal_NsnInfoFetched: function(mapData)
+        function onSignal_NsnInfoFetched(mapData)
         {
             rectPleaseWait.visible = false
         }
 
-        onSignal_GetNsnInfo: function(){
+        function onSignal_GetNsnInfo(){
             rectPleaseWait.visible = true
         }
 
-        onSignal_Error_Open: function(){
+        function onSignal_Error_Open(){
             rectPleaseWait.visible = false
         }
 
-        onSignal_Error: function(sTitle, sMessage){
+        function onSignal_Error(sTitle, sMessage){
             progress.visible = false
             lblPleaseWait.text = sTitle
             lblErrorMessage.text = sMessage
@@ -67,8 +67,6 @@ Popup {
         nsnDetails = undefined
 
     }
-
-
 
     Timer{
         id: tmrDelayGetDetails
