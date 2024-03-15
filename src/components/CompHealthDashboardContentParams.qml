@@ -267,11 +267,11 @@ Comp__BASE {
                 }
 
                 onPressAndHold: {
-                    tooltip.open()
+                    tooltip1.open()
                 }
 
                 CompTooltip{
-                    id: tooltip
+                    id: tooltip1
                     text: parent.myModel.tooltip_text
                 }
 

@@ -14,6 +14,11 @@ Item {
     property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 4 : 0
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property real zoomCurrent
+    property real mapTypesHeight: 64
+    property real mapTypeSize: 20
+    property alias mapTypes: compMapViewerRoot.mapTypesHeight
+    property alias listHeight: listMapTypes
+    property alias mapFontSize: compMapViewerRoot.mapTypeSize
 
     Component {
         id: highlight
@@ -45,6 +50,9 @@ Item {
 
         delegate: CompBtnBreadcrumb{
             text: getSimpleMapNameString(model.name)
+
+            height: compMapViewerRoot.mapTypesHeight
+            font.pixelSize: compMapViewerRoot.mapTypeSize
 
             onClicked: {
                 compMapViewerRoot.activeMapTypeIndex = index

@@ -324,7 +324,7 @@ Comp__BASE {
 
         property real btnSpacing: 41
         property real btnHeight: 250
-        property real btnWidth: ((compHealthDashboardContentContextNav.width - (btnSpacing * 3)) * 0.23)
+        property real btnWidth: ((loaderContentNav.width - (btnSpacing * 3)) * 0.23)
         property int fontPixelSize: 24
 
         visible: !isDataVisible
@@ -356,8 +356,8 @@ Comp__BASE {
                 width: viewContext1_MTC.btnWidth
                 height: viewContext1_MTC.btnHeight
 
-                text: model.name
-                                fontPixelSize: viewContext1_MTC.fontPixelSize
+                text: model.display
+                fontPixelSize: viewContext1_MTC.fontPixelSize
 
                 onClicked: function(txt){
                     filterDisplayData(txt)

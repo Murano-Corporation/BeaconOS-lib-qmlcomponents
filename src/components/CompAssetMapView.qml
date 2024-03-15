@@ -7,6 +7,9 @@ Comp__BASE {
     id: compAssetMapView
 
     property bool showStyleControls: false
+    property alias mapTypeBtns: mapView.mapTypes
+    property alias listMapHeight: mapView.listHeight
+    property alias mapTypeFontSize: mapView.mapFontSize
 
     CompMapViewer{
         id: mapView
