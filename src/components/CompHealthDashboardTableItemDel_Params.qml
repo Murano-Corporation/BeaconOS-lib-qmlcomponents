@@ -16,6 +16,7 @@ Comp__BASE {
     property int rows: 1
     property int selectedRow: -1
     property bool showRowNum: false
+    property alias dataContent : textContent
     /** POSSIBLE VALUES
       * - text = Only shows textual data
       * - image = Only shows image data

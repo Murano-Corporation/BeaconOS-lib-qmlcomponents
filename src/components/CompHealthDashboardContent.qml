@@ -26,6 +26,7 @@ Comp__BASE {
     property bool isBtnGridViewVisible: false
     property bool isBtnListViewVisible: false
     property bool isBtnGraphViewVisible: false
+    property bool isDataVisible: false
 
     /** POSSIBLE CONTENT STATES
       * - context_nav : User is choosing contexts
@@ -571,6 +572,7 @@ Comp__BASE {
             text: compHealthDashboardContentRoot.systemTypeSelected
 
             onClicked: {
+                compHealthDashboardContentRoot.isDataVisible = false
 
                 if(compHealthDashboardContentRoot.navObject === null)
                     compHealthDashboardContentRoot.systemTypeSelected = "null"

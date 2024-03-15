@@ -11,6 +11,11 @@ Comp__BASE {
     property color color1: "#9287ED"
     property color color2: "#9287ED"
     property string iconPath: ''
+    property alias hotParamIconGroup: iconGroup
+    property alias hotParamIcon : imgIcon
+    property alias hotParamName : lblName
+    property alias hotParamValue1 : lblValue
+    property alias hotParamValue2 : lblValue2
 
     height: 93
     width: 364
@@ -52,61 +57,64 @@ Comp__BASE {
 
         }
     }
-
-    CompLabel{
-        id: lblName
-        text: compAssetHotParam.displayName
-        
+    Item{
         anchors{
-            top: lblValue.bottom
-            topMargin: 2
-            left: lblValue.left
-        }
-        
-        color: "#9287ED"
 
-        font{
-            pixelSize: 14
-            capitalization: Font.AllUppercase
-        }
-    }
-    
-    CompLabel{
-        id: lblValue
-        
-        anchors{
-            top: parent.top
-            topMargin: 20
+            verticalCenter: iconGroup.verticalCenter
             left: iconGroup.right
             leftMargin: 16
-            
         }
-        
-        font{
-            pixelSize: 25
-            weight: Font.Normal
-        }
-        
-        text: compAssetHotParam.value1
-    }
-    
-    CompLabel{
-        id: lblValue2
-        
-        anchors{
-            bottom: lblValue.bottom
+        CompLabel{
+            id: lblName
+            text: compAssetHotParam.displayName
 
-            left: lblValue.right
-            leftMargin: 6
+            anchors{
+                top: lblValue.bottom
+                topMargin: 2
+                left: lblValue.left
+            }
+
+            color: "#9287ED"
+
+            font{
+                pixelSize: 14
+                capitalization: Font.AllUppercase
+            }
         }
-        
-        font{
-            pixelSize: 12
-            weight: Font.Normal
+
+        CompLabel{
+            id: lblValue
+
+            anchors{
+                bottom: parent.top
+                left: parent.left
+            }
+
+            font{
+                pixelSize: 25
+                weight: Font.Normal
+            }
+
+            text: compAssetHotParam.value1
         }
-        
-        text: compAssetHotParam.value2
+
+        CompLabel{
+            id: lblValue2
+
+            anchors{
+                bottom: lblValue.bottom
+
+                left: lblValue.right
+                leftMargin: 6
+            }
+
+            font{
+                pixelSize: 12
+                weight: Font.Normal
+            }
+
+            text: compAssetHotParam.value2
+        }
     }
-    
     
 }
