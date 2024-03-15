@@ -677,93 +677,115 @@ Comp__BASE {
             right: groupBreadcrumbs.right
         }
 
-        CompHealthDashboardContentContextNav {
-            id: compHealthDashboardContentContextNav
-
-            visible: (compHealthDashboardContentRoot.contentState === "context_nav")
-            onVisibleChanged: {
-                if(visible === false)
+        Loader{
+            id: loaderContentNav
+            active: (compHealthDashboardContentRoot.contentState === "context_nav")
+            onActiveChanged:{
+                if(active === false)
                 {
                     return
                 }
 
-                isBtnGridViewVisible = false
-                isBtnListViewVisible = false
+                compHealthDashboardContentRoot.isBtnGridViewVisible = false
+                compHealthDashboardContentRoot.isBtnListViewVisible = false
             }
 
+            asynchronous: true
             anchors.fill: parent
+            sourceComponent: CompHealthDashboardContentContextNav {
+                id: compHealthDashboardContentContextNav
 
-            onSystemSelectedChanged: {
-                compHealthDashboardContentRoot.systemTypeSelected = compHealthDashboardContentContextNav.systemSelected
-            }
+                onSystemSelectedChanged: {
+                    compHealthDashboardContentRoot.systemTypeSelected = compHealthDashboardContentContextNav.systemSelected
+                }
 
-            onContext1SelectedChanged: {
-                compHealthDashboardContentRoot.context1Selected = compHealthDashboardContentContextNav.context1Selected
-            }
+                onContext1SelectedChanged: {
+                    compHealthDashboardContentRoot.context1Selected = compHealthDashboardContentContextNav.context1Selected
+                }
 
-            onContext2SelectedChanged: {
-                compHealthDashboardContentRoot.context2Selected = compHealthDashboardContentContextNav.context2Selected
+                onContext2SelectedChanged: {
+                    compHealthDashboardContentRoot.context2Selected = compHealthDashboardContentContextNav.context2Selected
+                }
             }
         }
 
-        CompHealthDashboardContentParams {
-            id: compHealthDashboardContentParams
+
+
+        Loader{
+            id: loaderContentParams
+
+            active: (compHealthDashboardContentRoot.contentState !== "context_nav" && compHealthDashboardContentRoot.contentState !== 'params_mtconnect')
+
+            asynchronous: true
             anchors.fill: parent
 
-            visible: (compHealthDashboardContentRoot.contentState !== "context_nav" && compHealthDashboardContentRoot.contentState !== 'params_mtconnect')
-            targetData: (visible ? (compHealthDashboardContentRoot.contentState) : "")
-            view: compHealthDashboardContentRoot.paramViewMode
+            sourceComponent:         CompHealthDashboardContentParams {
+                id: compHealthDashboardContentParams
 
-            onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
+                targetData: (visible ? (compHealthDashboardContentRoot.contentState) : "")
+                view: compHealthDashboardContentRoot.paramViewMode
 
-            onFloatingBreadCrumbNameChanged: {
-                compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
+                onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
+
+                onFloatingBreadCrumbNameChanged: {
+                    compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
+                }
+
+                onForceViewModeMaximized: {
+                    compHealthDashboardContentRoot.forceViewModeMaximized()
+                }
+
+                onParamSelected: txt => compHealthDashboardContentRoot.paramNameSelected = txt
+
+                onSetGridBtnVisible: isVis => {
+                                         compHealthDashboardContentRoot.isBtnGridViewVisible = isVis
+                                     }
+
+                onSetListBtnVisible: isVis => {
+                                         compHealthDashboardContentRoot.isBtnListViewVisible = isVis
+                                     }
             }
-
-            onForceViewModeMaximized: {
-                compHealthDashboardContentRoot.forceViewModeMaximized()
-            }
-
-            onParamSelected: txt => compHealthDashboardContentRoot.paramNameSelected = txt
-
-            onSetGridBtnVisible: isVis => {
-                                     compHealthDashboardContentRoot.isBtnGridViewVisible = isVis
-                                 }
-
-            onSetListBtnVisible: isVis => {
-                                     compHealthDashboardContentRoot.isBtnListViewVisible = isVis
-                                 }
         }
 
-        CompHealthDashboardContentMTConnect {
-            id: compHealthDashboardContentMTConnect
 
-            visible: compHealthDashboardContentRoot.contentState === 'params_mtconnect'
+
+        Loader{
+            id: loaderContentMTConnect
+
+            active: compHealthDashboardContentRoot.contentState === 'params_mtconnect'
+
+            asynchronous: true
             anchors.fill: parent
+            sourceComponent:         CompHealthDashboardContentMTConnect {
+                id: compHealthDashboardContentMTConnect
 
-            view: compHealthDashboardContentRoot.paramViewMode
-            searchFieldText: compHealthDashboardContentRoot.searchFieldValue
-            onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
 
-            //onFloatingBreadCrumbNameChanged: {
-            //    compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
-            //}
+                view: compHealthDashboardContentRoot.paramViewMode
+                searchFieldText: compHealthDashboardContentRoot.searchFieldValue
+                onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
 
-            onForceViewModeMaximized: {
-                compHealthDashboardContentRoot.forceViewModeMaximized()
+                //onFloatingBreadCrumbNameChanged: {
+                //    compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
+                //}
+
+                onForceViewModeMaximized: {
+                    compHealthDashboardContentRoot.forceViewModeMaximized()
+                }
+
+                onParamSelected: txt => compHealthDashboardContentRoot.paramNameSelected = txt
+
+                onSetGridBtnVisible: isVis => {
+                                         compHealthDashboardContentRoot.isBtnGridViewVisible = isVis
+                                     }
+
+                onSetListBtnVisible: isVis => {
+                                         compHealthDashboardContentRoot.isBtnListViewVisible = isVis
+                                     }
+
             }
-
-            onParamSelected: txt => compHealthDashboardContentRoot.paramNameSelected = txt
-
-            onSetGridBtnVisible: isVis => {
-                                     compHealthDashboardContentRoot.isBtnGridViewVisible = isVis
-                                 }
-
-            onSetListBtnVisible: isVis => {
-                                     compHealthDashboardContentRoot.isBtnListViewVisible = isVis
-                                 }
-
         }
+
+
 
 
     }
