@@ -24,6 +24,7 @@ Comp__BASE {
 
     signal actionClickedShowGraph(string paramName)
     signal clicked()
+    signal pressAndHold()
 
     Rectangle {
 
@@ -195,6 +196,8 @@ Comp__BASE {
         }
 
         onClicked: compHealthDashboardTableItemDel_Params_Root.clicked()
+
+        onPressAndHold: compHealthDashboardTableItemDel_Params_Root.pressAndHold()
     }
 
 
