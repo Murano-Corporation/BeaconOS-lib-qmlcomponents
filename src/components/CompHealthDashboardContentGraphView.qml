@@ -92,21 +92,6 @@ Comp__BASE {
         lineSeries1.clear()
     }
 
-    Component.onCompleted: {
-        //testPoints_Initialize();
-        //devTimer.start()
-    }
-
-    onVisibleChanged: {
-        if(visible === true)
-        {
-            forceHideGridListBtns()
-            LiveGraphController.signal_TargetDataChanged.connect(addPoint)
-        } else {
-            LiveGraphController.signal_TargetDataChanged.disconnect(addPoint)
-        }
-    }
-
     Connections{
         target: LiveGraphController
 
@@ -116,6 +101,11 @@ Comp__BASE {
 
         function onSignal_RemoveAllPoints(){
             clear()
+        }
+
+        function onSignal_TargetDataChanged(x,y)
+        {
+            addPoint(x,y)
         }
     }
 

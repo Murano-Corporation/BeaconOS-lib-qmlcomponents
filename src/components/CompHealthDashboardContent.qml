@@ -19,7 +19,9 @@ Comp__BASE {
     property string paramViewMode: "List"
     property string paramViewMode_Last: paramViewMode
     property string assetType: AssetInfo.assetType
-
+    property int galleryInstanceId: -1
+    property string graphViewTarget: 'null'
+    property CompHealthDashboardContentContextNav navObject: null
 
     property bool isBtnGridViewVisible: false
     property bool isBtnListViewVisible: false
@@ -100,8 +102,8 @@ Comp__BASE {
 
         if(floatingBreadcrumbBtntext === 'null')
         {
-            compHealthDashboardContentParams.galleryInstanceId = -1
-            compHealthDashboardContentParams.graphViewTarget = 'null'
+            compHealthDashboardContentRoot.galleryInstanceId = -1
+            compHealthDashboardContentRoot.graphViewTarget = 'null'
 
             if(paramViewMode === "Graph"){
                 compHealthDashboardContentRoot.paramViewMode = paramViewMode_Last
@@ -112,7 +114,7 @@ Comp__BASE {
 
     onContentStateChanged: {
 
-        //console.log("Content State: " + contentState)
+        console.log("Content State: " + contentState)
 
         if(contentState === 'gallery' || contentState === 'context_nav')
         {
@@ -126,17 +128,25 @@ Comp__BASE {
         checkContextNavCompleteness()
 
         if(blockModelDataFilterSignal)
+        {
+
             return;
+        }
 
         updateModelDataFilters()
 
     }
 
     onSystemTypeSelectedChanged: {
+
+        //console.log('System type changed to: ' + systemTypeSelected)
         btnViewParameters.clicked()
         checkContextNavCompleteness()
         if(blockModelDataFilterSignal)
+        {
+            //console.log('...Blocked')
             return;
+        }
 
         blockModelDataFilterSignal = true
         context1Selected = "null"
@@ -152,10 +162,15 @@ Comp__BASE {
     }
 
     onContext1SelectedChanged: {
+
+        //console.log("Context 1 is now: " + context1Selected)
+
         btnViewParameters.clicked()
         checkContextNavCompleteness()
         if(blockModelDataFilterSignal)
-            return;
+        {
+            //console.log('...Blocked')
+            return;}
 
         blockModelDataFilterSignal = true
 
@@ -170,10 +185,16 @@ Comp__BASE {
     }
 
     onContext2SelectedChanged: {
+
+        //console.log("Context 2 is now: " + context2Selected)
+
         btnViewParameters.clicked()
         checkContextNavCompleteness()
         if(blockModelDataFilterSignal)
+        {
+            //console.log('...Blocked')
             return;
+        }
 
         blockModelDataFilterSignal = true
         paramNameSelected = "null"
@@ -247,6 +268,9 @@ Comp__BASE {
 
 
         isComplete &= (context2Selected !== 'null')
+
+
+        //console.log("...returning: " + isComplete)
         compHealthDashboardContentRoot.contextNavCompletenessCheck = isComplete
 
     }
@@ -547,7 +571,11 @@ Comp__BASE {
             text: compHealthDashboardContentRoot.systemTypeSelected
 
             onClicked: {
-                compHealthDashboardContentContextNav.systemSelected = "null"
+
+                if(compHealthDashboardContentRoot.navObject === null)
+                    compHealthDashboardContentRoot.systemTypeSelected = "null"
+                else
+                    compHealthDashboardContentRoot.navObject.systemSelected = "null"
             }
         }
 
@@ -576,7 +604,10 @@ Comp__BASE {
             }
 
             onClicked: {
-                compHealthDashboardContentContextNav.context1Selected = "null"
+                if(compHealthDashboardContentRoot.navObject === null)
+                    compHealthDashboardContentRoot.context1Selected = "null"
+                else
+                    compHealthDashboardContentRoot.navObject.context1Selected = "null"
             }
 
             text: compHealthDashboardContentRoot.context1Selected
@@ -611,7 +642,11 @@ Comp__BASE {
             }
 
             onClicked: {
-                compHealthDashboardContentContextNav.context2Selected = "null"
+
+                if(compHealthDashboardContentRoot.navObject === null)
+                    compHealthDashboardContentRoot.context2Selected = "null"
+                else
+                    compHealthDashboardContentRoot.navObject.context2Selected = "null"
             }
 
             text: compHealthDashboardContentRoot.context2Selected
@@ -683,6 +718,7 @@ Comp__BASE {
             onActiveChanged:{
                 if(active === false)
                 {
+                    compHealthDashboardContentRoot.navObject = null
                     return
                 }
 
@@ -706,6 +742,15 @@ Comp__BASE {
                 onContext2SelectedChanged: {
                     compHealthDashboardContentRoot.context2Selected = compHealthDashboardContentContextNav.context2Selected
                 }
+
+                Component.onCompleted: {
+                    compHealthDashboardContentRoot.navObject = this
+
+                    systemSelected = compHealthDashboardContentRoot.systemTypeSelected
+                    context1Selected = compHealthDashboardContentRoot.context1Selected
+                    context2Selected = compHealthDashboardContentRoot.context2Selected
+
+                }
             }
         }
 
@@ -719,7 +764,7 @@ Comp__BASE {
             asynchronous: true
             anchors.fill: parent
 
-            sourceComponent:         CompHealthDashboardContentParams {
+            sourceComponent: CompHealthDashboardContentParams {
                 id: compHealthDashboardContentParams
 
                 targetData: (visible ? (compHealthDashboardContentRoot.contentState) : "")
@@ -744,6 +789,20 @@ Comp__BASE {
                 onSetListBtnVisible: isVis => {
                                          compHealthDashboardContentRoot.isBtnListViewVisible = isVis
                                      }
+
+                Connections{
+                    target: compHealthDashboardContentRoot
+
+                    function onGalleryInstanceIdChanged(id)
+                    {
+                        compHealthDashboardContentParams.galleryInstanceId = id
+                    }
+
+                    function onGraphViewTargetChanged(targ)
+                    {
+                        compHealthDashboardContentParams.graphViewTarget = targ
+                    }
+                }
             }
         }
 
