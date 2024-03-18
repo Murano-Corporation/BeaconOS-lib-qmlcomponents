@@ -8,7 +8,8 @@ Comp__BASE {
     property string graphViewTarget: 'null'
     property string graphViewUnits: "UNITS"
     property string view: "List"
-    property var dataModel: TableModelMTConnect
+    property var dataModel: TableModelMTConnect_Context1
+    property var mainDataModel: TableModelMTConnect
     property string searchFieldText: ""
 
     signal forceViewType(string viewType)
@@ -17,6 +18,10 @@ Comp__BASE {
     signal setListBtnVisible(bool isVisible);
     signal paramSelected(string paramName);
 
+    function filterDisplayData(componentName) {
+        compHealthDashboardContentMTConnect.mainDataModel.setContext1MTC(componentName);
+        isDataVisible = true;
+    }
 
     onSearchFieldTextChanged: {
         TableModelMTConnect.setSearchFieldText(searchFieldText)
@@ -115,6 +120,8 @@ Comp__BASE {
 
         signal columnWidthsUpdated()
 
+        visible: isDataVisible
+
         onWidthChanged: {
             //console.log("Table width now: " + width)
             forceLayout()
@@ -136,11 +143,10 @@ Comp__BASE {
 
 
         clip: true
-        visible: true
         topMargin: 51
         rightMargin: 8
 
-        model: visible ? compHealthDashboardContentMTConnect.dataModel : undefined
+        model: visible ? compHealthDashboardContentMTConnect.mainDataModel : undefined
         boundsBehavior: Flickable.StopAtBounds
 
         rowHeightProvider: row => {
@@ -161,7 +167,7 @@ Comp__BASE {
                                  //tableView.columnWidthsUpdated()
 
 
-                                 return 300
+                                 return compDrawerInfo.isOpen ? 525 : 625;
                              }
 
 
@@ -215,7 +221,7 @@ Comp__BASE {
 
                     property int col: index
 
-                    width: 300
+                    width: compDrawerInfo.isOpen ? 525 : 625
                     height: 52
 
                     color: "#333958"
@@ -309,6 +315,56 @@ Comp__BASE {
             width: 8
             //topInset: 51
             topPadding: 51
+        }
+
+    }
+
+    Item{
+        id: viewContext1_MTC
+
+        property real btnSpacing: 41
+        property real btnHeight: 250
+        property real btnWidth: ((loaderContentNav.width - (btnSpacing * 3)) * 0.23)
+        property int fontPixelSize: 24
+
+        visible: !isDataVisible
+
+        anchors{
+            top: groupFilters.bottom
+            left: groupFilters.left
+            right: groupFilters.right
+            bottom: parent.bottom
+
+            topMargin: (groupFilters.visible ? 34 : 0)
+        }
+
+        GridView {
+            id: rowDynamicContexts
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            anchors{
+                fill: parent
+            }
+
+            model: visible ? compHealthDashboardContentMTConnect.dataModel : undefined
+
+            cellHeight: viewContext1_MTC.btnHeight + viewContext1_MTC.btnSpacing
+            cellWidth: viewContext1_MTC.btnWidth + viewContext1_MTC.btnSpacing
+            delegate: CompHealthContextNavBtn{
+
+                width: viewContext1_MTC.btnWidth
+                height: viewContext1_MTC.btnHeight
+
+                text: model.display
+                fontPixelSize: viewContext1_MTC.fontPixelSize
+
+                onClicked: function(txt){
+                    filterDisplayData(txt)
+                }
+
+            }
+
         }
 
     }

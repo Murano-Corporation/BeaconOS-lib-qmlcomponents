@@ -79,7 +79,7 @@ Comp__BASE {
                 model: compAlphaNumPinBtnRoot.listOfOptions.length
 
                 Rectangle {
-                    color: "#000000"
+                    color: "#9287ED"
 
                     height: compNumpadBtnRoot.height
                     width: compNumpadBtnRoot.width
