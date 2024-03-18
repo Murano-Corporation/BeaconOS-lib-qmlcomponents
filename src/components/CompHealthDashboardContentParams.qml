@@ -197,13 +197,15 @@ Comp__BASE {
             Connections{
                 target: compHealthDashboardContentParams
 
-                function onTableViewSelectedRowChanged(selectedRow){
-                    this.selectedRow = selectedRow
+                function onTableViewSelectedRowChanged(){
+                    tableView.selectedRow = compHealthDashboardContentParams.tableViewSelectedRow
                 }
             }
 
             Component.onCompleted: {
                 startingWidth = width
+
+                tableView.selectedRow = compHealthDashboardContentParams.tableViewSelectedRow
             }
 
             onWidthChanged: {
@@ -231,6 +233,10 @@ Comp__BASE {
             }
 
             model: visible ? compHealthDashboardContentParams.dataModel : undefined
+            onModelChanged: {
+                tableView.pos
+            }
+
             boundsBehavior: Flickable.StopAtBounds
 
 
@@ -242,6 +248,7 @@ Comp__BASE {
                 property int myRow: model.row
                 property int myCol: model.column
                 property var myData: model.value_string
+                property bool isSelected: selectedRow === myRow
 
                 gridLineColor: tableView.gridLineColor
                 rows: tableView.rows
@@ -256,10 +263,12 @@ Comp__BASE {
                     if(selectedRow === myRow)
                     {
                         tableView.selectedRow = -1
+                        compHealthDashboardContentParams.tableViewSelectedRow = -1
                         compHealthDashboardContentParams.graphViewTarget= "null"
                         compHealthDashboardContentParams.graphViewUnits= "UNITS"
                     } else {
                         tableView.selectedRow = myRow
+                        compHealthDashboardContentParams.tableViewSelectedRow = myRow
                         compHealthDashboardContentParams.graphViewTarget = paramName
                         compHealthDashboardContentParams.graphViewUnits= myModel.unit
                     }
@@ -421,20 +430,6 @@ Comp__BASE {
 
     }
 
-
-    Component {
-        id: highlight
-        Rectangle {
-            width: gridView.cellWidth; height: gridView.cellHeight
-            border {
-                width: 4
-                color: "#9287ED"
-            }
-            color: "Transparent"
-            radius: 5
-        }
-    }
-
     Loader{
         id: loaderGridView
 
@@ -462,26 +457,23 @@ Comp__BASE {
 
             property real cellPadding: 37
 
-
-
-
             clip: true
-
-
-            //Rectangle{
-            //    anchors.fill: parent
-            //
-            //    color: "#8000ffff"
-            //}
 
             cellWidth: compHealthDashboardContentParams.targetData === 'params' ? 354.33 : (387 + cellPadding)
             cellHeight: compHealthDashboardContentParams.targetData === 'params' ? 355 : (375 + cellPadding)
-            //onCellWidthChanged:{
-            //    console.log("Width / 3 = " + width/3)
-            //}
-            //targetData === 'gallery' 387, 375 : 340,355
             model: visible ? compHealthDashboardContentParams.dataModel : undefined
-            onModelChanged: currentIndex = -1
+            onModelChanged: {
+
+                //console.log('TableViewSelectedRow now: ' + compHealthDashboardContentParams.tableViewSelectedRow)
+                gridView.currentIndex = compHealthDashboardContentParams.tableViewSelectedRow
+                gridView.positionViewAtIndex(compHealthDashboardContentParams.tableViewSelectedRow, GridView.Center)
+            }
+
+            onCurrentIndexChanged: {
+                //console.log('Current index is now ' + currentIndex)
+                compHealthDashboardContentParams.tableViewSelectedRow = currentIndex
+            }
+
             DelegateChooser{
                 id: delChooser
                 role: "data_type"
@@ -529,8 +521,10 @@ Comp__BASE {
                             valueText: SingletonUtils.convertNumberToString(value, 'f', 0)
                             stepSize: 0.01
 
-                            MouseArea{
 
+
+                            MouseArea{
+                                id: mouseAreaGauges
 
                                 anchors{
                                     fill: parent
@@ -543,11 +537,11 @@ Comp__BASE {
                                 }
 
                                 onPressAndHold: {
-                                    tooltip.open()
+                                    tooltip1.open()
                                 }
 
                                 CompTooltip{
-                                    id: tooltip
+                                    id: tooltip1
                                     text: gaugeRoot.myModel.tooltip_text
                                 }
                             }
@@ -685,7 +679,15 @@ Comp__BASE {
 
             delegate: delChooser;
 
-            highlight: highlight
+            highlight: Rectangle {
+                width: gridView.cellWidth; height: gridView.cellHeight
+                border {
+                    width: 4
+                    color: "#9287ED"
+                }
+                color: "Transparent"
+                radius: 5
+            }
             highlightFollowsCurrentItem: true
             focus: true
 
@@ -694,6 +696,11 @@ Comp__BASE {
                 width: 8
                 //topInset: 51
                 topPadding: 51
+            }
+
+            Component.onCompleted: {
+                gridView.currentIndex = compHealthDashboardContentParams.tableViewSelectedRow
+                gridView.positionViewAtIndex(compHealthDashboardContentParams.tableViewSelectedRow, GridView.Center)
             }
 
         }
