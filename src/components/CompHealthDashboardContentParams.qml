@@ -282,6 +282,15 @@ Comp__BASE {
                 CompTooltip{
                     id: tooltip1
                     text: parent.myModel.tooltip_text
+                    contentItem: Text {
+                        text: tooltip1.text
+                        font.pixelSize: 20
+                    }
+
+                    background: Rectangle {
+                        radius: 5
+                        color: "#9287ED"
+                    }
                 }
 
 
@@ -413,11 +422,11 @@ Comp__BASE {
             }
 
 
-            ScrollBar.horizontal: ScrollBar{
-                policy:  ScrollBar.AsNeeded
+//            ScrollBar.horizontal: ScrollBar{
+//                policy:  ScrollBar.AsNeeded
 
-                height: 8
-            }
+//                height: 8
+//            }
 
             ScrollBar.vertical: ScrollBar{
                 policy:  ScrollBar.AsNeeded
@@ -537,12 +546,21 @@ Comp__BASE {
                                 }
 
                                 onPressAndHold: {
-                                    tooltip1.open()
+                                    tooltip2.open()
                                 }
 
                                 CompTooltip{
-                                    id: tooltip1
+                                    id: tooltip2
                                     text: gaugeRoot.myModel.tooltip_text
+                                    contentItem: Text {
+                                        text: tooltip2.text
+                                        font.pixelSize: 25
+                                    }
+
+                                    background: Rectangle {
+                                        radius: 5
+                                        color: "#9287ED"
+                                    }
                                 }
                             }
 
@@ -679,14 +697,9 @@ Comp__BASE {
 
             delegate: delChooser;
 
-            highlight: Rectangle {
+            highlight: Item {
                 width: gridView.cellWidth; height: gridView.cellHeight
-                border {
-                    width: 4
-                    color: "#9287ED"
-                }
-                color: "Transparent"
-                radius: 5
+                CompGlassRect {}
             }
             highlightFollowsCurrentItem: true
             focus: true
