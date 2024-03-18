@@ -17,6 +17,7 @@ Popup {
     property alias lblFileNameSize: listContents.fileNameFontSize
     property alias groupControlscomp: groupControls
     property alias btnCancelComp: btnCancel
+    property alias referenceManualGrid: tableContents
 
 
     signal searchTextChanged(string text)
@@ -180,6 +181,8 @@ Popup {
 
             cellHeight: height / 3
             cellWidth: width / 5
+
+            clip: true
 
             anchors{
                 fill: listContents
