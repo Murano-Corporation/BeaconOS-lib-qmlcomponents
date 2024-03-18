@@ -20,18 +20,18 @@ Item {
     property alias listHeight: listMapTypes
     property alias mapFontSize: compMapViewerRoot.mapTypeSize
 
-    Component {
-        id: highlight
-        Rectangle {
-            width: listMapTypes.cellWidth; height: listMapTypes.cellHeight
-            border {
-                width: 4
-                color: "#9287ED"
-            }
-            color: "Transparent"
-            radius: 5
-        }
-    }
+//    Component {
+//        id: highlight
+//        Rectangle {
+//            width: listMapTypes.cellWidth; height: listMapTypes.cellHeight
+//            border {
+//                width: 4
+//                color: "#9287ED"
+//            }
+//            color: "Transparent"
+//            radius: 5
+//        }
+//    }
     ListView{
         id: listMapTypes
         anchors{
@@ -60,7 +60,16 @@ Item {
             }
         }
 
-        highlight: highlight
+        highlight: Rectangle {
+                width: listMapTypes.cellWidth; height: listMapTypes.cellHeight
+                border {
+                    width: 4
+                    color: "#9287ED"
+                }
+                color: "Transparent"
+                radius: 20
+            }
+
         highlightFollowsCurrentItem: true
         focus: true
 
