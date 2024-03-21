@@ -37,7 +37,7 @@ Comp__BASE {
     }
 
     function setOverlayDefaults(){
-        //console.log("Setting parent level values...")
+        console.log("Setting root level values...")
         var openSize = Qt.size(400,300)
         var openOrigin = Qt.point(((root.contentItem.width * 0.5) - openSize.width), ((root.contentItem.height * 0.5) - openSize.height))
 

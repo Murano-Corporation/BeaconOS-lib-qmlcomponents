@@ -7,6 +7,18 @@ Popup{
     modal: false
     closePolicy: Popup.NoAutoClose
 
+    property real textFont: 16
+    property real widthofContents: 0.75
+    property real responsesHeight: 32
+
+    property alias messageIcon: iconMessage
+    property alias titleLbl: lblTitle
+    property alias expandIcon: iconExpand
+    property alias textFont: popupChatAi.textFont
+    property alias widthofmodelData: popupChatAi.widthofContents
+    property alias inputTxtMsg: edtMessage
+    property alias heightofResponses: popupChatAi.responsesHeight
+
     background: Item{}
 
     CompResizableMoveableContainer {
@@ -60,7 +72,7 @@ Popup{
             var startOrigin = SingletonOverlayManager.getPopupOrigin("Chat AI")
             var startSize = SingletonOverlayManager.getPopupSize("Chat AI")
 
-            //console.log("Chat AI defaulting to: " + startOrigin + " : " + startSize)
+            console.log("Chat AI defaulting to: " + startOrigin + " : " + startSize)
 
             compConvAiChatRoot.x = startOrigin.x
             compConvAiChatRoot.y = startOrigin.y
@@ -144,8 +156,8 @@ Popup{
                     id: btnClose
                     anchors.right: parent.right
                     anchors.verticalCenter: lblTitle.verticalCenter
-                    height: 21
-                    width: 21
+                    height: iconExpand.height
+                    width: iconExpand.width
 
                     onClicked: {
                         compConvAiChatRoot.onUserClickedCancel()
@@ -191,7 +203,7 @@ Popup{
                     text: qsTr('Today')
 
                     font{
-                        pixelSize: 16
+                        pixelSize: textFont
                         weight: Font.Bold
                     }
                 }
@@ -207,7 +219,7 @@ Popup{
                     text: "1:53 PM"
 
                     font{
-                        pixelSize: 16
+                        pixelSize: textFont
                     }
 
                 }
@@ -234,7 +246,7 @@ Popup{
                 ListView{
                     id: listChatEntries
 
-                    property real chatEntryWidth: width * 0.75
+                    property real chatEntryWidth: width * widthofContents
 
                     clip: true
                     highlightFollowsCurrentItem: true
@@ -401,7 +413,7 @@ Popup{
                         model: compConvAiChatRoot.listQuickResponses
                         delegate: CompBtnBreadcrumb{
                             text: modelData
-                            height: 32
+                            height: responsesHeight
                         }
                     }
                 }

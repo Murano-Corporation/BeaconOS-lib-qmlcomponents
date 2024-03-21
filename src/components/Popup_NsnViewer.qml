@@ -11,10 +11,13 @@ Popup {
     property alias titleText: lblTitle.text
     property alias btnHeight: btnClose.height
     property alias btnWidth: btnClose.width
-    property alias listNsnValuesHeight: listNsnValues.height
+    property alias listNsnValuesHeight: listNsnValues.rowHeight
     property alias listNsnValuesSpacing: listNsnValues.spacing
     property int labelNameSize : 30
     property int labelValueSize: 30
+    //property int titleTextSize: 25
+    property alias titleTextSize: lblTitle.font.pixelSize
+
 
     property real minimumWidth: 600
     property real minimumHeight: 300
@@ -250,8 +253,8 @@ Popup {
                     height: listNsnValues.rowHeight
                     width: listNsnValues.width
 
-                    labelName.font.pixelSize: 25
-                    labelValue.font.pixelSize: 25
+                    labelName.font.pixelSize: labelNameSize
+                    labelValue.font.pixelSize: labelValueSize
 
                     listLongestKeyWidth: listNsnValues.longestKeyNameWidth
 
