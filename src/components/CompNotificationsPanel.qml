@@ -50,9 +50,9 @@ Item {
                 contents: model.data
                 listQuickActions: model.Parameters.responses
 
-                onChatWithAiClicked: {
-                    compAssetAlertsPanel.chatWithAiClicked(model)
-                }
+                //onChatWithAiClicked: {
+                //    compNotificationsPanel.chatWithAiClicked(model)
+                //}
             }
         }
 

@@ -157,7 +157,7 @@ Item {
             iconColor: btnIconColor
             iconHeight: btnIconSize
 
-            onClicked: ApplicationsController.slot_Request_OpenApp(Constants.ESourceUUID_Popup_Help, {})
+            onClicked: Applications.slot_Request_OpenApp(Constants.ESourceUUID_Popup_Help, {})
         }
 
         CompIconBtn{
