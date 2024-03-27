@@ -12,6 +12,7 @@ Comp__BASE {
     property alias image: compImageIcon
     property alias source: compImageIcon.source
     property alias colorOverlay: colorOverlay
+    property alias compImageIcon: compImageIcon
 
     Image {
         id: compImageIcon

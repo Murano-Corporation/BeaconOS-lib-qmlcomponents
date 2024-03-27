@@ -115,5 +115,13 @@
         <file>Comp__BASE_ComboBox.qml</file>
         <file>Screen_Camera_Delta.qml</file>
         <file>Screen_Camera_Omega.qml</file>
+        <file>CompSwitch.qml</file>
+        <file>CompToggle.qml</file>
+        <file>Screen_Networking.qml</file>
+        <file>Screen_Networking_Content_Control.qml</file>
+        <file>Screen_Networking_Content_Control_Wifi.qml</file>
+        <file>CompTextField.qml</file>
+        <file>CompLabelledComboBox.qml</file>
+        <file>Screen_Networking_Content_Control_Wifi_Auto.qml</file>
     </qresource>
 </RCC>

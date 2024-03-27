@@ -8,6 +8,7 @@ Popup {
 
     background: Item{}
 
+
     CompConversationalAIChat{
         id: compConversationalAIChat
         //visible: isChatModeActive

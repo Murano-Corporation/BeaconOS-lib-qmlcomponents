@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import QtGraphicalEffects 1.12
+//import QtGraphicalEffects 1.12
 
 Comp__BASE {
     id: compAssetHotParam
