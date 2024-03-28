@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import QtCharts 2.3
+import QtCharts 2.15
 
 Comp__BASE {
     id: compHealthDashboardContentGraphView
@@ -13,6 +13,11 @@ Comp__BASE {
     property int range: 10;
     property int testDtIncrement: 86400000;
     property int dateViewSpan: LiveGraphController.timespan
+
+
+    property ScatterSeries scatterSeries1
+    property LineSeries lineSeries1
+
     //onDateViewSpanChanged: {
     //    console.log('Date View Span now: ' + dateViewSpan)
     //}
@@ -80,34 +85,19 @@ Comp__BASE {
 
     function removePoints(index, count)
     {
-        //console.log('Removing points: ' + index + " - " + (index+count))
+        console.log('Removing points: ' + index + " - " + (index+count))
         scatterSeries1.removePoints(index, count)
         lineSeries1.removePoints(index, count)
     }
 
     function clear(){
 
-        //console.log('Clearing graph')
+        console.log('Clearing graph')
         scatterSeries1.clear()
         lineSeries1.clear()
     }
 
-    Connections{
-        target: LiveGraphController
 
-        function onSignal_RemovePoints(index, count){
-            removePoints(index, count)
-        }
-
-        function onSignal_RemoveAllPoints(){
-            clear()
-        }
-
-        function onSignal_TargetDataChanged(x,y)
-        {
-            addPoint(x,y)
-        }
-    }
 
     Timer{
         id: devTimer
@@ -131,112 +121,169 @@ Comp__BASE {
         color: "#1E273A"
     }
 
-    ChartView{
+    Component.onCompleted:{
+        //console.log("Chart completed")
 
-        id: chart
+        //console.log("---Date Min: " + compHealthDashboardContentGraphView.dateMin)
+        //console.log("---Date Max: " + compHealthDashboardContentGraphView.dateMax)
+        //console.log("---Y Min: " + compHealthDashboardContentGraphView.yValueMin)
+        //console.log("---Y Max: " + compHealthDashboardContentGraphView.yValueMax)
+        //console.log("---Date View Span: " + compHealthDashboardContentGraphView.dateViewSpan)
+        //console.log("---Value Units: " + compHealthDashboardContentGraphView.valueUnits)
+        loaderChartView.active = true
+    }
 
-        property color gridLineColor: "#4D4A5F"
-        property color lineSeriesColor: "#5445CB"
-        property color lineSeriesPointColor: "#B1A8FF"
-        property real lineSeriesWidth: 5
-
-        legend.visible: false
-
-
-
-
+    Loader{
+        id: loaderChartView
+        active: false
         anchors{
             fill: parent
         }
+        sourceComponent: ChartView{
 
-        //theme: ChartView.ChartThemeHighContrast
+            id: chart
 
-        backgroundColor: "transparent"
+            property color gridLineColor: "#4D4A5F"
+            property color lineSeriesColor: "#5445CB"
+            property color lineSeriesPointColor: "#B1A8FF"
+            property real lineSeriesWidth: 5
 
-        title: ""
-        antialiasing: true
-        //animationDuration: compHealthDashboardContentGraphView.devTimerInterval
-        //animationOptions: ChartView.SeriesAnimations
+            Connections{
+                target: LiveGraphController
 
-        DateTimeAxis {
+                function onSignal_RemovePoints(index, count){
+                    removePoints(index, count)
+                }
 
-            id: axisXDateTime
+                function onSignal_RemoveAllPoints(){
+                    clear()
+                }
 
-            format: "HH:mm:ss.zzz"
-            tickCount: 2
+                function onSignal_TargetDataChanged(x,y)
+                {
+                    addPoint(x,y)
+                }
+            }
 
-            gridLineColor: chart.gridLineColor
+            legend.visible: false
 
-            min: compHealthDashboardContentGraphView.dateMin
-            max: compHealthDashboardContentGraphView.dateMax
 
-            labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: 20})
-            labelsColor: "White"
-            labelsVisible: false
+
+
+            //theme: ChartView.ChartThemeHighContrast
+
+            backgroundColor: "transparent"
+
+            title: ""
+            //antialiasing: true
+            animationDuration: 1000
+            animationOptions: ChartView.SeriesAnimations
+
+            DateTimeAxis {
+
+                id: axisXDateTime
+
+                visible: true
+
+                //format: "HH:mm:ss.zzz"
+                tickCount: 2
+
+                gridLineColor: chart.gridLineColor
+
+                //min: {
+                //    var dtMin = Date.now()
+                //}
+
+                //max: {
+                //    var dtMin = Date.now()
+                //}
+
+                min: compHealthDashboardContentGraphView.dateMin
+                max: compHealthDashboardContentGraphView.dateMax
+
+                labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: 20})
+                labelsColor: "White"
+                labelsVisible: false
+            }
+
+            ValueAxis {
+                id: axisYValue
+
+                visible: true
+
+                labelFormat: "%.2f"
+                //tickCount: 3
+
+                gridLineColor: chart.gridLineColor
+
+                titleText: compHealthDashboardContentGraphView.valueUnits
+                color: "White"
+                titleBrush: color
+
+                //min: -10000.0
+                //max: 10000.0
+
+                min: compHealthDashboardContentGraphView.yValueMin
+                max: compHealthDashboardContentGraphView.yValueMax
+
+                labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: 18})
+                labelsColor: "White"
+                //labelsVisible: false
+
+            }
+
+
+
+            LineSeries {
+                id: lineSeries1
+
+                visible: true
+
+                //useOpenGL: true
+
+                axisX: axisXDateTime
+                axisY: axisYValue
+
+                pointLabelsVisible: false
+                pointsVisible: false
+                //pointLabelsColor: chart.lineSeriesPointColor
+
+                width: chart.lineSeriesWidth
+
+                color: chart.lineSeriesColor
+
+                Component.onCompleted: {
+                    compHealthDashboardContentGraphView.lineSeries1 = this
+                }
+
+            }
+
+            ScatterSeries {
+                id: scatterSeries1
+
+                visible:  true
+
+                //useOpenGL: true
+
+                axisX: axisXDateTime
+                axisY: axisYValue
+
+                markerSize: 12
+                markerShape: ScatterSeries.MarkerShapeCircle
+                color: chart.lineSeriesPointColor
+                borderWidth: 0
+
+                Component.onCompleted: {
+                    compHealthDashboardContentGraphView.scatterSeries1 = this
+                }
+            }
+
+
+
         }
-
-        ValueAxis {
-            id: axisYValue
-
-            labelFormat: "%.2f"
-            //tickCount: 3
-
-            gridLineColor: chart.gridLineColor
-
-            titleText: compHealthDashboardContentGraphView.valueUnits
-            color: "White"
-            titleBrush: color
-
-            min: compHealthDashboardContentGraphView.yValueMin
-            max: compHealthDashboardContentGraphView.yValueMax
-
-            labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: 18})
-            labelsColor: "White"
-            //labelsVisible: false
-
-        }
-
-
-
-        LineSeries {
-            id: lineSeries1
-
-            visible: true
-
-            //useOpenGL: true
-
-            axisX: axisXDateTime
-            axisY: axisYValue
-
-            pointLabelsVisible: false
-            pointsVisible: false
-            //pointLabelsColor: chart.lineSeriesPointColor
-
-            width: chart.lineSeriesWidth
-
-            color: chart.lineSeriesColor
-
-        }
-
-        ScatterSeries {
-            id: scatterSeries1
-
-
-
-            //useOpenGL: true
-
-            axisX: axisXDateTime
-            axisY: axisYValue
-
-            markerSize: 12
-            markerShape: ScatterSeries.MarkerShapeCircle
-            color: chart.lineSeriesPointColor
-            borderWidth: 0
-        }
-
-
 
     }
+
 
 }
 

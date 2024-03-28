@@ -1,5 +1,5 @@
 import QtQuick 2.12
-import QtGraphicalEffects 1.15
+import QtGraphicalEffects 1.0
 
 Comp__BASE {
     id: compGradientRectRoot
@@ -15,7 +15,6 @@ Comp__BASE {
         visible: false
         color: "red"
     }
-
 
     LinearGradient {
         id: linearGradientUnflippedBg

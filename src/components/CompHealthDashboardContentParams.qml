@@ -36,6 +36,7 @@ Comp__BASE {
     onGraphViewTargetChanged: {
         paramSelected(graphViewTarget)
         floatingBreadCrumbName = graphViewTarget
+        LiveGraphController.targetDataId = graphViewTarget
     }
 
     onFloatingBreadCrumbNameChanged: {

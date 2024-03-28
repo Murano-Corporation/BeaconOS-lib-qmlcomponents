@@ -154,7 +154,7 @@ Comp__BASE {
             leftPadding: 20
             rightPadding: 20
 
-            verticalAlignment: "AlignVCenter"
+            verticalAlignment: Text.AlignVCenter
             horizontalAlignment: tableModelRef.headerData(col, Qt.Horizontal, Constants.DataRole_HeaderData_TextAlign)
         }
 
