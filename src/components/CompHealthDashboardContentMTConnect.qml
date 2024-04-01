@@ -120,7 +120,7 @@ Comp__BASE {
 
         signal columnWidthsUpdated()
 
-        visible: isDataVisible
+        visible: true
 
         onWidthChanged: {
             //console.log("Table width now: " + width)
@@ -191,19 +191,19 @@ Comp__BASE {
                 if(selectedRow === myRow)
                 {
                     tableView.selectedRow = -1
-                    compHealthDashboardContentParams.graphViewTarget= "null"
-                    compHealthDashboardContentParams.graphViewUnits="UNITS"
+                    compHealthDashboardContentMTConnect.graphViewTarget= "null"
+                    compHealthDashboardContentMTConnect.graphViewUnits="UNITS"
                 } else {
                     tableView.selectedRow = myRow
-                    compHealthDashboardContentParams.graphViewTarget = paramName
-                    compHealthDashboardContentParams.graphViewUnits=myModel.units
+                    compHealthDashboardContentMTConnect.graphViewTarget = paramName
+                    compHealthDashboardContentMTConnect.graphViewUnits= myModel.units
                 }
 
             }
 
             onActionClickedShowGraph: paramName => {
 
-                                          compHealthDashboardContentParams.graphViewTarget = paramName
+                                          compHealthDashboardContentMTConnect.graphViewTarget = paramName
                                       }
 
         }
@@ -319,53 +319,53 @@ Comp__BASE {
 
     }
 
-    Item{
-        id: viewContext1_MTC
+    //Item{
+    //    id: viewContext1_MTC
 
-        property real btnSpacing: 41
-        property real btnHeight: 250
-        property real btnWidth: ((loaderContentNav.width - (btnSpacing * 3)) * 0.23)
-        property int fontPixelSize: 24
+    //    property real btnSpacing: 41
+    //    property real btnHeight: 250
+    //    property real btnWidth: ((loaderContentNav.width - (btnSpacing * 3)) * 0.23)
+    //    property int fontPixelSize: 24
 
-        visible: !isDataVisible
+    //    visible: !isDataVisible
 
-        anchors{
-            top: groupFilters.bottom
-            left: groupFilters.left
-            right: groupFilters.right
-            bottom: parent.bottom
+    //    anchors{
+    //        top: groupFilters.bottom
+    //        left: groupFilters.left
+    //        right: groupFilters.right
+    //        bottom: parent.bottom
 
-            topMargin: (groupFilters.visible ? 34 : 0)
-        }
+    //        topMargin: (groupFilters.visible ? 34 : 0)
+    //    }
 
-        GridView {
-            id: rowDynamicContexts
-            clip: true
-            boundsBehavior: Flickable.StopAtBounds
+    //    GridView {
+    //        id: rowDynamicContexts
+    //        clip: true
+    //        boundsBehavior: Flickable.StopAtBounds
 
-            anchors{
-                fill: parent
-            }
+    //        anchors{
+    //            fill: parent
+    //        }
 
-            model: visible ? compHealthDashboardContentMTConnect.dataModel : undefined
+    //        model: visible ? compHealthDashboardContentMTConnect.dataModel : undefined
 
-            cellHeight: viewContext1_MTC.btnHeight + viewContext1_MTC.btnSpacing
-            cellWidth: viewContext1_MTC.btnWidth + viewContext1_MTC.btnSpacing
-            delegate: CompHealthContextNavBtn{
+    //        cellHeight: viewContext1_MTC.btnHeight + viewContext1_MTC.btnSpacing
+    //        cellWidth: viewContext1_MTC.btnWidth + viewContext1_MTC.btnSpacing
+    //        delegate: CompHealthContextNavBtn{
 
-                width: viewContext1_MTC.btnWidth
-                height: viewContext1_MTC.btnHeight
+    //            width: viewContext1_MTC.btnWidth
+    //            height: viewContext1_MTC.btnHeight
 
-                text: model.display
-                fontPixelSize: viewContext1_MTC.fontPixelSize
+    //            text: model.display
+    //            fontPixelSize: viewContext1_MTC.fontPixelSize
 
-                onClicked: function(txt){
-                    filterDisplayData(txt)
-                }
+    //            onClicked: function(txt){
+    //                filterDisplayData(txt)
+    //            }
 
-            }
+    //        }
 
-        }
+    //    }
 
-    }
+    //}
 }
