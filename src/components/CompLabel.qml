@@ -4,10 +4,13 @@ Comp__BASE_Label {
     id: lblScreenName
 
     text: "Asset Dashboard"
+    property alias fontWeight: lblScreenName.font.weight
+    property alias fontFamily: lblScreenName.font.family
+    property alias fontPixelSize: lblScreenName.font.pixelSize
 
-    font.pixelSize: 50
-    font.family: "Lato"
-    font.weight: Font.Normal
+    fontPixelSize: 25
+    fontWeight: Font.Normal
+    fontFamily: "Lato"
 
     opacity: enabled ? 1.0 : 0.3
     color: "White"

@@ -13,8 +13,8 @@ Popup {
     property alias btnWidth: btnClose.width
     property alias listNsnValuesHeight: listNsnValues.rowHeight
     property alias listNsnValuesSpacing: listNsnValues.spacing
-    property int labelNameSize : 30
-    property int labelValueSize: 30
+    property int labelNameSize : 24
+    property int labelValueSize: 24
     //property int titleTextSize: 25
     property alias titleTextSize: lblTitle.font.pixelSize
 

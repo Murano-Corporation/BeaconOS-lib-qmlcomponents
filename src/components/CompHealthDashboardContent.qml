@@ -58,7 +58,7 @@ Comp__BASE {
 
     function setSystemTypeSelection(sSystemType)
     {
-        compHealthDashboardContentContextNav.systemSelected = sSystemType
+        compHealthDashboardContentRoot.systemTypeSelected = sSystemType
     }
 
     onParamNameSelectedChanged: {

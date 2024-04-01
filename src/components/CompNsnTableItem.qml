@@ -62,16 +62,14 @@ Item{
         }
 
         verticalAlignment: Text.AlignVCenter
-        font{
-            pixelSize: 20
-        }
+        fontPixelSize: 12
         color: "white"
 
         FontMetrics{
             id: fontMx
 
             font{
-                pixelSize: lblName.font.pixelSize
+                pixelSize: lblName.fontPixelSize
                 family: lblName.font.family
                 weight: lblName.font.weight
             }
@@ -110,7 +108,7 @@ Item{
 
 
         font{
-            pixelSize: 20
+            pixelSize: 80
             weight: Font.Light
         }
         color: "white"

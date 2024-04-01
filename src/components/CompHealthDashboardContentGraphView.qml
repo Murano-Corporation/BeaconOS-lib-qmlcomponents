@@ -97,8 +97,6 @@ Comp__BASE {
         lineSeries1.clear()
     }
 
-
-
     Timer{
         id: devTimer
 

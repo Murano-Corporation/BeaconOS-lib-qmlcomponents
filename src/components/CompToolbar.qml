@@ -167,6 +167,8 @@ Item {
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Gear.svg"
             iconColor: btnIconColor
             iconHeight: btnIconSize
+
+            onClicked: Applications.slot_Request_OpenApp(Constants.ESourceUUID_Popup_Settings, {})
         }
 
         CompIconBtn{

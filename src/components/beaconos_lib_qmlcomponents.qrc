@@ -123,5 +123,10 @@
         <file>CompTextField.qml</file>
         <file>CompLabelledComboBox.qml</file>
         <file>Screen_Networking_Content_Control_Wifi_Auto.qml</file>
+        <file>Popup_Settings.qml</file>
+        <file>Popup__BASE.qml</file>
+        <file>Popup_Settings_Camera.qml</file>
+        <file>CompLabelledTextEdit.qml</file>
+        <file>Popup_Settings_System.qml</file>
     </qresource>
 </RCC>
