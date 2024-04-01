@@ -341,7 +341,7 @@ Popup {
             CompBtnBreadcrumb{
                 id: btnCancel
 
-                enabled: (popupManualPdfPicker.fileNameOnOpen !== "")
+                enabled: true
 
                 anchors{
                     right: parent.right
