@@ -12,6 +12,8 @@ Comp__BASE {
     property string assetType: "Vehicle"
     property alias itemWidth: compAssetDashboardGridItemRoot.width
     property alias itemHeight: compAssetDashboardGridItemRoot.height
+    property alias assetNameLabel: lblAssetName
+    property alias nanoName: lblNanoName
 
     width: 373
     height: 368
