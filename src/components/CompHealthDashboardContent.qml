@@ -250,7 +250,7 @@ Comp__BASE {
 
         if(isComplete && (systemTypeSelected === 'Asset Metrics') && (assetType === 'CNC'))
         {
-            compHealthDashboardContentRoot.contextNavCompletenessCheck = true;
+            compHealthDashboardContentRoot.contextNavCompletenessCheck = (context1Selected !== 'null');
             return;
         }
 
@@ -732,6 +732,8 @@ Comp__BASE {
             anchors.fill: parent
             sourceComponent: CompHealthDashboardContentContextNav {
                 id: compHealthDashboardContentContextNav
+
+                isMTConnectData: (assetType === "CNC")
 
                 onSystemSelectedChanged: {
                     compHealthDashboardContentRoot.systemTypeSelected = compHealthDashboardContentContextNav.systemSelected

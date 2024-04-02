@@ -4,15 +4,35 @@ import QtQuick.Controls 2.12
 Comp__BASE {
     id: compHealthDashboardContentContextNav
 
+    property bool isMTConnectData: false
     property string systemSelected: "null"
     property string context1Selected: "null"
     property string context2Selected: "null"
     property bool isMaxWidth: true
     property bool isMaxHeight: false
 
+    property var modelData_EnvImuJ1939J1708_Context1: TableModelHealthDashboard.listOfContext1Options
+    property var modelData_MTC_Context1: TableModelMTConnect_Context1
+
+    property var modelData_Context1: (isMTConnectData ? modelData_MTC_Context1 : modelData_EnvImuJ1939J1708_Context1)
+
+    function getContext1Name(iIndex, model)
+    {
+        if( isMTConnectData )
+        {
+            return model.display
+        } else {
+            return TableModelHealthDashboard.getContext1Name(iIndex)
+        }
+    }
+
     Component.onCompleted: {
 
-        MqttTopicCmdBOS.slot_Request_Context2Map(AssetInfo.beaconID);
+        if( !isMTConnectData )
+        {
+            MqttTopicCmdBOS.slot_Request_Context2Map(AssetInfo.beaconID);
+        }
+
 
         systemSelected = "null"
     }
@@ -171,11 +191,13 @@ Comp__BASE {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
 
+
+
             anchors{
                 fill: parent
             }
 
-            model: compHealthDashboardContentContextNav.visible ? TableModelHealthDashboard.listOfContext1Options : undefined
+            model: compHealthDashboardContentContextNav.visible ? compHealthDashboardContentContextNav.modelData_Context1 : undefined
 
             cellWidth: width * 0.25
             cellHeight: viewContext1_Asset.btnHeight * 1.1
@@ -184,9 +206,9 @@ Comp__BASE {
 
                 width: viewContext1_Asset.btnWidth
                 height: viewContext1_Asset.btnHeight
-                iconUrl:  (text === "?" ) ? "" : "file:/usr/share/BeaconOS-lib-images/images/"+ text +".svg"
+                iconUrl:  (text === "?" ) ? "" : ((isMTConnectData ? "" : "file:/usr/share/BeaconOS-lib-images/images/"+ text +".svg"))
 
-                text: TableModelHealthDashboard.getContext1Name(index)
+                text: compHealthDashboardContentContextNav.getContext1Name(index, model)
                 myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
                 fontPixelSize: viewContext1_Asset.fontPixelSize
 
