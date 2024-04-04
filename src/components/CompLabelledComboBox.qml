@@ -7,12 +7,13 @@ Item{
     property alias text: lbl.text
     property alias textFontPixelSize: lbl.font.pixelSize
     property real comboWidth: 450
+    property real comboBoxSize: 24
     property alias rowSpacing: row.spacing
     property alias comboModel: combo.model
     property alias currentValue: combo.currentValue
     property alias currentText: combo.currentText
     property alias currentIndex: combo.currentIndex
-
+    property alias valueComboBox: compLabelledComboBox.comboBoxSize
 
 
     Row{
@@ -45,6 +46,7 @@ Item{
 
             height: parent.height
             width: compLabelledComboBox.comboWidth
+            valueFontSize: comboBoxSize
         }
 
 

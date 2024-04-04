@@ -42,7 +42,7 @@ ComboBox {
         verticalAlignment: "AlignVCenter"
         elide: Label.ElideRight
         font{
-            pixelSize: 20
+            pixelSize: currentFontSize
         }
     }
 
@@ -61,7 +61,7 @@ ComboBox {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             color: currentTextColor
-            font.pixelSize: currentFontSize
+            //font.pixelSize: 40
             MouseArea{
                 anchors.fill: parent
 

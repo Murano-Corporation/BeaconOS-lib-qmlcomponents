@@ -13,6 +13,7 @@ Item{
     property alias text: edt.text
     property alias placeholderText: edt.placeholderText
     property alias edtEchoMode: edt.echoMode
+    property alias edtFontPixelSize: edt.font.pixelSize
 
     width: 514
     height: 80

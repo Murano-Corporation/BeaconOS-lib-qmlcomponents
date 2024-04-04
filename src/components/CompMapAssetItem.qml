@@ -10,6 +10,7 @@ Comp__BASE_MapQuickItem {
     property real lon: 0.0
     property string assetType: 'TYPE'
     property string assetID: 'ASSET_ID'
+    property alias assetTypelbl: lblAssetType
 
     signal centerOnPoint(var coords)
     signal fitViewportToVisibleMapItems()

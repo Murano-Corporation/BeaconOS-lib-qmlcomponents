@@ -14,7 +14,9 @@ Comp__BASE {
     property alias placeholderTextColor: txtfldSearch.placeholderTextColor
     property alias iconColor: iconSearch.color
     property alias cancelColor: btnClear.iconColor
-    
+    property alias textFontSize: txtfldSearch.font.pixelSize
+    property alias btnClearSize: btnClear.width
+
     signal enterPressed()
 
     FocusScope{
