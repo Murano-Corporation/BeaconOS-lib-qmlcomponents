@@ -65,10 +65,10 @@ Item{
 
         }
 
-        TextEdit{
+        TextInput{
             id: edt
 
-            readOnly: compLabelledTextEdit
+            readOnly: compLabelledTextEdit.isReadonly
 
             height: parent.height
             width: compLabelledTextEdit.__editWidthActual

@@ -128,5 +128,9 @@
         <file>Popup_Settings_Camera.qml</file>
         <file>CompLabelledTextEdit.qml</file>
         <file>Popup_Settings_System.qml</file>
+        <file>Popup_Settings_Database_Local.qml</file>
+        <file>Popup_Confirm.qml</file>
+        <file>Popup_Settings_Applications.qml</file>
+        <file>Popup_Application_Info.qml</file>
     </qresource>
 </RCC>

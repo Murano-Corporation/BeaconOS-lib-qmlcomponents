@@ -36,7 +36,8 @@ Popup{
         anchors.fill: parent
 
         onFocusChanged: {
-            popupChatAi.signal_GainedFocus(popupName, focus)
+            InputHandler.slot_OnPopupFocusChanged(popupName, focus)
+
         }
 
         CompResizableMoveableContainer {

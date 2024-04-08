@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 Item{
     id: compToggle
 
+    property bool isReadOnly: false
     property alias text: lbl.text
     property alias isOn: compSwitch.isOn
     property alias colorOn: compSwitch.colorOn
@@ -36,7 +37,7 @@ Item{
 
         CompSwitch {
             id: compSwitch
-
+            enabled: !compToggle.isReadOnly
             height: parent.height
         }
     }

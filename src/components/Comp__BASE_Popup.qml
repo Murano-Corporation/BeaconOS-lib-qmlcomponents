@@ -2,8 +2,10 @@ import QtQuick 2.0
 import QtQuick.Controls 2.12
 
 Popup {
-
+    id: popup_root
     property alias targetDevice: compBase.targetDevice
+    required property string popupName
+
     width: root.contentItem.width
     height: root.contentItem.height
 
@@ -18,4 +20,6 @@ Popup {
         id: compBase
     }
 
+
 }
+
