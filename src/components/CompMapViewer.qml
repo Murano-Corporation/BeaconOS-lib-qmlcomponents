@@ -16,9 +16,13 @@ Item {
     property real zoomCurrent
     property real mapTypesHeight: 64
     property real mapTypeSize: 20
+    property real lblFontSize: 20
+    property real coordSize: 24
     property alias mapTypes: compMapViewerRoot.mapTypesHeight
     property alias listHeight: listMapTypes
     property alias mapFontSize: compMapViewerRoot.mapTypeSize
+    property alias assetTypelblSize: compMapViewerRoot.lblFontSize
+    property alias latLongSize: compMapViewerRoot.coordSize
 
     //    Component {
     //        id: highlight
@@ -374,7 +378,7 @@ Item {
                         text: "lat: %1; lon:%2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
 
                         font{
-                            pixelSize: 24
+                            pixelSize: coordSize
                         }
 
                         anchors{
@@ -427,6 +431,7 @@ Item {
                 lon: model.Longitude
                 assetType: model.asset_type
                 assetID: model.Beacon_ID
+                assetTypelbl.font.pixelSize: lblFontSize
                 onCenterOnPoint: {
 
                     if(compMapViewerRoot.selectedAssetDataModel === model)

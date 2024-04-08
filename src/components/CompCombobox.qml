@@ -10,6 +10,8 @@ ComboBox {
     property real currentFontSize: 24
     property string unselectedText: qsTr("Select")
     property alias valueFontSize: comboFilters.currentFontSize
+    property real optionItemHeight : 50
+    property alias optionsHeight: comboFilters.optionItemHeight
 
     textRole: "key"
 
@@ -42,12 +44,13 @@ ComboBox {
         verticalAlignment: "AlignVCenter"
         elide: Label.ElideRight
         font{
-            pixelSize: 20
+            pixelSize: currentFontSize
         }
     }
 
     delegate: ItemDelegate{
         width: comboFilters.width
+        height: optionItemHeight
 
         background: Rectangle {
             width: parent.width
@@ -61,7 +64,7 @@ ComboBox {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             color: currentTextColor
-            font.pixelSize: currentFontSize
+            //font.pixelSize: 40
             MouseArea{
                 anchors.fill: parent
 

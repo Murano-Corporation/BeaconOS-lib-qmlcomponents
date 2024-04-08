@@ -10,6 +10,8 @@ Comp__BASE {
     property alias mapTypeBtns: mapView.mapTypes
     property alias listMapHeight: mapView.listHeight
     property alias mapTypeFontSize: mapView.mapFontSize
+    property alias lblFont: mapView.assetTypelblSize
+    property alias longLatSize: mapView.latLongSize
 
     CompMapViewer{
         id: mapView
