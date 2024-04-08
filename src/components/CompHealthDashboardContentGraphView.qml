@@ -209,7 +209,7 @@ Comp__BASE {
 
                 visible: true
 
-                labelFormat: "%.2f"
+                labelFormat: "%.2f        "
                 //tickCount: 3
 
                 gridLineColor: chart.gridLineColor
