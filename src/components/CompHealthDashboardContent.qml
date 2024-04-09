@@ -14,6 +14,7 @@ Comp__BASE {
     property string systemTypeSelected: "null"
     property string context1Selected: "null"
     property string context2Selected: "null"
+    property string mtcSortFilterString: "null"
     property string paramNameSelected: "null"
     property string floatingBreadcrumbBtntext: "null"
     property string paramViewMode: "List"
@@ -747,6 +748,10 @@ Comp__BASE {
                     compHealthDashboardContentRoot.context2Selected = compHealthDashboardContentContextNav.context2Selected
                 }
 
+                onMtcSortFilterStringChanged: {
+                    compHealthDashboardContentRoot.mtcSortFilterString = compHealthDashboardContentContextNav.mtcSortFilterString
+                }
+
                 Component.onCompleted: {
                     compHealthDashboardContentRoot.navObject = this
 
@@ -844,6 +849,8 @@ Comp__BASE {
                 onSetListBtnVisible: isVis => {
                                          compHealthDashboardContentRoot.isBtnListViewVisible = isVis
                                      }
+
+                context1Selected: compHealthDashboardContentRoot.mtcSortFilterString
 
             }
         }

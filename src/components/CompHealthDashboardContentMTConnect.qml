@@ -5,6 +5,7 @@ Comp__BASE {
     id: compHealthDashboardContentMTConnect
 
     property bool canShowGraphView: view === 'Graph' && graphViewTarget !== 'null'
+    property string context1Selected: "*"
     property string graphViewTarget: 'null'
     property string graphViewUnits: "UNITS"
     property string view: "List"
@@ -21,6 +22,10 @@ Comp__BASE {
     function filterDisplayData(componentName) {
         compHealthDashboardContentMTConnect.mainDataModel.setContext1MTC(componentName);
         isDataVisible = true;
+    }
+
+    onContext1SelectedChanged: {
+        filterDisplayData(context1Selected)
     }
 
     onSearchFieldTextChanged: {
