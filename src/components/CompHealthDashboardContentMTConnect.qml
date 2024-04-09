@@ -211,6 +211,24 @@ Comp__BASE {
                                           compHealthDashboardContentMTConnect.graphViewTarget = paramName
                                       }
 
+            onPressAndHold: {
+                tooltip.open()
+            }
+
+            CompTooltip{
+                id: tooltip
+                text: parent.myModel.tooltip_text
+
+                contentItem: Text {
+                          text: tooltip.text
+                          font.pixelSize: 20
+                      }
+
+                      background: Rectangle {
+                          color: "#9287ED"
+                      }
+            }
+
         }
 
         Row{
