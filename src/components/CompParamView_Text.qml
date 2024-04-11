@@ -40,7 +40,7 @@ Item{
         radius: 40
     }
 
-    Rectangle{
+    CompGradientRect{
         id: rectContents
 
         anchors{
@@ -55,19 +55,21 @@ Item{
         height: width
         radius: 20
 
-        color: "#80000000"
-    }
+        //color: "#80000000"
+Item{
+    anchors.centerIn: parent
 
     CompLabel {
         id: lblParamName
 
         anchors{
-            top: rectContents.bottom
-            topMargin: 20
-            left: compParamViewTextRoot.left
-            right: compParamViewTextRoot.right
+//            //top: rectContents.bottom
+//            //topMargin: 20
+//            left: rectContents.left
+//            right: rectContents.right
+           centerIn: parent
 
-        }
+       }
 
         text: "ParamName"
 
@@ -83,8 +85,10 @@ Item{
         id: lblValue
 
         anchors{
-            fill: rectContents
-            margins: 10
+//            fill: rectContents
+            top: lblParamName.bottom
+            horizontalCenter: lblParamName.horizontalCenter
+            topMargin: 10
         }
 
         wrapMode: Text.WordWrap
@@ -97,7 +101,8 @@ Item{
 
 
     }
+    }
 
-
+}
 
 }
