@@ -136,15 +136,14 @@ Comp__BASE {
 
         CompHealthContextNavBtn{
 
-            id:navBtnBeaconImu
+            id:navBtnBeaconEnv
             width: viewContext1_Beacon.btnWidth
             height: viewContext1_Beacon.btnHeight
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/IMU.svg"
-            text: "IMU"
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Environmental.svg"
+            text: "Environmental"
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
                 left: parent.left
-
             }
 
             onClicked: txt => {
@@ -154,14 +153,14 @@ Comp__BASE {
 
         CompHealthContextNavBtn{
 
-            id:navBtnBeaconEnv
+            id:navBtnBeaconImu
             width: viewContext1_Beacon.btnWidth
-            height: navBtnBeaconImu.height
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Environmental.svg"
-            text: "ENV"
+            height: viewContext1_Beacon.btnHeight
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/IMU.svg"
+            text: "Accelerometer"
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
-                left: navBtnBeaconImu.right
+                left: navBtnBeaconEnv.right
                 leftMargin: parent.btnSpacing
 
             }
