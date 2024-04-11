@@ -285,11 +285,12 @@ Comp__BASE {
                     contentItem: Text {
                         text: tooltip1.text
                         font.pixelSize: 20
+                        color: "#ffffff"
                     }
 
                     background: Rectangle {
                         radius: 5
-                        color: "#9287ED"
+                        color: "#000000"
                     }
                 }
 

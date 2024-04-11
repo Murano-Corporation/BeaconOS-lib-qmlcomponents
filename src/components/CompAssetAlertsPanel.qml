@@ -147,7 +147,7 @@ Comp__BASE {
             clip: true
             boundsBehavior: Flickable.StopAtBounds
 
-            spacing: 32
+            spacing: 15
 
             anchors{
                 fill: rectBg_Contents

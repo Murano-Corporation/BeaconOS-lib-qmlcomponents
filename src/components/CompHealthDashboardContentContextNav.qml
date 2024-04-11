@@ -7,6 +7,7 @@ Comp__BASE {
     property bool isMTConnectData: false
     property string systemSelected: "null"
     property string context1Selected: "null"
+    property string mtcSortFilterString
     property string context2Selected: "null"
     property bool isMaxWidth: true
     property bool isMaxHeight: false
@@ -135,15 +136,14 @@ Comp__BASE {
 
         CompHealthContextNavBtn{
 
-            id:navBtnBeaconImu
+            id:navBtnBeaconEnv
             width: viewContext1_Beacon.btnWidth
             height: viewContext1_Beacon.btnHeight
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/IMU.svg"
-            text: "IMU"
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Environmental.svg"
+            text: "Environmental"
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
                 left: parent.left
-
             }
 
             onClicked: txt => {
@@ -153,14 +153,14 @@ Comp__BASE {
 
         CompHealthContextNavBtn{
 
-            id:navBtnBeaconEnv
+            id:navBtnBeaconImu
             width: viewContext1_Beacon.btnWidth
-            height: navBtnBeaconImu.height
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Environmental.svg"
-            text: "ENV"
+            height: viewContext1_Beacon.btnHeight
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/IMU.svg"
+            text: "Accelerometer"
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
-                left: navBtnBeaconImu.right
+                left: navBtnBeaconEnv.right
                 leftMargin: parent.btnSpacing
 
             }
@@ -203,7 +203,8 @@ Comp__BASE {
             cellHeight: viewContext1_Asset.btnHeight * 1.1
 
             delegate: CompHealthContextNavBtn{
-
+                id: navBtnDelegate
+                property var myModel: model
                 width: viewContext1_Asset.btnWidth
                 height: viewContext1_Asset.btnHeight
                 iconUrl:  (text === "?" ) ? "" : ((isMTConnectData ? "" : "file:/usr/share/BeaconOS-lib-images/images/"+ text +".svg"))
@@ -213,8 +214,16 @@ Comp__BASE {
                 fontPixelSize: viewContext1_Asset.fontPixelSize
 
                 onClicked: function(txt){
-                               compHealthDashboardContentContextNav.context1Selected = txt
-                           }
+                    if(compHealthDashboardContentContextNav.isMTConnectData)
+                    {
+                        compHealthDashboardContentContextNav.mtcSortFilterString = navBtnDelegate.myModel.name
+                    }
+
+                    compHealthDashboardContentContextNav.context1Selected = txt
+
+
+
+                }
 
             }
 
