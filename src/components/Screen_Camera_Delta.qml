@@ -1210,7 +1210,7 @@ Screen__BASE {
         id: messageConfirmDelete
 
         text: qsTr("Do you really want to discard this image?")
-        buttons: MessageDialog.Yes | MessageDialog.No
+        buttons: StandardButton.Yes | StandardButton.No
 
         onYesClicked: {
             MqttTopicCmdBRX.slot_ClearLastImageData()
