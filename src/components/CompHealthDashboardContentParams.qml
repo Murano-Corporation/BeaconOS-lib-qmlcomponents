@@ -2,6 +2,7 @@ import QtQuick 2.12
 
 import QtQuick.Controls 2.12
 import Qt.labs.qmlmodels 1.0
+import CONSTANTS 1.0
 
 Comp__BASE {
     id: compHealthDashboardContentParams
@@ -169,7 +170,10 @@ Comp__BASE {
     Loader{
         id: loaderTableView
 
-        active: compHealthDashboardContentParams.view === "List" && !compHealthDashboardContentParams.showGalleryInstance && !loaderGraphView.active
+        active: compHealthDashboardContentParams.view === "List"
+                && !compHealthDashboardContentParams.showGalleryInstance
+                && !loaderGraphView.active
+
         anchors {
             top: groupFilters.bottom
             left: groupFilters.left
@@ -181,14 +185,15 @@ Comp__BASE {
 
         asynchronous: true
 
-        sourceComponent:     TableView{
+        sourceComponent:
+            TableView {
             id: tableView
-            property int selectedRow: -1
 
+            property int selectedRow: -1
             property color gridLineColor: "#4D4A5F"
-            property var listOfColumnWidths: [600, 150, 150, 200, 200]
-            property var listOfColumnWidthRatios: [0.45, 0.15, 0.10, 0.15, 0.15]
-            property var listOfColumnWidthsCurrent: [600,150,200,200,200]
+            //property var listOfColumnWidths: [600, 150, 150, 200, 200]
+            //property var listOfColumnWidthRatios: [0.45, 0.15, 0.10, 0.15, 0.15]
+            //property var listOfColumnWidthsCurrent: [600,150,200,200,200]
             property real tableWidthMax: 1717
             property real startingWidth: 0
 
@@ -205,19 +210,18 @@ Comp__BASE {
 
             Component.onCompleted: {
                 startingWidth = width
+                //tmrDelayPopulate.start()
+                tableView.model = visible ? Qt.binding(function(){ return compHealthDashboardContentParams.dataModel}) : undefined
 
                 tableView.selectedRow = compHealthDashboardContentParams.tableViewSelectedRow
             }
 
-            onWidthChanged: {
-                //console.log("Table width now: " + width)
+            //onRowsChanged: {
+            //    //console.log("Table width now: " + width)
 
-                if(startingWidth === 0)
-                    return
-
-                forceLayout()
-                //update()
-            }
+            //    forceLayout()
+            //    //update()
+            //}
 
             clip: true
 
@@ -231,11 +235,6 @@ Comp__BASE {
                 setGridBtnVisible(true)
                 setListBtnVisible(true)
 
-            }
-
-            model: visible ? compHealthDashboardContentParams.dataModel : undefined
-            onModelChanged: {
-                tableView.pos
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -308,24 +307,28 @@ Comp__BASE {
                                }
 
             columnWidthProvider: col => {
+                                     if(!tableView.model || tableView.model === undefined)
+                                     return;
 
-                                     //console.log("Updating column widths")
+                                     var varICol = col + 0;
+                                     //console.log("Updating column width for " + varICol)
+                                     //var widthRatio = tableView.listOfColumnWidthRatios[col]
+                                     //var widthMin = tableView.listOfColumnWidths[col]
+                                     //var tableWidthCurrent = tableView.width
+                                     //var widthCalcd = tableWidthCurrent * widthRatio
+                                     //var maxWidth = Math.max(widthMin, widthCalcd)
 
-                                     var widthRatio = tableView.listOfColumnWidthRatios[col]
-                                     var widthMin = tableView.listOfColumnWidths[col]
-                                     var tableWidthCurrent = tableView.width
-                                     var widthCalcd = tableWidthCurrent * widthRatio
-                                     var maxWidth = Math.max(widthMin, widthCalcd)
+                                     //tableView.listOfColumnWidthsCurrent[col] = maxWidth
+                                     //tableView.columnWidthsUpdated()
+                                     var ret = tableView.model.headerData(varICol, Qt.Horizontal ,Constants.DataRole_HeaderData_ColumnWidth)
 
-                                     tableView.listOfColumnWidthsCurrent[col] = maxWidth
-                                     tableView.columnWidthsUpdated()
-
-
-                                     return maxWidth
+                                     return ret
                                  }
 
             topMargin: 51
             rightMargin: 8
+
+
             Row{
                 id: columHeader
 
@@ -339,18 +342,18 @@ Comp__BASE {
 
                         property int col: index
 
-                        width: tableView.listOfColumnWidthsCurrent[index]
+                        width: tableView.columnWidthProvider(index)
                         height: 52
 
                         color: "#333958"
 
-                        Connections{
-                            target: tableView
+                        //Connections{
+                        //    target: tableView
 
-                            function onColumnWidthsUpdated(){
-                                width = tableView.listOfColumnWidthsCurrent[index]
-                            }
-                        }
+                        //    function onColumnWidthsUpdated(){
+                        //        width = tableView.listOfColumnWidthsCurrent[index]
+                        //    }
+                        //}
 
                         Rectangle{
                             anchors{
@@ -423,11 +426,11 @@ Comp__BASE {
             }
 
 
-//            ScrollBar.horizontal: ScrollBar{
-//                policy:  ScrollBar.AsNeeded
+            //            ScrollBar.horizontal: ScrollBar{
+            //                policy:  ScrollBar.AsNeeded
 
-//                height: 8
-//            }
+            //                height: 8
+            //            }
 
             ScrollBar.vertical: ScrollBar{
                 policy:  ScrollBar.AsNeeded
