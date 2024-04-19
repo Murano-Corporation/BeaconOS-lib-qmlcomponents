@@ -39,6 +39,12 @@ Comp__BASE_Popup {
             is_enabled: true
         }
 
+        ListElement{
+            name: "Display"
+            icon_path: "file:///usr/share/BeaconOS-lib-images/images/HelpFill.svg"
+            is_enabled: true
+        }
+
 
     }
 
@@ -282,6 +288,19 @@ Comp__BASE_Popup {
                 id: popup_settings_applications
 
                 width: searchField.width
+            }
+        }
+
+        Loader{
+            id: loaderDisplaySettings
+
+            anchors.fill: areaContents
+
+            active: popup_settings_root.selectedNavName === "Display"
+            asynchronous:  true
+            sourceComponent: Popup_Settings_Display {
+
+                controlWidth: searchField.width
             }
         }
 

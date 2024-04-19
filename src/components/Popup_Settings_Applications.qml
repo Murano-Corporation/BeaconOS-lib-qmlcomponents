@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 
-Item {
+Comp__BASE {
     id: popup_settings_applications_root
     property real listHeight: 90
     property alias listItemHeight: popup_settings_applications_root.listHeight

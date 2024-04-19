@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Item {
+Comp__BASE {
     id: popup_settings_database_local_root
 
     property string hostname
