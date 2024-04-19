@@ -134,5 +134,6 @@
         <file>Popup_Application_Info.qml</file>
         <file>Popup_Settings__BASE.qml</file>
         <file>Popup_Settings_Display.qml</file>
+        <file>DrawerSettingsOmega.qml</file>
     </qresource>
 </RCC>

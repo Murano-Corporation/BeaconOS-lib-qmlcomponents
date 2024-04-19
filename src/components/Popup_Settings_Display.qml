@@ -4,6 +4,8 @@ import QtQml.Models 2.15
 import CONSTANTS 1.0
 Popup_Settings__BASE {
     id: popup_Settings_Display
+
+    property bool isDelta: base.isDelta
     screenName: "Display"
     content: Column{
         id: colContents
@@ -12,10 +14,12 @@ Popup_Settings__BASE {
             id: comboRotation
             text: "Rotation"
 
-            height: 60
+            height: isDelta ? 60 : 100
             width: popup_Settings_Display.controlWidth
-
+            textFontPixelSize: isDelta ? 28 : 40
+            valueComboBox: isDelta ? 24 : 40
             comboItem.valueRole: "value"
+            comboItem.optionsHeight: isDelta ? 50 : 100
 
             comboModel: ListModel{
                 ListElement{

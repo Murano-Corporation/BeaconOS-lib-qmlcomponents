@@ -9,9 +9,7 @@ Comp__BASE {
     property string schema
     property int port
     property bool changesMade: false
-    property real dataSize: 28
-    property alias sizeofText: popup_settings_database_local_root.dataSize
-    property alias labelTitle: lblTitle
+    property bool isDelta: base.isDelta
 
     Component.onCompleted: {
         hostname = Settings.getDatabaseHostName("")
@@ -143,6 +141,7 @@ Comp__BASE {
 
             height: 40
             width: parent.width
+            font.pixelSize: isDelta ? 25 : 60
         }
 
         CompPopupBG{
@@ -170,12 +169,12 @@ Comp__BASE {
 
                     label{
                         text: "Hostname:"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "?"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
 
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
@@ -188,14 +187,14 @@ Comp__BASE {
                     isReadonly: false
                     label{
                         text: "Password:"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "?"
                         echoMode: TextInput.Password
                         inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -207,13 +206,13 @@ Comp__BASE {
 
                     label{
                         text: "Port:"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "?"
                         inputMethodHints: Qt.ImhDigitsOnly
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -225,12 +224,12 @@ Comp__BASE {
 
                     label{
                         text: "Schema:"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "?"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -242,12 +241,12 @@ Comp__BASE {
 
                     label{
                         text: "Username:"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "?"
-                        font.pixelSize: popup_settings_database_local_root.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }

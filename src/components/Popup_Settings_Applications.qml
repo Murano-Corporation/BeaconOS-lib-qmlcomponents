@@ -4,11 +4,9 @@ import QtQml.Models 2.15
 
 Comp__BASE {
     id: popup_settings_applications_root
-    property real listHeight: 90
-    property alias listItemHeight: popup_settings_applications_root.listHeight
+    property bool isDelta: base.isDelta
+    property real listHeight: isDelta ? 90 : 120
     property alias labeltitle: lblTitle
-    property real labelAppNameSize: 25
-    property alias labelItemSize: popup_settings_applications_root.labelAppNameSize
 
     function showAppInfoPopup(appName)
     {
@@ -50,6 +48,7 @@ Comp__BASE {
 
             height: 40
             width: parent.width
+            font.pixelSize: isDelta ? 25 : 60
         }
 
         CompPopupBG{
@@ -101,7 +100,7 @@ Comp__BASE {
                             height: row.height
                             width: row.width - row.spacing - iconArrow.width
                             color: "white"
-                            font.pixelSize: popup_settings_applications_root.labelAppNameSize
+                            font.pixelSize: isDelta ? 25 : 50
 
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -135,20 +134,8 @@ Comp__BASE {
 
                 }
 
-
-
-
-
-
-
-
-
-
             }
-
-
-
-        }
+       }
 
     }
 

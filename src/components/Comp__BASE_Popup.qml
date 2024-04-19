@@ -4,6 +4,7 @@ import QtQuick.Controls 2.12
 Popup {
     id: popup_root
     property alias targetDevice: compBase.targetDevice
+    property alias base: compBase
     required property string popupName
 
     enabled: !DisplayController.isBusy

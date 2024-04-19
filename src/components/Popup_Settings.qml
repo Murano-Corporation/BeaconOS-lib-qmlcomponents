@@ -6,11 +6,15 @@ Comp__BASE_Popup {
     id: popup_settings_root
 
     popupName: "Settings"
+    property bool isDelta: base.isDelta
     property string selectedNavName
 
     property var listOfNavigationOptions: listModelNavigation
     property color colorNavItemIdle:"#80ffffff"
     property color colorNavItemSelected: "#9287ED"
+    property DrawerSettingsOmega drawerSettingsroot
+
+    onDrawerSettingsrootChanged: console.log("drawerSettingsroot changd to " + drawerSettingsroot)
 
     ListModel{
         id: listModelNavigation
@@ -54,9 +58,9 @@ Comp__BASE_Popup {
 
     FocusScope{
 
-        transform: Translate{
-            y: -InputHandler.yTranslatePopup
-        }
+//        transform: Translate{
+//            y: -InputHandler.yTranslatePopup
+//        }
 
         Behavior on y{
             NumberAnimation{
@@ -73,8 +77,8 @@ Comp__BASE_Popup {
         CompPopupBG{
             id: bg
 
-            height: parent.height * 0.90
-            width: parent.width * 0.90
+            height: isDelta ? parent.height * 0.90 : parent.height*0.98
+            width: isDelta ? parent.width * 0.90 : parent.width*0.98
 
             anchors{
                 centerIn: parent
@@ -110,6 +114,7 @@ Comp__BASE_Popup {
 
             CompCustomisableTextField{
                 id: searchField
+                visible: isDelta
 
                 width: 600
 
@@ -137,40 +142,92 @@ Comp__BASE_Popup {
 
         }
 
-        Item{
-            id: areaNavigation
+        Loader {
+            id: loadOmegaSettingsDrawer
 
-            anchors{
-                left: areaControls.left
-                top: areaControls.bottom
-                topMargin: 20
-                bottom: bg.bottom
-                bottomMargin: bg.radiusBG
+            active: !isDelta
+            width: parent.width
+            height: parent.height
+            sourceComponent: DrawerSettingsOmega {
+                id: drawerSettingsroot
+
+                width: parent.width
+                height: parent.height
+
+                navigationModel: popup_settings_root.listOfNavigationOptions
+                onItemClicked: function(itemName)
+                {
+                    popup_settings_root.selectedNavName = itemName
+                }
+                Component.onCompleted: {
+                   popup_settings_root.drawerSettingsroot = this
+                   delayOpen(200)
+                    //open()
+                }
+            }
+        }
+    Loader{
+        active: !isDelta
+
+        CompIconBtn {
+
+            id: iconBtnAssetInfo
+
+            visible: !isDelta
+
+            anchors {
+                top: parent.top
+                left: parent.left
+                topMargin: 120
+                leftMargin: 66
             }
 
-            width: 400
+            height: 100
+            width: 100
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/ListFill.svg"
+            iconColor: "White"
 
+            onClicked: {
+                drawerSettingsroot.open()
+            }
+        }
+    }
+
+    // TODO: Move position bindings from the component to the Loader.
+    //       Check all uses of 'parent' inside the root element of the component.
+    //       Rename all outer uses of the id "areaNavigation" to "loader_areaNavigation.item".
+    //       Rename all outer uses of the id "navDelIcon" to "loader_areaNavigation.item.navDelIcon".
+    //       Rename all outer uses of the id "popup_Settings_Delegate_NavigationItem" to "loader_areaNavigation.item.popup_Settings_Delegate_NavigationItem".
+    //       Rename all outer uses of the id "listViewNavigation" to "loader_areaNavigation.item.listViewNavigation".
+    Component {
+        id: component_areaNavigation
+        Item{
+//            property CompImageIcon navDelIcon: inner_navDelIcon
+//            property Item popup_Settings_Delegate_NavigationItem: inner_popup_Settings_Delegate_NavigationItem
+//            property ListView listViewNavigation: inner_listViewNavigation
+
+            id: areaNavigation
             ListView{
-                id: listViewNavigation
+                id: inner_listViewNavigation
                 clip: true
                 anchors.fill: parent
                 boundsBehavior: Flickable.StopAtBounds
 
                 model: popup_settings_root.listOfNavigationOptions
                 delegate: Item{
-                    id: popup_Settings_Delegate_NavigationItem
+                    id: inner_popup_Settings_Delegate_NavigationItem
 
-                    property bool isCurrent: listViewNavigation.currentIndex === index
+                    property bool isCurrent: inner_listViewNavigation.currentIndex === index
                     property color colorCurrent: isCurrent ? popup_settings_root.colorNavItemSelected : popup_settings_root.colorNavItemIdle
 
                     enabled: model.is_enabled
                     opacity: enabled ? 1.0 : 0.3
 
-                    width: listViewNavigation.width
+                    width: inner_listViewNavigation.width
                     height: 60
 
                     CompImageIcon{
-                        id: navDelIcon
+                        id: inner_navDelIcon
                         anchors{
                             top: parent.top
                             left: parent.left
@@ -189,7 +246,7 @@ Comp__BASE_Popup {
                     CompLabel{
 
                         anchors{
-                            left: navDelIcon.right
+                            left: inner_navDelIcon.right
                             right: parent.right
                             bottom: parent.bottom
                             top: parent.top
@@ -210,7 +267,7 @@ Comp__BASE_Popup {
                         anchors.fill: parent
 
                         onClicked: {
-                            listViewNavigation.currentIndex = index
+                            inner_listViewNavigation.currentIndex = index
                             popup_settings_root.selectedNavName = model.name
                         }
                     }
@@ -218,6 +275,22 @@ Comp__BASE_Popup {
                 }
             }
         }
+    }
+    Loader {
+        id: loader_areaNavigation
+        sourceComponent: component_areaNavigation
+        active: isDelta
+        width: 400
+
+        anchors{
+            left: areaControls.left
+            top: areaControls.bottom
+            topMargin: 20
+            bottom: bg.bottom
+            bottomMargin: bg.radiusBG
+        }
+    }
+
 
         Item{
             id: areaContents
@@ -230,8 +303,8 @@ Comp__BASE_Popup {
                 bottomMargin: bg.radiusBG
             }
 
-            width: searchField.width
-            x: bg.mapFromItem(areaControls, searchField.x, searchField.y).x + bg.x
+            width: isDelta ? searchField.width : parent.width
+            x: isDelta ? (bg.mapFromItem(areaControls, searchField.x, searchField.y).x + bg.x) : (bg.mapFromItem(parent, parent.x, parent.y).x + bg.x)
         }
 
         Loader{
@@ -258,7 +331,8 @@ Comp__BASE_Popup {
             sourceComponent: Popup_Settings_System {
                 id: popup_Settings_System
 
-                width: searchField.width
+                width: parent.width
+                height : parent.height
             }
         }
 
@@ -272,7 +346,8 @@ Comp__BASE_Popup {
             sourceComponent: Popup_Settings_Database_Local {
                 id: popup_settings_database_local
 
-                width: searchField.width
+                width: parent.width
+                height : parent.height
             }
         }
 
@@ -287,7 +362,12 @@ Comp__BASE_Popup {
             sourceComponent: Popup_Settings_Applications {
                 id: popup_settings_applications
 
-                width: searchField.width
+//                listItemHeight:120
+//                labeltitle.font.pixelSize: 60
+//                labelItemSize: 50
+
+                width: parent.width
+                height : parent.height
             }
         }
 
@@ -300,7 +380,8 @@ Comp__BASE_Popup {
             asynchronous:  true
             sourceComponent: Popup_Settings_Display {
 
-                controlWidth: searchField.width
+                controlWidth: isDelta ? searchField.width : 800
+
             }
         }
 
