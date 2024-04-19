@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 
 Dialog {
 
-    property alias targetDevice: compBase
+    property alias targetDevice: compBase.targetDevice
 
     Comp__BASE{
         id: compBase
