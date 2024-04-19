@@ -5,6 +5,9 @@ Item{
 
     property alias title: lblTitle.text
     property alias spacingOutter: colContents.spacing
+    property real dataSize: 28
+    property alias sizeofText: popup_Settings_System.dataSize
+    property alias labelTitle: lblTitle
 
     height: 60
 
@@ -53,10 +56,12 @@ Item{
 
                     label{
                         text: "Beacon OS Name:"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
 
                     textEdit{
                         text: "Beacon OS Delta"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
                 }
 
@@ -67,10 +72,12 @@ Item{
 
                     label{
                         text: "Beacon OS Version:"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
 
                     textEdit{
                         text: "v0.1.2.3"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
                 }
 
@@ -81,10 +88,12 @@ Item{
 
                     label{
                         text: "Device Name:"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
 
                     textEdit{
                         text: "Delta 2"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
                 }
 
@@ -95,10 +104,12 @@ Item{
 
                     label{
                         text: "BeaconBusRx Version:"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
 
                     textEdit{
                         text: "v0.1.2"
+                        font.pixelSize: popup_Settings_System.dataSize
                     }
                 }
             }

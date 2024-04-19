@@ -9,6 +9,9 @@ Item {
     property string schema
     property int port
     property bool changesMade: false
+    property real dataSize: 28
+    property alias sizeofText: popup_settings_database_local_root.dataSize
+    property alias labelTitle: lblTitle
 
     Component.onCompleted: {
         hostname = Settings.getDatabaseHostName("")
@@ -167,10 +170,12 @@ Item {
 
                     label{
                         text: "Hostname:"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                     }
 
                     textEdit{
                         text: "?"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
 
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
@@ -183,12 +188,14 @@ Item {
                     isReadonly: false
                     label{
                         text: "Password:"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                     }
 
                     textEdit{
                         text: "?"
                         echoMode: TextInput.Password
                         inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -200,11 +207,13 @@ Item {
 
                     label{
                         text: "Port:"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                     }
 
                     textEdit{
                         text: "?"
                         inputMethodHints: Qt.ImhDigitsOnly
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -216,10 +225,12 @@ Item {
 
                     label{
                         text: "Schema:"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                     }
 
                     textEdit{
                         text: "?"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -231,10 +242,12 @@ Item {
 
                     label{
                         text: "Username:"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                     }
 
                     textEdit{
                         text: "?"
+                        font.pixelSize: popup_settings_database_local_root.dataSize
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
                     }
                 }
@@ -245,12 +258,16 @@ Item {
 
                     width: parent.width
 
-                    height: 60
-
-                    spacing: 20
+                    //height: 200
+                      height: 60
+                      spacing: 20
+                    //spacing: 100
 
                     CompBtnBreadcrumb{
                         id: btnRevert
+                        height: 120
+                        width: 300
+
                         enabled: popup_settings_database_local_root.changesMade
 
                         text: "Revert"
@@ -260,6 +277,8 @@ Item {
 
                     CompBtnBreadcrumb{
                         id: btnSave
+                        height: 120
+                        width: 300
                         enabled: popup_settings_database_local_root.changesMade
 
                         text: "Save"

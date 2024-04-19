@@ -190,6 +190,7 @@ Popup__BASE{
 
             textEdit{
                 text: popup_application_info_root.applicationInfoStruct.iconPath
+                wrapMode: Text.WordWrap
 
                 onTextChanged: {
                     popup_application_info_root.applicationInfoStruct.iconPath = edtAppIconPath.textEdit.text

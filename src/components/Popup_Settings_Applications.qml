@@ -4,6 +4,11 @@ import QtQml.Models 2.15
 
 Item {
     id: popup_settings_applications_root
+    property real listHeight: 90
+    property alias listItemHeight: popup_settings_applications_root.listHeight
+    property alias labeltitle: lblTitle
+    property real labelAppNameSize: 25
+    property alias labelItemSize: popup_settings_applications_root.labelAppNameSize
 
     function showAppInfoPopup(appName)
     {
@@ -73,7 +78,7 @@ Item {
 
                     opacity: model.enabled ? 1.0 : 0.6
 
-                    height: 90
+                    height: popup_settings_applications_root.listHeight
                     width: listApplications.width
 
                     Row{
@@ -96,6 +101,7 @@ Item {
                             height: row.height
                             width: row.width - row.spacing - iconArrow.width
                             color: "white"
+                            font.pixelSize: popup_settings_applications_root.labelAppNameSize
 
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -162,6 +168,7 @@ Item {
 
             applicationInfoStruct: loaderPopupEdit.appInfo
             applicationInfoStruct_Original: loaderPopupEdit.appInfo_Original
+            contentWidth: parent.width
 
             Component.onCompleted: {
                 open()
