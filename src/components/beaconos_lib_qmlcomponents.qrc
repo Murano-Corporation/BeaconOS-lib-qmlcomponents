@@ -134,5 +134,8 @@
         <file>Popup_Application_Info.qml</file>
         <file>Popup_Settings__BASE.qml</file>
         <file>Popup_Settings_Display.qml</file>
+        <file>Screen_Configuration.qml</file>
+        <file>Screen_Configuration_View__BASE.qml</file>
+        <file>Screen_Configuration_View_Nano.qml</file>
     </qresource>
 </RCC>

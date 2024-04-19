@@ -6,6 +6,9 @@ Dialog{
 
     property alias headerText: lblHeader.text
     property alias bodyText: lblContents.text
+    property alias yesText: btnYes.text
+    property alias noText: btnNo.text
+
     property var funcOnYes
     property var funcOnNo
     property real btnHeight: 40
@@ -33,10 +36,12 @@ Dialog{
 
     onAccepted: {
         dlgYesNo.funcOnYes()
+        dlgYesNo.close()
     }
 
     onRejected: {
         dlgYesNo.funcOnNo()
+        dlgYesNo.close()
     }
 
     modal: true
@@ -80,6 +85,7 @@ Dialog{
         spacing: dlgYesNo.btnHeight * 0.5
 
         CompBtnBreadcrumb{
+            id: btnYes
             text: qsTr("Yes")
             height: dlgYesNo.btnHeight
             width: 200
@@ -95,6 +101,7 @@ Dialog{
         }
 
         CompBtnBreadcrumb{
+            id: btnNo
             text: qsTr("No")
             height: dlgYesNo.btnHeight
             width: 200
