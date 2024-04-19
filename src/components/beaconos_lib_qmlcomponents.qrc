@@ -132,5 +132,7 @@
         <file>Popup_Confirm.qml</file>
         <file>Popup_Settings_Applications.qml</file>
         <file>Popup_Application_Info.qml</file>
+        <file>Popup_Settings__BASE.qml</file>
+        <file>Popup_Settings_Display.qml</file>
     </qresource>
 </RCC>

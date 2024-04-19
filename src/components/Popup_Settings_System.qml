@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-Item{
+Comp__BASE{
     id: popup_Settings_System
 
     property alias title: lblTitle.text

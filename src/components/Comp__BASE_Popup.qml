@@ -6,6 +6,8 @@ Popup {
     property alias targetDevice: compBase.targetDevice
     required property string popupName
 
+    enabled: !DisplayController.isBusy
+
     width: root.contentItem.width
     height: root.contentItem.height
 

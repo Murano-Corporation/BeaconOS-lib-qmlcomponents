@@ -14,7 +14,7 @@ Item{
     property alias currentText: combo.currentText
     property alias currentIndex: combo.currentIndex
     property alias valueComboBox: compLabelledComboBox.comboBoxSize
-
+    property alias comboItem: combo
 
     Row{
         id: row
