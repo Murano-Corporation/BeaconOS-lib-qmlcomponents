@@ -5,9 +5,7 @@ Comp__BASE{
 
     property alias title: lblTitle.text
     property alias spacingOutter: colContents.spacing
-    property real dataSize: 28
-    property alias sizeofText: popup_Settings_System.dataSize
-    property alias labelTitle: lblTitle
+    property bool isDelta: base.isDelta
 
     height: 60
 
@@ -30,6 +28,7 @@ Comp__BASE{
 
             height: 40
             width: parent.width
+            font.pixelSize: isDelta ? 25 : 60
         }
 
         CompPopupBG{
@@ -56,12 +55,12 @@ Comp__BASE{
 
                     label{
                         text: "Beacon OS Name:"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "Beacon OS Delta"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
                 }
 
@@ -72,12 +71,12 @@ Comp__BASE{
 
                     label{
                         text: "Beacon OS Version:"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "v0.1.2.3"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
                 }
 
@@ -88,12 +87,12 @@ Comp__BASE{
 
                     label{
                         text: "Device Name:"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "Delta 2"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
                 }
 
@@ -104,12 +103,12 @@ Comp__BASE{
 
                     label{
                         text: "BeaconBusRx Version:"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
 
                     textEdit{
                         text: "v0.1.2"
-                        font.pixelSize: popup_Settings_System.dataSize
+                        font.pixelSize: isDelta ? 28 : 40
                     }
                 }
             }
