@@ -7,8 +7,8 @@ Comp__BASE {
 
     property alias isPressed: btn.pressed
 
-    height: 100
-    width: 100
+    height: isDelta ? 100 : 180
+    width: isDelta ? 100 : 180
     
     signal clicked(string txt)
 

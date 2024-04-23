@@ -138,5 +138,7 @@
         <file>Screen_Configuration.qml</file>
         <file>Screen_Configuration_View__BASE.qml</file>
         <file>Screen_Configuration_View_Nano.qml</file>
+        <file>Screen_Welcome.qml</file>
+        <file>Screen_Login.qml</file>
     </qresource>
 </RCC>

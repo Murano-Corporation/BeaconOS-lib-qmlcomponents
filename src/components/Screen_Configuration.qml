@@ -6,17 +6,18 @@ Screen__BASE {
 
     anchors.fill: parent
 
-
     property string selectedDeviceType: ""
     readonly property string selectedDeviceType_Nano: "Nano"
 
+    //property bool whichDevice: isDelta
+
     property real selectedDeviceLabelX: 0
-    property real selectDeviceLabelWidth: 900
+    property real selectDeviceLabelWidth: isDelta ? 900 : 450
 
     Item {
         id: groupTopControls
 
-        width: 1800
+        width: isDelta ? 1800 : 1000
 
         anchors{
             top: parent.top
@@ -61,9 +62,9 @@ Screen__BASE {
             anchors.leftMargin: 20
             anchors.right: parent.right
 
-            height: 42
+            height: isDelta ? 42 : 62
 
-            spacing: 850
+            spacing: isDelta ? 850 : 400
 
             CompLabel {
                 id: lblDelta

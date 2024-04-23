@@ -57,7 +57,7 @@ CompNumpadBtn {
                 text: compAlphaNumPinBtnRoot.listOfOptions[index + 1]
                 bottomPadding: 20
                 font{
-                    pixelSize: 12
+                    pixelSize: isDelta ? 12 : 20
                 }
             }
         }
