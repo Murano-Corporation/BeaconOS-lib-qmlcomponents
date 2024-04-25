@@ -140,5 +140,7 @@
         <file>Screen_Configuration_View_Nano.qml</file>
         <file>Screen_Welcome.qml</file>
         <file>Screen_Login.qml</file>
+        <file>Screen_Reference.qml</file>
+        <file>Screen_AssetDashboard.qml</file>
     </qresource>
 </RCC>

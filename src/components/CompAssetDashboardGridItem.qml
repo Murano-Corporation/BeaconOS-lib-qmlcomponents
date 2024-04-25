@@ -10,13 +10,9 @@ Comp__BASE {
     property string assetState: "Active"
     property string beaconState: "Active"
     property string assetType: "Vehicle"
-    property alias itemWidth: compAssetDashboardGridItemRoot.width
-    property alias itemHeight: compAssetDashboardGridItemRoot.height
-    property alias assetNameLabel: lblAssetName
-    property alias nanoName: lblNanoName
 
-    width: 373
-    height: 368
+    width: isDelta ? 373 : 412
+    height: isDelta ? 368 : 412
 
     CompGlassRect{
         id: rectBg
@@ -149,7 +145,7 @@ Comp__BASE {
             color: "White"
             verticalAlignment: "AlignVCenter"
             font {
-                pixelSize: 25
+                pixelSize: isDelta ? 25 : 35
                 family: "Lato"
                 weight: Font.Normal
             }
@@ -193,7 +189,7 @@ Comp__BASE {
             color: "White"
 
             font {
-                pixelSize: 25
+                pixelSize: isDelta ? 25 : 35
                 family: "Lato"
                 weight: Font.Normal
             }

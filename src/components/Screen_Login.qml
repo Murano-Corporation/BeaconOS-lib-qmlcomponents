@@ -175,8 +175,8 @@ Screen__BASE {
             anchors{
                 horizontalCenter: parent.horizontalCenter
                 top: lblEnterPin.bottom
-                topMargin: 20
-            }
+                topMargin: isDelta ? 20 : 38
+             }
             height: 32
 
             Repeater{
@@ -186,8 +186,8 @@ Screen__BASE {
 
                     property int assignedIndex: index
 
-                    height: 32
-                    width: 32
+                    height: isDelta ? 32 : 45
+                    width: height
                     radius: 0.5 * height
 
                     border.color: "#FFFFFF"

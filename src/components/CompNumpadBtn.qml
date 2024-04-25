@@ -13,7 +13,7 @@ Comp__BASE {
     signal clicked(string txt)
 
     property string text: 'Text'
-    property real fontSize: 40
+    property real fontSize: isDelta ? 40 : 55
     property color textColor: 'White'
     property Text textComp: textComp
 
