@@ -12,13 +12,6 @@ Popup {
     property rect mappedObj: Qt.rect(0,0,300,400)
     property string fileNameOnOpen
     property int viewMode: 0
-    //property int fileNameFontSize: 20
-    property alias lblTitleComp : lblTitle
-    property alias lblFileNameSize: listContents.fileNameFontSize
-    property alias groupControlscomp: groupControls
-    property alias btnCancelComp: btnCancel
-    property alias referenceManualGrid: tableContents
-
 
     signal searchTextChanged(string text)
     signal itemSelected()
@@ -152,7 +145,7 @@ Popup {
 
             text: qsTr("Please select a Manual to review")
             font{
-                pixelSize: 20
+                pixelSize: isDelta ? 20 : 35
                 weight: Font.Bold
             }
 
@@ -179,8 +172,8 @@ Popup {
 
             boundsBehavior: Flickable.StopAtBounds
 
-            cellHeight: height / 3
-            cellWidth: width / 5
+            cellHeight: isDelta ? (height / 3) : 480
+            cellWidth: isDelta ? (width / 5) : 480
 
             clip: true
 
@@ -236,7 +229,7 @@ Popup {
 
             property real itemHeight: 100
             property string fileNameHovered: ""
-            property real fileNameFontSize: 20
+            property real fileNameFontSize: isDelta ? 20 : 35
 
 
             clip: true
@@ -329,7 +322,7 @@ Popup {
             property real btnWidth: 200
             property real btnSpacing: 40
 
-            height: 60
+            height: isDelta ? 60 : 120
 
             anchors{
                 left: lblTitle.left
@@ -351,7 +344,7 @@ Popup {
                 height: groupControls.height
                 width: groupControls.btnWidth
 
-                font.pixelSize: 20
+                font.pixelSize: isDelta ? 20 : 35
 
                 text: qsTr("Back")
 

@@ -14,15 +14,7 @@ Item {
     property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 4 : 0
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property real zoomCurrent
-    property real mapTypesHeight: 64
-    property real mapTypeSize: 20
-    property real lblFontSize: 20
-    property real coordSize: 24
-    property alias mapTypes: compMapViewerRoot.mapTypesHeight
-    property alias listHeight: listMapTypes
-    property alias mapFontSize: compMapViewerRoot.mapTypeSize
-    property alias assetTypelblSize: compMapViewerRoot.lblFontSize
-    property alias latLongSize: compMapViewerRoot.coordSize
+
 
     //    Component {
     //        id: highlight
@@ -44,7 +36,7 @@ Item {
             right: parent.right
         }
 
-        height: 64
+        height: isDelta ? 64 : 110
         spacing: 20
         clip: true
         orientation: ListView.Horizontal
@@ -55,8 +47,8 @@ Item {
         delegate: CompBtnBreadcrumb{
             text: getSimpleMapNameString(model.name)
 
-            height: compMapViewerRoot.mapTypesHeight
-            font.pixelSize: compMapViewerRoot.mapTypeSize
+            height: isDelta ? 64 : 100
+            font.pixelSize: isDelta ? 20 : 40
 
             onClicked: {
                 compMapViewerRoot.activeMapTypeIndex = index
@@ -378,7 +370,7 @@ Item {
                         text: "lat: %1; lon:%2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
 
                         font{
-                            pixelSize: coordSize
+                            pixelSize: isDelta ? 24 : 40
                         }
 
                         anchors{
@@ -431,7 +423,7 @@ Item {
                 lon: model.Longitude
                 assetType: model.asset_type
                 assetID: model.Beacon_ID
-                assetTypelbl.font.pixelSize: lblFontSize
+                assetTypelbl.font.pixelSize: isDelta ? 20 : 40
                 onCenterOnPoint: {
 
                     if(compMapViewerRoot.selectedAssetDataModel === model)

@@ -4,6 +4,7 @@ import QtQml.Models 2.15
 
 Popup__BASE{
     id: popup_application_info_root
+    property bool isDelta: base.isDelta
 
     contentWidth: 1200
     property var applicationInfoStruct
@@ -127,9 +128,10 @@ Popup__BASE{
             id: lblTitle
 
             width: parent.width
-            height: 40
+            height: isDelta ? 40 : 60
 
             text: popup_application_info_root.titleText
+            font.pixelSize: isDelta ? 28 : 40
         }
 
         CompLabelledTextEdit{
@@ -138,13 +140,16 @@ Popup__BASE{
             isReadonly: false
 
             width: parent.width
+            height: isDelta ? 60 : 80
 
             label{
                 text: "App. Name:"
+                font.pixelSize: isDelta ? 28 : 40
             }
 
             textEdit{
                 text: popup_application_info_root.applicationInfoStruct.name
+                font.pixelSize: isDelta ? 28 : 40
 
                 onTextChanged: {
                     //console.log("TExt changed to " + edtAppName.textEdit.text)
@@ -161,13 +166,16 @@ Popup__BASE{
             isReadonly: false
 
             width: parent.width
+            height: isDelta ? 60 : 150
 
             label{
                 text: "App. Description:"
+                font.pixelSize: isDelta ? 28 : 40
             }
 
             textEdit{
                 text: popup_application_info_root.applicationInfoStruct.description
+                font.pixelSize: isDelta ? 28 : 40
 
                 onTextChanged: {
                     popup_application_info_root.applicationInfoStruct.description = edtAppDescription.textEdit.text
@@ -183,14 +191,17 @@ Popup__BASE{
             isReadonly: false
 
             width: parent.width
+            height: isDelta ? 60 : 80
 
             label{
                 text: "App. Icon Path:"
+                font.pixelSize: isDelta ? 28 : 40
             }
 
             textEdit{
                 text: popup_application_info_root.applicationInfoStruct.iconPath
                 wrapMode: Text.WordWrap
+                font.pixelSize: isDelta ? 28 : 40
 
                 onTextChanged: {
                     popup_application_info_root.applicationInfoStruct.iconPath = edtAppIconPath.textEdit.text
@@ -206,13 +217,16 @@ Popup__BASE{
             isReadonly: false
 
             width: parent.width
+            height: isDelta ? 60 : 80
 
             label{
                 text: "App. Nav. Path:"
+                font.pixelSize: isDelta ? 25 : 40
             }
 
             textEdit{
                 text: popup_application_info_root.applicationInfoStruct.navPath
+                font.pixelSize: isDelta ? 25 : 40
 
                 onTextChanged: {
                     popup_application_info_root.applicationInfoStruct.navPath = edtAppNavPath.textEdit.text
@@ -228,8 +242,10 @@ Popup__BASE{
             isReadOnly: false
 
             width: parent.width
+            height: isDelta ? 60 : 80
 
             text:"App. Enabled?:"
+            font.pixelSize: isDelta ? 25 : 40
 
             onIsOnChanged:{
                 popup_application_info_root.applicationInfoStruct.enabled = edtAppEnabled.isOn
@@ -241,7 +257,7 @@ Popup__BASE{
         Row{
             id: rowControls
 
-            height: 60
+            height: isDelta ? 60 : 100
             width: parent.width
 
             spacing: 30
@@ -254,6 +270,7 @@ Popup__BASE{
                 enabled: true
 
                 text: "Back"
+                font.pixelSize: isDelta ? 25 : 40
 
                 height: parent.height
                 width: btnRevert.width
@@ -267,6 +284,7 @@ Popup__BASE{
                 enabled: popup_application_info_root.changesMade
 
                 text: "Revert"
+                font.pixelSize: isDelta ? 25 : 40
 
                 height: parent.height
                 width: 0.333 * (parent.width - (parent.spacing * 2))
@@ -280,6 +298,7 @@ Popup__BASE{
                 enabled: popup_application_info_root.changesMade
 
                 text: "Save"
+                font.pixelSize: isDelta ? 25 : 40
 
                 height: parent.height
                 width: btnRevert.width

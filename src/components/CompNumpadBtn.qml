@@ -7,13 +7,13 @@ Comp__BASE {
 
     property alias isPressed: btn.pressed
 
-    height: 100
-    width: 100
+    height: isDelta ? 100 : 180
+    width: isDelta ? 100 : 180
     
     signal clicked(string txt)
 
     property string text: 'Text'
-    property real fontSize: 40
+    property real fontSize: isDelta ? 40 : 55
     property color textColor: 'White'
     property Text textComp: textComp
 
