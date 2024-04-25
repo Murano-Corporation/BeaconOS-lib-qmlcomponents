@@ -7,6 +7,8 @@ Item{
     property bool showDevRects: false
     property alias label: lbl
     property alias textEdit: edt
+    property alias text: lbl.text
+    property alias value: edt.text
     property alias spacing: row.spacing
     property alias row: row
 
