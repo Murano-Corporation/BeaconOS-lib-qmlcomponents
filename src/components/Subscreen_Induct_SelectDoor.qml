@@ -65,12 +65,15 @@ Item {
             }
 
             anchors{
-                top: parent.top
+                top: isDelta ? parent.top : compBeaconOsInduct_ZoneHighlighter.bottom
+                topMargin: isDelta ? 0 : 20
                 left: parent.left
+                right: isDelta ? undefined : parent.right
                 bottom: parent.bottom
+                bottomMargin: isDelta ? 0 : 150
             }
 
-            width: parent.width * 0.48
+            width: isDelta ? (parent.width * 0.48) : parent.width
 
             CompCustomisableTextField{
                 id: searchField
@@ -83,6 +86,8 @@ Item {
                     right: parent.right
                     rightMargin: 42
                 }
+
+                height: isDelta ? 41 : 100
 
 
             }
@@ -105,7 +110,7 @@ Item {
 
                 delegate: Item{
                     id: compBeaconOsInduct_ZoneListItem
-                    height: 90
+                    height: isDelta ? 90 : 120
 
                     property real sidePadding: 20
 
@@ -124,7 +129,7 @@ Item {
 
                         text: modelData.name
                         color: "white"
-                        font.pixelSize: 25
+                        font.pixelSize: isDelta ? 25 : 35
                         verticalAlignment: Text.AlignVCenter
 
                         anchors{
@@ -152,7 +157,7 @@ Item {
                             visible: modelData.isComplete
 
                             text: "View Work Order"
-                            font.pixelSize: 25
+                            font.pixelSize: isDelta ? 25 : 35
                             height: btnInspectZone.height
 
 
@@ -212,7 +217,7 @@ Item {
 
                             visible: !modelData.isComplete
 
-                            height: parent.height * 0.3
+                            height: isDelta ? (parent.height * 0.3) : (parent.height*0.5)
                             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
 
                             iconColor: modelData.tags.length > 0 ? "#ffff00" : "#ffffff"
@@ -237,13 +242,18 @@ Item {
             property color colorAssetImg: "#818181"
 
             anchors{
-                top: rectZoneSelect.top
+                top: isDelta ? rectZoneSelect.top : parent.top
+                topMargin: isDelta ? 0 : 16
                 right: parent.right
-                bottom: rectZoneSelect.bottom
+                rightMargin: isDelta ? 0 : 40
+                left: isDelta ? undefined : parent.left
+                leftMargin: isDelta ? 0 : 40
+                bottom: isDelta ? rectZoneSelect.bottom : undefined
 
             }
 
-            width: rectZoneSelect.width
+            width: isDelta ? rectZoneSelect.width : 400
+            height: isDelta ? undefined : 400
             color: "transparent"
 
             border{
@@ -317,8 +327,11 @@ Item {
                 color:  subscreenInductSelectDoor_Root.quadrantId === "Q4" ? compBeaconOsInduct_ZoneHighlighter.colorFade : compBeaconOsInduct_ZoneHighlighter.colorContrast
             }
 
+
+
             CompImageIcon{
                 id: imgAsset
+                visible: isDelta
 
                 source: subscreenInductSelectDoor_Root.assetImgPath
 
@@ -327,6 +340,28 @@ Item {
                     margins: 80
 
 
+                }
+                color: compBeaconOsInduct_ZoneHighlighter.colorAssetImg
+
+            }
+
+            CompImageIcon{
+                id: imgAssetOmega
+                visible: !isDelta
+
+                source: subscreenInductSelectDoor_Root.assetImgPath
+
+                anchors{
+                    fill: parent
+                    margins: 80
+
+
+                }
+                transform: Rotation{
+                    origin.x: imgAssetOmega.width * 0.5
+                    origin.y: imgAssetOmega
+                    .height * 0.5
+                    angle: 90
                 }
                 color: compBeaconOsInduct_ZoneHighlighter.colorAssetImg
 

@@ -16,6 +16,8 @@ Screen__BASE {
     property string bureauNumberSelected: ""
     property string zoneIdSelected: ""
     property string subscreenTitleText: ""
+    property bool enabledNextBtn: false
+    property bool visibleNextBtn: false
     property string titleText: {
         var retString = ""
 
@@ -246,16 +248,46 @@ Screen__BASE {
         text: "BACK"
 
         anchors{
-            top: parent.top
-            topMargin: 32
+            top: isDelta ? parent.top : undefined
+            topMargin: isDelta ? 32 : 0
             left: parent.left
+            leftMargin:isDelta ? 0 : 20
+            bottom: isDelta ? undefined : parent.bottom
+            bottomMargin: isDelta ? 0 : 35
         }
 
         visible: screenRepairRoot.state !== "Start"
 
+        height: isDelta ? 60 : 128
+        width: isDelta ? 150 : 454
+
+        font.pixelSize: isDelta ? 25 : 35
+
         onClicked: {
             screenRepairRoot.goBack()
         }
+    }
+
+    CompBtnBreadcrumb{
+        id: btnNext
+
+
+        anchors{
+            left: compBtnArrow.right
+            leftMargin: 60
+            right: parent.right
+            rightMargin: 20
+            bottom: parent.bottom
+            bottomMargin: 35
+        }
+        enabled: screenRepairRoot.enabledNextBtn
+        visible: !isDelta && screenRepairRoot.visibleNextBtn
+
+        height: 128
+        width: 454
+
+        text: qsTr("Next")
+        font.pixelSize: 35
     }
 
 
@@ -356,7 +388,6 @@ Screen__BASE {
             }
 
         }
-
 
         Loader{
             active: screenRepairRoot.state === "Select_Quadrant"  || screenRepairRoot.state === "Identify" || screenRepairRoot.state === "Select"

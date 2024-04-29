@@ -17,8 +17,11 @@ Item {
 
         anchors{
             top: parent.top
+            topMargin: isDelta ? 0 : 20
             right: parent.right
-
+            rightMargin: isDelta ? 0 : 20
+            left: isDelta ? undefined : parent.left
+            leftMargin: isDelta ? 0 : 20
         }
 
         height: 32
@@ -31,10 +34,13 @@ Item {
 
         anchors{
             top: compProgressBar.bottom
-            topMargin: 16
+            topMargin: isDelta ? 16 : 25
             left: parent.left
+            leftMargin: isDelta ? 0 : 20
             right: parent.right
+            rightMargin: isDelta ? 0 : 20
             bottom: parent.bottom
+            bottomMargin:  isDelta ? 0 : 160
         }
 
         CompGradientRect
@@ -49,11 +55,30 @@ Item {
         CompImageIcon{
 
             anchors.fill: parent
+            visible: isDelta
 
             source: compBeaconOsInduct_QuadrantPicker.assetImagePath
             transform: Translate{
                 x: -100
             }
+
+            color: "#80ffffff"
+        }
+        CompImageIcon{
+
+            anchors.fill: parent
+            visible: !isDelta
+
+            source: compBeaconOsInduct_QuadrantPicker.assetImagePath
+            transform: Rotation{
+                origin.x: rectBg.width * 0.5
+                origin.y: rectBg.height * 0.5
+                angle: 90
+            }
+//            transform: Translate{
+//                x: -100
+
+//            }
 
             color: "#80ffffff"
         }

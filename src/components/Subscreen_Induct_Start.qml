@@ -11,6 +11,7 @@ Item {
     Row{
         id: rowNavButtons
         spacing: 34
+        visible: isDelta
 
         anchors.centerIn: parent
 
@@ -37,7 +38,53 @@ Item {
             CompRepairScreenNavButton {
                 id: compRepairScreenNavButton
                 height: 300
-                width: 550
+                width: isDelta ? 550 : 890
+
+                name: modelData.name
+                iconPath: modelData.iconUrl
+                onNavButtonClicked:{
+                    console.log("Clicked caught")
+                    //modelData.onClicked
+                    startInspectClicked()
+                }
+            }
+
+        }
+
+
+    }
+
+    Column{
+        id: colNavButtons
+        spacing: 56
+        visible: !isDelta
+
+        anchors.centerIn: parent
+
+        Repeater{
+            id: repeaterOmega
+            model: [
+                {
+                    name: "Induct Asset",
+                    iconUrl: "file:///usr/share/BeaconOS-lib-images/images/InductFill.svg",
+                    onClicked: function(){subscreenInduct_Start_Root.inductAssetClicked()}
+                },
+                {
+                    name: "Start Inspection",
+                    iconUrl: "file:///usr/share/BeaconOS-lib-images/images/SearchInspectFill.svg",
+                    onClicked: function(){subscreenInduct_Start_Root.startInspectClicked()}
+                },
+                {
+                    name: "Continue Inspection",
+                    iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Induct.svg",
+                    onClicked: function(){subscreenInduct_Start_Root.continueInspectClicked()}
+                }
+            ]
+
+            CompRepairScreenNavButton {
+                id: compRepairScreenNavButtonOmega
+                height: 300
+                width: 890
 
                 name: modelData.name
                 iconPath: modelData.iconUrl

@@ -142,5 +142,10 @@
         <file>Screen_Login.qml</file>
         <file>Screen_Reference.qml</file>
         <file>Screen_AssetDashboard.qml</file>
+        <file>Screen_Home.qml</file>
+        <file>CompBeaconOsInductScreen_SelectAssetItem_Omega.qml</file>
+        <file>CompFlippableRepairAssetItemOmega.qml</file>
+        <file>Subscreen_Induct_Identify_Omega.qml</file>
+        <file>Subscreen_Induct_Select_Omega.qml</file>
     </qresource>
 </RCC>

@@ -11,9 +11,9 @@ Item {
     property string zoneId: "18.10, 18.12"
     property string discrepancyNotes
 
-    property int fontSizeHeaders: 25
-    property int fontSizeContent: 25
-    property real iconButtonHeight: 32
+    property int fontSizeHeaders: isDelta ? 25 : 35
+    property int fontSizeContent: isDelta ? 25 : 35
+    property real iconButtonHeight: isDelta ? 32 : 75
 
     readonly property string title: assetName + " | " + quadrantId + " | " + zoneId
 
@@ -40,6 +40,7 @@ Item {
 
         CompBeaconOsInduct_InspectInfoPanel {
             id: compBeaconOsInduct_InspectInfoPanel
+            visible: isDelta
 
             fontSizeContent: subscreenInduct_Inspect_Root.fontSizeContent
             fontSizeHeaders: subscreenInduct_Inspect_Root.fontSizeHeaders
@@ -55,6 +56,31 @@ Item {
 
         }
 
+        Flickable{
+            id: scrollInspectInfoPnel
+            visible: !isDelta
+            anchors{
+                top: parent.top
+                left: parent.left
+                right: parent.right
+                //bottom: parent.bottom
+            }
+            height:550
+            clip: true
+
+            contentHeight: compBeaconOsInduct_InspectInfoPanelOmega.height
+            contentWidth: compBeaconOsInduct_InspectInfoPanelOmega.width
+
+            CompBeaconOsInduct_InspectInfoPanel {
+                id: compBeaconOsInduct_InspectInfoPanelOmega
+
+                fontSizeContent: subscreenInduct_Inspect_Root.fontSizeContent
+                fontSizeHeaders: subscreenInduct_Inspect_Root.fontSizeHeaders
+
+                height: 700
+                width: scrollInspectInfoPnel.width
+            }
+        }
 
         Item{
             id: compBeaconOsInduct_InspectStepPanel
@@ -64,13 +90,13 @@ Item {
             }
 
             anchors{
-                top: parent.top
+                top: isDelta ? parent.top : scrollInspectInfoPnel.bottom
                 right: parent.right
                 bottom: parent.bottom
 
             }
 
-            width: compBeaconOsInduct_InspectInfoPanel.width
+            width: isDelta ? compBeaconOsInduct_InspectInfoPanel.width : scrollInspectInfoPnel.width
 
             Column{
                 id: colStep
@@ -196,7 +222,7 @@ Item {
 
                 Row{
                     id: rowDiscrepancyControls
-                    spacing: 32
+                    spacing: isDelta ? 32 : 40
                     anchors{
                         bottom: parent.bottom
                         left: parent.left
@@ -280,7 +306,7 @@ Item {
                     right: parent.right
                     rightMargin: 20
                     bottom: parent.bottom
-                    bottomMargin: 20
+                    bottomMargin: isDelta ? 20 : 180
                 }
 
                 CompBtnBreadcrumb{
@@ -288,6 +314,7 @@ Item {
 
                     text: "View IETM"
                     width: ((rowButtons.width - (2 *rowButtons.spacing)) * 0.33333)
+                    height: isDelta ? 60 : 100
                 }
 
                 CompBtnBreadcrumb{
@@ -296,6 +323,7 @@ Item {
                     text: "View LES JX F18-0242"
 
                     width: btnViewIetm.width
+                    height: isDelta ? 60 : 100
                 }
 
                 CompBtnBreadcrumb{
@@ -303,6 +331,7 @@ Item {
 
                     text: "Save and Exit"
                     width: btnViewIetm.width
+                    height: isDelta ? 60 : 100
                 }
 
             }

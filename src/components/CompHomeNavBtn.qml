@@ -5,8 +5,8 @@ import QtGraphicalEffects 1.12
 Comp__BASE{
     id: compHomeNavBtn
     
-    height: 202
-    width: 156
+    height: isDelta ? 202 : 200
+    width: isDelta ? 156 : 200
     
     property string name: 'Health'
     property string pathName: name
@@ -29,18 +29,19 @@ Comp__BASE{
         
         CompIconBtnRound {
             id: btnRoot
-            height: 156
+            height: isDelta ? 156 : 200
 
             icon.source: compHomeNavBtn.iconPath
-            width: 156
+            width: isDelta ? 156 : 200
 
             onClicked: compHomeNavBtn.clicked(compHomeNavBtn.name)
+            anchors.bottomMargin: isDelta ? 0 : 16
         }
         
         Label {
             id: lblName
             text: compHomeNavBtn.name
-            font.pixelSize: 24
+            font.pixelSize: isDelta ? 24 : 36
             color: "White"
             font.family: "Lato"
             font.weight: Font.Normal

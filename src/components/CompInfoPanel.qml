@@ -6,7 +6,7 @@ import QtQml 2.12
 Comp__BASE {
     id: compInfoPanel
 
-    height: 200
+    height: isDelta ? 200 : 125
     width: 589
 
     property int taskCompleteValue: 75
@@ -27,6 +27,7 @@ Comp__BASE {
     Column {
 
         anchors.fill: parent
+        visible: isDelta
 
         Label {
             id: lblDateTime
@@ -93,6 +94,46 @@ Comp__BASE {
                     font.weight: Font.Light
                 }
             }
+        }
+    }
+    Column {
+
+        anchors.fill: parent
+        visible: !isDelta
+
+        spacing: 25
+        Label {
+            id: lblWelcome
+
+            text: "Welcome"
+            color: "White"
+            font {
+                pixelSize: 50
+                family: "Lato"
+            }
+
+            height: 63
+        }
+
+        Rectangle {
+            id: lineHOmega
+
+            width: parent.width
+            height: 2
+            color: "#80FFFFFF"
+            anchors.topMargin: 22
+        }
+        Label {
+            id: lblDateTimeOmega
+
+            text: compInfoPanel.dateString
+            color: "#9287ED"
+            font {
+                pixelSize: 37
+                family: "Lato"
+            }
+            height: 53
+            anchors.topMargin: 21
         }
     }
 }

@@ -59,6 +59,7 @@ Comp__BASE {
 
     Item{
         id: contentsGroup
+        visible: isDelta
 
         width: parent.width
         height: btnLbl.y + btnLbl.height
@@ -102,6 +103,75 @@ Comp__BASE {
             font{
                 pixelSize: 34
             }
+        }
+
+    }
+
+    Item{
+        id: contentsGroupOmega
+        visible: !isDelta
+
+        width: Math.min(Math.max(btnIcon.width, btnLbl.width), parent.width)
+        height: 100
+        anchors{
+            //centerIn: parent
+            fill: parent
+        }
+
+        CompImageIcon {
+            id: btnIconOmega
+
+            anchors{
+               //horizontalCenter: parent.horizontalCenter
+                left: parent.left
+                leftMargin: 20
+                verticalCenter: parent.verticalCenter
+            }
+
+            height: ((compHealthContextNavBtn.iconUrl === "") ? 0 : 124)
+
+            width: ((compHealthContextNavBtn.iconUrl === "") ? 0 : 124)
+            source: compHealthContextNavBtn.iconUrl
+            color: "#9287ED"
+        }
+
+        CompLabel{
+            id: btnLblOmega
+            text: compHealthContextNavBtn.text
+
+            width: Math.min(btnLblOmega.implicitWidth, compHealthContextNavBtn.width)
+            //horizontalAlignment: "AlignHCenter"
+            verticalAlignment: "AlignVCenter"
+
+            wrapMode: Text.WordWrap
+            anchors{
+                verticalCenter: btnIconOmega.verticalCenter
+//                top: compHealthContextNavBtn.iconUrl === "" ? undefined : btnIcon.bottom
+//                topMargin: (compHealthContextNavBtn.iconUrl === "" ? 0 : 28)
+                left: compHealthContextNavBtn.iconUrl === "" ? parent.left : btnIconOmega.right
+                leftMargin: (compHealthContextNavBtn.iconUrl === "" ? 40 : 28)
+                //centerIn: (compHealthContextNavBtn.iconUrl === "" ? parent : undefined)
+            }
+
+            font{
+                pixelSize: 34
+            }
+        }
+
+        CompIconBtn{
+            id: btnRightArrow
+
+            //visible: false
+
+            height: 55
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
+
+            iconColor: "#ffffff"
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+
         }
 
     }
