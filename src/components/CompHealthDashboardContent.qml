@@ -613,7 +613,16 @@ Comp__BASE {
                     compHealthDashboardContentRoot.navObject.context1Selected = "null"
             }
 
-            text: compHealthDashboardContentRoot.context1Selected
+            property string contextSelected : compHealthDashboardContentRoot.context1Selected
+
+            onContextSelectedChanged: {
+                if(contextSelected === "ENV")
+                    text = "Environmental"/*
+                else if (contextSelected === "IMU")
+                    text: "Accelerometer"*/
+                else
+                    text = contextSelected
+            }
 
             height: parent.height
 

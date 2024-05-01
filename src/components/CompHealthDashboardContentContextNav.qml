@@ -147,7 +147,7 @@ Comp__BASE {
             }
 
             onClicked: txt => {
-                           compHealthDashboardContentContextNav.context1Selected = txt
+                           compHealthDashboardContentContextNav.context1Selected = "ENV"
                        }
         }
 
@@ -157,7 +157,7 @@ Comp__BASE {
             width: viewContext1_Beacon.btnWidth
             height: viewContext1_Beacon.btnHeight
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/IMU.svg"
-            text: "Accelerometer"
+            text: "IMU"
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
                 left: navBtnBeaconEnv.right

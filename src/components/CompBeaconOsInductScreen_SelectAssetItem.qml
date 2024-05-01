@@ -37,23 +37,27 @@ Comp__BASE{
         anchors{
             top: parent.top
             left: parent.left
-            bottom: parent.bottom
+            bottom: isDelta ? parent.bottom : undefined
+            right: isDelta ? undefined : parent.right
 
             leftMargin: 90
-            topMargin: 180
+            topMargin: isDelta ? 180 : 100
             bottomMargin: 180
-
+            rightMargin: isDelta ? 0 : 90
         }
 
         color: "white"
 
         source: compBeaconOsInductScreen_SelectAssetItem.assetImagePath
 
-        width: height
+        width: isDelta ? height : parent.width
+        height: isDelta ? height : 500
     }
 
     Rectangle{
         id: rectSep
+
+        visible: isDelta
 
         anchors{
             top: parent.top
@@ -68,18 +72,37 @@ Comp__BASE{
         color: "#80000000"
     }
 
+    Rectangle{
+        id: separator
+        visible: !isDelta
+
+        anchors{
+            left: assetImage.left
+            top: assetImage.bottom
+            right: assetImage.right
+            topMargin: 45
+        }
+
+        width: assetImage.width
+        height: 8
+
+        radius: 1
+
+        color: "#33FFFFFF"
+    }
+
     Item{
         id: groupAssetInfo
 
         anchors{
-            top: parent.top
+            top: isDelta ? parent.top: separator.bottom
             topMargin: 40
-            left: rectSep.right
-            leftMargin: 40
+            left: isDelta ? rectSep.right : assetImage.left
+            leftMargin: isDelta ? 40 : 0
             bottom: parent.bottom
-            bottomMargin: 40
-            right: parent.right
-            rightMargin: 40
+            bottomMargin: isDelta ? 40 : 120
+            right: isDelta ? parent.right : assetImage.right
+            rightMargin: isDelta ? 40 : 0
         }
 
         CompCombobox {
