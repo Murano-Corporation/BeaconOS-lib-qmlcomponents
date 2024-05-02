@@ -38,6 +38,7 @@ Item {
         }
 
         placeholderText: "Search by Asset Title or BuNo"
+        height: isDelta ? 41 : 100
     }
 
     Item{
@@ -58,7 +59,7 @@ Item {
             id: lblResultsFound
 
             text: subscreenInduct_Select_Root.resultsString
-            font.pixelSize: 20
+            font.pixelSize: isDelta ? 20 : 35
 
             anchors.verticalCenter: parent.verticalCenter
         }
@@ -69,6 +70,8 @@ Item {
             anchors{
                 right: parent.right
             }
+            height: isDelta ? 41 : 100
+            valueFontSize: isDelta ? 24 : 50
         }
     }
 

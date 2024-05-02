@@ -114,13 +114,17 @@ Comp__BASE{
             model: compBeaconOsInductScreen_SelectAssetItem.listBureauNumbers
 
             anchors{
-                top:  lblAssetName.top
+                top:  isDelta ? lblAssetName.top : parent.top
                 right: parent.right
-                bottom: lblAssetName.bottom
+                left: isDelta ? undefined : parent.left
+                leftMargin: isDelta ? 0 : 25
+                bottom: isDelta ? lblAssetName.bottom : undefined
 
             }
 
-            width: 400
+            height: isDelta ? 41 : 100
+            width: isDelta ? 400 : undefined
+            valueFontSize: isDelta ? 24 : 50
 
             onCurrentIndexChanged: {
                 console.log("Current Index Changed to: " + currentIndex)
@@ -207,6 +211,7 @@ Comp__BASE{
             anchors{
                 left: parent.left
                 top: parent.top
+                topMargin: comboSelectBureauNumber.visible ? (isDelta ? 0 : 125) : 0
                 right: parent.right
             }
 
@@ -217,7 +222,7 @@ Comp__BASE{
 
             text: compBeaconOsInductScreen_SelectAssetItem.inductionData
             color: "white"
-            font.pixelSize: 26
+            font.pixelSize: isDelta ? 26 : 35
             anchors{
                 left: lblAssetName.left
                 top: lblAssetName.bottom
@@ -231,7 +236,9 @@ Comp__BASE{
             id: lblAssetDetails
             color: "white"
             text: compBeaconOsInductScreen_SelectAssetItem.assetDetails
-            font.pixelSize: 26
+            clip: true
+            wrapMode: Text.WordWrap
+            font.pixelSize: isDelta ? 26 : 35
             anchors{
                 left: lblAssetName.left
                 top: lblInductionDate.bottom
@@ -247,7 +254,7 @@ Comp__BASE{
 
             text: compBeaconOsInductScreen_SelectAssetItem.assetsInducted
             color: "white"
-            font.pixelSize: 26
+            font.pixelSize: isDelta ? 26 : 35
             anchors{
                 left: lblAssetName.left
                 bottom: parent.bottom

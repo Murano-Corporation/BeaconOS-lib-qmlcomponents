@@ -254,12 +254,14 @@ Screen__BASE {
             leftMargin:isDelta ? 0 : 20
             bottom: isDelta ? undefined : parent.bottom
             bottomMargin: isDelta ? 0 : 35
+            right: isDelta ? undefined : parent.right
+            rightMargin: isDelta ? undefined : 20
         }
 
         visible: screenRepairRoot.state !== "Start"
 
         height: isDelta ? 60 : 128
-        width: isDelta ? 150 : 454
+        width: isDelta ? 150 : undefined
 
         font.pixelSize: isDelta ? 25 : 35
 
@@ -268,29 +270,6 @@ Screen__BASE {
         }
     }
 
-    CompBtnBreadcrumb{
-        id: btnNext
-
-
-        anchors{
-            left: compBtnArrow.right
-            leftMargin: 60
-            right: parent.right
-            rightMargin: 20
-            bottom: parent.bottom
-            bottomMargin: 35
-        }
-        enabled: screenRepairRoot.enabledNextBtn
-        visible: !isDelta && screenRepairRoot.visibleNextBtn
-
-        height: 128
-        width: 454
-
-        text: qsTr("Next")
-        font.pixelSize: 35
-    }
-
-
     CompLabel{
         id: lblTitle
 
@@ -298,23 +277,25 @@ Screen__BASE {
         text: screenRepairRoot.titleText
 
         anchors{
-            left: compBtnArrow.right
-            leftMargin: 40
-            verticalCenter: compBtnArrow.verticalCenter
+            left: isDelta ? compBtnArrow.right : parent.left
+            leftMargin: isDelta ? 40 : 50
+            verticalCenter: isDelta ? compBtnArrow.verticalCenter : undefined
+            top: isDelta ? undefined : parent.top
+            topMargin: isDelta ? 0 : 150
         }
-
+        font.pixelSize: isDelta ? 25 : 35
     }
 
     Item{
         id: contentRoot
 
         anchors{
-            top: compBtnArrow.visible ? compBtnArrow.bottom : parent.top
-            topMargin: compBtnArrow.visible ? 40 : 0
+            top: isDelta ? (compBtnArrow.visible ? compBtnArrow.bottom : parent.top) : (lblTitle.visible ? lblTitle.bottom : parent.top)
+            topMargin: isDelta ? (compBtnArrow.visible ? 40 : 0) : (lblTitle.visible ? 40 : 0)
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            bottomMargin: 40
+            bottomMargin: isDelta ? 40 : 120
         }
 
         Loader{

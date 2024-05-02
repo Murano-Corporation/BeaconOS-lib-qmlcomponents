@@ -147,5 +147,21 @@
         <file>CompFlippableRepairAssetItemOmega.qml</file>
         <file>Subscreen_Induct_Identify_Omega.qml</file>
         <file>Subscreen_Induct_Select_Omega.qml</file>
+        <file>Screen_HealthDashboard.qml</file>
+        <file>CompFlippableAssetMetaDataOmega.qml</file>
+        <file>CompHealthContextNavBtnOmega.qml</file>
+        <file>CompHealthDashboardContentContextNavOmega.qml</file>
+        <file>CompHealthDashboardContentGraphViewOmega.qml</file>
+        <file>CompHealthDashboardContentMTConnectOmega.qml</file>
+        <file>CompHealthDashboardContentOmega.qml</file>
+        <file>CompHealthDashboardContentParamsOmega.qml</file>
+        <file>CompHealthDashboardViewNavBtnOmega.qml</file>
+        <file>CompParamView_GaugeOmega.qml</file>
+        <file>DrawerAssetDashboardMenu.qml</file>
+        <file>CompQuickView.qml</file>
+        <file>CompDrawerHandle.qml</file>
+        <file>DrawerSystem.qml</file>
+        <file>Screen_HealthDashboard_Delta.qml</file>
+        <file>Screen_HealthDashboard_Omega.qml</file>
     </qresource>
 </RCC>

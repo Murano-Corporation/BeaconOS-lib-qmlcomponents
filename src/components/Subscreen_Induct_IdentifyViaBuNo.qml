@@ -33,7 +33,7 @@ Item {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            bottomMargin: 40
+            bottomMargin: isDelta ? 40 : 100
         }
     }
 

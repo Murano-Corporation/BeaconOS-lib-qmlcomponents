@@ -15,33 +15,42 @@ Comp__BASE_Flipable {
     property string beaconLastSeenTxt: AssetInfo.beaconLastSeen ? AssetInfo.beaconLastSeen : "Now"
     property bool flipped: false
 
-    height: 202
-    width: 654
+    height: isDelta ? 202 :  undefined
+    width: isDelta ? 654 : undefined
 
     front: Item {
         id: viewUnflipped
         //visible: (compFlippableAssetMetaData.flipped === false)
 
-        anchors.fill: parent
+        anchors{
+            fill: parent
+            topMargin: isDelta ? 0 : 100
+            leftMargin: isDelta ? 0 : 50
+            rightMargin: isDelta ? 0 : 50
+            bottomMargin: isDelta ? 0 : 150
+        }
 
 
         CompGradientRect {
             id: compGradientRect
             anchors.fill: parent
+            anchors.topMargin: isDelta ? 0 : 150
         }
 
         Item{
             id: imgGroup
             anchors{
-                top: parent.top
-                topMargin: 27
-                left: parent.left
-                leftMargin: 36
-                bottom: parent.bottom
-                bottomMargin: 27
+                top: isDelta ? parent.top : undefined
+                topMargin: isDelta ? 27 : 0
+                left: isDelta ? parent.left : undefined
+                leftMargin: isDelta ? 36 : 0
+                bottom: isDelta ? parent.bottom : undefined
+                bottomMargin: isDelta ? 27 : 0
+                horizontalCenter: isDelta ? undefined : parent.horizontalCenter
             }
 
-            width: 237
+            width: isDelta ?  237 : 814
+            height: isDelta ? undefined : 508
 
             ImgAssetCNC {
                 id: imgCNC
@@ -92,26 +101,47 @@ Comp__BASE_Flipable {
             id: textGroup
 
             anchors{
-                verticalCenter: parent.verticalCenter
-                left: imgGroup.right
-                leftMargin: 21
+                verticalCenter: isDelta ? parent.verticalCenter : undefined
+                left: isDelta ? imgGroup.right : parent.left
+                leftMargin: isDelta ? 21 : 40
+                right: isDelta ? undefined : parent.right
+                rightMargin: isDelta ? 0 : 40
+                top: isDelta ? undefined : imgGroup.bottom
+                topMargin: isDelta ? 0 : 21
             }
 
-            height: (lblAssetName.y + lblAssetMaterialId.height + lblAssetMaterialId.y)
+            height: isDelta ? (lblAssetName.y + lblAssetMaterialId.height + lblAssetMaterialId.y) : undefined
 
             CompLabel{
                 id: lblAssetName
                 color: "White"
                 anchors{
-                    left: parent.right
+                    left: isDelta ? parent.right : parent.left
                     top: parent.top
                 }
 
                 text: compFlippableAssetMetaData.assetName
                 font{
-                    pixelSize: 32
+                    pixelSize: isDelta ? 32 : 74
 
                 }
+
+            }
+            CompIconBtn {
+                id: btnEdit
+                visible: !isDelta
+
+                anchors {
+                    top: parent.top
+                    left: lblAssetName.right
+                    leftMargin: 42
+                    verticalCenter: lblAssetName.verticalCenter
+                }
+
+                height: 53
+                width: 51
+                iconUrl: "file:///usr/share/BeaconOS-lib-images/images/EditPencil.svg"
+                iconColor: "White"
 
             }
 
@@ -121,13 +151,14 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblAssetName.left
                     top: lblAssetName.bottom
-                    topMargin: 1
+                    topMargin: isDelta ? 1 : 13
+                    right: isDelta ? undefined : lblAssetName.right
                 }
 
                 text: compFlippableAssetMetaData.assetDescription
 
                 font{
-                    pixelSize: 12
+                    pixelSize: isDelta ? 12 : 38
 
                 }
             }
@@ -138,10 +169,11 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblAssetName.left
                     top: lblAssetDescription.bottom
-                    topMargin: 17
+                    right: isDelta ? undefined : lblAssetName.right
+                    topMargin: isDelta ? 17 : 45
                 }
 
-                width: 304
+                width: isDelta ? 304 : 759
                 height: 2
 
                 radius: 1
@@ -155,13 +187,14 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblAssetName.left
                     top: separator.bottom
-                    topMargin: 10
+                    right: isDelta ? undefined : lblAssetName.right
+                    topMargin: isDelta ? 10 : 91
                 }
 
                 text: qsTr("Serial No.: ") + compFlippableAssetMetaData.assetSerialNumber
 
                 font{
-                    pixelSize: 14
+                    pixelSize: isDelta ? 14 : 42
 
                     weight: Font.Light
                 }
@@ -173,12 +206,14 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblAssetName.left
                     top: lblAssetSerial.bottom
-                    topMargin: 1
+                    right: isDelta ? undefined : lblAssetName.right
+                    topMargin: isDelta ? 1 : 24
+                    bottom: isDelta ? undefined : parent.bottom
                 }
 
                 text: qsTr("Material ID: ") + compFlippableAssetMetaData.assetMeterialId
                 font{
-                    pixelSize: 14
+                    pixelSize: isDelta ? 14 : 42
 
                     weight: Font.Light
                 }
@@ -194,22 +229,33 @@ Comp__BASE_Flipable {
     back: Item {
         id: viewFlipped
         //visible: (compFlippableAssetMetaData.flipped === true)
-        anchors.fill: parent
+        anchors{
+            fill: parent
+            topMargin: isDelta ? 0 : 100
+            leftMargin: isDelta ? 0 : 50
+            rightMargin: isDelta ? 0 : 50
+            bottomMargin: isDelta ? 0 : 150
+        }
 
         CompGradientRect {
             anchors.fill: parent
+            anchors.topMargin: isDelta ? 0 : 150
         }
         Item{
             id: imgBeaconInfoParent
             anchors{
-                top: parent.top
-                topMargin: 27
-                left: parent.left
-                leftMargin: 36
-                bottom: parent.bottom
-                bottomMargin: 27
+                top: isDelta ? parent.top : undefined
+                topMargin: isDelta ? 27 : 0
+                left: isDelta ? parent.left : undefined
+                leftMargin: isDelta ? 36 : 0
+                bottom: isDelta ? parent.bottom : undefined
+                bottomMargin: isDelta ? 27 : 0
+                horizontalCenter: isDelta ? undefined : parent.horizontalCenter
             }
-            width: 237
+
+            width: isDelta ?  237 : 814
+            height: isDelta ? undefined : 508
+
             ImgAssetNano {
                 id: imgBeaconInfo
                 anchors.fill: parent
@@ -220,24 +266,29 @@ Comp__BASE_Flipable {
             id: beaconInfo
 
             anchors{
-                verticalCenter: parent.verticalCenter
-                left: imgBeaconInfoParent.right
-                leftMargin: 21
+                verticalCenter: isDelta ? parent.verticalCenter : undefined
+                left: isDelta ? imgBeaconInfoParent.right : parent.left
+                leftMargin: isDelta ? 21 : 40
+                right: isDelta ? undefined : parent.right
+                rightMargin: isDelta ? 0 : 40
+                top: isDelta ? undefined :imgBeaconInfoParent.bottom
+                topMargin: isDelta ? 0  : 21
             }
 
-            height: (lblAssetName.y + lblAssetMaterialId.height + lblAssetMaterialId.y)
+            height: isDelta ? (lblAssetName.y + lblAssetMaterialId.height + lblAssetMaterialId.y) : undefined
 
             CompLabel{
                 id: lblbeaconID
                 color: "White"
                 anchors{
-                    left: parent.right
+                    left: isDelta ? parent.right : parent.left
                     top: parent.top
+                    right: isDelta ? undefined : parent.right
                 }
 
                 text: compFlippableAssetMetaData.beaconID
                 font{
-                    pixelSize: 32
+                    pixelSize: isDelta ? 32 : 60
 
                 }
 
@@ -249,10 +300,11 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblbeaconID.left
                     top: lblbeaconID.bottom
-                    topMargin: 17
+                    right: isDelta ? undefined : lblbeaconID.right
+                    topMargin: isDelta ? 17 : 45
                 }
 
-                width: 304
+                width: isDelta ? 304 : 759
                 height: 2
 
                 radius: 1
@@ -266,12 +318,13 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblbeaconID.left
                     top: separatorBack.bottom
-                    topMargin: 10
+                    right: isDelta ? undefined : lblbeaconID.right
+                    topMargin: isDelta ? 10 : 60
                 }
                 text: qsTr("Beacon Last Seen: ") + compFlippableAssetMetaData.beaconLastSeenTxt
 
                 font{
-                    pixelSize: 14
+                    pixelSize: isDelta ? 14 : 42
 
                     weight: Font.Light
                 }
@@ -283,12 +336,14 @@ Comp__BASE_Flipable {
                 anchors{
                     left: lblbeaconID.left
                     top: lblbeaconLastSeen.bottom
-                    topMargin: 1
+                    right: isDelta ? undefined : lblbeaconID.right
+                    topMargin: isDelta ? 1 : 24
+                    bottom: isDelta ? undefined : parent.bottom
                 }
 
                 text: qsTr("Beacon State: ") + compFlippableAssetMetaData.beaconState
                 font{
-                    pixelSize: 14
+                    pixelSize: isDelta ? 14 : 42
 
                     weight: Font.Light
                 }
