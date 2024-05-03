@@ -36,8 +36,8 @@ Item {
         canvasSeverityMeter.requestPaint()
     }
 
-    width: 340
-    height: 355
+    width: isDelta ? 340 : 500
+    height: isDelta ? 355 : 500
 
     Rectangle{
         id: rectBg
@@ -141,7 +141,7 @@ Item {
                 text: styleData.value.toFixed(0)
 
                 font{
-                    pixelSize: 12
+                    pixelSize: isDelta ? 12 : 30
                 }
                 color: "White"
             }
@@ -167,7 +167,7 @@ Item {
         verticalAlignment: "AlignVCenter"
         wrapMode: Text.WordWrap
         font{
-            pixelSize: 20
+            pixelSize: isDelta ? 20 : 35
         }
     }
 
@@ -181,7 +181,7 @@ Item {
         }
 
         font{
-            pixelSize: 32
+            pixelSize: isDelta ? 32 : 35
             weight: Font.Normal
         }
 
@@ -199,7 +199,7 @@ Item {
         text: compParamViewGaugeRoot.units
 
         font{
-            pixelSize: 17
+            pixelSize: isDelta ? 17 : 30
             weight: Font.Light
 
         }

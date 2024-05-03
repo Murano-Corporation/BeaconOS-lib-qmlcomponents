@@ -11,6 +11,8 @@ Comp__BASE {
     property string context2Selected: "null"
     property bool isMaxWidth: true
     property bool isMaxHeight: false
+    property alias btnHeight: viewSystemType.btnHeight
+    property alias btnSpacing: viewSystemType.btnSpacing
 
     property var modelData_EnvImuJ1939J1708_Context1: TableModelHealthDashboard.listOfContext1Options
     property var modelData_MTC_Context1: TableModelMTConnect_Context1
@@ -51,7 +53,7 @@ Comp__BASE {
 
         property real btnSpacing: 41
         property real btnWidth: ((compHealthDashboardContentContextNav.width - btnSpacing) * 0.33)
-        property real btnHeight: 303
+        property real btnHeight: isDelta ? 303 : 350
 
         anchors{
             centerIn: parent
@@ -65,14 +67,16 @@ Comp__BASE {
 
             anchors{
                 left: parent.left
+                top: isDelta ? undefined : parent.top
 
             }
 
-            width: (viewSystemType.btnWidth)
+            width: isDelta ? (viewSystemType.btnWidth) : 892
             height: viewSystemType.btnHeight
 
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Beacon.svg"
             text: qsTr("Beacon Metrics")
+            fontPixelSize: isDelta ? 34 : 50
 
             onClicked: txt => {
                            compHealthDashboardContentContextNav.systemSelected = txt
@@ -83,8 +87,10 @@ Comp__BASE {
             id: navBtnAsset
 
             anchors{
-                left: navBtnBeacon.right
-                leftMargin: viewSystemType.btnSpacing
+                left: isDelta ? navBtnBeacon.right : navBtnBeacon.left
+                leftMargin: isDelta ? viewSystemType.btnSpacing : 0
+                top: isDelta ? undefined : navBtnBeacon.bottom
+                topMargin: isDelta ? 0 :viewSystemType.btnSpacing
 
             }
 
@@ -93,6 +99,7 @@ Comp__BASE {
 
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/AssetFill.svg"
             text: qsTr("Asset Metrics")
+            fontPixelSize: isDelta ? 34 : 50
 
             onClicked: txt => {
                            compHealthDashboardContentContextNav.systemSelected = txt
@@ -103,8 +110,10 @@ Comp__BASE {
             id: navBtnVision
 
             anchors{
-                left: navBtnAsset.right
-                leftMargin: viewSystemType.btnSpacing
+                left: isDelta ? navBtnAsset.right : navBtnBeacon.left
+                leftMargin: isDelta ? viewSystemType.btnSpacing : 0
+                top : isDelta ? undefined : navBtnAsset.bottom
+                topMargin: isDelta ? 0 :viewSystemType.btnSpacing
             }
 
             width: navBtnBeacon.width
@@ -112,6 +121,7 @@ Comp__BASE {
 
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/CameraFill.svg"
             text: qsTr("Camera Gallery")
+            fontPixelSize: isDelta ? 34 : 50
 
             onClicked: txt => {
                            compHealthDashboardContentContextNav.systemSelected = txt
@@ -124,7 +134,7 @@ Comp__BASE {
         visible: (parent.systemSelected === "Beacon Metrics" && parent.context1Selected === "null")
 
         property real btnSpacing: 41
-        property real btnWidth: ((compHealthDashboardContentContextNav.width - (btnSpacing * 3)) * 0.5)
+        property real btnWidth: isDelta ? ((compHealthDashboardContentContextNav.width - (btnSpacing * 3)) * 0.5) : 892
         property real btnHeight: 303
 
         anchors{
@@ -144,7 +154,9 @@ Comp__BASE {
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
                 left: parent.left
+                topMargin: isDelta ? 0 : 10
             }
+            fontPixelSize: isDelta ? 34 : 50
 
             onClicked: txt => {
                            compHealthDashboardContentContextNav.context1Selected = "ENV"
@@ -160,10 +172,12 @@ Comp__BASE {
             text: "IMU"
             myHierarchyPath: compHealthDashboardContentContextNav.systemSelected + "." + text
             anchors{
-                left: navBtnBeaconEnv.right
-                leftMargin: parent.btnSpacing
-
+                left: isDelta ? navBtnBeaconEnv.right : parent.left
+                leftMargin: isDelta ? parent.btnSpacing : 0
+                top: isDelta ? undefined : navBtnBeaconEnv.bottom
+                topMargin: isDelta ? 0 : 52
             }
+            fontPixelSize: isDelta ? 34 : 50
 
             onClicked: txt => {
                            compHealthDashboardContentContextNav.context1Selected = txt
@@ -178,9 +192,9 @@ Comp__BASE {
         visible: (parent.systemSelected === "Asset Metrics" && parent.context1Selected === "null")
 
         property real btnSpacing: 41
-        property real btnHeight: 250
-        property real btnWidth: ((compHealthDashboardContentContextNav.width - (btnSpacing * 3)) * 0.25)
-        property int fontPixelSize: (compHealthDashboardContentContextNav.isMaxWidth ? 32 : 24)
+        property real btnHeight: isDelta ? 250 : 303
+        property real btnWidth: isDelta ? ((compHealthDashboardContentContextNav.width - (btnSpacing * 3)) * 0.25) : 892
+        property int fontPixelSize: isDelta ? (compHealthDashboardContentContextNav.isMaxWidth ? 32 : 24) : 50
 
         anchors{
             fill: parent
@@ -195,12 +209,15 @@ Comp__BASE {
 
             anchors{
                 fill: parent
+                topMargin: isDelta ? 0 : 20
+                leftMargin: isDelta ? 0 : 10
             }
 
             model: compHealthDashboardContentContextNav.visible ? compHealthDashboardContentContextNav.modelData_Context1 : undefined
 
-            cellWidth: width * 0.25
-            cellHeight: viewContext1_Asset.btnHeight * 1.1
+            cellWidth: isDelta ? (width * 0.25) : (viewContext1_Asset.btnWidth + viewContext1_Asset.btnSpacing
+)
+            cellHeight: isDelta ? (viewContext1_Asset.btnHeight * 1.1) : (viewContext1_Asset.btnHeight + viewContext1_Asset.btnSpacing)
 
             delegate: CompHealthContextNavBtn{
                 id: navBtnDelegate
@@ -238,7 +255,8 @@ Comp__BASE {
 
         anchors{
             fill: parent
-
+            topMargin: isDelta ? 0 : 20
+            leftMargin: isDelta ? 0 : 10
         }
 
         GridView {
@@ -247,8 +265,8 @@ Comp__BASE {
             clip: true
 
             property real cellSpacing: 26
-            property real btnWidth: 319
-            property real btnHeight: 133
+            property real btnWidth: isDelta ? 319 : 892
+            property real btnHeight: isDelta ? 133 : 128
 
             model: compHealthDashboardContentContextNav.visible ? TableModelHealthDashboard.listOfContext2Options : undefined
 
@@ -260,7 +278,7 @@ Comp__BASE {
                 height: gridContext2.btnHeight
                 width: gridContext2.btnWidth
 
-                fontPixelSize: 28
+                fontPixelSize: isDelta ? 28 : 40
 
                 onClicked: txt => {
                                compHealthDashboardContentContextNav.context2Selected = txt

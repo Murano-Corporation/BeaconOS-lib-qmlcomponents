@@ -65,7 +65,8 @@ Screen__BASE {
         MqttTopicHealth.slot_Subscribe();
 
         isDrawerDisplayed = Settings.getHealthDashboardDefaultDrawerOpen()
-        tmrDelayOpenDrawerOnCompleted.start()
+        if(!isDelta)
+            tmrDelayOpenDrawerOnCompleted.start()
     }
 
     function setOverlayDefaults(){
@@ -128,6 +129,39 @@ Screen__BASE {
         sourceComponent: Screen_HealthDashboard_Omega {}
 
 
+    }
+    DrawerAssetDashboardMenu {
+        id: drawerAssetDashboardMenu
+        visible: !isDelta
+
+        currentScreen: screenHealthDashboardRoot.currentView
+
+        onItemClicked: function(itemName)
+        {
+            screenHealthDashboardRoot.currentView = itemName
+        }
+    }
+
+    CompIconBtn {
+
+        id: iconBtnAssetInfo
+        visible: !isDelta
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            topMargin: 80
+            leftMargin: 66
+        }
+
+        height: 100
+        width: 100
+        iconUrl: "file:///usr/share/BeaconOS-lib-images/images/ListFill.svg"
+        iconColor: "White"
+
+        onClicked: {
+            drawerAssetDashboardMenu.open()
+        }
     }
 
     Loader{

@@ -37,13 +37,16 @@ Comp__BASE {
 
         property real comboSpacing: 17
         property real comboWidth: ((width - (comboSpacing * 3)) * 0.25)
-        property real comboHeight: 41
-        property real comboFontPixelSize: 20
+        property real comboHeight: isDelta ? 41 : 100
+        property real comboFontPixelSize: isDelta ? 20 : 35
 
         anchors{
             top: parent.top
+            topMargin: isDelta ? 0 : 20
             left: parent.left
+            leftMargin: isDelta ? 0 : 20
             right: parent.right
+            rightMargin: isDelta ? 0 : 20
         }
 
         height: comboCategory.height
@@ -148,14 +151,14 @@ Comp__BASE {
 
 
         clip: true
-        topMargin: 51
+        topMargin: isDelta ? 51 : 100
         rightMargin: 8
 
         model: visible ? compHealthDashboardContentMTConnect.mainDataModel : undefined
         boundsBehavior: Flickable.StopAtBounds
 
         rowHeightProvider: row => {
-                               return 51;
+                               return isDelta ? 51 : 100;
                            }
 
         columnWidthProvider: col => {
@@ -172,7 +175,7 @@ Comp__BASE {
                                  //tableView.columnWidthsUpdated()
 
 
-                                 return compDrawerInfo.isOpen ? 525 : 625;
+                                 return isDelta ? (compDrawerInfo.isOpen ? 525 : 625) : 450;
                              }
 
 
@@ -221,7 +224,7 @@ Comp__BASE {
 
                 contentItem: Text {
                           text: tooltip.text
-                          font.pixelSize: 20
+                          font.pixelSize: isDelta ? 20 : 35
                       }
 
                       background: Rectangle {
@@ -244,8 +247,8 @@ Comp__BASE {
 
                     property int col: index
 
-                    width: compDrawerInfo.isOpen ? 525 : 625
-                    height: 52
+                    width: isDelta ? (compDrawerInfo.isOpen ? 525 : 625) : 450
+                    height: isDelta ? 52 : 100
 
                     color: "#333958"
 
@@ -314,7 +317,7 @@ Comp__BASE {
 
                         text: tableView.model ? tableView.model.headerData(modelData, Qt.Horizontal) : ""
                         font{
-                            pixelSize: 20
+                            pixelSize: isDelta ? 20 : 35
                         }
 
                         horizontalAlignment: "AlignHCenter"

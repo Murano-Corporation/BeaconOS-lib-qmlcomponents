@@ -284,7 +284,7 @@ Comp__BASE {
                     text: parent.myModel.tooltip_text
                     contentItem: Text {
                         text: tooltip1.text
-                        font.pixelSize: 20
+                        font.pixelSize: isDelta ? 20 : 35
                         color: "#ffffff"
                     }
 
@@ -304,7 +304,11 @@ Comp__BASE {
 
 
             rowHeightProvider: row => {
+                                   if(isDelta)
                                    return 51;
+                                   else
+                                   return 100;
+
                                }
 
             columnWidthProvider: col => {
@@ -326,7 +330,7 @@ Comp__BASE {
                                      return ret
                                  }
 
-            topMargin: 51
+            topMargin: isDelta ? 51 : 100
             rightMargin: 8
 
 
@@ -344,7 +348,7 @@ Comp__BASE {
                         property int col: index
 
                         width: tableView.columnWidthProvider(index)
-                        height: 52
+                        height: isDelta ? 52 : 100
 
                         color: "#333958"
 
@@ -413,7 +417,7 @@ Comp__BASE {
 
                             text: tableView.model ? tableView.model.headerData(modelData, Qt.Horizontal) : ""
                             font{
-                                pixelSize: 20
+                                pixelSize: isDelta ? 20 : 35
                             }
 
                             horizontalAlignment: "AlignHCenter"
@@ -464,6 +468,9 @@ Comp__BASE {
             left: groupFilters.left
             right: groupFilters.right
             bottom: parent.bottom
+            topMargin: isDelta ? 0 : 50
+            bottomMargin: isDelta ? 0 : 50
+            leftMargin: isDelta ? 0 : 155
         }
 
         sourceComponent: GridView {
@@ -473,8 +480,8 @@ Comp__BASE {
 
             clip: true
 
-            cellWidth: compHealthDashboardContentParams.targetData === 'params' ? 354.33 : (387 + cellPadding)
-            cellHeight: compHealthDashboardContentParams.targetData === 'params' ? 355 : (375 + cellPadding)
+            cellWidth: isDelta ? (compHealthDashboardContentParams.targetData === 'params' ? 354.33 : (387 + cellPadding)) : 600
+            cellHeight: isDelta ? (compHealthDashboardContentParams.targetData === 'params' ? 355 : (375 + cellPadding)) : 600
             model: visible ? compHealthDashboardContentParams.dataModel : undefined
             onModelChanged: {
 
@@ -559,7 +566,7 @@ Comp__BASE {
                                     text: gaugeRoot.myModel.tooltip_text
                                     contentItem: Text {
                                         text: tooltip2.text
-                                        font.pixelSize: 25
+                                        font.pixelSize: isDelta ? 25 : 35
                                     }
 
                                     background: Rectangle {

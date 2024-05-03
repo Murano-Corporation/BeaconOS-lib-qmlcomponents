@@ -93,7 +93,7 @@ Item{
 
         active: currentView === "Live Data"
 
-        sourceComponent: CompHealthDashboardContentOmega {
+        sourceComponent: CompHealthDashboardContent {
             id: comHealthDashboardContentOmega
 
             //onToggleViewModeClicked: screenHealthDashboardRoot.toggleViewMaximized()
@@ -108,7 +108,7 @@ Item{
 
             onParamNameSelectedChanged: {
                 //console.log('Paramname changed relay A')
-                screenHealthDashboardRoot.parameterNameSelected = comHealthDashboardContent.paramNameSelected
+                screenHealthDashboardRoot.parameterNameSelected = comHealthDashboardContentOmega.paramNameSelected
             }
 
 
@@ -116,38 +116,5 @@ Item{
 
 
     }
-
-    DrawerAssetDashboardMenu {
-        id: drawerAssetDashboardMenu
-
-        currentScreen: screenHealthDashboardRoot.currentView
-
-        onItemClicked: function(itemName)
-        {
-            screenHealthDashboardRoot.currentView = itemName
-        }
-    }
-
-    CompIconBtn {
-
-        id: iconBtnAssetInfo
-
-        anchors {
-            top: parent.top
-            left: parent.left
-            topMargin: 80
-            leftMargin: 66
-        }
-
-        height: 100
-        width: 100
-        iconUrl: "file:///usr/share/BeaconOS-lib-images/images/ListFill.svg"
-        iconColor: "White"
-
-        onClicked: {
-            drawerAssetDashboardMenu.open()
-        }
-    }
-
 
 }

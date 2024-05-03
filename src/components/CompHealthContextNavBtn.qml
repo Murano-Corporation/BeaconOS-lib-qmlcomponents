@@ -7,7 +7,7 @@ Comp__BASE {
     property string myHierarchyPath: text
 
     property string iconUrl: ""
-    property alias fontPixelSize: btnLbl.font.pixelSize
+    property alias fontPixelSize: btnLblOmega.font.pixelSize
     property alias rightBtnArrow: btnRightArrow
     property int alertCounts: 0
     signal clicked(string text)

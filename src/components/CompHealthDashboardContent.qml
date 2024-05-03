@@ -282,11 +282,30 @@ Comp__BASE {
 
         anchors{
             fill: parent
-            topMargin: 95
+            topMargin:isDelta ? 95 : 400
         }
 
         color: "#14818087"
         rotation: 0
+    }
+    CompLabel{
+
+        id: lblAssetName
+        visible: !isDelta
+
+        text: screenHealthDashboardRoot.assetName
+        font {
+            pixelSize: 75
+        }
+        color: "White"
+        anchors {
+            right: parent.right
+            rightMargin: 20
+            bottom: groupContentBg.top
+            bottomMargin: 120
+        }
+
+
     }
 
     Rectangle {
@@ -295,9 +314,9 @@ Comp__BASE {
         anchors{
             verticalCenter: groupContentBg.top
             left: parent.left
-            leftMargin: -2
+            leftMargin: isDelta ? -2 : 0
             right: parent.right
-            rightMargin: -2
+            rightMargin: isDelta ? -2 : 0
         }
 
         height: 6
@@ -307,18 +326,19 @@ Comp__BASE {
 
     Item {
         id: groupButtons
-        height: 32
+        height: isDelta ? 32 : 100
 
         property real btnWidth: (width * 0.3333)
         property color colorSelected: "#D9177D89"
         property color colorIdle: "#80177D89"
-        property real iconSize: 32
+        property real iconSize: isDelta ? 32 : 90
 
         anchors{
             bottom: rectSelectedTabBg.top
             bottomMargin: 23
             left: parent.left
             right: parent.right
+            top: isDelta ? undefined : lblAssetName.bottom
         }
 
         CompHealthDashboardViewNavBtn {
@@ -457,11 +477,12 @@ Comp__BASE {
             rightMargin: (!btnGridView.visible && !btnListView.visible && !btnExpandShrink.visible && !btnGraphView.visible ) ? 0 : 19
         }
 
-        height: 48
+        height: isDelta ? 48 : 100
 
         text: ""
         placeholderText: compHealthDashboardContentRoot.searchFieldPlaceholderText
-
+        textFontSize: isDelta ? 20: 40
+        btnClearSize: isDelta ? 23 : 60
     }
 
     CompIconBtn {
@@ -477,7 +498,7 @@ Comp__BASE {
 
         iconColor: (compHealthDashboardContentRoot.paramViewMode === "Grid") ? "White" : "#80ffffff"
         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/GridFill.svg"
-        height: 50
+        height: isDelta ? 50 : 100
 
         onClicked: compHealthDashboardContentRoot.paramViewMode = "Grid"
     }
@@ -490,13 +511,13 @@ Comp__BASE {
         anchors{
             top:txtfldSearch.top
             bottom: txtfldSearch.bottom
-            right: btnGraphView.visible ? btnGraphView.left : btnExpandShrink.left
+            right: isDelta ? (btnGraphView.visible ? btnGraphView.left : btnExpandShrink.left) : (btnGraphView.visible ? btnGraphView.left : parent.right)
             rightMargin: 20
         }
 
         iconColor: (compHealthDashboardContentRoot.paramViewMode === "List") ? "White" : "#80ffffff"
         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/ListFill.svg"
-        height: 50
+        height: isDelta ? 50 : 100
 
         onClicked: compHealthDashboardContentRoot.paramViewMode = "List"
     }
@@ -508,13 +529,13 @@ Comp__BASE {
         anchors {
             top:txtfldSearch.top
             bottom: txtfldSearch.bottom
-            right: btnExpandShrink.left
+            right: isDelta ? btnExpandShrink.left : parent.right
             rightMargin: 20
         }
 
         iconColor: (compHealthDashboardContentRoot.paramViewMode === "Graph") ? "White" : "#80ffffff"
         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/GraphFill.svg"
-        height: 50
+        height: isDelta ? 50 : 100
 
         onClicked: {
             compHealthDashboardContentRoot.paramViewMode_Last = compHealthDashboardContentRoot.paramViewMode
@@ -525,6 +546,7 @@ Comp__BASE {
 
     CompIconBtn {
         id: btnExpandShrink
+        visible: isDelta
 
         iconUrl: topControlGroup.state === "normal" ? "file:///usr/share/BeaconOS-lib-images/images/Expand.png" : "file:///usr/share/BeaconOS-lib-images/images/Shrink.png"
         iconColor: "White"
@@ -559,7 +581,7 @@ Comp__BASE {
         contentHeight: height
         contentWidth: contentItem.implicitWidth
 
-        height: (groupBreadcrumbs.visible ? 60 : 0)
+        height: (groupBreadcrumbs.visible ? (isDelta ? 60 : 120) : 0)
 
         CompBtnBreadcrumb {
             id: btnBreadcrumb1
@@ -569,6 +591,8 @@ Comp__BASE {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.top: parent.top
+
+            font.pixelSize: isDelta ? 20 : 40
 
             text: compHealthDashboardContentRoot.systemTypeSelected
 
@@ -605,6 +629,8 @@ Comp__BASE {
                 leftMargin: groupBreadcrumbs.spacing
                 bottom: parent.bottom
             }
+
+            font.pixelSize: isDelta ? 20 : 40
 
             onClicked: {
                 if(compHealthDashboardContentRoot.navObject === null)
@@ -653,6 +679,8 @@ Comp__BASE {
                 bottom: parent.bottom
             }
 
+            font.pixelSize: isDelta ? 20 : 40
+
             onClicked: {
 
                 if(compHealthDashboardContentRoot.navObject === null)
@@ -694,6 +722,8 @@ Comp__BASE {
                 bottom: parent.bottom
             }
 
+            font.pixelSize: isDelta ? 20 : 40
+
             onClicked: {
                 compHealthDashboardContentRoot.floatingBreadcrumbBtntext = "null"
                 compHealthDashboardContentRoot.paramNameSelected = 'null'
@@ -722,6 +752,7 @@ Comp__BASE {
             bottomMargin: 20
 
             right: groupBreadcrumbs.right
+            rightMargin: isDelta ? 0 : 34
         }
 
         Loader{

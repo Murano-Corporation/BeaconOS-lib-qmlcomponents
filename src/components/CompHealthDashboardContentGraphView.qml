@@ -199,7 +199,7 @@ Comp__BASE {
                 min: compHealthDashboardContentGraphView.dateMin
                 max: compHealthDashboardContentGraphView.dateMax
 
-                labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: 20})
+                labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: isDelta ? 20 : 30})
                 labelsColor: "White"
                 labelsVisible: false
             }
@@ -209,7 +209,7 @@ Comp__BASE {
 
                 visible: true
 
-                labelFormat: "%.2f        "
+                labelFormat: isDelta ? "%.2f        " : "%.2f    "
                 //tickCount: 3
 
                 gridLineColor: chart.gridLineColor
@@ -224,7 +224,7 @@ Comp__BASE {
                 min: compHealthDashboardContentGraphView.yValueMin
                 max: compHealthDashboardContentGraphView.yValueMax
 
-                labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: 18})
+                labelsFont:  Qt.font({family: 'Lato', weight: Font.Medium, pixelSize: isDelta ? 18 : 30})
                 labelsColor: "White"
                 //labelsVisible: false
 

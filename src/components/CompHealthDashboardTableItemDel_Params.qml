@@ -147,7 +147,7 @@ Comp__BASE {
             }
 
             font{
-                pixelSize: 20
+                pixelSize: isDelta ? 20 : 35
                 weight: Font.Light
             }
 
