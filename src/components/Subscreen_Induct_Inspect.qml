@@ -93,6 +93,7 @@ Item {
                 top: isDelta ? parent.top : scrollInspectInfoPnel.bottom
                 right: parent.right
                 bottom: parent.bottom
+                bottomMargin: isDelta ? 0 : 80
 
             }
 
@@ -306,7 +307,7 @@ Item {
                     right: parent.right
                     rightMargin: 20
                     bottom: parent.bottom
-                    bottomMargin: isDelta ? 20 : 180
+                    bottomMargin: isDelta ? 20 : 30
                 }
 
                 CompBtnBreadcrumb{

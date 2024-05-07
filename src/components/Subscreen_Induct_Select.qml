@@ -84,7 +84,7 @@ Item {
             left: searchField.left
             right: searchField.right
             bottom: parent.bottom
-            bottomMargin: 85
+            bottomMargin: 75
         }
 
         onAssetClicked: {

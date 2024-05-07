@@ -62,6 +62,7 @@ Item{
         }
 
         verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WordWrap
         fontPixelSize: 12
         color: "white"
 

@@ -7,7 +7,7 @@ import QtQml 2.12
 Drawer{
     id: drawerSystem
 
-    property var listOfNotifications
+    property var listOfNotifications: TableModelAlerts
     property bool isChatModeActive: false
     property var targetAlertForChat
     property real globalOpacity: 1.0
@@ -48,6 +48,17 @@ Drawer{
             //console.log("Closing the drawer system")
             drawerSystem.close();
         }
+    }
+
+    onOpened: groupSystemControls.setOverlayDefaults()
+
+    onAboutToHide: {
+        var openOrigin = SingletonOverlayManager.getPopupOrigin_Last("NSN Viewer");
+        var openSize = SingletonOverlayManager.getPopupSize_Last("NSN Viewer");
+        SingletonOverlayManager.setPerScreenPopupOpenRect("NSN Viewer", openOrigin, openSize);
+        openOrigin = SingletonOverlayManager.getPopupOrigin_Last("WiFi Viewer");
+        openSize = SingletonOverlayManager.getPopupSize_Last("WiFi Viewer");
+        SingletonOverlayManager.setPerScreenPopupOpenRect("WiFi Viewer", openOrigin, openSize);
     }
 
     Item{

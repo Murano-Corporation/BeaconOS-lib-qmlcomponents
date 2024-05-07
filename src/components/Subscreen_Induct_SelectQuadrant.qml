@@ -40,7 +40,7 @@ Item {
             right: parent.right
             rightMargin: isDelta ? 0 : 20
             bottom: parent.bottom
-            bottomMargin:  isDelta ? 0 : 120
+            bottomMargin:  isDelta ? 0 : 80
         }
 
         CompGradientRect

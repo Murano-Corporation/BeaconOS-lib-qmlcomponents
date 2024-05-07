@@ -193,6 +193,7 @@ Comp__BASE {
                     textEdit{
                         text: "?"
                         echoMode: TextInput.Password
+                        wrapMode: Text.WordWrap
                         inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
                         font.pixelSize: isDelta ? 28 : 40
                         onAccepted: popup_settings_database_local_root.checkChangesMade()
@@ -258,29 +259,31 @@ Comp__BASE {
                     width: parent.width
 
                     //height: 200
-                      height: 60
-                      spacing: 20
+                      height: isDelta ? 60 : 200
+                      spacing: isDelta ? 20 : 90
                     //spacing: 100
 
                     CompBtnBreadcrumb{
                         id: btnRevert
-                        height: 120
-                        width: 300
+                        height: isDelta ? 60 : 120
+                        width: isDelta ? 120 : 420
 
                         enabled: popup_settings_database_local_root.changesMade
 
                         text: "Revert"
+                        font.pixelSize: isDelta ? 25 : 35
 
                         onClicked: popup_settings_database_local_root.revertChanges()
                     }
 
                     CompBtnBreadcrumb{
                         id: btnSave
-                        height: 120
-                        width: 300
+                        height: isDelta ? 60 : 120
+                        width: isDelta ? 120 : 420
                         enabled: popup_settings_database_local_root.changesMade
 
                         text: "Save"
+                        font.pixelSize: isDelta ? 25 : 35
 
                         onClicked: popup_settings_database_local_root.saveChanges()
                     }

@@ -5,8 +5,22 @@ Comp__BASE{
 
     property real controlWidth: 600
 
+    CompLabel{
+        id: lblTitle
+
+        text: "Camera"
+
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignBottom
+
+        height: 40
+        width: parent.width
+        font.pixelSize: isDelta ? 25 : 60
+    }
+
     CompPopupBG{
         anchors.fill: parent
+        anchors.topMargin: isDelta ? 0 : 65
 
         CompToggle{
             id: switchCameraFlipped

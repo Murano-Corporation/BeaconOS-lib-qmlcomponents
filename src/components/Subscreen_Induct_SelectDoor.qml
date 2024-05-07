@@ -70,7 +70,7 @@ Item {
                 left: parent.left
                 right: isDelta ? undefined : parent.right
                 bottom: parent.bottom
-                bottomMargin: isDelta ? 0 : 100
+                bottomMargin: isDelta ? 0 : 80
             }
 
             width: isDelta ? (parent.width * 0.48) : parent.width

@@ -167,6 +167,7 @@ Comp__BASE_Popup {
             }
         }
     Loader{
+        id: loaderBtnAssetInfo
         active: !isDelta
 
         CompIconBtn {
@@ -296,11 +297,14 @@ Comp__BASE_Popup {
             id: areaContents
 
             anchors{
-                top: areaControls.bottom
-                topMargin: 40
-
-                bottom: bg.bottom
-                bottomMargin: bg.radiusBG
+                top: isDelta ? areaControls.bottom : loaderBtnAssetInfo.bottom
+                topMargin: isDelta ? 40 : 170
+                bottom: isDelta ? bg.bottom : parent.bottom
+                bottomMargin: isDelta ? bg.radiusBG : 45
+                left: isDelta ? undefined : parent.left
+                leftMargin: isDelta ? 0 : 45
+                right: isDelta ? undefined : parent.right
+                rightMargin: isDelta ? 0 : 45
             }
 
             width: isDelta ? searchField.width : parent.width
@@ -317,7 +321,9 @@ Comp__BASE_Popup {
             sourceComponent: Popup_Settings_Camera {
                 id: popup_Settings_Camera
 
-                controlWidth: searchField.width
+                controlWidth: isDelta ? searchField.width : parent.width * 0.8
+                width: parent.width
+                height : parent.height
             }
         }
 
