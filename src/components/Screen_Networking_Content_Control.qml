@@ -1,23 +1,33 @@
 import QtQuick 2.12
 
-Item{
+Comp__BASE{
     id: screenNetworkingContentControlRoot
-
 
     property CompAssetHotParam selectedTechTab
 
-    Component.onCompleted: {
-        selectedTechTab = btnWiFi
+    property var listOfNetWorkTypes: ListModel{
+        ListElement{ key: "Select Network type"; value: -1}
+        ListElement{ key: "WiFi"; value: 0}
+        ListElement{ key: "LiFi"; value: 1}
+        ListElement{ key: "Cellular"; value: 2}
+        ListElement{ key: "Satellite"; value: 3}
     }
 
+    property var selectedTab
 
+    property real hotParamSpacing: isDelta ? 21 : 18
+    property real hotParamWidth: isDelta ? ((width * 0.25) - (hotParamSpacing * 2.5)) : ((width * 0.25) - (hotParamSpacing))
+    property real hotParamHeight: isDelta ? 93 : 130
 
-    property real hotParamSpacing: 21
-    property real hotParamWidth: (width * 0.25) - (hotParamSpacing * 2.5)
-    property real hotParamHeight: 93
+    Component.onCompleted: {
+        if(isDelta)
+            selectedTechTab = btnWiFi
+        selectedTab = -1
+    }
 
     Item{
         id: rectSelectedTechTabBG
+        visible: isDelta
         property alias color: rectBg_Selected.color
         height: rowQuickButtons.height - rowQuickButtons.anchors.topMargin
         width: screenNetworkingContentControlRoot.hotParamWidth + screenNetworkingContentControlRoot.hotParamSpacing
@@ -66,6 +76,7 @@ Item{
 
     Row{
         id: rowQuickButtons
+        visible: isDelta
 
         anchors{
             left: parent.left
@@ -158,6 +169,34 @@ Item{
         }
     }
 
+    CompCombobox {
+        id: comboSelectNetworkType
+        visible: !isDelta
+
+        unselectedText: "Select Network Type"
+        textRole: "key"
+        model: listOfNetWorkTypes
+
+        anchors{
+            left: parent.left
+            leftMargin: screenNetworkingContentControlRoot.hotParamSpacing * 0.5
+            top: parent.top
+            topMargin: screenNetworkingContentControlRoot.hotParamSpacing * 0.5
+            right: parent.right
+            rightMargin: screenNetworkingContentControlRoot.hotParamSpacing * 0.5
+
+        }
+
+        height: 100
+        valueFontSize: 50
+        optionsHeight: 100
+
+        onCurrentIndexChanged: {
+            selectedTab = currentIndex
+        }
+
+    }
+
     Item{
         id: areaContent
 
@@ -166,15 +205,18 @@ Item{
         anchors{
             left: parent.left
             right: parent.right
-            top: rectSelectedTechTabBG.bottom
+            top: isDelta ? rectSelectedTechTabBG.bottom : comboSelectNetworkType.bottom
+            topMargin: isDelta ? 0 : 30
             bottom: parent.bottom
+            bottomMargin: isDelta ? 0 : 30
         }
 
         Rectangle{
             id: rectContentBG
+
             anchors{
                 fill: parent
-                topMargin: -rectContentBG.radius
+                topMargin: isDelta ? -rectContentBG.radius : 0
             }
 
             radius: 24
@@ -188,25 +230,22 @@ Item{
 
             anchors{
                 fill: rectContentBG
-                leftMargin: rectContentBG.radius
-                rightMargin: rectContentBG.radius
-                bottomMargin: rectContentBG.radius
-
-                topMargin: rectContentBG.radius - rectContentBG.anchors.topMargin
+                leftMargin: isDelta ? rectContentBG.radius : 0
+                rightMargin: isDelta ? rectContentBG.radius : 0
+                bottomMargin: isDelta ? rectContentBG.radius : 0
+                topMargin: isDelta ? (rectContentBG.radius - rectContentBG.anchors.topMargin) : 0
             }
         }
 
         Loader{
             id: loaderWiFi
 
-            active: screenNetworkingContentControlRoot.selectedTechTab === btnWiFi
+            active: screenNetworkingContentControlRoot.selectedTechTab === btnWiFi || screenNetworkingContentControlRoot.selectedTab === 1
 
             asynchronous:  true
             anchors.fill: areaTechContent
-            sourceComponent:         Screen_Networking_Content_Control_Wifi {
+            sourceComponent: Screen_Networking_Content_Control_Wifi {
                 id: screen_Networking_Content_Control_Wifi
-
-
             }
         }
 

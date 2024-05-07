@@ -1,15 +1,15 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.15
 
-Item{
+Comp__BASE{
     id: screen_Networking_Content_Control_Wifi_Auto
 
     property alias spacing: column.spacing
     property real btnHeight: 60
     property real btnWidth_Action: 300
-    property real btnHeight_Action: 90
+    property real btnHeight_Action: isDelta ? 90 : 120
     property alias headerHeight: rowHeaders.height
-    property real listItemHeight: 90
+    property real listItemHeight: isDelta ? 90 : 120
     property real listItemWidth_SSID: 0.60
     property real listItemWidth_Security: 0.2575
     property real listItemWidth_Bars: 0.0325
@@ -57,6 +57,7 @@ Item{
         spacing: 26
 
         anchors.fill: parent
+        anchors.bottomMargin: isDelta ? 0 : 20
 
         Item{
             id: groupList
@@ -120,6 +121,7 @@ Item{
                             verticalAlignment: Text.AlignVCenter
 
                             color: model.isCurrent ? "#00dd00" : "White"
+                            font.pixelSize: isDelta ? 25 : 40
                         }
 
                         CompLabel{
@@ -132,6 +134,7 @@ Item{
                             verticalAlignment: Text.AlignVCenter
 
                             color: model.isCurrent ? "#00dd00" : "White"
+                            font.pixelSize: isDelta ? 25 : 40
                         }
 
                         Item{
@@ -228,6 +231,7 @@ Item{
             spacing: 0.5 * height
 
             anchors.right: parent.right
+
 
             CompRoundButton{
                 height: parent.height

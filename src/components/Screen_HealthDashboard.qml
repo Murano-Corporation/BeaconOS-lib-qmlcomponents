@@ -80,6 +80,10 @@ Screen__BASE {
         openSize = Qt.size(651, 706)
         openOrigin = Qt.point(723, 307)
         SingletonOverlayManager.setPerScreenPopupOpenRect("NSN Viewer", openOrigin, openSize);
+
+        openSize = Qt.size(1920,1080)
+        openOrigin = Qt.point(0, 0)
+        SingletonOverlayManager.setPerScreenPopupOpenRect("WiFi Viewer", openOrigin, openSize);
     }
 
 

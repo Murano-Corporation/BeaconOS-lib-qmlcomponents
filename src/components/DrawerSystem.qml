@@ -56,9 +56,6 @@ Drawer{
         var openOrigin = SingletonOverlayManager.getPopupOrigin_Last("NSN Viewer");
         var openSize = SingletonOverlayManager.getPopupSize_Last("NSN Viewer");
         SingletonOverlayManager.setPerScreenPopupOpenRect("NSN Viewer", openOrigin, openSize);
-        openOrigin = SingletonOverlayManager.getPopupOrigin_Last("WiFi Viewer");
-        openSize = SingletonOverlayManager.getPopupSize_Last("WiFi Viewer");
-        SingletonOverlayManager.setPerScreenPopupOpenRect("WiFi Viewer", openOrigin, openSize);
     }
 
     Item{
@@ -203,9 +200,9 @@ Drawer{
                 var openSize = Qt.size(var_width,1300)
                 var openOrigin = Qt.point(var_point.x + contents.anchors.leftMargin-11, 510)
                 SingletonOverlayManager.setPerScreenPopupOpenRect("NSN Viewer", openOrigin, openSize);
-                SingletonOverlayManager.setPerScreenPopupOpenRect("WiFi Viewer", openOrigin, openSize);
                 var openSizeSettings = Qt.size(1080, 1920)
                 var openOriginSettings = Qt.point(0,0)
+                SingletonOverlayManager.setPerScreenPopupOpenRect("WiFi Viewer", openOriginSettings, openSizeSettings);
                 SingletonOverlayManager.setPerScreenPopupOpenRect("Settings", openOriginSettings, openSizeSettings)
             }
 
@@ -255,6 +252,7 @@ Drawer{
                             if (modelData.name === "WiFi"){
                                 console.log("GOING TO NETWORKING SCREEN");
                                 //screenToLoad = "Networking";
+                                drawerSystem.close()
                                 loaderPopupWiFiViewer.active = true;
                             } else if(modelData.name === "Logout"){
                                 //console.log("Opening popupPowerOptions")
@@ -268,13 +266,6 @@ Drawer{
 
                 }
             }
-//            MouseArea {
-//                anchors.fill: parent
-//                onClicked: {
-//                    console.log("Going to networking screen");
-//                    //screenToLoad = "Networking"
-//                }
-//            }
         }
 
         Rectangle {

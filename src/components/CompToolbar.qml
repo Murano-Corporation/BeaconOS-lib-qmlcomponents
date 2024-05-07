@@ -147,6 +147,7 @@ Item {
             iconUrl: "file:///usr/share/BeaconOS-lib-images/images/WiFi.svg"
             iconColor: btnIconColor
             iconHeight: btnIconSize
+            onClicked: loaderPopupWiFiViewer.active=true
         }
 
         CompIconBtn{
