@@ -40,8 +40,14 @@ Screen_Configuration_View__BASE {
         State{
             id: stateNetplan
             name: "Netplan"
-
-
+        },
+        State{
+            id: stateMosquitto
+            name: "Mosquitto"
+        },
+        State{
+            id: stateBeaconBus
+            name: "Beacon Bus"
         }
     ]
 
@@ -114,12 +120,12 @@ Screen_Configuration_View__BASE {
         sourceComponent: Item{
             Row{
                 anchors.fill: parent
-
+                spacing: 30
                 Button{
                     id: btnInit
 
 
-                    highlighted: screen_Configuration_View_Nano.state == stateInit.name
+                    highlighted: screen_Configuration_View_Nano.state == "Initialize"
 
                     text: "Init"
                     onClicked: {
@@ -130,12 +136,36 @@ Screen_Configuration_View__BASE {
                 Button{
                     id: btnNetplan
 
-                    highlighted: screen_Configuration_View_Nano.state == stateNetplan.name
+                    highlighted: screen_Configuration_View_Nano.state == "Netplan"
 
 
                     text: "Netplan"
                     onClicked: {
                         screen_Configuration_View_Nano.state = "Netplan"
+                    }
+                }
+
+                Button{
+                    id: btnMosquitto
+
+                    highlighted: screen_Configuration_View_Nano.state == "Mosquitto"
+
+
+                    text: "Mosquitto"
+                    onClicked: {
+                        screen_Configuration_View_Nano.state = "Mosquitto"
+                    }
+                }
+
+                Button{
+                    id: btnBeaconbus
+
+                    highlighted: screen_Configuration_View_Nano.state == "Beacon Bus"
+
+
+                    text: "Beacon Bus"
+                    onClicked: {
+                        screen_Configuration_View_Nano.state = "Beacon Bus"
                     }
                 }
 
@@ -155,8 +185,8 @@ Screen_Configuration_View__BASE {
         }
     }
 
-    Loader{
-        id: loaderNanoConnectState
+    Item{
+        id: areaContent
 
         anchors{
             top: parent.top
@@ -164,45 +194,18 @@ Screen_Configuration_View__BASE {
             right: parent.right
             bottom: (loaderDevTools.active ? loaderDevTools.top : parent.bottom)
         }
+    }
+
+    Loader{
+        id: loaderNanoConnectState
+
+        anchors.fill: areaContent
+
         asynchronous: true
         active: screen_Configuration_View_Nano.state === "Initialize"
 
-        sourceComponent:    Column{
-            width: 600
-
-            anchors{
-                top: parent.top
-                bottom: parent.bottom
-                centerIn: parent
-            }
-
-            CompLabel{
-                id: lblNanoConnected
-
-                text: "Nano Connected: " + (isNanoConnected ? "TRUE" : "FALSE")
-                color: isNanoConnected ? "Green" : "Red"
-            }
-
-            CompLabel{
-                id: lblNanoPingable
-
-                text: "Nano Pingable: " + (isPingOk ? "TRUE" : "FALSE")
-                color: isPingOk ? "Green" : "Red"
-            }
-
-            CompLabel{
-                id: lblNanoSshAble
-
-                text: "Nano SSH OK?: " + (isSshOk ? "TRUE" : "FALSE")
-                color: isSshOk ? "Green" : "Red"
-            }
-
-            CompLabel{
-                id: lblNanoReady
-
-                text: "Nano Ready?: " + (isNanoReady ? "TRUE" : "FALSE")
-                color: isNanoReady ? "Green" : "Red"
-            }
+        sourceComponent:    Screen_Configuration_View_Nano_Connect {
+            id: screen_Configuration_View_Nano_Connect
         }
 
     }
@@ -210,96 +213,39 @@ Screen_Configuration_View__BASE {
     Loader{
         id: loaderNanoConfigControls
 
-        anchors{
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            bottom: (loaderDevTools.active ? loaderDevTools.top : parent.bottom)
-        }
+        anchors.fill: areaContent
         asynchronous: true
         active: screen_Configuration_View_Nano.state === "Netplan"
 
-        sourceComponent: Item{
-
-
-            Connections{
-                target: screen_Configuration_View_Nano
-
-                function onNetplanConfigChanged() {
-
-                    if(screen_Configuration_View_Nano.state !== stateNetplan.name)
-                    {
-                        return
-                    }
-
-                    console.log("INCOMING DC CONFIG ENABLED?: " + screen_Configuration_View_Nano.netplanConfig.enabled)
-                    lblDCConfigEnabled.isOn = screen_Configuration_View_Nano.netplanConfig.enabled
-                    lblDCConfigAssetAddress.value = screen_Configuration_View_Nano.netplanConfig.assetAddress
-                    lblDCConfigNanoAddress.value = screen_Configuration_View_Nano.netplanConfig.nanoAddress
-                }
-            }
-
-            Column{
-                anchors{
-                    top: parent.top
-                    bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                }
-
-                spacing: 30
-
-                CompToggle{
-                    id: lblDCConfigEnabled
-
-                    text: "Direct Connect Enabled: " + Nano.netplanDCConfig.enabled
-                    isOn: false
-                }
-
-                CompLabelledTextEdit{
-                    id: lblDCConfigNanoAddress
-
-                    text: "Direct Connect Nano Address: "
-                    value: "---"
-                }
-
-                CompLabelledTextEdit{
-                    id: lblDCConfigAssetAddress
-
-                    text: "Direct Connect Asset Address: "
-                    value: "---"
-                }
-
-                Button{
-                    id: btnReadConfig
-
-                    text: "Read"
-
-                    onClicked:{
-                        Nano.netplan_ReadConfigFile()
-                    }
-                }
-
-                Button{
-                    id: btnWriteConfig
-
-                    text: "Write"
-
-                    onClicked:{
-
-                        var outGoingNetplanConfig = Nano.getNetplanDCConfig()
-
-                        console.log("DC CONFIG ENABLED?: " + lblDCConfigEnabled.isOn)
-                        outGoingNetplanConfig.enabled = lblDCConfigEnabled.isOn
-                        console.log("DC CONFIG ENABLED 2?: " + outGoingNetplanConfig.enabled)
-                        outGoingNetplanConfig.nanoAddress = lblDCConfigNanoAddress.value
-                        outGoingNetplanConfig.assetAddress = lblDCConfigAssetAddress.value
-
-                        Nano.netplan_WriteConfig(outGoingNetplanConfig)
-                    }
-                }
-            }
-
+        sourceComponent: Screen_Configuration_View_Nano_Netplan {
+            id: screen_Configuration_View_Nano_Netplan
         }
+    }
+
+    Loader{
+        id: loaderNanoMosquittoConfig
+
+        anchors.fill: areaContent
+        asynchronous: true
+        active: screen_Configuration_View_Nano.state === "Mosquitto"
+
+        sourceComponent: Screen_Configuration_View_Nano_Mosquitto {
+            id: screen_Configuration_View_Nano_Mosquitto
+        }
+
+    }
+
+    Loader{
+        id: loaderNanoBeaconBusConfig
+
+        anchors.fill: areaContent
+        asynchronous: true
+        active: screen_Configuration_View_Nano.state === "Beacon Bus"
+
+        sourceComponent: Screen_Configuration_View_Nano_BeaconBus {
+            id: screen_Configuration_View_Nano_BeaconBus
+        }
+
     }
 
 }

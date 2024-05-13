@@ -142,6 +142,59 @@
         <file>Screen_Login.qml</file>
         <file>Screen_Reference.qml</file>
         <file>Screen_AssetDashboard.qml</file>
+        <file>Screen_Configuration_View_Nano_Mosquitto.qml</file>
+        <file>Screen_Configuration_View_Nano_Netplan.qml</file>
+        <file>Screen_Configuration_View_Nano_Connect.qml</file>
+        <file>Screen_Configuration_View_Nano_BeaconBus.qml</file>
+        <file>Screen_3dViewer.qml</file>
+        <file>Comp_Joystick.qml</file>
+        <file>CompCheckableLabelledTextEdit.qml</file>
+        <file>CompYamlNode.qml</file>
+        <file>Screen_Raptor.qml</file>
+        <file>Screen_Raptor__BASE.qml</file>
+        <file>Screen_Raptor_Delta.qml</file>
+        <file>Screen_Raptor_Omega.qml</file>
+        <file>Comp_Pip__BASE.qml</file>
+        <file>Comp_Pip_Radar.qml</file>
+        <file>Comp_Pip_Camera.qml</file>
+        <file>Comp_Pip_Battlespace.qml</file>
+        <file>Screen_Drone_RoutePlanner.qml</file>
+        <file>Comp_Drone_AvionicsViewer.qml</file>
+        <file>Comp_Drone_Gauge__BASE.qml</file>
+        <file>Comp_Drone_Gauge_Speedometer.qml</file>
+        <file>Comp_Drone_Gauge_Altitude.qml</file>
+        <file>Comp_Drone_Gauge_Slope.qml</file>
+        <file>Comp_Drone_Gauge_Bearing.qml</file>
+        <file>Comp_Drone_Gauge_VertSpeed.qml</file>
+        <file>Comp_Drone_Gauge_HorizSpeed.qml</file>
+        <file>Comp_Drone_Gauge_TurnCoordinator.qml</file>
+        <file>Comp_Drone_Gauge_ElevationGain.qml</file>
+        <file>Comp_Drone_Gauge_Coordinates.qml</file>
+        <file>Comp_Drone_Gauge_AirSpeed.qml</file>
+        <file>Comp_Drone_Gauge_Altimeter.qml</file>
+        <file>Comp_Drone_Gauge_HeadingIndicator.qml</file>
+        <file>Comp_Drone_Gauge_Battery.qml</file>
+        <file>Screen_Raptor_Detect.qml</file>
+        <file>Comp_3dReconVisualizer.qml</file>
+        <file>Comp_DigitalTwin__BASE.qml</file>
+        <file>Comp_DigitalTwin_Raptor_Detect.qml</file>
+        <file>Comp_DigitalTwin_Raptor_Drone.qml</file>
+        <file>Comp_DigitalTwin_Raptor_Defend.qml</file>
+        <file>Screen_Configuration_View_Drone.qml</file>
+        <file>Screen_Configuration_View_Delta.qml</file>
+        <file>Screen_Configuration_View_Omega.qml</file>
+        <file>Screen_Configuration_View_Raptor_Defend.qml</file>
+        <file>Screen_Configuration_View_Raptor_Detect.qml</file>
+        <file>CompTestJesses.qml</file>
+        <file>Comp_MapMarker_Drone.qml</file>
+        <file>CompIcon_Drone.qml</file>
+        <file>Comp_MapMarker_Antenna.qml</file>
+        <file>CompIcon_Antenna.qml</file>
+        <file>CompMapItem_AntennaRange.qml</file>
+        <file>CompIcon_AircraftCarrier.qml</file>
+        <file>CompMapItem_ACCarrier.qml</file>
+        <file>Comp_3DOverlay_Battlespace.qml</file>
+        <file>CompMapItem_3D_Cube.qml</file>
         <file>Screen_Home.qml</file>
         <file>CompBeaconOsInductScreen_SelectAssetItem_Omega.qml</file>
         <file>CompFlippableRepairAssetItemOmega.qml</file>

@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.0
 
 Item {
     id: compMapViewerRoot
+
     property point centerPoint: Qt.point(0,0)
     property var listAssets: TableModelAssetDashboardGridView
     property var selectedAssetDataModel: undefined
@@ -13,7 +14,105 @@ Item {
     property bool captureMouseCoords: false
     property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 4 : 0
     property int maxMapTypeIndex: map.supportedMapTypes.length
+    property alias targetListDelegate: mapView_Targets.delegate
+    property alias tilt: map.tilt
+    property alias center: map.center
+    property alias zoomLevel: map.zoomLevel
+    property alias bearing: map.bearing
+
     property real zoomCurrent
+
+
+    onSelectedAssetDataModelChanged: {
+        if(selectedAssetDataModel === undefined)
+        {
+            popupSelectedAsset.close()
+        } else {
+            popupSelectedAsset.open()
+        }
+    }
+
+    function getSimpleMapNameString(mapTypeName)
+    {
+
+        console.log("Map name: " + mapTypeName)
+        switch(mapTypeName)
+        {
+        case " ":
+            return qsTr("No Map")
+        case "mapbox://styles/mapbox/streets-v10":
+            return qsTr("Street")
+        case "mapbox://styles/mapbox/basic-v9":
+            return qsTr("Basic")
+        case "mapbox://styles/mapbox/bright-v9":
+            return qsTr("Bright")
+        case "mapbox://styles/mapbox/outdoors-v10":
+            return qsTr("Terrain")
+        case "mapbox://styles/mapbox/satellite-streets-v10":
+            return qsTr("Hybrid")
+        case "mapbox://styles/mapbox/light-v9":
+            return qsTr("Street (Light)")
+        case "mapbox://styles/mapbox/dark-v9":
+            return qsTr("Street (Dark)")
+        case "mapbox://styles/mapbox/satellite-v9":
+            return qsTr("Satellite")
+        case "mapbox://styles/mapbox/navigation-preview-day-v2":
+            return qsTr("Nav Preview (Day)")
+        case "mapbox://styles/mapbox/navigation-guidance-day-v2":
+            return qsTr("Nav Guidance (Day)")
+        case "mapbox://styles/mapbox/navigation-preview-night-v2":
+            return qsTr("Nav Preview (Night)")
+        case "mapbox://styles/mapbox/navigation-guidance-night-v2":
+            return qsTr("Nav Guidance (Night)")
+        }
+
+        return "?"
+    }
+
+    function setActiveMapTypeIndex(index)
+    {
+        activeMapTypeIndex = index
+    }
+
+    function clear(){
+
+    }
+
+    function setZoomLevel(zoomLevel)
+    {
+        map.zoomLevel = zoomLevel
+    }
+
+    function addPoint(lat, lon, type)
+    {
+        var mapPoint = Qt.createQmlObject('import QtLocation 5.3; MapCircle {}', compMapViewerRoot)
+        var coords = QtPositioning.coordinate(lat, lon)
+        mapPoint.center = coords
+        mapPoint.radius = 20
+        mapPoint.color = "#800000FF"
+
+        map.addMapItem(mapPoint)
+
+
+        var toAdd = compClickableMapItem.createObject(compMapViewerRoot)
+        toAdd.coordinate = coords
+        map.addMapItem(toAdd)
+
+
+        compMapViewerRoot.centerPoint = Qt.point(lat, lon)
+
+    }
+
+    function centerOnPointXY(x, y)
+    {
+        centerOnPoint(QtPositioning.coordinate(x,y))
+    }
+
+    function centerOnPoint(coords)
+    {
+        map.center = coords
+    }
+
 
 
     //    Component {
@@ -111,76 +210,6 @@ Item {
         map.activeMapType = map.supportedMapTypes[activeMapTypeIndex]
     }
 
-    function getSimpleMapNameString(mapTypeName)
-    {
-
-        console.log("Map name: " + mapTypeName)
-        switch(mapTypeName)
-        {
-        case " ":
-            return qsTr("No Map")
-        case "mapbox://styles/mapbox/streets-v10":
-            return qsTr("Street")
-        case "mapbox://styles/mapbox/basic-v9":
-            return qsTr("Basic")
-        case "mapbox://styles/mapbox/bright-v9":
-            return qsTr("Bright")
-        case "mapbox://styles/mapbox/outdoors-v10":
-            return qsTr("Terrain")
-        case "mapbox://styles/mapbox/satellite-streets-v10":
-            return qsTr("Hybrid")
-        case "mapbox://styles/mapbox/light-v9":
-            return qsTr("Street (Light)")
-        case "mapbox://styles/mapbox/dark-v9":
-            return qsTr("Street (Dark)")
-        case "mapbox://styles/mapbox/satellite-v9":
-            return qsTr("Satellite")
-        case "mapbox://styles/mapbox/navigation-preview-day-v2":
-            return qsTr("Nav Preview (Day)")
-        case "mapbox://styles/mapbox/navigation-guidance-day-v2":
-            return qsTr("Nav Guidance (Day)")
-        case "mapbox://styles/mapbox/navigation-preview-night-v2":
-            return qsTr("Nav Preview (Night)")
-        case "mapbox://styles/mapbox/navigation-guidance-night-v2":
-            return qsTr("Nav Guidance (Night)")
-        }
-
-        return "?"
-    }
-
-    function setActiveMapTypeIndex(index)
-    {
-        activeMapTypeIndex = index
-    }
-
-    function clear(){
-
-    }
-
-    function setZoomLevel(zoomLevel)
-    {
-        map.zoomLevel = zoomLevel
-    }
-
-    function addPoint(lat, lon, type)
-    {
-        var mapPoint = Qt.createQmlObject('import QtLocation 5.3; MapCircle {}', compMapViewerRoot)
-        var coords = QtPositioning.coordinate(lat, lon)
-        mapPoint.center = coords
-        mapPoint.radius = 20
-        mapPoint.color = "#800000FF"
-
-        map.addMapItem(mapPoint)
-
-
-        var toAdd = compClickableMapItem.createObject(compMapViewerRoot)
-        toAdd.coordinate = coords
-        map.addMapItem(toAdd)
-
-
-        compMapViewerRoot.centerPoint = Qt.point(lat, lon)
-
-    }
 
     Component{
         id: compClickableMapItem
@@ -217,15 +246,7 @@ Item {
         }
     }
 
-    function centerOnPointXY(x, y)
-    {
-        centerOnPoint(QtPositioning.coordinate(x,y))
-    }
 
-    function centerOnPoint(coords)
-    {
-        map.center = coords
-    }
 
     onCenterPointChanged: {
         map.center = QtPositioning.coordinate(centerPoint.x, centerPoint.y)
@@ -310,6 +331,9 @@ Item {
         }
 
         onZoomLevelChanged: compMapViewerRoot.zoomCurrent = zoomLevel
+
+
+
         copyrightsVisible: false
         activeMapType: supportedMapTypes[compMapViewerRoot.activeMapTypeIndex]
         //activeMapType: mapPlugin.name === "osm" ? supportedMapTypes[3] : mapPlugin.name === "mapboxgl" ? supportedMapTypes[9] : supportedMapTypes[0]
@@ -341,13 +365,15 @@ Item {
         {
             id:mouseArea_CoordGrabber
 
+            property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
+
             //enabled: compMapViewerRoot.captureMouseCoords
             visible: enabled
 
             anchors.fill: parent
             //hoverEnabled: true
             propagateComposedEvents: true
-            property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
+
 
         }
 
@@ -413,6 +439,7 @@ Item {
         }
 
         MapItemView{
+            id: mapView_Targets
             model: compMapViewerRoot.listAssets
 
 
@@ -444,14 +471,7 @@ Item {
 
     }
 
-    onSelectedAssetDataModelChanged: {
-        if(selectedAssetDataModel === undefined)
-        {
-            popupSelectedAsset.close()
-        } else {
-            popupSelectedAsset.open()
-        }
-    }
+
 
     Popup{
         id: popupSelectedAsset
@@ -481,6 +501,8 @@ Item {
         CompAssetDashboardGridItem{
             id: selectAssetItem
 
+            property var modelData: visible ? selectedAssetDataModel : undefined
+
             height: 375
             width: 387
 
@@ -503,7 +525,6 @@ Item {
             //    console.log("My focus is now: "  + focus)
             //}
 
-            property var modelData: visible ? selectedAssetDataModel : undefined
 
             assetName: modelData ? modelData.asset_name : ''
             beaconID: modelData ? modelData.Beacon_ID : ''

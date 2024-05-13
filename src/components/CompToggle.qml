@@ -5,6 +5,7 @@ Item{
     id: compToggle
 
     property bool isReadOnly: false
+    property alias lblWidth: lbl.width
     property alias text: lbl.text
     property alias isOn: compSwitch.isOn
     property alias colorOn: compSwitch.colorOn

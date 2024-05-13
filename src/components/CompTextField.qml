@@ -7,6 +7,7 @@ Item{
     property alias radius: rectBG.radius
     property alias spacing: row.spacing
     property alias lblText: lbl.text
+    property alias lblWidth: lbl.width
     property alias lblFontPixelSize: lbl.font.pixelSize
     property alias textEditWidth: rectBG.width
     property alias textEditHeight: rectBG.height
@@ -14,6 +15,8 @@ Item{
     property alias placeholderText: edt.placeholderText
     property alias edtEchoMode: edt.echoMode
     property alias edtFontPixelSize: edt.font.pixelSize
+    property alias backgroundRect: rectBG
+    property string dataTypeName: "QString"
 
     width: 514
     height: 80
@@ -39,11 +42,13 @@ Item{
             verticalAlignment: Text.AlignVCenter
         }
 
+
+
         Rectangle{
             id: rectBG
             width: 450
             height: parent.height
-
+            opacity: enabled ? 1.0 : 0.3
             anchors{
                 verticalCenter: row.verticalCenter
             }
@@ -79,14 +84,18 @@ Item{
 
                 background: Item {}
 
+                onReleased: {
+                    edt.selectAll()
+                }
+
+                onActiveFocusChanged: {
+                    if(edt.activeFocus)
+                        edt.selectAll()
+                }
+                // onFocusChanged: {
+                    // selectAllText()
+                // }
             }
         }
-
-
-
     }
-
-
-
-
 }

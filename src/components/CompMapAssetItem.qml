@@ -6,14 +6,11 @@ import QtGraphicalEffects 1.0
 Comp__BASE_MapQuickItem {
     id: compMapAssetItemRoot
 
-    property real lat: 0.0
-    property real lon: 0.0
     property string assetType: 'TYPE'
     property string assetID: 'ASSET_ID'
     property alias assetTypelbl: lblAssetType
 
-    signal centerOnPoint(var coords)
-    signal fitViewportToVisibleMapItems()
+
 
 
     anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height * 0.5)

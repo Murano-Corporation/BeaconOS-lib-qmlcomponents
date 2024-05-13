@@ -4,8 +4,6 @@ import QtMultimedia 5.12
 import Qt.labs.platform 1.1
 import CONSTANTS 1.0
 
-
-
 Screen__BASE {
     id: screenCameraRoot
 

@@ -12,6 +12,7 @@ Dialog{
     property var funcOnYes
     property var funcOnNo
     property real btnHeight: 40
+    property var cnx
 
     // @disable-check M16
     Overlay.modal: Rectangle{
@@ -23,11 +24,15 @@ Dialog{
     height: 352
     width: 831
 
-    onClosed: {
+
+
+    function cleanup(){
         funcOnNo = undefined
         funcOnYes = undefined
         headerText = qsTr("SetMe")
         bodyText = ""
+
+        tmrDelayFunc.triggered.disconnect()
     }
 
     anchors{
@@ -35,8 +40,20 @@ Dialog{
     }
 
     onAccepted: {
-        dlgYesNo.funcOnYes()
+
+        tmrDelayFunc.triggered.connect(function(){
+            dlgYesNo.funcOnYes()
+            dlgYesNo.cleanup()
+        })
+        tmrDelayFunc.start()
         dlgYesNo.close()
+    }
+
+    Timer{
+        id: tmrDelayFunc
+
+        interval: 500
+
     }
 
     onRejected: {
