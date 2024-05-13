@@ -208,5 +208,8 @@
         <file>DrawerSystem.qml</file>
         <file>Screen_HealthDashboard_Delta.qml</file>
         <file>Screen_HealthDashboard_Omega.qml</file>
+        <file>Comp_TEST_Jesse.qml</file>
+        <file>Comp_ListVisualization_Example.qml</file>
+        <file>CompMenuIconsJR.qml</file>
     </qresource>
 </RCC>
