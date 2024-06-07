@@ -244,6 +244,19 @@
         <file>Comp_Drone_Settings.qml</file>
         <file>Screen_Calculator.qml</file>
         <file>Popup_Calculator.qml</file>
+        <file>CompServo.qml</file>
+        <file>CompRelay.qml</file>
+        <file>CompAuxFunction.qml</file>
+        <file>CompTelemetryLogsButton.qml</file>
+        <file>Screen_Jesse_Sandbox.qml</file>
+        <file>Comp_Drone_Gimble.qml</file>
+        <file>CompTelemetryLogs.qml</file>
+        <file>Screen_Raptor_Drone.qml</file>
+        <file>Comp_Drone_Switch.qml</file>
+        <file>Comp_Drone_Dial.qml</file>
+        <file>Comp_Drone_Settings.qml</file>
+        <file>Screen_Calculator.qml</file>
+        <file>Popup_Calculator.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal">
         <file>CompTelemetryLogs.qml</file>
