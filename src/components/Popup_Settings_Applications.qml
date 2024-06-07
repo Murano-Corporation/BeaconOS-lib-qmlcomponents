@@ -2,11 +2,12 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 
-Comp__BASE {
+Popup_Settings_View__BASE {
     id: popup_settings_applications_root
-    property bool isDelta: base.isDelta
+
     property real listHeight: isDelta ? 90 : 120
-    property alias labeltitle: lblTitle
+
+    viewName: "Applications Settings"
 
     function showAppInfoPopup(appName)
     {
@@ -29,113 +30,81 @@ Comp__BASE {
         //console.log("...NavPath: " + appInfo.navPath);
     }
 
-    Column{
-        id: colContents
+    ListView{
+        id: listApplications
 
+        boundsBehavior: Flickable.StopAtBounds
+
+        clip: true
         spacing: 20
-
         anchors{
-            fill: parent
+            fill: contents
+            margins: contentsBgRadius
         }
 
-        CompLabel{
-            id: lblTitle
+        model: TableModelApplications
 
-            text: "Applications"
+        delegate: Item{
+            id: compApplicationsListItem
 
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignBottom
+            opacity: model.enabled ? 1.0 : 0.6
 
-            height: 40
-            width: parent.width
-            font.pixelSize: isDelta ? 25 : 60
-        }
+            height: popup_settings_applications_root.listHeight
+            width: listApplications.width
 
-        CompPopupBG{
-            id: bg
-            width: parent.width
-            height: parent.height - parent.spacing - lblTitle.height
+            Row{
+                id: row
 
-            anchors.fill: undefined
-
-            ListView{
-                id: listApplications
-
-                boundsBehavior: Flickable.StopAtBounds
-
-                clip: true
-                spacing: 20
                 anchors{
                     fill: parent
-                    margins: bg.radiusBG
+                    margins: 20
+                }
+                spacing: 20
+
+                CompLabel{
+                    id: lblAppName
+                    text: model.app_display_name
+                    anchors{
+                        verticalCenter: parent.verticalCenter
+
+                    }
+
+                    height: row.height
+                    width: row.width - row.spacing - iconArrow.width
+                    color: "white"
+                    font.pixelSize: isDelta ? 25 : 50
+
+                    verticalAlignment: Text.AlignVCenter
                 }
 
-                model: TableModelApplications
+                CompImageIcon{
+                    id: iconArrow
 
-                delegate: Item{
-                    id: compApplicationsListItem
-
-                    opacity: model.enabled ? 1.0 : 0.6
-
-                    height: popup_settings_applications_root.listHeight
-                    width: listApplications.width
-
-                    Row{
-                        id: row
-
-                        anchors{
-                            fill: parent
-                            margins: 20
-                        }
-                        spacing: 20
-
-                        CompLabel{
-                            id: lblAppName
-                            text: model.app_display_name
-                            anchors{
-                                verticalCenter: parent.verticalCenter
-
-                            }
-
-                            height: row.height
-                            width: row.width - row.spacing - iconArrow.width
-                            color: "white"
-                            font.pixelSize: isDelta ? 25 : 50
-
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        CompImageIcon{
-                            id: iconArrow
-
-                            anchors{
-                                verticalCenter: parent.verticalCenter
-                            }
-
-                            source: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
-
-                            color: "white"
-                            height: lblAppName.height
-                            width: height
-
-                        }
-
+                    anchors{
+                        verticalCenter: parent.verticalCenter
                     }
 
-                    MouseArea{
-                        anchors.fill: parent
+                    source: "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg"
 
-                        onClicked: {
-                            listApplications.currentIndex = index
-                            popup_settings_applications_root.showAppInfoPopup(model.app_display_name)
-                        }
-                    }
-
+                    color: "white"
+                    height: lblAppName.height
+                    width: height
 
                 }
 
             }
-       }
+
+            MouseArea{
+                anchors.fill: parent
+
+                onClicked: {
+                    listApplications.currentIndex = index
+                    popup_settings_applications_root.showAppInfoPopup(model.app_display_name)
+                }
+            }
+
+
+        }
 
     }
 

@@ -71,3 +71,9 @@ Thumbs.db
 *.dll
 *.exe
 
+
+*.stash
+
+*.idx
+
+build/5_15_12_DEV-Debug/.qtc_clangd/

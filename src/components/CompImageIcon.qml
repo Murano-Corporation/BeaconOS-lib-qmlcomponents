@@ -1,18 +1,17 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 
 Comp__BASE {
     id: iconImageRoot
     
-    property alias color: colorOverlay.color
+    property alias colorOverlay: colorOverlayComp
+    property alias color: colorOverlayComp.color
     property alias verticalAlignment: compImageIcon.verticalAlignment
     property real iconHeight: height
     property real iconWidth: width
     property alias image: compImageIcon
     property alias source: compImageIcon.source
-    property alias colorOverlay: colorOverlay
-    property alias compImageIcon: compImageIcon
 
     Image {
         id: compImageIcon
@@ -27,16 +26,11 @@ Comp__BASE {
         antialiasing: true
         smooth: true
         visible: false
-
-
-
-
-
     }
 
     ColorOverlay {
 
-        id: colorOverlay
+        id: colorOverlayComp
         anchors.fill: compImageIcon
         antialiasing: true
         smooth: true
@@ -46,8 +40,4 @@ Comp__BASE {
 }
 
 
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
-##^##*/
+

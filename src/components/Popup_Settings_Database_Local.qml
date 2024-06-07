@@ -1,7 +1,9 @@
 import QtQuick 2.0
 
-Comp__BASE {
+Popup_Settings_View__BASE {
     id: popup_settings_database_local_root
+
+    viewName: "Database Settings (Local)"
 
     property string hostname
     property string password
@@ -9,7 +11,7 @@ Comp__BASE {
     property string schema
     property int port
     property bool changesMade: false
-    property bool isDelta: base.isDelta
+
 
     Component.onCompleted: {
         hostname = Settings.getDatabaseHostName("")
@@ -123,180 +125,147 @@ Comp__BASE {
     }
 
     Column{
-        id: colContents
+        id: areaContent
 
         spacing: 20
 
         anchors{
-            fill: parent
+            fill: contents
+            margins: contentsBgRadius
         }
 
-        CompLabel{
-            id: lblTitle
+        CompLabelledTextEdit {
+            id: textDatabaseLocalHostname
 
-            text: "Database (Local)"
-
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignBottom
-
-            height: 40
             width: parent.width
-            font.pixelSize: isDelta ? 25 : 60
-        }
+            isReadonly: false
 
-        CompPopupBG{
-            id: bg
-            width: parent.width
-            height: parent.height - parent.spacing - lblTitle.height
-
-            anchors.fill: undefined
-
-            Column{
-                id: areaContent
-
-                spacing: 20
-
-                anchors{
-                    fill: parent
-                    margins: bg.radiusBG
-                }
-
-                CompLabelledTextEdit {
-                    id: textDatabaseLocalHostname
-
-                    width: parent.width
-                    isReadonly: false
-
-                    label{
-                        text: "Hostname:"
-                        font.pixelSize: isDelta ? 28 : 40
-                    }
-
-                    textEdit{
-                        text: "?"
-                        font.pixelSize: isDelta ? 28 : 40
-
-                        onAccepted: popup_settings_database_local_root.checkChangesMade()
-                    }
-                }
-
-                CompLabelledTextEdit {
-                    id: textDatabaseLocalPassword
-
-                    width: parent.width
-                    isReadonly: false
-                    label{
-                        text: "Password:"
-                        font.pixelSize: isDelta ? 28 : 40
-                    }
-
-                    textEdit{
-                        text: "?"
-                        echoMode: TextInput.Password
-                        wrapMode: Text.WordWrap
-                        inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
-                        font.pixelSize: isDelta ? 28 : 40
-                        onAccepted: popup_settings_database_local_root.checkChangesMade()
-                    }
-                }
-
-                CompLabelledTextEdit {
-                    id: textDatabaseLocalPort
-                    isReadonly: false
-                    width: parent.width
-
-                    label{
-                        text: "Port:"
-                        font.pixelSize: isDelta ? 28 : 40
-                    }
-
-                    textEdit{
-                        text: "?"
-                        inputMethodHints: Qt.ImhDigitsOnly
-                        font.pixelSize: isDelta ? 28 : 40
-                        onAccepted: popup_settings_database_local_root.checkChangesMade()
-                    }
-                }
-
-                CompLabelledTextEdit {
-                    id: textDatabaseLocalSchema
-                    isReadonly: false
-                    width: parent.width
-
-                    label{
-                        text: "Schema:"
-                        font.pixelSize: isDelta ? 28 : 40
-                    }
-
-                    textEdit{
-                        text: "?"
-                        font.pixelSize: isDelta ? 28 : 40
-                        onAccepted: popup_settings_database_local_root.checkChangesMade()
-                    }
-                }
-
-                CompLabelledTextEdit {
-                    id: textDatabaseLocalUsername
-                    isReadonly: false
-                    width: parent.width
-
-                    label{
-                        text: "Username:"
-                        font.pixelSize: isDelta ? 28 : 40
-                    }
-
-                    textEdit{
-                        text: "?"
-                        font.pixelSize: isDelta ? 28 : 40
-                        onAccepted: popup_settings_database_local_root.checkChangesMade()
-                    }
-                }
-
-
-                Row{
-                    id: rowControls
-
-                    width: parent.width
-
-                    //height: 200
-                      height: isDelta ? 60 : 200
-                      spacing: isDelta ? 20 : 90
-                    //spacing: 100
-
-                    CompBtnBreadcrumb{
-                        id: btnRevert
-                        height: isDelta ? 60 : 120
-                        width: isDelta ? 120 : 420
-
-                        enabled: popup_settings_database_local_root.changesMade
-
-                        text: "Revert"
-                        font.pixelSize: isDelta ? 25 : 35
-
-                        onClicked: popup_settings_database_local_root.revertChanges()
-                    }
-
-                    CompBtnBreadcrumb{
-                        id: btnSave
-                        height: isDelta ? 60 : 120
-                        width: isDelta ? 120 : 420
-                        enabled: popup_settings_database_local_root.changesMade
-
-                        text: "Save"
-                        font.pixelSize: isDelta ? 25 : 35
-
-                        onClicked: popup_settings_database_local_root.saveChanges()
-                    }
-
-                }
-
+            label{
+                text: "Hostname:"
+                font.pixelSize: isDelta ? 28 : 40
             }
 
+            textEdit{
+                text: "?"
+                font.pixelSize: isDelta ? 28 : 40
 
+                onAccepted: popup_settings_database_local_root.checkChangesMade()
+            }
+        }
+
+        CompLabelledTextEdit {
+            id: textDatabaseLocalPassword
+
+            width: parent.width
+            isReadonly: false
+            label{
+                text: "Password:"
+                font.pixelSize: isDelta ? 28 : 40
+            }
+
+            textEdit{
+                text: "?"
+                echoMode: TextInput.Password
+                wrapMode: Text.WordWrap
+                inputMethodHints: Qt.ImhSensitiveData | Qt.ImhHiddenText
+                font.pixelSize: isDelta ? 28 : 40
+                onAccepted: popup_settings_database_local_root.checkChangesMade()
+            }
+        }
+
+        CompLabelledTextEdit {
+            id: textDatabaseLocalPort
+            isReadonly: false
+            width: parent.width
+
+            label{
+                text: "Port:"
+                font.pixelSize: isDelta ? 28 : 40
+            }
+
+            textEdit{
+                text: "?"
+                inputMethodHints: Qt.ImhDigitsOnly
+                font.pixelSize: isDelta ? 28 : 40
+                onAccepted: popup_settings_database_local_root.checkChangesMade()
+            }
+        }
+
+        CompLabelledTextEdit {
+            id: textDatabaseLocalSchema
+            isReadonly: false
+            width: parent.width
+
+            label{
+                text: "Schema:"
+                font.pixelSize: isDelta ? 28 : 40
+            }
+
+            textEdit{
+                text: "?"
+                font.pixelSize: isDelta ? 28 : 40
+                onAccepted: popup_settings_database_local_root.checkChangesMade()
+            }
+        }
+
+        CompLabelledTextEdit {
+            id: textDatabaseLocalUsername
+            isReadonly: false
+            width: parent.width
+
+            label{
+                text: "Username:"
+                font.pixelSize: isDelta ? 28 : 40
+            }
+
+            textEdit{
+                text: "?"
+                font.pixelSize: isDelta ? 28 : 40
+                onAccepted: popup_settings_database_local_root.checkChangesMade()
+            }
+        }
+
+
+        Row{
+            id: rowControls
+
+            width: parent.width
+
+            //height: 200
+            height: isDelta ? 60 : 200
+            spacing: isDelta ? 20 : 90
+            //spacing: 100
+
+            CompBtnBreadcrumb{
+                id: btnRevert
+                height: isDelta ? 60 : 120
+                width: isDelta ? 120 : 420
+
+                enabled: popup_settings_database_local_root.changesMade
+
+                text: "Revert"
+                font.pixelSize: isDelta ? 25 : 35
+
+                onClicked: popup_settings_database_local_root.revertChanges()
+            }
+
+            CompBtnBreadcrumb{
+                id: btnSave
+                height: isDelta ? 60 : 120
+                width: isDelta ? 120 : 420
+                enabled: popup_settings_database_local_root.changesMade
+
+                text: "Save"
+                font.pixelSize: isDelta ? 25 : 35
+
+                onClicked: popup_settings_database_local_root.saveChanges()
+            }
 
         }
 
     }
+
+
 
     Loader{
         id: loaderPopupConfirm
@@ -325,7 +294,7 @@ Comp__BASE {
         }
 
         active: false
-        anchors.fill: parent
+        anchors.fill: contents
         asynchronous: true
 
         sourceComponent: Popup_Confirm {

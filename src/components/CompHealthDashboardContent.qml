@@ -288,6 +288,7 @@ Comp__BASE {
         color: "#14818087"
         rotation: 0
     }
+
     CompLabel{
 
         id: lblAssetName
