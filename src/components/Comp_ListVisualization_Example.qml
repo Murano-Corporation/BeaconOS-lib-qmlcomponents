@@ -9,37 +9,62 @@ Item {
     GridView{
         anchors.fill: parent
 
-        cellHeight: 200
-        cellWidth: 200
+        cellHeight: 55
+        cellWidth: 360
 
         model: ListModel{
 
             ListElement{
-                name: "Altitude (m)"
-                value: "0.00"
+                name: "DATA"
+                sourceMain: "/usr/share/BeaconOS-lib-images/images/paper.png"
+                sourceSub: "/usr/share/BeaconOS-lib-images/images/plane.png"
+                subPosition: "Top-Right"
+
+
+            }
+
+            ListElement{
+                name: "PLAN"
+                sourceMain: "/usr/share/BeaconOS-lib-images/images/paper.png"
+                sourceSub: "/usr/share/BeaconOS-lib-images/images/plane.png"
+                subPosition: "Top-Right"
+            }
+
+            ListElement{
+                name: "SETUP"
+                sourceMain: "/usr/share/BeaconOS-lib-images/images/paper.png"
+                sourceSub: "/usr/share/BeaconOS-lib-images/images/plane.png"
+                subPosition: "Top-Right"
+            }
+
+            ListElement{
+                name: "CONFIG"
+                sourceMain: "/usr/share/BeaconOS-lib-images/images/paper.png"
+                sourceSub: "/usr/share/BeaconOS-lib-images/images/plane.png"
+                subPosition: "Top-Right"
             }
 
 
             ListElement{
-                name: "Groundspeed (m/s)"
-                value: "1.11"
+                name: "SIMULATION"
+                sourceMain: "/usr/share/BeaconOS-lib-images/images/paper.png"
+                sourceSub: "/usr/share/BeaconOS-lib-images/images/plane.png"
+                subPosition: "Top-Right"
             }
 
             ListElement{
-                        name: "Dist to WP (m)"
-                        value: "2.22"
-                    }
+                name: "HELP"
+                sourceMain: "/usr/share/BeaconOS-lib-images/images/paper.png"
+                sourceSub: "/usr/share/BeaconOS-lib-images/images/plane.png"
+                subPosition: "Top-Right"
+            }
 
         }
 
 
-        delegate: Comp_TEST_Jesse{
-            height: 200
-            width: 200
-
+        delegate: CompMenuIconsJR{
 
             textName: model.name
-            textValue: model.value
         }
 
 

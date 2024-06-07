@@ -1,6 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.15
 
-Item {
+Comp__BASE {
     id: compMenuIconJR_Root
 
     property alias textName: lblText.text
@@ -8,11 +8,15 @@ Item {
     property alias iconPathSub: imgSecondary.source
     property string iconPlacementSub: "Top-Right"
 
+    height: 53
+    width: 55
+
     CompLabel {
         id: lblText
 
         text: "DATA"
         color: "black"
+        fontPixelSize: 14
 
         horizontalAlignment: "AlignHCenter"
         verticalAlignment: "AlignBottom"
@@ -31,6 +35,9 @@ Item {
 
     CompImageIcon {
         id: imgMain
+        height: 32
+        width: 40
+        color: "blue"
 
         anchors {
             top: parent.top
@@ -41,25 +48,19 @@ Item {
             rightMargin: 10
             leftMargin: 10
         }
-
-
-        height: 6
-        width: 8
-
-        color: "blue"
-
     }
 
-    Rectangle{
-        anchors.fill: imgMain
+    // Rectangle{
+    //     anchors.fill: imgMain
 
-        color: "blue"
-    }
+    //     color: "blue"
+    // }
 
     CompImageIcon {
         id: imgSecondary
-
-        source: "file:///usr/share/BeaconOS-lib-images/images/Electric.svg"
+        height: 20
+        width: 26
+        //source: "file:///usr/share/BeaconOS-lib-images/images/Electric.svg"
         color: "green"
         //sourceSize
         //{
@@ -76,19 +77,10 @@ Item {
 
             margins: 20
         }
-
-
-
-
-        height: 60
-        width: 60
-
-
     }
 
-    Rectangle{
-        anchors.fill: imgSecondary
-
-        color: "green"
-    }
+    // Rectangle{
+    //     anchors.fill: imgSecondary
+    //     color: "green"
+    // }
 }
