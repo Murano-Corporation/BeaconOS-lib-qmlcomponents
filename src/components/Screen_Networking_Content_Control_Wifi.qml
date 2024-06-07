@@ -120,7 +120,7 @@ Comp__BASE_Popup{
 
                     imageIcon{
 
-                        image{
+                        image {
                             antialiasing: true
                             smooth: true
                             cache: true
@@ -421,4 +421,5 @@ Comp__BASE_Popup{
             }
         }
     }
+
 }

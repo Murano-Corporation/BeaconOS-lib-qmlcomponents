@@ -1,30 +1,17 @@
 import QtQuick 2.0
 
-Comp__BASE{
+Popup_Settings_View__BASE{
     id: popup_Settings_Camera
 
-    property real controlWidth: 600
+    viewName: "Camera Settings"
 
-    CompLabel{
-        id: lblTitle
-
-        text: "Camera"
-
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignBottom
-
-        height: 40
-        width: parent.width
-        font.pixelSize: isDelta ? 25 : 60
-    }
-
-    CompPopupBG{
-        anchors.fill: parent
-        anchors.topMargin: isDelta ? 0 : 65
+    Column{
+        anchors.fill: contents
+        anchors.margins: 20
 
         CompToggle{
             id: switchCameraFlipped
-            width: popup_Settings_Camera.controlWidth
+            width: parent.width
             text: "Flip View:"
 
             Component.onCompleted: {
@@ -37,4 +24,6 @@ Comp__BASE{
         }
 
     }
+
+
 }

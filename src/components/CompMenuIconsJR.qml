@@ -37,9 +37,9 @@ Item {
             left: parent.left
             right: parent.right
             bottom: lblText.top
-            topMargin: 1
-            rightMargin: 1
-            leftMargin: 1
+            topMargin: 10
+            rightMargin: 10
+            leftMargin: 10
         }
 
 

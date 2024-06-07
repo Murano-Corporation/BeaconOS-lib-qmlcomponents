@@ -211,5 +211,13 @@
         <file>Comp_TEST_Jesse.qml</file>
         <file>Comp_ListVisualization_Example.qml</file>
         <file>CompMenuIconsJR.qml</file>
+        <file>Popup_Settings_Wifi.qml</file>
+        <file>Comp_Settings_Wifi_Auto.qml</file>
+        <file>Popup_Settings_View__BASE.qml</file>
+        <file>Comp_Drone_MissionViewer.qml</file>
+        <file>Comp_UDP_Testing.qml</file>
+        <file>CompConnectionsButton.qml</file>
+        <file>Popup_DeviceInfoViewer.qml</file>
+        <file>Popup_Settings_Networking.qml</file>
     </qresource>
 </RCC>

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 Comp__BASE_Popup {
     id: popupBASERoot
 
+    popupName: "Network Device Info Viewer"
     closePolicy: Popup.NoAutoClose
     modal: true
 

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 
@@ -8,6 +8,7 @@ Comp__BASE_Popup {
     popupName: "Settings"
     property bool isDelta: base.isDelta
     property string selectedNavName
+    property string startingNavName: "System"
 
     property var listOfNavigationOptions: listModelNavigation
     property color colorNavItemIdle:"#80ffffff"
@@ -15,6 +16,19 @@ Comp__BASE_Popup {
     property DrawerSettingsOmega drawerSettingsroot
 
     onDrawerSettingsrootChanged: console.log("drawerSettingsroot changd to " + drawerSettingsroot)
+
+    Component.onCompleted: {
+        tmr_DelayStartNavName.start()
+    }
+
+    Timer{
+        id: tmr_DelayStartNavName
+
+        interval: 10
+        onTriggered: {
+            popup_settings_root.selectedNavName = popup_settings_root.startingNavName
+        }
+    }
 
     ListModel{
         id: listModelNavigation
@@ -28,6 +42,12 @@ Comp__BASE_Popup {
         ListElement{
             name: "Camera"
             icon_path: "file:///usr/share/BeaconOS-lib-images/images/CameraFill.svg"
+            is_enabled: true
+        }
+
+        ListElement{
+            name: "Networking"
+            icon_path: "file:///usr/share/BeaconOS-lib-images/images/Icon_Ethernet.svg"
             is_enabled: true
         }
 
@@ -49,6 +69,12 @@ Comp__BASE_Popup {
             is_enabled: true
         }
 
+        ListElement{
+            name: "WiFi"
+            icon_path: "file:///usr/share/BeaconOS-lib-images/images/WiFi.svg"
+            is_enabled: true
+        }
+
 
     }
 
@@ -58,9 +84,9 @@ Comp__BASE_Popup {
 
     FocusScope{
 
-//        transform: Translate{
-//            y: -InputHandler.yTranslatePopup
-//        }
+        //        transform: Translate{
+        //            y: -InputHandler.yTranslatePopup
+        //        }
 
         Behavior on y{
             NumberAnimation{
@@ -160,137 +186,137 @@ Comp__BASE_Popup {
                     popup_settings_root.selectedNavName = itemName
                 }
                 Component.onCompleted: {
-                   popup_settings_root.drawerSettingsroot = this
-                   delayOpen(200)
+                    popup_settings_root.drawerSettingsroot = this
+                    delayOpen(200)
                     //open()
                 }
             }
         }
-    Loader{
-        id: loaderBtnAssetInfo
-        active: !isDelta
+        Loader{
+            id: loaderBtnAssetInfo
+            active: !isDelta
 
-        CompIconBtn {
+            CompIconBtn {
 
-            id: iconBtnAssetInfo
+                id: iconBtnAssetInfo
 
-            visible: !isDelta
+                visible: !isDelta
 
-            anchors {
-                top: parent.top
-                left: parent.left
-                topMargin: 120
-                leftMargin: 66
-            }
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    topMargin: 120
+                    leftMargin: 66
+                }
 
-            height: 100
-            width: 100
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/ListFill.svg"
-            iconColor: "White"
+                height: 100
+                width: 100
+                iconUrl: "file:///usr/share/BeaconOS-lib-images/images/ListFill.svg"
+                iconColor: "White"
 
-            onClicked: {
-                drawerSettingsroot.open()
-            }
-        }
-    }
-
-    // TODO: Move position bindings from the component to the Loader.
-    //       Check all uses of 'parent' inside the root element of the component.
-    //       Rename all outer uses of the id "areaNavigation" to "loader_areaNavigation.item".
-    //       Rename all outer uses of the id "navDelIcon" to "loader_areaNavigation.item.navDelIcon".
-    //       Rename all outer uses of the id "popup_Settings_Delegate_NavigationItem" to "loader_areaNavigation.item.popup_Settings_Delegate_NavigationItem".
-    //       Rename all outer uses of the id "listViewNavigation" to "loader_areaNavigation.item.listViewNavigation".
-    Component {
-        id: component_areaNavigation
-        Item{
-//            property CompImageIcon navDelIcon: inner_navDelIcon
-//            property Item popup_Settings_Delegate_NavigationItem: inner_popup_Settings_Delegate_NavigationItem
-//            property ListView listViewNavigation: inner_listViewNavigation
-
-            id: areaNavigation
-            ListView{
-                id: inner_listViewNavigation
-                clip: true
-                anchors.fill: parent
-                boundsBehavior: Flickable.StopAtBounds
-
-                model: popup_settings_root.listOfNavigationOptions
-                delegate: Item{
-                    id: inner_popup_Settings_Delegate_NavigationItem
-
-                    property bool isCurrent: inner_listViewNavigation.currentIndex === index
-                    property color colorCurrent: isCurrent ? popup_settings_root.colorNavItemSelected : popup_settings_root.colorNavItemIdle
-
-                    enabled: model.is_enabled
-                    opacity: enabled ? 1.0 : 0.3
-
-                    width: inner_listViewNavigation.width
-                    height: 60
-
-                    CompImageIcon{
-                        id: inner_navDelIcon
-                        anchors{
-                            top: parent.top
-                            left: parent.left
-                            bottom: parent.bottom
-                            margins: 10
-                        }
-
-                        width: height
-
-                        source: model.icon_path
-
-                        color: parent.colorCurrent
-
-                    }
-
-                    CompLabel{
-
-                        anchors{
-                            left: inner_navDelIcon.right
-                            right: parent.right
-                            bottom: parent.bottom
-                            top: parent.top
-
-                            leftMargin: 20
-                            topMargin: 10
-                            bottomMargin: 10
-                            rightMargin: 10
-                        }
-
-                        text: model.name
-                        color: parent.colorCurrent
-
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    MouseArea{
-                        anchors.fill: parent
-
-                        onClicked: {
-                            inner_listViewNavigation.currentIndex = index
-                            popup_settings_root.selectedNavName = model.name
-                        }
-                    }
-
+                onClicked: {
+                    drawerSettingsroot.open()
                 }
             }
         }
-    }
-    Loader {
-        id: loader_areaNavigation
-        sourceComponent: component_areaNavigation
-        active: isDelta
-        width: 400
 
-        anchors{
-            left: areaControls.left
-            top: areaControls.bottom
-            topMargin: 20
-            bottom: bg.bottom
-            bottomMargin: bg.radiusBG
+        // TODO: Move position bindings from the component to the Loader.
+        //       Check all uses of 'parent' inside the root element of the component.
+        //       Rename all outer uses of the id "areaNavigation" to "loader_areaNavigation.item".
+        //       Rename all outer uses of the id "navDelIcon" to "loader_areaNavigation.item.navDelIcon".
+        //       Rename all outer uses of the id "popup_Settings_Delegate_NavigationItem" to "loader_areaNavigation.item.popup_Settings_Delegate_NavigationItem".
+        //       Rename all outer uses of the id "listViewNavigation" to "loader_areaNavigation.item.listViewNavigation".
+        Component {
+            id: component_areaNavigation
+            Item{
+                //            property CompImageIcon navDelIcon: inner_navDelIcon
+                //            property Item popup_Settings_Delegate_NavigationItem: inner_popup_Settings_Delegate_NavigationItem
+                //            property ListView listViewNavigation: inner_listViewNavigation
+
+                id: areaNavigation
+                ListView{
+                    id: inner_listViewNavigation
+                    clip: true
+                    anchors.fill: parent
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    model: popup_settings_root.listOfNavigationOptions
+                    delegate: Item{
+                        id: inner_popup_Settings_Delegate_NavigationItem
+
+                        property bool isCurrent: popup_settings_root.selectedNavName === model.name
+                        property color colorCurrent: isCurrent ? popup_settings_root.colorNavItemSelected : popup_settings_root.colorNavItemIdle
+
+                        enabled: model.is_enabled
+                        opacity: enabled ? 1.0 : 0.3
+
+                        width: inner_listViewNavigation.width
+                        height: 60
+
+                        CompImageIcon{
+                            id: inner_navDelIcon
+                            anchors{
+                                top: parent.top
+                                left: parent.left
+                                bottom: parent.bottom
+                                margins: 10
+                            }
+
+                            width: height
+
+                            source: model.icon_path
+
+                            color: parent.colorCurrent
+
+                        }
+
+                        CompLabel{
+
+                            anchors{
+                                left: inner_navDelIcon.right
+                                right: parent.right
+                                bottom: parent.bottom
+                                top: parent.top
+
+                                leftMargin: 20
+                                topMargin: 10
+                                bottomMargin: 10
+                                rightMargin: 10
+                            }
+
+                            text: model.name
+                            color: parent.colorCurrent
+
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+
+                            onClicked: {
+                                inner_listViewNavigation.currentIndex = index
+                                popup_settings_root.selectedNavName = model.name
+                            }
+                        }
+
+                    }
+                }
+            }
         }
-    }
+        Loader {
+            id: loader_areaNavigation
+            sourceComponent: component_areaNavigation
+            active: isDelta
+            width: 400
+
+            anchors{
+                left: areaControls.left
+                top: areaControls.bottom
+                topMargin: 20
+                bottom: bg.bottom
+                bottomMargin: bg.radiusBG
+            }
+        }
 
 
         Item{
@@ -309,6 +335,24 @@ Comp__BASE_Popup {
 
             width: isDelta ? searchField.width : parent.width
             x: isDelta ? (bg.mapFromItem(areaControls, searchField.x, searchField.y).x + bg.x) : (bg.mapFromItem(parent, parent.x, parent.y).x + bg.x)
+        }
+
+        Loader{
+            id: loaderWifiSettings
+
+            anchors.fill: areaContents
+
+            active: popup_settings_root.selectedNavName === "WiFi"
+            asynchronous:  true
+            sourceComponent: Popup_Settings_Wifi {
+                id: popup_Settings_Wifi
+                height: parent.height
+                width: parent.width
+                controlWidth: isDelta ? searchField.width : parent.width * 0.8
+                Component.onCompleted: {
+                    open()
+                }
+            }
         }
 
         Loader{
@@ -368,9 +412,9 @@ Comp__BASE_Popup {
             sourceComponent: Popup_Settings_Applications {
                 id: popup_settings_applications
 
-//                listItemHeight:120
-//                labeltitle.font.pixelSize: 60
-//                labelItemSize: 50
+                //                listItemHeight:120
+                //                labeltitle.font.pixelSize: 60
+                //                labelItemSize: 50
 
                 width: parent.width
                 height : parent.height
@@ -388,6 +432,18 @@ Comp__BASE_Popup {
 
                 controlWidth: isDelta ? searchField.width : 800
 
+            }
+        }
+
+        Loader{
+            id: loaderNetworkingSettings
+
+            anchors.fill: areaContents
+
+            active: popup_settings_root.selectedNavName === "Networking"
+            asynchronous: true
+            sourceComponent: Popup_Settings_Networking{
+                controlWidth: isDelta ? searchField.width : 800
             }
         }
 

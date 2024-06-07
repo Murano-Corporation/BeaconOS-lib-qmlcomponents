@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtMultimedia 5.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtMultimedia 5.15
 import Qt.labs.platform 1.1
 import CONSTANTS 1.0
 
@@ -11,6 +11,15 @@ Screen__BASE {
         fill: parent
     }
 
+    property string mode_current: mode_video
+    readonly property string mode_image: "Image"
+    readonly property string mode_video: "Video"
+
+    property string videoCaptureState: "Starting"
+    readonly property string videoCaptureState_ChangingMode_Video: "Change Mode: Video"
+    readonly property string videoCaptureState_Record: "Record"
+    readonly property string videoCaptureState_Done: "Done"
+    property bool isVideoCapturing: false
     property bool dev_mode: Settings.cameraDevModeEnabled
     property bool isDevModeCamSwitchVisible: Settings.cameraDevModeCamSwitchVisible
     property bool isCameraAvailable: availableCameras.length > 0
@@ -101,45 +110,38 @@ Screen__BASE {
 
     }
 
-    Rectangle{
-        id: rectBg
 
-        anchors{
-            fill: parent
+    function startCapture(){
+
+        if( mode_current === mode_image )
+        {
+            startImgCapture()
+        } else if (mode_current === mode_video && !isVideoCapturing) {
+            isVideoCapturing = true
+
+            startVideoCapture()
+        } else if ( mode_current === mode_video && isVideoCapturing ) {
+
+            console.log("[Camera Screen] - Stopping record...")
+
+            cameraMain.videoRecorder.stop()
+            isVideoCapturing = false
         }
-
-        radius: 17
-
-        color: "#1A2432"
     }
 
-    Component.onCompleted: {
-        //console.log("Found cameras: " + QtMultimedia.availableCameras.length)
+    function startVideoCapture() {
 
-        //MqttTopicCmdBOS.slot_TEST_UserCaptdLoop();
+        var file_timestamp = SingletonUtils.getCompactTimestamp_Current()
 
-        CameraController.slot_SetTargetBeaconId(beaconId)
-        screenCameraRoot.state = "capture"
+        //cameraMain.captureMode = Camera.CaptureVideo
+        console.log("[Camera Screen] - Beginning record...")
 
-    }
-
-    Connections{
-        target: CameraController
-
-        function onSignal_ImageProcessingComplete(mapData){
-            //console.log("Image Capture Complete")
-            screenCameraRoot.processedImageData = mapData
-            //console.log("Map Data now: " + mapData)
-
-            screenCameraRoot.imgCaptureComplete()
-        }
-
-        function onSignal_DEVMODE_CopyDevImgToTemp_Complete(){
-            screenCameraRoot.stepImgCapture()
-        }
-
-        function onSignal_ClearAllFromTemp_Complete(){
-            screenCameraRoot.stepImgCapture();
+        if( cameraMain.captureMode !== Camera.CaptureVideo )
+        {
+            videoCaptureState = videoCaptureState_ChangingMode_Video
+            cameraMain.setCaptureMode(Camera.CaptureVideo)
+        } else {
+            cameraMain.videoRecorder.record()
         }
     }
 
@@ -150,7 +152,6 @@ Screen__BASE {
         screenCameraRoot.state = "process"
         showPleaseWaitPopup();
         CameraController.slot_ClearAllFromTemp()
-
     }
 
     function imgCaptureComplete() {
@@ -202,6 +203,49 @@ Screen__BASE {
         MqttTopicCmdBOS.slot_Camera_UserCaptured(screenCameraRoot.beaconId, screenCameraRoot.assetId, captureTarget)
     }
 
+
+    Rectangle{
+        id: rectBg
+
+        anchors{
+            fill: parent
+        }
+
+        radius: 17
+
+        color: "#1A2432"
+    }
+
+    Component.onCompleted: {
+        //console.log("Found cameras: " + QtMultimedia.availableCameras.length)
+
+        //MqttTopicCmdBOS.slot_TEST_UserCaptdLoop();
+
+        CameraController.slot_SetTargetBeaconId(beaconId)
+        screenCameraRoot.state = "capture"
+
+    }
+
+    Connections{
+        target: CameraController
+
+        function onSignal_ImageProcessingComplete(mapData){
+            //console.log("Image Capture Complete")
+            screenCameraRoot.processedImageData = mapData
+            //console.log("Map Data now: " + mapData)
+
+            screenCameraRoot.imgCaptureComplete()
+        }
+
+        function onSignal_DEVMODE_CopyDevImgToTemp_Complete(){
+            screenCameraRoot.stepImgCapture()
+        }
+
+        function onSignal_ClearAllFromTemp_Complete(){
+            screenCameraRoot.stepImgCapture();
+        }
+    }
+
     state: "capture"
 
     states: [
@@ -231,7 +275,6 @@ Screen__BASE {
                 target: btnCaptureRight
                 visible: true
                 enabled: true
-
             }
 
             PropertyChanges{
@@ -313,7 +356,6 @@ Screen__BASE {
         State{
             name: "review"
 
-
             PropertyChanges {
                 target: compCVResults
                 visible: true
@@ -367,8 +409,6 @@ Screen__BASE {
         State{
             name: "audit"
 
-
-
             PropertyChanges {
                 target: compCVResults
                 visible: true
@@ -393,29 +433,35 @@ Screen__BASE {
             PropertyChanges {
                 target: compCVResults
                 visible: true
-
             }
 
             PropertyChanges {
                 target: drawerMiniGallery
                 visible: false
-
             }
 
             PropertyChanges {
                 target: btnAccept
                 visible: true
-
-
             }
 
             PropertyChanges {
                 target: btnDiscard
                 visible: true
-
             }
         }
     ]
+
+    //Timer {
+    //    id: tmCaptDelay_VideoRecord
+
+    //    interval: 33
+    //    repeat: true
+    //    onTriggered: {
+    //        screenCameraRoot.imgsCaptured += 1
+    //        cameraMain.imageCapture.captureToLocation(screenCameraRoot.imgSaveFileName)
+    //    }
+    //}
 
     Timer {
         id: tmrCaptDelay
@@ -429,6 +475,7 @@ Screen__BASE {
 
             } else {
                 cameraMain.imageCapture.captureToLocation(screenCameraRoot.imgSaveFileName)
+
             }
         }
     }
@@ -454,7 +501,7 @@ Screen__BASE {
                 id: cameraAlt
 
                 deviceId: QtMultimedia.availableCameras[1].deviceId
-
+                captureMode: (screenCameraRoot.mode_current === screenCameraRootmode_image ? Camera.CaptureStillImage :  Camera.CaptureVideo)
 
                 imageCapture.onImageCaptured: {
                     //console.log("Image Captured")
@@ -492,7 +539,7 @@ Screen__BASE {
         text: qsTr("Back")
 
         onClicked: {
-           cancelClicked()
+            cancelClicked()
         }
 
     }
@@ -544,6 +591,7 @@ Screen__BASE {
                 //topMargin: 60
             }
 
+
             sourceComponent: VideoOutput{
                 id: videoOut
 
@@ -557,14 +605,61 @@ Screen__BASE {
 
                     deviceId: QtMultimedia.availableCameras[2].deviceId
 
+                    videoRecorder{
+                        outputLocation: "file:///home/murano/camera_test.avi"
+
+                        audioChannels: 0
+                        //audioBitRate: 80000
+                        //audioCodec: "vorbis"
+
+                        //videoCodec: "h264"
+                        resolution: Qt.size(640,480)
+                        mediaContainer: "mp4"
+                        frameRate: 60
+                    }
+
                     imageCapture.onImageSaved: function (reqId, path){
                         //console.log("Main Image saved to: " + path + "for reqID " + reqId);
 
                         if(isCaptureDistanceEnabled)
+                        {
+
+
                             cameraAlt.imageCapture.captureToLocation(screenCameraRoot.imgSaveFileNameDist)
+
+                        }
+
+
+
                         else{
                             screenCameraRoot.stepImgCapture()
                         }
+                    }
+
+                    onCameraStateChanged: {
+                        console.log("Camera state now: " + cameraState)
+                    }
+
+                    onCameraStatusChanged: {
+                        console.log("Camera STATUS now: " + cameraStatus)
+
+                        if( videoCaptureState === videoCaptureState_ChangingMode_Video && cameraStatus === 8)
+                        {
+                            console.log("--- Video Settings:")
+                            console.log("------ Resolution: " + cameraMain.videoRecorder.resolution)
+                            console.log("------ Codec: " + cameraMain.videoRecorder.videoCodec)
+                            console.log("------ Container: " + cameraMain.videoRecorder.mediaContainer)
+                            console.log("--- Audio Settings:")
+                            console.log("------ Channels: " + cameraMain.videoRecorder.audioChannels)
+
+
+                            videoCaptureState = videoCaptureState_Record
+                            cameraMain.videoRecorder.record()
+                        }
+                    }
+
+                    onErrorChanged: {
+                        console.log("Camera error now: " + error)
                     }
 
                     Component.onCompleted:{
@@ -653,17 +748,6 @@ Screen__BASE {
                 }
             }
         }
-
-        //Rectangle{
-        //    id: areaSourceSize
-        //
-        //    anchors.centerIn: imgProcessed
-        //
-        //    height: imgProcessed.sourceSize.height
-        //    width: imgProcessed.sourceSize.width
-        //
-        //    color: "#80ff0000"
-        //}
 
         Item{
             id: areaImgPainted
@@ -1069,20 +1153,100 @@ Screen__BASE {
             }
 
             rightCaptBtnInit = false
-            screenCameraRoot.startImgCapture()
+            screenCameraRoot.startCapture()
         }
 
     }
 
+    Rectangle {
+        id: circleVideoMode
+
+        visible: screenCameraRoot.mode_current === screenCameraRoot.mode_video
+
+        radius: 0.5 * height
+
+        width: height
+        height: 60
+
+        anchors{
+            right: rectMainBg.right
+            bottom: rectMainBg.bottom
+
+            margins: 20
+        }
+
+        color: "transparent"
+
+        border{
+            width: 2
+            color: isVideoCapturing ? "white" : "red"
+        }
+
+        Rectangle{
+
+            visible: isVideoCapturing
+
+            anchors.fill: parent
+            anchors.margins: 8
+
+            radius: parent.radius
+
+            color: "red"
+        }
+    }
+
+    Row {
+        id: rowCaptureModes
+
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: btnCaptureLeft.top
+            bottom: btnCaptureLeft.bottom
+        }
+
+        CompImageIcon {
+            id: imgMode_Image
+
+            height: parent.height
+            width: height
+
+            source: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
+
+            color: screenCameraRoot.mode_current === mode_video ? "#80ffffff" : "#ffffff"
+        }
+
+        Switch {
+            id: switchMode
+
+            height: parent.height
+
+            checked: screenCameraRoot.mode_current === mode_video
+
+            onCheckedChanged: {
+                screenCameraRoot.mode_current = (checked ? mode_video : mode_image)
+            }
+        }
+
+        CompImageIcon {
+            id: imgMode_Video
+
+            height: parent.height
+            width: height
+
+            source: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
+            color: screenCameraRoot.mode_current === mode_video ? "#ffffff" : "#80ffffff"
+        }
+    }
+
     CompBtnCameraCapture{
         id: btnCaptureRight
-        enabled: btnCaptureLeft.enabled
 
+        enabled: btnCaptureLeft.enabled
 
         height: 75
         width: 75
 
-        anchors{
+        anchors {
             right: parent.right
             rightMargin: 30
             bottom: parent.bottom
@@ -1098,7 +1262,7 @@ Screen__BASE {
             }
 
             rightCaptBtnInit = true
-            screenCameraRoot.startImgCapture()
+            screenCameraRoot.startCapture()
         }
 
 

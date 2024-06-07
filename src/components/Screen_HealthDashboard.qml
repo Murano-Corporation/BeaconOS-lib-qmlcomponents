@@ -134,6 +134,7 @@ Screen__BASE {
 
 
     }
+
     DrawerAssetDashboardMenu {
         id: drawerAssetDashboardMenu
         visible: !isDelta

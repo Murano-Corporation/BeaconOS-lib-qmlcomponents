@@ -12,54 +12,67 @@ Comp__BASE{
     property real listItemHeight: isDelta ? 90 : 120
     property real listItemWidth_SSID: 0.60
     property real listItemWidth_Security: 0.2575
-    property real listItemWidth_Bars: 0.0325
+    property real listItemWidth_Bars: 0.12
 
     property var selectedListItem
 
-    property var listOfWifiNetworks: listDev
+    property var listOfWifiNetworks:  TableModelNetworkWifi //listDev
 
-    ListModel{
+    Component.onCompleted: {
+        WifiController.updateWifiNetworkConfigLists(-1)
+    }
+
+    Component.onDestruction:  {
+        WifiController.stopUpdateWifiNetworkConfigLists()
+    }
+
+    ListModel {
         id: listDev
 
-        ListElement{
-            isCurrent: true
-            ssid: "Murano"
+        ListElement {
+            is_in_use: true
+            display: "Murano"
             security: "WPA-3"
-            bars: 4
+            signal_strength: 4
         }
 
-        ListElement{
-            isCurrent: false
-            ssid: "Tatum"
+        ListElement {
+            is_in_use: false
+            display: "Tatum"
             security: "WPA-X"
-            bars: 1
+            signal_strength: 1
         }
 
-        ListElement{
-            isCurrent: false
-            ssid: "Med-Something"
+        ListElement {
+            is_in_use: false
+            display: "Med-Something"
             security: "WPA-2"
-            bars: 2
+            signal_strength: 2
         }
 
-        ListElement{
-            isCurrent: false
-            ssid: "Med-Something"
+        ListElement {
+            is_in_use: false
+            display: "Med-Something"
             security: ""
-            bars: 3
+            signal_strength: 3
         }
     }
 
-
-    Column{
+    Column {
         id: column
 
         spacing: 26
 
-        anchors.fill: parent
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            bottom: rowActions.top
+        }
+
         anchors.bottomMargin: isDelta ? 0 : 20
 
-        Item{
+        Item {
             id: groupList
 
             width: parent.width
@@ -71,7 +84,7 @@ Comp__BASE{
                 height: 40
             }
 
-            Rectangle{
+            Rectangle {
                 id: rectBG_List
 
                 height: groupList.height - rowHeaders.height
@@ -81,7 +94,7 @@ Comp__BASE{
                 color: "#80000000"
             }
 
-            ListView{
+            ListView {
                 id: listOfWifiNetworks
 
                 clip: true
@@ -93,7 +106,7 @@ Comp__BASE{
 
                 model: screen_Networking_Content_Control_Wifi_Auto.listOfWifiNetworks
 
-                delegate: Item{
+                delegate: Item {
                     id: delegateWiFiListItem
 
                     signal clicked(string ssid)
@@ -106,25 +119,25 @@ Comp__BASE{
                     height: screen_Networking_Content_Control_Wifi_Auto.listItemHeight
                     width: listOfWifiNetworks.width
 
-                    Row{
+                    Row {
                         id: rowDelegateWiFiListItem
 
                         anchors.fill: parent
 
-                        CompLabel{
+                        CompLabel {
                             id: lblSSID
 
-                            text: model.ssid
+                            text: model.display
                             width: parent.width * (listItemWidth_SSID)
                             height: parent.height
 
                             verticalAlignment: Text.AlignVCenter
 
-                            color: model.isCurrent ? "#00dd00" : "White"
+                            color: model.is_in_use ? "#00dd00" : "White"
                             font.pixelSize: isDelta ? 25 : 40
                         }
 
-                        CompLabel{
+                        CompLabel {
                             id: lblSecurity
 
                             text: model.security
@@ -137,22 +150,22 @@ Comp__BASE{
                             font.pixelSize: isDelta ? 25 : 40
                         }
 
-                        Item{
+                        Item {
                             id: groupBars
 
-                            property int bars: model.bars
+                            property int bars: model.signal_strength
                             property color colorWeak: "#80000000"
                             property color colorStrong: model.isCurrent ? "#00dd00" : "White"
                             property real barWidth: width * 0.25
 
                             height: parent.height * 0.50
-                            width: parent.width * (listItemWidth_Bars)
+                            width: parent.width * ( listItemWidth_Bars )
                             anchors.verticalCenter: parent.verticalCenter
 
-                            Row{
+                            Row {
                                 anchors.fill: parent
 
-                                Rectangle{
+                                Rectangle {
                                     anchors.bottom: parent.bottom
 
                                     height: parent.height * 0.25
@@ -160,7 +173,8 @@ Comp__BASE{
 
                                     color: (groupBars.bars >= 1 ? groupBars.colorStrong : groupBars.colorWeak)
                                 }
-                                Rectangle{
+
+                                Rectangle {
                                     anchors.bottom: parent.bottom
 
                                     height: parent.height * 0.50
@@ -168,7 +182,8 @@ Comp__BASE{
 
                                     color: (groupBars.bars >= 2 ? groupBars.colorStrong : groupBars.colorWeak)
                                 }
-                                Rectangle{
+
+                                Rectangle {
                                     anchors.bottom: parent.bottom
 
                                     height: parent.height * 0.75
@@ -176,7 +191,8 @@ Comp__BASE{
 
                                     color: (groupBars.bars >= 3 ? groupBars.colorStrong : groupBars.colorWeak)
                                 }
-                                Rectangle{
+
+                                Rectangle {
                                     anchors.bottom: parent.bottom
 
                                     height: parent.height * 1.0
@@ -191,10 +207,10 @@ Comp__BASE{
 
                     }
 
-                    MouseArea{
+                    MouseArea {
                         anchors.fill: parent
 
-                        onClicked: delegateWiFiListItem.clicked(model.ssid)
+                        onClicked: delegateWiFiListItem.clicked(model.display)
                     }
                 }
 
@@ -223,41 +239,41 @@ Comp__BASE{
             }
         }
 
-        Row{
-            id: rowActions
-
-            height: screen_Networking_Content_Control_Wifi_Auto.btnHeight_Action
-
-            spacing: 0.5 * height
-
-            anchors.right: parent.right
-
-
-            CompRoundButton{
-                height: parent.height
-
-                text: "Connect"
-
-                enabled: (screen_Networking_Content_Control_Wifi_Auto.selectedListItem !== undefined && !screen_Networking_Content_Control_Wifi_Auto.selectedListItem.isCurrent )
-
-                width: screen_Networking_Content_Control_Wifi_Auto.btnWidth_Action
-
-                font.pixelSize: 40
-            }
-
-            CompRoundButton{
-                height: parent.height
-
-                text: "Disconnect"
-                enabled: (screen_Networking_Content_Control_Wifi_Auto.selectedListItem !== undefined && screen_Networking_Content_Control_Wifi_Auto.selectedListItem.isCurrent )
-
-                width: screen_Networking_Content_Control_Wifi_Auto.btnWidth_Action
-
-                font.pixelSize: 40
-            }
-        }
 
     }
 
+
+    Row {
+        id: rowActions
+
+        height: screen_Networking_Content_Control_Wifi_Auto.btnHeight_Action
+        spacing: 0.5 * height
+
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            right: parent.right
+        }
+
+        CompRoundButton {
+            height: parent.height
+            text: "Connect"
+            enabled: (screen_Networking_Content_Control_Wifi_Auto.selectedListItem !== undefined && !screen_Networking_Content_Control_Wifi_Auto.selectedListItem.is_in_use )
+
+            width: ((parent.width) * 0.5) - (rowActions.spacing * 0.5)
+
+            font.pixelSize: 40
+        }
+
+        CompRoundButton {
+            height: parent.height
+            text: "Disconnect"
+            enabled: (screen_Networking_Content_Control_Wifi_Auto.selectedListItem !== undefined && screen_Networking_Content_Control_Wifi_Auto.selectedListItem.is_in_use )
+
+            width: ((parent.width) * 0.5) - (rowActions.spacing * 0.5)
+
+            font.pixelSize: 40
+        }
+    }
 
 }

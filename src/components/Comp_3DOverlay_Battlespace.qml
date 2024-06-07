@@ -3,8 +3,13 @@ import QtQuick3D 1.15
 import QtQuick.Controls 2.15
 import QtPositioning 5.12
 
+//import "file:///home/murano/.nerf_models/Cheburashka.qml" as TestMesh
+
 Item {
     id: comp_3DOverlay_Battlespace
+
+    height: 1000
+    width: 1000
 
     property var mapCoords
     property point viewPoint
@@ -38,8 +43,8 @@ Item {
     onViewPointChanged: {
         console.log("3D Overlay view point now: " + viewPoint)
 
-        camera_Perspective_1.z = comp_3DOverlay_Battlespace.viewPoint.x
-        camera_Perspective_1.x = comp_3DOverlay_Battlespace.viewPoint.y
+        //camera_Perspective_1.z = comp_3DOverlay_Battlespace.viewPoint.x
+        //camera_Perspective_1.x = comp_3DOverlay_Battlespace.viewPoint.y
     }
 
     function locationToPoint(c)
@@ -154,76 +159,91 @@ Item {
         }
 
 
-        /// MODELS
-        //Model {
-        //    id: modelWall1
-        //    position: Qt.vector3d(0,0,500);
-        //    source: "#Cube"
-        //    scale: Qt.vector3d(1,1,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "red"
-        //        }]
-        //}
-
-        //Model {
-        //    id: modelWall2
-        //    position: Qt.vector3d(0,0,-500);
-        //    source: "#Cube"
-        //    scale: Qt.vector3d(1,1,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "blue"
-        //        }]
-        //}
-
-        //Model {
-        //    id: modelWall3
-        //    position: Qt.vector3d(-500,0,0);
-        //    source: "#Cube"
-        //    scale: Qt.vector3d(1,1,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "green"
-        //        }]
-        //}
-
-        //Model {
-        //    id: modelWall4
-        //    position: Qt.vector3d(500,0,0);
-        //    source: "#Cube"
-        //    scale: Qt.vector3d(1,1,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "yellow"
-        //        }]
-        //}
-
-        //Model {
-        //    id: modelWall5
-        //    position: Qt.vector3d(0,500,0);
-        //    source: "#Cube"
-        //    scale: Qt.vector3d(1,1,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "black"
-        //        }]
-        //}
-
-        //Model {
-        //    id: modelWall6
-        //    position: Qt.vector3d(0,-500,0);
-        //    source: "#Cube"
-        //    scale: Qt.vector3d(1,1,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "purple"
-        //        }]
-        //}
-
+        // MODELS
         Model {
-            id: modelCylinder
-            position: Qt.vector3d(-30773.2,-10,3.96163e+06)
-            source: "#Cylinder"
-            scale: Qt.vector3d(0.1,0.2,0.1)
+            id: modelWall1
+            position: Qt.vector3d(0,0,500);
+            source: "#Cube"
+            scale: Qt.vector3d(1,1,1)
             materials: [DefaultMaterial {
                     diffuseColor: "red"
                 }]
         }
+
+        Model {
+            id: modelWall2
+            position: Qt.vector3d(0,0,-500);
+            source: "#Cube"
+            scale: Qt.vector3d(1,1,1)
+            materials: [DefaultMaterial {
+                    diffuseColor: "blue"
+                }]
+        }
+
+        Model {
+            id: modelWall3
+            position: Qt.vector3d(-500,0,0);
+            source: "#Cube"
+            scale: Qt.vector3d(1,1,1)
+            materials: [DefaultMaterial {
+                    diffuseColor: "green"
+                }]
+        }
+
+        Model {
+            id: modelWall4
+            position: Qt.vector3d(500,0,0);
+            source: "#Cube"
+            scale: Qt.vector3d(1,1,1)
+            materials: [DefaultMaterial {
+                    diffuseColor: "yellow"
+                }]
+        }
+
+        Model {
+            id: modelWall5
+            position: Qt.vector3d(0,500,0);
+            source: "#Cube"
+            scale: Qt.vector3d(1,1,1)
+            materials: [DefaultMaterial {
+                    diffuseColor: "black"
+                }]
+        }
+
+        Model {
+            id: modelWall6
+            position: Qt.vector3d(0,-500,0);
+            source: "#Cube"
+            scale: Qt.vector3d(1,1,1)
+            materials: [DefaultMaterial {
+                    diffuseColor: "purple"
+                }]
+        }
+
+
+        Loader{
+            id: loaderMesh
+
+            active: true
+
+            source: "file:///home/murano/.nerf_models/Box.qml"
+
+            onLoaded: {
+                loaderMesh.sourceComponent.position = Qt.vector3d(0,-400,0)
+                loaderMesh.sourceComponent.scale = Qt.vector3d(1,1,1)
+            }
+        }
+
+
+        //Model {
+        //    id: modelCylinder
+        //    position: Qt.vector3d(-30773.2,-10,3.96163e+06)
+        //    source: "file:///home/murano/.nerf_models/meshes/defaultobject_mesh.mesh"
+        //    scale: Qt.vector3d(0.1,0.2,0.1)
+        //    materials: [DefaultMaterial {
+        //            diffuseColor: "red"
+        //        }]
+        //}
 
         //Model {
         //    id: modelCylinder2
@@ -238,9 +258,9 @@ Item {
         /// CAMERA
         PerspectiveCamera{
             id: camera_Perspective_1
-            x: comp_3DOverlay_Battlespace.viewPoint.x
+            x: 0
             y: 600
-            z: comp_3DOverlay_Battlespace.viewPoint.y
+            z: -100
 
             //x: 0
             //y: 0

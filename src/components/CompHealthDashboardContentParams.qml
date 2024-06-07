@@ -239,8 +239,6 @@ Comp__BASE {
 
             boundsBehavior: Flickable.StopAtBounds
 
-
-
             delegate: CompHealthDashboardTableItemDel_Params {
                 myModel: model
                 tableModelRef: tableView.model
