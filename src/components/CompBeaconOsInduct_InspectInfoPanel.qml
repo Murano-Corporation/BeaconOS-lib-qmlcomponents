@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Comp__BASE{
     id: compBeaconOsInduct_InspectInfoPanel
@@ -49,7 +50,7 @@ Comp__BASE{
 
     Column{
         id: columnContents
-         property color colorText: "#80ffffff"
+        property color colorText: "#80ffffff"
         anchors{
             top: groupTopControls.bottom
             topMargin: 70
@@ -95,13 +96,21 @@ Comp__BASE{
                 font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeHeaders
             }
 
-            CompLabel{
+            TextField{
                 id: lblWorkUnitCode_Value
 
+                readOnly: true
+                selectByMouse: true
+                background: Item{}
                 text: "11B10, 11B52, 11B1S, 11B24, 11B35, 11B3F"
                 font.weight: Font.Light
                 color: columnContents.colorText
                 font.pixelSize: compBeaconOsInduct_InspectInfoPanel.fontSizeContent
+
+                onPressAndHold: {
+                    console.log("Selected text is: " + lblWorkUnitCode_Value.selectedText)
+                }
+
             }
         }
 

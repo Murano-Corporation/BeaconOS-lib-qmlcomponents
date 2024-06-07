@@ -3,7 +3,7 @@ import QtQuick 2.15
 Screen__BASE {
 id: screen_Raptor_Root
 
-
+screenName: "Raptor"
 
 Item{
     id: areaContents

@@ -5,6 +5,8 @@ import CONSTANTS 1.0
 Screen__BASE {
     anchors.fill: parent
 
+    screenName: "Welcome"
+
     property bool isReadyToProceed: false
     property bool startProcessComplete: false
     property int iStartupStep: -1;

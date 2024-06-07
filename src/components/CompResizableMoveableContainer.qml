@@ -4,7 +4,6 @@ Comp__BASE {
     id: compResizableMoveableContainerRoot
 
     property bool showDevLabels: false
-
     property real dragAreaHeight: 40
     property real dragAreaWidth: 40
 
@@ -17,12 +16,20 @@ Comp__BASE {
     property real minimumWidth: 400
     property real minimumHeight: 300
 
+    //property real maximumWidth: 1080
+    //property real maximumHeight: 1920
+
     property real moveAreaRightOffset: 40
 
     property int xBeforeStash
     property int yBeforeStash
 
     Component.onCompleted:{
+        updateResizeRectPos()
+    }
+
+    function updateResizeRectPos()
+    {
         rectBG_Resize.ignoreChanges = true
 
         rectBG_Resize.x = mouseAreaResize.x
@@ -83,12 +90,25 @@ Comp__BASE {
     }
 
 
+    MouseArea{
+        id: mouseAreaNoClickthru
 
+        anchors{
+            fill: parent
+        }
+    }
 
     MouseArea{
         id: mouseAreaMove
 
         property bool isDragging: false
+
+        // Rectangle {
+        //     id: testMouseAreaMove
+        //
+        //     anchors.fill: parent
+        //     color: "yellow"
+        // }
 
         anchors{
             top: parent.top
@@ -99,8 +119,7 @@ Comp__BASE {
 
         height: compResizableMoveableContainerRoot.dragAreaHeight
 
-
-        drag{
+        drag {
             target: parent
             axis: Drag.XAndYAxis
             minimumX: compResizableMoveableContainerRoot.minX
@@ -121,6 +140,9 @@ Comp__BASE {
 
         }
     }
+
+
+
 
     MouseArea{
         id: mouseAreaResize

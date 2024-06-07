@@ -3,6 +3,7 @@ import QtQuick 2.0
 Comp__BASE {
     id: screenBaseRoot
 
+    required property string screenName
     property bool bCanLeaveScreen: true
     property bool bAttemptingToLeaveScreen: false;
     property bool bOverRideOverLaySettings: true
@@ -13,6 +14,7 @@ Comp__BASE {
 
         function onSignal_AttemptingToLeaveScreen(){
 
+            console.log("Attemtping to leave the screen '" + screenName + "'")
             if(bCanLeaveScreen === true)
             {
                 screenBaseRoot.sendLeaveResponse_OK();
@@ -23,10 +25,12 @@ Comp__BASE {
     }
 
     function sendLeaveResponse_OK(){
+        console.log("Attemtping to leave the screen '" + screenName + "' OK")
         SingletonScreenManager.screenLeaveResponse_OK();
     }
 
     function sendLeaveResponse_NotOK(){
+        console.log("Attemtping to leave the screen '" + screenName + "' NOT OK")
         SingletonScreenManager.screenLeaveResponse_NotOK();
     }
 

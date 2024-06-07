@@ -7,6 +7,8 @@ Screen__BASE {
     id: screenHealthDashboardRoot
     anchors.fill: parent
 
+    screenName: "Health Dashboard"
+
     property string beaconID: AssetInfo.beaconID
     property string assetName: AssetInfo.assetName
     property string serial: AssetInfo.serialNumber

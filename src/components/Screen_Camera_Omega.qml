@@ -13,6 +13,7 @@ Screen__BASE {
         fill: parent
     }
 
+    screenName: "Camera: Omega"
     property bool dev_mode: Settings.cameraDevModeEnabled
     property bool isDevModeCamSwitchVisible: Settings.cameraDevModeCamSwitchVisible
     property bool isCameraAvailable: availableCameras.length > 0

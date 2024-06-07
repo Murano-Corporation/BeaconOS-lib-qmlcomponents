@@ -7,6 +7,8 @@ import CONSTANTS 1.0
 Screen__BASE {
     id: screenCameraRoot
 
+    screenName: "Camera: Delta"
+
     anchors{
         fill: parent
     }

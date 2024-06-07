@@ -15,29 +15,23 @@ Popup {
     property real minimumWidth: 300
     property real minimumHeight: 450
 
-    //property real savedX: UtilityCalculator.savedX
-    //property real savedY: UtilityCalculator.savedY
-
-    //property real maxiumumWidth: 900
-    //property real maximumHeight: 1350
-
-    opacity: 0.8
     modal: false
     closePolicy: Popup.NoAutoClose
-    background: Item {}
+    background: Item{}
 
     CompResizableMoveableContainer {
         id: containerRoot
-
         //x: popup.savedX
         //y: popup.savedY
         minX: 0
         minY: 0
-        maxX: screenWidth - containerRoot.width - 25 //not dynamic
-        maxY: screenHeight - containerRoot.height - 25 // not dynamic
+        maxX: screenWidth - containerRoot.width - 25 //not dynamic //for screen borders
+        maxY: screenHeight - containerRoot.height - 25 // not dynamic //for screen borders
 
-        height: popup.minimumHeight
-        width: popup.minimumWidth
+        opacity: 0.6
+
+        //height: popup.minimumHeight
+        //width: popup.minimumWidth
 
         minimumWidth: popup.minimumWidth
         minimumHeight: popup.minimumHeight
@@ -50,28 +44,62 @@ Popup {
             anchors.fill: parent
         }
 
-        Component.onDestruction: {
-            console.log("destructed!")
-            console.log("Old coords: " + popup.savedX + ", " + popup.savedY + " x, y " + x + ", " + y)
-            popup.savedX = x
-            popup.savedY = y
-            console.log("New coords: " + popup.savedX + ", " + popup.savedY + " x, y " + x + ", " + y)
-        }
+
 
         Component.onCompleted: {
-            console.log("completed!")
-            console.log("Old coords: " + popup.savedX + ", " + popup.savedY + " x, y " + x + ", " + y)
-            x = popup.savedX
-            y = popup.savedY
-            console.log("New coords: " + popup.savedX + ", " + popup.savedY + " x, y " + x + ", " + y)
+
+            var rect = UtilityCalculator.rPopupRect
+
+            containerRoot.x = rect.x
+            containerRoot.y = rect.y
+            containerRoot.width = rect.width
+            containerRoot.height = rect.height
+
+            updateResizeRectPos()
         }
+
+        onXChanged: {
+            var rect = UtilityCalculator.rPopupRect
+
+            rect.x = containerRoot.x
+
+            UtilityCalculator.rPopupRect = rect
+        }
+
+        onYChanged: {
+            var rect = UtilityCalculator.rPopupRect
+
+            rect.y = containerRoot.y
+
+            UtilityCalculator.rPopupRect = rect
+        }
+
+        onWidthChanged: {
+            var rect = UtilityCalculator.rPopupRect
+
+            rect.width = containerRoot.width
+
+            UtilityCalculator.rPopupRect = rect
+        }
+
+        onHeightChanged: {
+            var rect = UtilityCalculator.rPopupRect
+
+            rect.height = containerRoot.height
+
+            UtilityCalculator.rPopupRect = rect
+        }
+
 
 
         Screen_Calculator{
             bCanLeaveScreen: false
             anchors.fill: parent
-            anchors.margins: 20
-            opacity: 0.8
+            anchors.topMargin: 40
+            anchors.bottomMargin: 20
+            anchors.leftMargin: 20
+            anchors.rightMargin: 20
+            //anchors.margins: 20
         }
     }
 }

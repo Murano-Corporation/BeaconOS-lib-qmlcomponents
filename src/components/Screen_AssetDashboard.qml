@@ -4,6 +4,8 @@ Screen__BASE {
     id: screenAssetDashboardRoot
     anchors.fill: parent
 
+    screenName: "Asset Dashboard"
+
     property string selectedAssetType: ""
     property string selectedViewMode: "Grid"
     property string searchString: "*"

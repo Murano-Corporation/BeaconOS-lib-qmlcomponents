@@ -3,7 +3,9 @@ import QtQuick 2.12
 Screen__BASE {
     id: screenHomeRoot
     anchors.fill: parent
-    
+
+    screenName: "Home"
+
     Component.onCompleted:{
         TableModelApplications.slot_RefreshListOfApplications()
         MqttTopic_notifyOS.slot_Subscribe()
@@ -75,7 +77,7 @@ Screen__BASE {
 //        //        bottom: textDEV2.top
 //        //        bottomMargin: 200
 //        //    }
-//        //}
+//        //}Asset
 
 //        //TextEdit{
 //        //    id: textDEV2

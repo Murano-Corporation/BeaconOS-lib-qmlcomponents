@@ -30,8 +30,6 @@ Popup{
 
     background: Item{}
 
-
-
     FocusScope{
         anchors.fill: parent
 

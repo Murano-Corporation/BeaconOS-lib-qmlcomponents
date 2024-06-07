@@ -1,66 +1,58 @@
 import QtQuick 2.15
-
-import QtQuick.Controls 2.15
+//import QtQuick.Controls 2.15
 
 Comp__BASE {
-    id: tlMain
-    height: 32
-    width: 58
-    Column {
-        CompButton{
-            id: tlLoadLog
-            height: 38
-            width: 92
-            text: "Load Log"
-            font.pixelSize: 16
+    id: root
 
+    height: 235
+    width: 335
 
+    property CompTelemetryLogsButton currentButton: btnNull //???
 
-        }
-        CompButton {
-            id: tlPlay
-            height: 33
-            width: 92
+    property color fontColor1: "black"
+    property color bgColor: "#000068"
+    property color boxColor1: "#065465"
 
-            font{
-                font.pixelSize: 16
-                text: "Play"
-            }
-        }
-        CompButton {
-            id: tlTkg
-            height: 55
-            width: 92
+    property int gridCellHeight: 80
+    property int gridCellWidth: 80
+    property int buttonHeight: 70
+    property int buttonWidth: 70
+    property int pixelSize: 18
 
-            font{
-                font.pixelSize: 16
-                text: "Tlog > Kml or Graph"
-                Text.WordWrap: true
-            }
-        }
+    CompTelemetryLogsButton { //???
+        id: btnNull
+        visible: false
+    }
+
+    Rectangle {
+        anchors.fill: root
+        color: root.bgColor
+        radius: 10
     }
 
     GridView {
-        id: tlSpeedNums
-        cellHeight: 77
-        cellWidth: 132
+        id: grid
 
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
+        height: root.gridCellHeight * 2
+        width: root.gridCellWidth * 4
+        cellHeight: root.gridCellHeight
+        cellWidth: root.gridCellWidth
+        anchors.centerIn: root
+        boundsBehavior: Flickable.StopAtBounds
 
         model: ListModel {
 
-            ListElement {
-                speed: "0.1x"
-            }
             ListElement {
                 speed: "0.25x"
             }
             ListElement {
                 speed: "0.5x"
+            }
+            ListElement {
+                speed: "0.5x"
+            }
+            ListElement {
+                speed: "0.75x"
             }
             ListElement {
                 speed: "1x"
@@ -69,22 +61,29 @@ Comp__BASE {
                 speed: "2x"
             }
             ListElement {
-                speed: "5x"
-            }
-            ListElement {
-                speed: "10x"
+                speed: "3x"
             }
         }
 
-        delegate: CompTelemetryLogsSpeedJR{
-            height: 77
-            width: 132
+        delegate: Item{ //???
+            id: delegate
 
-            textSpeed: model.speed
+            height: root.gridCellHeight
+            width: root.gridCellWidth
+
+            CompTelemetryLogsButton{
+
+                height: root.buttonHeight
+                width: root.buttonWidth
+                anchors.centerIn: parent
+                isCurrent: root.currentButton === this //???
+                textSpeed: model.speed
+
+                onClicked: {
+                    console.log("Clicked " + index)
+                    root.currentButton = this //???
+                }
+            }
         }
-
     }
-
-    //speed slider and percentage slider????
-    //NOT COMPLETED REFER TO FIGMA
 }

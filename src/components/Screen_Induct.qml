@@ -5,6 +5,8 @@ import QtGraphicalEffects 1.12
 Screen__BASE {
     id: screenRepairRoot
 
+    screenName: "Induct"
+
     property color colorNavButton1: "#8BBEC4"
     property var listStatesBreadcrumb: []
 

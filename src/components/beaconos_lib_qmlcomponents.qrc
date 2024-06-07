@@ -231,18 +231,24 @@
         <file>CompDataFlashLogsJR.qml.autosave</file>
         <file>CompPreFlightJR.qml.autosave</file>
         <file>CompPreFlightObjectJR.qml.autosave</file>
+        <file>CompServo.qml</file>
+        <file>CompRelay.qml</file>
+        <file>CompAuxFunction.qml</file>
+        <file>CompTelemetryLogsButton.qml</file>
+        <file>Screen_Jesse_Sandbox.qml</file>
+        <file>Comp_Drone_Gimble.qml</file>
+        <file>CompTelemetryLogs.qml</file>
+        <file>Screen_Raptor_Drone.qml</file>
+        <file>Comp_Drone_Switch.qml</file>
+        <file>Comp_Drone_Dial.qml</file>
+        <file>Comp_Drone_Settings.qml</file>
+        <file>Screen_Calculator.qml</file>
+        <file>Popup_Calculator.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal">
-        <file>CompPreFlightJR.qml</file>
-        <file>CompPreFlightJR.qml.autosave</file>
-        <file>CompPreFlightObjectJR.qml</file>
-        <file>CompPreFlightObjectJR.qml.autosave</file>
-        <file>CompRelayJR.qml</file>
-        <file>CompServoJR.qml</file>
-        <file>CompTelemetryLogsJR.qml</file>
-        <file>CompTelemetryLogsSpeedJR.qml</file>
+        <file>CompTelemetryLogs.qml</file>
         <file>Comp_TEST_Jesse.qml</file>
         <file>CompTestJesses.qml</file>
-        <file>CompAuxFunctionJR.qml</file>
+        <file>Screen_Jesse_Sandbox.qml</file>
     </qresource>
 </RCC>

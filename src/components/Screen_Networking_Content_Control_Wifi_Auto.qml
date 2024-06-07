@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 Comp__BASE{
     id: screen_Networking_Content_Control_Wifi_Auto
 
+
     property alias spacing: column.spacing
     property real btnHeight: 60
     property real btnWidth_Action: 300

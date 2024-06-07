@@ -4,6 +4,7 @@ import QtQuick.Controls 2.12
 Screen__BASE {
     id: screenLoginRoot
 
+    screenName: "Login"
     anchors.centerIn: parent
 
     signal passcodeEntered(string passcode)

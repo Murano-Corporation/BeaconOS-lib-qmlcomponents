@@ -17,6 +17,8 @@ Screen__BASE {
     property string answerString: UtilityCalculator.sAnswerString
     property var currentMenu: UtilityCalculator.sCurrentMenu
 
+
+
     Column {
         id: calculatorScreen
 
@@ -35,33 +37,92 @@ Screen__BASE {
             color: outputColor
             radius: 10
 
-            CompLabel{
+            TextInput{
                 id: inputText
 
                 text: inputString
                 color: "white"
                 font.pixelSize: Math.min(root.height, root.width) * 0.07
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignTop
+                maximumLength: 30 // Set maximum length of text input to one line
+                wrapMode: TextInput.NoWrap
+                selectByMouse: true
+                cursorVisible: true
+
+                onTextChanged:{
+                    UtilityCalculator.sInputString = text
+                }
+
+                cursorDelegate: Rectangle {
+                    id: cursorDelegate
+                    color: "white"
+                    width: 2
+                    height: 30
+
+                    Timer {
+                        id: cursorTimer
+                        interval: 500 // Adjust blinking speed (milliseconds)
+                        repeat: true
+                        running: true
+                        onTriggered: {
+                            cursorDelegate.visible = !cursorDelegate.visible; // Toggle cursor visibility
+                        }
+                    }
+                }
 
                 anchors {
+                    fill: parent
                     top: parent.top
-                    topMargin: parent.height * 0.1
-                    right: parent.right
-                    rightMargin: parent.width * 0.05
+                    topMargin: parent.height * 0.05
                 }
+
+
+                //spaces split logic
+
+
+                //on cursor position changed //addproperty backend // backend needs to know when cursor changes
+
+                Connections {
+                    target: UtilityCalculator
+                    function onSignal_KeyPressed(key) {
+                        inputText.insert(inputText.cursorPosition, key)
+                    }
+                    function onSignal_Clear() {
+                        inputText.clear()
+                    }
+                    function onSignal_BackSpace() {
+                        console.log(inputText.cursorPosition)
+                        inputText.remove(inputText.cursorPosition - 1, inputText.cursorPosition)
+                    }
+                    function onSignal_Delete() {
+                        console.log(inputText.cursorPosition)
+                        inputText.remove(inputText.cursorPosition, inputText.cursorPosition + 1)
+                    }
+                    function onSignal_MoveCursorToLeft() {
+                        inputText.cursorPosition--
+                    }
+                    function onSignal_MoveCursorToRight() {
+                        inputText.cursorPosition++
+                    }
+
+                }
+
             }
 
             CompLabel{
                 id: answerText
 
                 text: answerString
-                color: "white"
+                color: "red"
                 font.pixelSize: Math.min(root.height, root.width) * 0.07
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignBottom
 
                 anchors {
+                    fill: parent
                     bottom: parent.bottom
-                    bottomMargin: parent.height * 0.1
-                    right: parent.right
-                    rightMargin: parent.width * 0.05
+                    bottomMargin: parent.height * 0.05
                 }
             }
         }

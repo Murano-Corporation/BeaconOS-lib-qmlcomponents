@@ -6,6 +6,8 @@ import org.docviewer.poppler 1.0
 Screen__BASE {
     id: screenReferenceRoot
 
+    screenName: "Reference"
+
     property string preloadPDF: ""
     property string currentPDF: ""
     property bool isCheckForManuals: false

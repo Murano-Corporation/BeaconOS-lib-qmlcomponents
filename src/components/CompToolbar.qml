@@ -160,6 +160,18 @@ Item {
         }
 
         CompIconBtn{
+            id: btnCalculator
+            height: btnHeight
+
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Calculator.svg"
+            iconColor: btnIconColor
+            iconHeight: btnIconSize
+
+            onClicked: Applications.slot_Request_OpenApp(Constants.ESourceUUID_Popup_Calculator, {})
+        }
+
+
+        CompIconBtn{
             id: btnSettings
             height: btnHeight
 

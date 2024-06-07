@@ -7,6 +7,7 @@ Screen__BASE {
 
     anchors.fill: parent
 
+    screenName: "Configuration"
     property string selectedDeviceType: isDelta ? selectedDeviceType_Delta : selectedDeviceType_Omega
     readonly property string selectedDeviceType_Delta: "Delta"
     readonly property string selectedDeviceType_Omega: "Omega"

@@ -3,6 +3,7 @@ import QtQuick 2.12
 Screen__BASE {
     id: screen_NetworkingRoot
 
+    screenName: "Networking"
     property CompLabel selectedTab: btnControl
     state: "Control"
 
