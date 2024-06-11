@@ -219,18 +219,6 @@
         <file>CompConnectionsButton.qml</file>
         <file>Popup_DeviceInfoViewer.qml</file>
         <file>Popup_Settings_Networking.qml</file>
-        <file>CompServoJR.qml</file>
-        <file>CompRelayJR.qml</file>
-        <file>CompAuxFunctionJR.qml</file>
-        <file>CompTelemetryLogsJR.qml</file>
-        <file>CompTelemetryLogsSpeedJR.qml</file>
-        <file>CompDataFlashButtonJR.qml</file>
-        <file>CompDataFlashJR.qml</file>
-        <file>CompPreFlightJR.qml</file>
-        <file>CompPreFlightObjectJR.qml</file>
-        <file>CompDataFlashLogsJR.qml.autosave</file>
-        <file>CompPreFlightJR.qml.autosave</file>
-        <file>CompPreFlightObjectJR.qml.autosave</file>
         <file>CompServo.qml</file>
         <file>CompRelay.qml</file>
         <file>CompAuxFunction.qml</file>

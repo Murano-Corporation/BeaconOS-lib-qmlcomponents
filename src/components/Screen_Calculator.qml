@@ -45,7 +45,7 @@ Screen__BASE {
                 font.pixelSize: Math.min(root.height, root.width) * 0.07
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignTop
-                maximumLength: 30 // Set maximum length of text input to one line
+                maximumLength: 50 // Set maximum length of text input to one line
                 wrapMode: TextInput.NoWrap
                 selectByMouse: true
                 cursorVisible: true
@@ -90,6 +90,7 @@ Screen__BASE {
                     }
                     function onSignal_Clear() {
                         inputText.clear()
+                        answerText.clear() //new
                     }
                     function onSignal_BackSpace() {
                         console.log(inputText.cursorPosition)
@@ -110,14 +111,19 @@ Screen__BASE {
 
             }
 
-            CompLabel{
+            TextInput{
                 id: answerText
 
                 text: answerString
+                enabled: false //new
                 color: "red"
                 font.pixelSize: Math.min(root.height, root.width) * 0.07
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignBottom
+
+                onTextChanged:{
+                    UtilityCalculator.sAnswerString = text
+                }
 
                 anchors {
                     fill: parent
