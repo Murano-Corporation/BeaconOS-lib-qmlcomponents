@@ -219,15 +219,6 @@
         <file>CompConnectionsButton.qml</file>
         <file>Popup_DeviceInfoViewer.qml</file>
         <file>Popup_Settings_Networking.qml</file>
-        <file>CompServoJR.qml</file>
-        <file>CompRelayJR.qml</file>
-        <file>CompAuxFunctionJR.qml</file>
-        <file>CompTelemetryLogsJR.qml</file>
-        <file>CompTelemetryLogsSpeedJR.qml</file>
-        <file>CompDataFlashButtonJR.qml</file>
-        <file>CompDataFlashJR.qml</file>
-        <file>CompPreFlightJR.qml</file>
-        <file>CompPreFlightObjectJR.qml</file>
         <file>CompServo.qml</file>
         <file>CompRelay.qml</file>
         <file>CompAuxFunction.qml</file>
@@ -253,12 +244,6 @@
     </qresource>
     <qresource prefix="/jesse_royal">
         <file>CompTelemetryLogs.qml</file>
-        <file>CompPreFlightJR.qml</file>
-        <file>CompPreFlightObjectJR.qml</file>
-        <file>CompRelayJR.qml</file>
-        <file>CompServoJR.qml</file>
-        <file>CompTelemetryLogsJR.qml</file>
-        <file>CompTelemetryLogsSpeedJR.qml</file>
         <file>Comp_TEST_Jesse.qml</file>
         <file>CompTestJesses.qml</file>
         <file>Screen_Jesse_Sandbox.qml</file>
