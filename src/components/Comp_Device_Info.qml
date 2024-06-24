@@ -107,7 +107,7 @@ Item {
             width: parent.width
 
             //appSourceName: myModelData ? myModelData.appSource : '?'
-            text: modelData.id + " " + modelData.coordinates
+            text: modelData.id + " - " + modelData.coordinates
 
             MouseArea {
                 anchors.fill: parent
@@ -175,10 +175,10 @@ Item {
             anchors.leftMargin: 10
 
             model: [
-                ["file:///usr/share/BeaconOS-lib-images/images/Gear.svg", "WiFi"],
-                ["file:///usr/share/BeaconOS-lib-images/images/Gear.svg", "Settings"],
-                ["file:///usr/share/BeaconOS-lib-images/images/Gear.svg", "Logout"],
-                ["file:///usr/share/BeaconOS-lib-images/images/Gear.svg", "Power"]
+                ["file:///usr/share/BeaconOS-lib-images/images/Hide.svg", "Hide"],
+                ["file:///usr/share/BeaconOS-lib-images/images/Control.svg", "Control"],
+                ["file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg", "3DReconstruction"],
+                ["file:///usr/share/BeaconOS-lib-images/images/FlightPlannerIcon.svg", "FlightPlanner"]
             ]
 
             cellHeight: height / 2
