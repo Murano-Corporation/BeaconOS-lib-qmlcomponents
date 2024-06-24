@@ -124,7 +124,6 @@ Item {
 
         /// LIGHTING
         DirectionalLight {
-
             eulerRotation{
                 x: -45
 
@@ -132,8 +131,6 @@ Item {
         }
 
         DirectionalLight {
-
-
             eulerRotation{
                 x: 45
 
@@ -141,8 +138,6 @@ Item {
         }
 
         DirectionalLight {
-
-
             eulerRotation{
                 y: 45
 
@@ -150,8 +145,6 @@ Item {
         }
 
         DirectionalLight {
-
-
             eulerRotation{
                 y: -45
 
@@ -219,41 +212,6 @@ Item {
                     diffuseColor: "purple"
                 }]
         }
-
-
-        Loader{
-            id: loaderMesh
-
-            active: true
-
-            source: "file:///home/murano/.nerf_models/Box.qml"
-
-            onLoaded: {
-                loaderMesh.sourceComponent.position = Qt.vector3d(0,-400,0)
-                loaderMesh.sourceComponent.scale = Qt.vector3d(1,1,1)
-            }
-        }
-
-
-        //Model {
-        //    id: modelCylinder
-        //    position: Qt.vector3d(-30773.2,-10,3.96163e+06)
-        //    source: "file:///home/murano/.nerf_models/meshes/defaultobject_mesh.mesh"
-        //    scale: Qt.vector3d(0.1,0.2,0.1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "red"
-        //        }]
-        //}
-
-        //Model {
-        //    id: modelCylinder2
-        //    position: Qt.vector3d(0,0,0)
-        //    source: "#Cylinder"
-        //    scale: Qt.vector3d(2,0.2,1)
-        //    materials: [DefaultMaterial {
-        //            diffuseColor: "blue"
-        //        }]
-        //}
 
         /// CAMERA
         PerspectiveCamera{

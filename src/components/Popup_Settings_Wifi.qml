@@ -113,7 +113,7 @@ Popup_Settings_View__BASE {
             }
             spacing: popup_Settings_Wifi_Root.itemSpacingVertical
 
-            CompToggle {
+            CompToggle{
                 id: compToggle
 
                 text: "WiFi Enabled:"

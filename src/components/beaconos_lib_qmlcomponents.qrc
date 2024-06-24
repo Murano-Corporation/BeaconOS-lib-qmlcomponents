@@ -228,9 +228,6 @@
         <file>CompDataFlashJR.qml</file>
         <file>CompPreFlightJR.qml</file>
         <file>CompPreFlightObjectJR.qml</file>
-        <file>CompDataFlashLogsJR.qml.autosave</file>
-        <file>CompPreFlightJR.qml.autosave</file>
-        <file>CompPreFlightObjectJR.qml.autosave</file>
         <file>CompServo.qml</file>
         <file>CompRelay.qml</file>
         <file>CompAuxFunction.qml</file>
@@ -244,9 +241,24 @@
         <file>Comp_Drone_Settings.qml</file>
         <file>Screen_Calculator.qml</file>
         <file>Popup_Calculator.qml</file>
+        <file>Comp_Terminal.qml</file>
+        <file>Comp_Raptor_Antenna.qml</file>
+        <file alias="Drone_063.qml">../models/drone/Drone_063.qml</file>
+        <file>../models/drone/meshes/drone_63.mesh</file>
+        <file>../shaders/shader_fragment.frag</file>
+        <file>../shaders/shader_vertex.vert</file>
+        <file>../models/drone/maps/drone_063_baseColor.png</file>
+        <file>Comp_Device_Info.qml</file>
+        <file>Screen_Device_Info.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal">
         <file>CompTelemetryLogs.qml</file>
+        <file>CompPreFlightJR.qml</file>
+        <file>CompPreFlightObjectJR.qml</file>
+        <file>CompRelayJR.qml</file>
+        <file>CompServoJR.qml</file>
+        <file>CompTelemetryLogsJR.qml</file>
+        <file>CompTelemetryLogsSpeedJR.qml</file>
         <file>Comp_TEST_Jesse.qml</file>
         <file>CompTestJesses.qml</file>
         <file>Screen_Jesse_Sandbox.qml</file>

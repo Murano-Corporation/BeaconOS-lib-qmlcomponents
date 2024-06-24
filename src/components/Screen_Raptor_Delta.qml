@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import Qt.labs.qmlmodels 1.0
+
 Screen_Raptor__BASE {
     id: screen_Raptor_Delta_Root
 
@@ -67,7 +68,7 @@ Screen_Raptor__BASE {
 
     }
 
-    Item{
+    Item {
         id: areaBottomControls
 
         anchors{
@@ -103,130 +104,139 @@ Screen_Raptor__BASE {
 
         }
 
-        CompMapViewer{
-            id: mapViewer
+        // CompMapViewer{
+        //     id: mapViewer
 
-            anchors.fill: parent
+        //     anchors.fill: parent
 
-            onCenterChanged: {console.log("Center is now: " + center)}
-            onBearingChanged: {console.log("Bearing is now: " + bearing)}
-            onTiltChanged: {console.log("Tilt is now: " + tilt)}
+        //     onCenterChanged: {console.log("Center is now: " + center)}
+        //     onBearingChanged: {console.log("Bearing is now: " + bearing)}
+        //     onTiltChanged: {console.log("Tilt is now: " + tilt)}
 
-            listAssets: ListModel {
+        //     listAssets: ListModel {
 
-                ListElement {
-                    Latitude: 0.0
-                    Longitude: 0.0
-                    asset_type: "Drone"
-                    assetID: "DEV-01"
-                    heading: 15
-                    is_ally: true
-                }
+        //         ListElement {
+        //             Latitude: 0.0
+        //             Longitude: 0.0
+        //             asset_type: "Drone"
+        //             assetID: "DEV-01"
+        //             heading: 15
+        //             is_ally: true
+        //         }
 
-                ListElement {
-                    Latitude: 1.0
-                    Longitude: 1.0
-                    asset_type: "Antenna"
-                    assetID: "DEV-01"
-                    effective_range_km: 2.0
-                    is_ally: false
-                }
+        //         ListElement {
+        //             Latitude: 1.0
+        //             Longitude: 1.0
+        //             asset_type: "Antenna"
+        //             assetID: "DEV-01"
+        //             effective_range_km: 2.0
+        //             is_ally: false
+        //         }
 
-                ListElement {
-                    Latitude: 3.0
-                    Longitude: 3.0
-                    asset_type: "Aircraft Carrier"
-                    assetID: "AAC-001"
-                    heading: 270
-                    is_ally: true
-                }
+        //         ListElement {
+        //             Latitude: 3.0
+        //             Longitude: 3.0
+        //             asset_type: "Aircraft Carrier"
+        //             assetID: "AAC-001"
+        //             heading: 270
+        //             is_ally: true
+        //         }
 
-                ListElement {
-                    Latitude: 4.0
-                    Longitude: 3.0
-                    asset_type: "3D Cube"
-                    assetID: "3DC-001"
-                    is_ally: true
-                }
+        //         ListElement {
+        //             Latitude: 4.0
+        //             Longitude: 3.0
+        //             asset_type: "3D Cube"
+        //             assetID: "3DC-001"
+        //             is_ally: true
+        //         }
 
-                //ListElement{
-                //    Latitude: 0.1
-                //    Longitude: 0.1
-                //    asset_type: "Antenna"
-                //    assetID: "???"
-                //    effective_range_km: 2.0
-                //    is_ally: true
-                //}
-            }
+        //         //ListElement{
+        //         //    Latitude: 0.1
+        //         //    Longitude: 0.1
+        //         //    asset_type: "Antenna"
+        //         //    assetID: "???"
+        //         //    effective_range_km: 2.0
+        //         //    is_ally: true
+        //         //}
+        //     }
 
-            targetListDelegate: delegateChooser_Targets
+        //     targetListDelegate: delegateChooser_Targets
 
-            DelegateChooser{
-                id: delegateChooser_Targets
+        //     DelegateChooser{
+        //         id: delegateChooser_Targets
 
-                role: "asset_type"
+        //         role: "asset_type"
 
-                DelegateChoice{
-                    roleValue: "Antenna"
+        //         DelegateChoice{
+        //             roleValue: "Antenna"
 
-                    Comp_MapMarker_Antenna {
-                        lat: model.Latitude
-                        lon: model.Longitude
-                        isAlly: model.is_ally
-                        effectiveRadiusKm: model.effective_range_km
-                    }
-                }
+        //             Comp_MapMarker_Antenna {
+        //                 lat: model.Latitude
+        //                 lon: model.Longitude
+        //                 isAlly: model.is_ally
+        //                 effectiveRadiusKm: model.effective_range_km
+        //             }
+        //         }
 
-                DelegateChoice {
-                    roleValue: "Drone"
+        //         DelegateChoice {
+        //             roleValue: "Drone"
 
-                    Comp_MapMarker_Drone{
-                        lat: model.Latitude
-                        lon: model.Longitude
-                        heading: model.heading
-                        isAlly: model.is_ally
-                    }
+        //             Comp_MapMarker_Drone{
+        //                 lat: model.Latitude
+        //                 lon: model.Longitude
+        //                 heading: model.heading
+        //                 isAlly: model.is_ally
+        //             }
 
-                }
+        //         }
 
-                DelegateChoice {
-                    roleValue: "Aircraft Carrier"
+        //         DelegateChoice {
+        //             roleValue: "Aircraft Carrier"
 
-                    CompMapItem_ACCarrier {
-                        id: compMapItem_ACCarrier
+        //             CompMapItem_ACCarrier {
+        //                 id: compMapItem_ACCarrier
 
-                        lat: model.Latitude
-                        lon: model.Longitude
-                        heading: model.heading
-                        isAlly: model.is_ally
-                    }
+        //                 lat: model.Latitude
+        //                 lon: model.Longitude
+        //                 heading: model.heading
+        //                 isAlly: model.is_ally
+        //             }
 
-                }
+        //         }
 
-                DelegateChoice {
-                    roleValue: "3D Cube"
+        //         DelegateChoice {
+        //             roleValue: "3D Cube"
 
-                    CompMapItem_3D_Cube {
-                        id: compMapItem_3D_Cube
-                        lat: model.Latitude
-                        lon: model.Longitude
-                        heading: model.heading
-                        isAlly: model.is_ally
+        //             CompMapItem_3D_Cube {
+        //                 id: compMapItem_3D_Cube
+        //                 lat: model.Latitude
+        //                 lon: model.Longitude
+        //                 heading: model.heading
+        //                 isAlly: model.is_ally
 
-                        tilt: mapViewer.tilt
-                    }
+        //                 tilt: mapViewer.tilt
+        //             }
 
-                }
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
-        Comp_3DOverlay_Battlespace {
-            id: comp_3DOverlay_Battlespace
+        //Comp_3DOverlay_Battlespace {
+        //    id: comp_3DOverlay_Battlespace
+
+        //    enabled: false
+        //    visible: false
+
+        //    anchors.fill: areaContents
+
+        //    mapCoords: mapViewer.center
+
+        //}
+
+        Comp_Raptor_Antenna {
+            id: comp_Raptor_Antenna
             anchors.fill: areaContents
-
-            mapCoords: mapViewer.center
-
         }
 
         Comp_Pip_Radar {
@@ -248,6 +258,8 @@ Screen_Raptor__BASE {
             fullViewWidth: areaContents.width
         }
 
+
+
         Comp_Pip_Camera {
             id: component_Pip_Camera
 
@@ -267,22 +279,22 @@ Screen_Raptor__BASE {
             fullViewWidth: areaContents.width
         }
 
-        Comp_Pip_Battlespace {
-            id: comp_Pip_Battlespace
-            //height: pipHeight
-            //width: pipWidth
-            //x: pipMargins
-            //y: parent.height - height - pipMargins
+        //Comp_Pip_Battlespace {
+        //    id: comp_Pip_Battlespace
+        //    //height: pipHeight
+        //    //width: pipWidth
+        //    //x: pipMargins
+        //    //y: parent.height - height - pipMargins
 
-            pipViewX: pipMargins
-            pipViewY: parent.height - height - pipMargins
+        //    pipViewX: pipMargins
+        //    pipViewY: parent.height - height - pipMargins
 
-            pipViewHeight: pipHeight
-            pipViewWidth: pipWidth
+        //    pipViewHeight: pipHeight
+        //    pipViewWidth: pipWidth
 
-            fullViewHeight: areaContents.height
-            fullViewWidth: areaContents.width
-        }
+        //    fullViewHeight: areaContents.height
+        //    fullViewWidth: areaContents.width
+        //}
 
 
     }
