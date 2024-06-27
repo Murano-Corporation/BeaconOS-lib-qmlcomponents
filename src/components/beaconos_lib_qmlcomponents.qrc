@@ -234,13 +234,18 @@
         <file>Popup_Calculator.qml</file>
         <file>Comp_Terminal.qml</file>
         <file>Comp_Raptor_Antenna.qml</file>
-        <file alias="Drone_063.qml">../models/drone/Drone_063.qml</file>
-        <file>../models/drone/meshes/drone_63.mesh</file>
         <file>../shaders/shader_fragment.frag</file>
         <file>../shaders/shader_vertex.vert</file>
         <file>../models/drone/maps/drone_063_baseColor.png</file>
         <file>Comp_Device_Info.qml</file>
         <file>Screen_Device_Info.qml</file>
+        <file>CompRaptorNavMenu.qml</file>
+        <file>CompRaptorNavMenuItem.qml</file>
+        <file>Screen_Raptor_Control.qml</file>
+        <file>PopupAsset.qml</file>
+        <file>Screen_Raptor_Flight_Planner.qml</file>
+        <file>CompRaptorPlayBackBar.qml</file>
+        <file>CompPopupPlanner.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal">
         <file>CompTelemetryLogs.qml</file>

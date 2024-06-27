@@ -11,52 +11,21 @@ Item {
     property alias labelTitle: lbltitle
     property bool isAntenna: true
     property alias isDeviceAntenna : compDeviceInfo.isAntenna
-    property var listofAntennas: [
-        {
-            "id": "276557",
-            "coordinates": "20.9584° N, 151.700° W"
-        },
-        {
-            "id": "897637",
-            "coordinates": "87.3930° S, 231.504° W"
-        },
-        {
-            "id": "678375",
-            "coordinates": "7.4959° N, 11.055° E"
-        },
-        {
-            "id": "852147",
-            "coordinates": "19.9854° S, 120.500° E"
-        },
-        {
-            "id": "951753",
-            "coordinates": "50.4532° N, 136.524° W"
-        }
-    ]
-    property var listofDrones: [
-        {
-            "id": "7431",
-            "coordinates": "20.9584° N, 151.700° W"
-        },
-        {
-            "id": "9963",
-            "coordinates": "87.3930° S, 231.504° W"
-        },
-        {
-            "id": "1487",
-            "coordinates": "7.4959° N, 11.055° E"
-        },
-        {
-            "id": "5841",
-            "coordinates": "19.9854° S, 120.500° E"
-        },
-        {
-            "id": "4752",
-            "coordinates": "50.4532° N, 136.524° W"
-        }
-    ]
+    property string deviceID: ""
+    property var xVal
+    property var yVal
+    property var listofDevices: []
 
-    property var listData: isAntenna ? listofAntennas : listofDrones
+    function setCoordinates(model){
+        var xValue = model.Latitude;
+        var yValue = model.Longitude/*
+       compDeviceInfo.xVal = xValue.split("° ")[0];
+       compDeviceInfo.yVal = yValue.split("° ")[0];*/
+        centerOnCoords(xValue, yValue);
+    }
+
+    signal centerOnCoords(var x, var y);
+    signal signalBeaconIDChanged(var beaconIDSelected);
 
     Rectangle {
         anchors.fill: parent
@@ -99,29 +68,38 @@ Item {
             bottomMargin: 10
         }
 
-
-        model: compDeviceInfo.listData
-
+        model: compDeviceInfo.listofDevices
         delegate: CompBtnBreadcrumb{
 
             width: parent.width
+            Rectangle{
+                anchors.fill: parent
+                color: "Transparent"
+                border{
+                    width: 3
+                    color: "#9287ED"
+                }
+                visible: model.is_selected
+            }
 
             //appSourceName: myModelData ? myModelData.appSource : '?'
-            text: modelData.id + " - " + modelData.coordinates
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    console.log("Clicked on button");
-                    popupActions.open();
-                }
+            text: model.Beacon_ID + " - " + model.Latitude + ", " + model.Longitude
+            onClicked: {
+                //console.log("Clicked on button");
+                compDeviceInfo.deviceID = model.Beacon_ID;
+                //compDeviceInfo.beaconIDSelected = model.Beacon_ID;
+                compDeviceInfo.signalBeaconIDChanged(model.Beacon_ID);
+                console.log("model.is_selected : " + model.is_selected);
+                popupActions.open();
+                setCoordinates(model);
             }
+
         }
     }
 
     Popup {
         id: popupActions
-        height: 270
+        height: compDeviceInfo.isAntenna ? 160 : 270
         width: listofDevices.width
 
         x: listofDevices.x
@@ -131,6 +109,20 @@ Item {
             color: "#123456"
 
             radius: 16
+        }
+
+        CompLabel {
+            id: lblPopuptitle
+
+            anchors{
+                top: parent.top
+                //topMargin: 20
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            font.pixelSize: 25
+            text: compDeviceInfo.deviceID
+
         }
 
         BtnClose{
@@ -170,9 +162,18 @@ Item {
         GridView {
 
             id: gridViewActions
+            // anchors.left: parent.left
+            // anchors.right: parent.right
+            // anchors.top: lblPopuptitle.bottom
             anchors.fill: parent
             anchors.topMargin: 40
             anchors.leftMargin: 10
+
+            // Rectangle {
+            //     anchors.fill: parent
+            //     color: "Purple"
+            //     opacity: 0.5
+            // }
 
             model: [
                 ["file:///usr/share/BeaconOS-lib-images/images/Hide.svg", "Hide"],
@@ -181,25 +182,40 @@ Item {
                 ["file:///usr/share/BeaconOS-lib-images/images/FlightPlannerIcon.svg", "FlightPlanner"]
             ]
 
-            cellHeight: height / 2
-            cellWidth: width / 2
-            delegate: CompGradientRect {
-                anchors.topMargin: 20
-                height: gridViewActions.cellHeight * 0.9
-                width: gridViewActions.cellWidth * 0.95
-                CompImageIcon {
+            cellHeight: compDeviceInfo.isAntenna ? height : height / 2
+            cellWidth: compDeviceInfo.isAntenna ? width/3 : width / 2
+            delegate: Item{
+
+                //color: "Pink"
+
+                visible: (index !==3 && compDeviceInfo.isAntenna) || (!compDeviceInfo.isAntenna)
+                height: gridViewActions.cellHeight
+                width: gridViewActions.cellWidth
+                CompGradientRect {
+
+                    height: parent.height * 0.80
+                    width: parent.width * 0.80
                     anchors.centerIn: parent
-                    width: 80
-                    height: 80
-                    source: modelData[0]
-                    color: "White"
-                }
 
-                MouseArea {
-                    anchors.fill: parent
+                    CompImageIcon {
+                        anchors.centerIn: parent
 
-                    onClicked:{
-                        console.log("clicked on more options");
+                        height: parent.height * 0.80
+                        width: parent.width * 0.80
+                        source: modelData[0]
+                        color: "White"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked:{
+                            if(modelData[1] === "Control"){
+                                popupActions.close();
+                                raptorNavMenu.selectedScreen = "Control"
+                            }
+
+                        }
                     }
                 }
             }

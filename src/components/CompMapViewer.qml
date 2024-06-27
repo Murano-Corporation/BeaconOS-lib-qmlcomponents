@@ -4,7 +4,7 @@ import QtPositioning 5.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 
-Item {
+Comp__BASE {
     id: compMapViewerRoot
 
     property point centerPoint: Qt.point(0,0)
@@ -19,9 +19,10 @@ Item {
     property alias center: map.center
     property alias zoomLevel: map.zoomLevel
     property alias bearing: map.bearing
+    property alias mapPolyLine: mapPolyLineMain
+    property bool showMapTypes: true
 
     property real zoomCurrent
-
 
     onSelectedAssetDataModelChanged: {
         if(selectedAssetDataModel === undefined)
@@ -35,7 +36,7 @@ Item {
     function getSimpleMapNameString(mapTypeName)
     {
 
-        console.log("Map name: " + mapTypeName)
+        //console.log("Map name: " + mapTypeName)
         switch(mapTypeName)
         {
         case " ":
@@ -129,13 +130,15 @@ Item {
     //    }
     ListView{
         id: listMapTypes
+
+        visible: compMapViewerRoot.showMapTypes
         anchors{
             top: parent.top
             left: parent.left
             right: parent.right
         }
 
-        height: isDelta ? 64 : 110
+        height: compMapViewerRoot.showMapTypes ? (isDelta ? 64 : 110) : 0
         spacing: 20
         clip: true
         orientation: ListView.Horizontal
@@ -324,7 +327,7 @@ Item {
         id: map
         anchors{
             top: listMapTypes.bottom
-            topMargin: 20
+            topMargin: compMapViewerRoot.showMapTypes ? 20 : 0
             left: parent.left
             right: parent.right
             bottom: parent.bottom
@@ -336,30 +339,17 @@ Item {
 
         copyrightsVisible: false
         activeMapType: supportedMapTypes[compMapViewerRoot.activeMapTypeIndex]
-        //activeMapType: mapPlugin.name === "osm" ? supportedMapTypes[3] : mapPlugin.name === "mapboxgl" ? supportedMapTypes[9] : supportedMapTypes[0]
-        //onActiveMapTypeChanged: {
-        //    console.log("ActiveMapType is now: " + activeMapType.name)
-        //}
-
-
-
         plugin: mapPlugin
         center: QtPositioning.coordinate(center.x, centerPoint.y)
 
-        //Component.onCompleted:{
-        //    //console.log("Supported map types:")
-        //    for(var i = 0; i < supportedMapTypes.length; i++)
-        //    {
-        //        var mapType = supportedMapTypes[i]
-        //
-        //        console.log("- " + mapType)
-        //        console.log("--- Name: " + mapType.name)
-        //        console.log("--- Description: " + mapType.description)
-        //        console.log("--- Mobile?: " + mapType.mobile)
-        //        console.log("--- Night?: " + mapType.night)
-        //        console.log("--- Style: " + mapType.style)
-        //    }
-        //}
+        MapPolyline{
+            id: mapPolyLineMain
+
+            line.width: 5
+            line.color: "blue"
+
+
+        }
 
         MouseArea
         {

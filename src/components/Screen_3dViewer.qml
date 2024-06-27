@@ -208,27 +208,27 @@ FocusScope {
 
                 role: "type"
 
-                DelegateChoice{
-                    roleValue: "Drone"
+                // DelegateChoice{
+                //     roleValue: "Drone"
 
-                    delegate: Drone_063 {
+                //     delegate: Drone_063 {
 
-                        property bool selected: screen_3DViewer_Root.selectedTarget === this
+                //         property bool selected: screen_3DViewer_Root.selectedTarget === this
 
-                        property var meta_data: {
-                            "name": model.name,
-                            "type": model.type
-                        }
+                //         property var meta_data: {
+                //             "name": model.name,
+                //             "type": model.type
+                //         }
 
-                        diffuseColor: model.ally ? "green" : "red"
+                //         diffuseColor: model.ally ? "green" : "red"
 
-                        position: Qt.vector3d(model.position_x, model.position_y, model.position_z)
-                        scale: Qt.vector3d(model.scale, model.scale, model.scale)
-                        //source: model.source
-                        pickable: true
+                //         position: Qt.vector3d(model.position_x, model.position_y, model.position_z)
+                //         scale: Qt.vector3d(model.scale, model.scale, model.scale)
+                //         //source: model.source
+                //         pickable: true
 
-                    }
-                }
+                //     }
+                // }
 
                 DelegateChoice{
                     roleValue: "Lego Tractor"
