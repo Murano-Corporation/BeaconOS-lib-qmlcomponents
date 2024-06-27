@@ -245,6 +245,13 @@
         <file>Comp_Drone_Settings.qml</file>
         <file>Screen_Calculator.qml</file>
         <file>Popup_Calculator.qml</file>
+        <file>Comp_Raptor_Altimeter_Roll.qml</file>
+        <file>Comp_Raptor_Altimeter_Tilt.qml</file>
+        <file>Comp_Raptor_Altimeter_CrossHair.qml</file>
+        <file>Comp_Raptor_Altimeter_Compass.qml</file>
+        <file>Comp_Raptor_Menu_SideBars.qml</file>
+        <file>Comp_Raptor_Menu_BottomBars.qml</file>
+        <file>Comp_Raptor_Altimeter.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal">
         <file>CompTelemetryLogs.qml</file>
