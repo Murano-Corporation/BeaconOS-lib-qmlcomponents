@@ -71,6 +71,26 @@ Comp__BASE {
             fillMode: Image.PreserveAspectFit
         }
 
+        Image {
+            visible: assetType === "Antenna"
+            source: "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg"
+            anchors.fill: parent
+            opacity: 0.8
+            asynchronous: true
+            cache: true
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Image {
+            visible: assetType === "Drone"
+            source: "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
+            anchors.fill: parent
+            opacity: 0.8
+            asynchronous: true
+            cache: true
+            fillMode: Image.PreserveAspectFit
+        }
+
         ImgAssetGrowler {
             visible: assetType === "Growler"
             anchors.fill: parent

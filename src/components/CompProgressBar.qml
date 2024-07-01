@@ -9,6 +9,7 @@ Item{
     property real percentComplete: 0.35
     property color colorBg: "#80000000"
     property color colorComplete: "#9287ED"
+    property alias showPercentComplete: colorOVerlay.visible
 
     width: 800
 
@@ -33,6 +34,18 @@ Item{
         width: rectBg.width * compProgressBar.percentComplete
         radius: rectBg.radius
         color: compProgressBar.colorComplete
+
+        Rectangle{
+            height: 12
+            width: 12
+
+            radius: 0.5 * height
+
+            color: parent.color
+
+            x: parent.width - (width*0.5)
+            y: -(parent.height*0.25) - (height*0.25)
+        }
     }
 
     CompLabel{

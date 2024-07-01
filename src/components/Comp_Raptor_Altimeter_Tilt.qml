@@ -57,8 +57,8 @@ Rectangle {
 
                 y: compRaptorAltimerTiltRoot.zero
                 onYChanged:{
-                    console.log("yo:: " + tiltImageTranslate.y)
-                    console.log("minY: " + minY + " maxY: " + maxY)
+                    //console.log("yo:: " + tiltImageTranslate.y)
+                    //console.log("minY: " + minY + " maxY: " + maxY)
                     if( y <= compRaptorAltimerTiltRoot.minY || y >= compRaptorAltimerTiltRoot.maxY)
                     {
                         behaviourY.enabled = false
