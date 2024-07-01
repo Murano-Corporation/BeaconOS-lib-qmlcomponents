@@ -135,6 +135,13 @@ Screen_Raptor__BASE {
         width: 40
 
         color: "#80ff8899"
+
+        Comp_Raptor_Altimeter{
+
+            anchors.centerIn: parent
+            height: 700
+            width: 700
+        }
     }
 
     CompLabel{

@@ -67,8 +67,8 @@ Rectangle {
                 x: compRaptorAltimeterCompassRoot.zero
 
                 onXChanged:{
-                    console.log("yo:: " + compassImageTranslate.x)
-                    console.log("minX: " + minX + " maxX: " + maxX)
+                    //console.log("yo:: " + compassImageTranslate.x)
+                    //console.log("minX: " + minX + " maxX: " + maxX)
                     if( x <= compRaptorAltimeterCompassRoot.minX || x >= compRaptorAltimeterCompassRoot.maxX)
                     {
                         behaviourX.enabled = false
@@ -77,7 +77,7 @@ Rectangle {
                     }
                 }
 
-                Behavior on x{
+                Behavior on x {
                     id: behaviourX
 
                     enabled: true
