@@ -39,5 +39,9 @@ RESOURCES += \
 #LIB_QMLCOMPONENTS_QML_DIR = $$PWD/../../libraries/BeaconOS-lib-qmlcomponents/src/components/beaconos_lib_qmlcomponents.qrc
 #RESOURCES += $${LIB_QMLCOMPONENTS_QML_DIR}
 
+DISTFILES += \
+    src/shaders/shader_fragment.frag \
+    src/shaders/shader_vertex.glsl
+
 
 
