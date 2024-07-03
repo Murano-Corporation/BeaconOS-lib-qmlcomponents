@@ -10,6 +10,10 @@ Comp__BASE_Popup{
             centerIn: parent
         }
 
+        background: CompBtnBreadcrumb {
+            anchors.fill: parent
+        }
+
         height: 700
         width: 700
 

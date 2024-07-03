@@ -10,6 +10,7 @@ Screen_Raptor__BASE {
     // property string altitude: ""
     // property string deviceSpeed: ""
     property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
+    property bool controlON: true
 
     signal signalBeaconIDSelected(var beaconID)
 
@@ -178,9 +179,9 @@ Screen_Raptor__BASE {
         radius: 20
 
         anchors {
-            bottom: parent.bottom
-            margins: 140
-            horizontalCenter: parent.horizontalCenter
+            right: lblBeaconID.left
+            verticalCenter: lblBeaconID.verticalCenter
+            rightMargin: 220
         }
 
 
@@ -383,6 +384,7 @@ Screen_Raptor__BASE {
 
         CompRaptorNavMenuItem {
             id: menuItemRaptor
+            visible: false
             opacity: 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
@@ -390,6 +392,7 @@ Screen_Raptor__BASE {
         }
         CompRaptorNavMenuItem {
             id: menuItemControl
+            visible: false
             opacity:0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
@@ -398,6 +401,7 @@ Screen_Raptor__BASE {
         }
         CompRaptorNavMenuItem {
             id: menuItem3DReconstruction
+            visible: false
             opacity: 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg"
@@ -409,6 +413,21 @@ Screen_Raptor__BASE {
             opacity: 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"
+
+            imgIconColor: screen_RaptorControlRoot.controlON ? "Green" : "Red"
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("screen_RaptorControlRoot.controlON : " + screen_RaptorControlRoot.controlON)
+                    if(screen_RaptorControlRoot.controlON){
+                        screen_RaptorControlRoot.controlON = false
+                    } else {
+                        screen_RaptorControlRoot.controlON = true
+                    }
+
+                }
+            }
 
         }
 
@@ -435,6 +454,7 @@ Screen_Raptor__BASE {
     Comp_Drone_Gimble{
         id: stick1
 
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.09 - (stick1.width / 2)
         y: root.height * 0.66
@@ -443,6 +463,7 @@ Screen_Raptor__BASE {
     Comp_Drone_Gimble{
         id: stick2
 
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.91 - (stick2.width / 2)
         y: root.height * 0.66
@@ -450,6 +471,7 @@ Screen_Raptor__BASE {
     }
 
     Rectangle {
+        id:deviceData
 
         visible: screen_RaptorControlRoot.beaconIDSelected !== ""
 
@@ -479,7 +501,7 @@ Screen_Raptor__BASE {
             spacing: 20
 
             CompLabel{
-                id: deviceData
+                id: deviceFlightRemaining
 
                 text: screen_RaptorControlRoot.beaconIDSelected ? DroneController.flightRemaining : ""
 

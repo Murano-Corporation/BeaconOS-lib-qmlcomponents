@@ -118,6 +118,7 @@ Item {
         ScrollBar.vertical: ScrollBar{
             policy: ScrollBar.AlwaysOn
             width: 8
+            position: position + 4
             //topInset: 51
             topPadding: 10
             bottomPadding: 10

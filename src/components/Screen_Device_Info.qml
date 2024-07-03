@@ -61,8 +61,12 @@ Item {
                 console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
                 console.log("OPENING DEVICE INFO DRAWER!!!")
 
-                drawerDeviceInfo.open()
-                screenDeviceInfoRoot.isDrawerOpen = true;
+                if(drawerDeviceInfo.visible) {
+                    drawerDeviceInfo.close()
+                } else{
+                    drawerDeviceInfo.open()
+                }
+                screenDeviceInfoRoot.isDrawerOpen = drawerDeviceInfo.visible;
 
                 console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
             }
@@ -96,8 +100,12 @@ Item {
             onClicked: {
                 console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
                 console.log("CLOSING DEVICE INFO DRAWER!!!")
-                drawerDeviceInfo.close()
-                screenDeviceInfoRoot.isDrawerOpen = false;
+                if(drawerDeviceInfo.visible) {
+                    drawerDeviceInfo.close()
+                } else{
+                    drawerDeviceInfo.open()
+                }
+                screenDeviceInfoRoot.isDrawerOpen = drawerDeviceInfo.visible;
                 console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
             }
             // Component.onDestroyed: {

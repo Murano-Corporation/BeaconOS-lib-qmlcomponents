@@ -71,28 +71,28 @@ Comp__BASE {
 
                 if (touchPoints[0].x - (joystick.width / 2) >= 0 && touchPoints[0].x + (joystick.width / 2) <= root.width ) {
                     joystick.x = touchPoints[0].x - joystick.width / 2
-                    joystick.finalX = parseInt(joystick.liveCenterX / .0875) /// 90
+                    joystick.finalX = (joystick.liveCenterX / 87.5) /// 90
                 }
                 if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + (joystick.height / 2) <= root.height){
                     joystick.y = touchPoints[0].y - joystick.height / 2
-                    joystick.finalY = parseInt(joystick.liveCenterY / .0875) /// 90
+                    joystick.finalY = -(joystick.liveCenterY / 87.5) /// 90
                 }
 
                     if (touchPoints[0].x < (joystick.width / 2)) {
                         joystick.x = 0
-                        joystick.finalX = -1000
+                        joystick.finalX = -1
                     }
                     if (touchPoints[0].y < (joystick.height / 2)) {
                         joystick.y = 0
-                        joystick.finalY = -1000
+                        joystick.finalY = 1
                     }
                     if (touchPoints[0].x > (root.width - (joystick.width / 2))) {
                         joystick.x = root.width - (joystick.width)
-                        joystick.finalX = 1000
+                        joystick.finalX = 1
                     }
                     if (touchPoints[0].y > (root.height - (joystick.height / 2))) {
                         joystick.y = root.height - (joystick.height)
-                        joystick.finalY = 1000
+                        joystick.finalY = -1
                     }
 
                     console.log(touchPoints[0].x + " " + touchPoints[0].y)

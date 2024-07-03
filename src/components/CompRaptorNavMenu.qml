@@ -30,6 +30,7 @@ Item {
         CompRaptorNavMenuItem {
             id: menuItemFlightPlanner
             opacity: compRaptorNavMenuRoot.selectedScreen === "FlightPlanner" ? 1.0 : 0.6
+            enabled: false
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/FlightPlannerIcon.svg"
 
@@ -38,6 +39,7 @@ Item {
         CompRaptorNavMenuItem {
             id: menuItem3DReconstruction
             opacity: compRaptorNavMenuRoot.selectedScreen === "3DReconstruction" ? 1.0 : 0.6
+            enabled: false
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg"
 
