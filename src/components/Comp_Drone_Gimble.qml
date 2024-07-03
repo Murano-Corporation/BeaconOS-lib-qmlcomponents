@@ -52,8 +52,8 @@ Comp__BASE {
                 property real liveCenterX: joystick.x + (joystick.width / 2) - (root.width / 2) //live location in relation to the center of the outer circle
                 property real liveCenterY: joystick.y + (joystick.height / 2) - (root.height / 2)
 
-                property real liveX
-                property real liveY
+                property real finalX
+                property real finalY
 
             }
         }
@@ -69,36 +69,36 @@ Comp__BASE {
                 if( touchPoints.length === 0)
                 return
 
-                console.log(touchPoints[0].x + " " + touchPoints[0].y)
-                console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
-                console.log(joystick.liveX + " droneX " + joystick.liveY + " droneY ")
-
                 if (touchPoints[0].x - (joystick.width / 2) >= 0 && touchPoints[0].x + (joystick.width / 2) <= root.width ) {
                     joystick.x = touchPoints[0].x - joystick.width / 2
-                    joystick.liveX = joystick.liveCenterX / (root.width / 3.3333333333) /// 90
+                    joystick.finalX = parseInt(joystick.liveCenterX / .0875) /// 90
                 }
                 if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + (joystick.height / 2) <= root.height){
                     joystick.y = touchPoints[0].y - joystick.height / 2
-                    joystick.liveY = joystick.liveCenterY / (root.height / 3.3333333333) /// 90
+                    joystick.finalY = parseInt(joystick.liveCenterY / .0875) /// 90
                 }
 
-                    if (joystick.liveX < -1) {
+                    if (touchPoints[0].x < (joystick.width / 2)) {
                         joystick.x = 0
-                        joystick.liveX = -1
+                        joystick.finalX = -1000
                     }
-                    if (joystick.liveY < -1) {
+                    if (touchPoints[0].y < (joystick.height / 2)) {
                         joystick.y = 0
-                        joystick.liveY = -1
+                        joystick.finalY = -1000
                     }
-                    if (joystick.liveX > 1) {
+                    if (touchPoints[0].x > (root.width - (joystick.width / 2))) {
                         joystick.x = root.width - (joystick.width)
-                        joystick.liveX = 1
+                        joystick.finalX = 1000
                     }
-                    if (joystick.liveY > 1) {
+                    if (touchPoints[0].y > (root.height - (joystick.height / 2))) {
                         joystick.y = root.height - (joystick.height)
-                        joystick.liveY = 1
+                        joystick.finalY = 1000
                     }
 
+                    console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                    console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                    console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                    console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
             }
 
             onGestureStarted: {
@@ -109,9 +109,19 @@ Comp__BASE {
                 if (isThrottle === false) {
                     joystick.x = root.joystickDefaultX
                     joystick.y = root.joystickDefaultY
+                    console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                    console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                    console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                    console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
+
                 }
                 else {
                     joystick.x = root.joystickDefaultX
+                    joystick.finalX = 0
+                    console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                    console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                    console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                    console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
                 }
 
                 joystick.opacity = 1.0

@@ -9,7 +9,7 @@ Screen_Raptor__BASE {
     // property string lon: ""
     // property string altitude: ""
     // property string deviceSpeed: ""
-    property string dispText: selectedItem.Latitude + ", " + selectedItem.Longitude + ", " + selectedItem.altitude + " " + selectedItem.device_speed
+    property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
 
     signal signalBeaconIDSelected(var beaconID)
 
@@ -481,7 +481,7 @@ Screen_Raptor__BASE {
             CompLabel{
                 id: deviceData
 
-                text: "24'17"//screen_RaptorControlRoot.beaconIDSelected ? dispText : ""
+                text: screen_RaptorControlRoot.beaconIDSelected ? DroneController.flightRemaining : ""
 
                 anchors.verticalCenter: row.verticalCenter
 
@@ -507,7 +507,7 @@ Screen_Raptor__BASE {
             Item {
                 id: groupBars
 
-                property int bars: 3
+                property int bars: DroneController.deviceSignal
                 property color colorWeak: "#ffffff"
                 property color colorStrong: "#00FF94"
                 property real barWidth: width * 0.20
