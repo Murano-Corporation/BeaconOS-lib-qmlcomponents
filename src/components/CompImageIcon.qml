@@ -12,6 +12,7 @@ Comp__BASE {
     property real iconWidth: width
     property alias image: compImageIcon
     property alias source: compImageIcon.source
+    //property alias aspectFit: compImageIcon.fillMode
 
     Image {
         id: compImageIcon

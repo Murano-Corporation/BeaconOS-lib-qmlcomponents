@@ -66,9 +66,10 @@ Comp__BASE_Popup{
                 }
 
                 //appSourceName: myModelData ? myModelData.appSource : '?'
-                text: model.Beacon_ID + " - " + model.Latitude + ", " + model.Longitude
+                text: model.Beacon_ID// + " - " + model.Latitude + ", " + model.Longitude
                 onClicked: {
                     screen_RaptorControlRoot.beaconIDSelected = model.Beacon_ID;
+                    screen_RaptorControlRoot.selectedItem = model;
                     signalBeaconIDSelected(model.Beacon_ID);
                 }
             }

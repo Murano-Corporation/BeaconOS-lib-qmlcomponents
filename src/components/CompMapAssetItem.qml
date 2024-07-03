@@ -9,6 +9,8 @@ Comp__BASE_MapQuickItem {
     property string assetType: 'TYPE'
     property string assetID: 'ASSET_ID'
     property alias assetTypelbl: lblAssetType
+    property string imgSource
+    property alias iconDetails: colorOverlayMapPin
 
     anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height * 0.5)
     coordinate: QtPositioning.coordinate(lat, lon)
@@ -37,6 +39,7 @@ Comp__BASE_MapQuickItem {
             property var coords
 
             visible: false
+            source: imgSource
 
             anchors{
                 fill:parent

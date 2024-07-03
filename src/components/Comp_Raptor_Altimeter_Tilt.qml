@@ -14,9 +14,9 @@ Rectangle {
 
     property alias angle: tiltImageTranslate.y
 
-    Component.onCompleted: {
-    timter.start()
-    }
+    // Component.onCompleted: {
+    // timter.start()
+    // }
 
     Timer {
         id: timter

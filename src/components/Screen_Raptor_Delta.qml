@@ -4,8 +4,13 @@ import Qt.labs.qmlmodels 1.0
 Screen_Raptor__BASE {
     id: screen_Raptor_Delta_Root
     property var selectedAssetID
-    property var beaconIDSelected: ""
-    property var beaconIDSelectedLast: ""
+    property var beaconIDSelected
+    property var beaconIDSelectedLast
+    // property string lat
+    // property string lon
+    // property string altitude
+    // property string deviceSpeed
+    // property var selectedItem
 
     onBeaconIDSelectedChanged: {
         console.log("BEACON ID CHANGED");
@@ -25,6 +30,8 @@ Screen_Raptor__BASE {
         }
         TableModelRaptorRoot.setIsSelected(beaconIDSelectedLast, false);
         beaconIDSelectedLast = beaconIDSelected;
+        //signalBeaconIDSelected(beaconIDSelected);
+
     }
 
     Loader{
@@ -35,12 +42,33 @@ Screen_Raptor__BASE {
 
         sourceComponent: Screen_Device_Info{
 
-           onBeaconIDSelectedChanged: {
-               screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
-               console.log("BEACON ID CHANGED IN SCREEN RAPTOR");
-           }
+            onBeaconIDSelectedChanged: {
+                screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
+                console.log("BEACON ID CHANGED IN SCREEN RAPTOR");
 
-           //onBeaconIDSelectedChanged: screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
+            }
+
+            // onLatChanged: {
+            //     screen_Raptor_Delta_Root.lat = lat
+            //     //console.log("LATITUDE CHANGED IN SCREEN RAPTOR");
+            // }
+
+            // onLonChanged: {
+            //     screen_Raptor_Delta_Root.lon = lon
+            //     //console.log("LONGITUDE CHANGED IN SCREEN RAPTOR");
+            // }
+
+            // onAltitudeChanged: {
+            //     screen_Raptor_Delta_Root.altitude = altitude
+            //     console.log("ALTITUDE CHANGED IN SCREEN RAPTOR");
+            // }
+
+            // onDeviceSpeedChanged: {
+            //     screen_Raptor_Delta_Root.deviceSpeed = deviceSpeed
+            //     console.log("DEVICE SPEED CHANGED IN SCREEN RAPTOR");
+            // }
+
+            //onBeaconIDSelectedChanged: screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
         }
     }
 
@@ -49,10 +77,13 @@ Screen_Raptor__BASE {
         anchors.fill: parent
         asynchronous: true
         active: raptorNavMenu.selectedScreen === "Control"
-
         sourceComponent: Screen_Raptor_Control{
             beaconIDSelected: screen_Raptor_Delta_Root.beaconIDSelected
-            onSignalBeaconIDSelected: screen_Raptor_Delta_Root.beaconIDSelected = beacon_ID
+            onSignalBeaconIDSelected: {
+                screen_Raptor_Delta_Root.beaconIDSelected = beaconID
+
+            }
+
         }
 
     }
@@ -74,7 +105,7 @@ Screen_Raptor__BASE {
             left: parent.left
             top: parent.top
             leftMargin: 20
-            topMargin: 20
+            topMargin: 110
         }
         width: 100
         height: 500

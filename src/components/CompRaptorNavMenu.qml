@@ -13,7 +13,7 @@ Item {
 
         CompRaptorNavMenuItem {
             id: menuItemRaptor
-            opacity: compRaptorNavMenuRoot.selectedScreen === "Raptor" ? 0.6 : 0.3
+            opacity: compRaptorNavMenuRoot.selectedScreen === "Raptor" ? 1.0 : 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Icon_Raptor.svg"
 
@@ -21,7 +21,7 @@ Item {
         }
         CompRaptorNavMenuItem {
             id: menuItemControl
-            opacity: compRaptorNavMenuRoot.selectedScreen === "Control" ? 0.6 : 0.3
+            opacity: compRaptorNavMenuRoot.selectedScreen === "Control" ? 1.0 : 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Control.svg"
 
@@ -29,7 +29,7 @@ Item {
         }
         CompRaptorNavMenuItem {
             id: menuItemFlightPlanner
-            opacity: compRaptorNavMenuRoot.selectedScreen === "FlightPlanner" ? 0.6 : 0.3
+            opacity: compRaptorNavMenuRoot.selectedScreen === "FlightPlanner" ? 1.0 : 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/FlightPlannerIcon.svg"
 
@@ -37,7 +37,7 @@ Item {
         }
         CompRaptorNavMenuItem {
             id: menuItem3DReconstruction
-            opacity: compRaptorNavMenuRoot.selectedScreen === "3DReconstruction" ? 0.6 : 0.3
+            opacity: compRaptorNavMenuRoot.selectedScreen === "3DReconstruction" ? 1.0 : 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg"
 

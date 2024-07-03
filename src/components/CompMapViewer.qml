@@ -383,7 +383,8 @@ Comp__BASE {
                     CompLabel{
                         id: lbl
                         visible: false
-                        text: "lat: %1; lon:%2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
+                        //text: "lat: %1; lon: %2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
+                        text: ""
 
                         font{
                             pixelSize: isDelta ? 24 : 40
@@ -439,8 +440,11 @@ Comp__BASE {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-                assetID: model.Beacon_ID
+                assetID: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
+                imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/AntennaFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DroneFill.svg"
+                //iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "White" : "#9287ED"
+                iconDetails.opacity: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? 1.0 : 0.9
                 onCenterOnPoint: {
 
                     if(compMapViewerRoot.selectedAssetDataModel === model)

@@ -7,9 +7,9 @@ Comp__BASE {
     height: 250 //scaleable!!!
     width: 250
 
-    property color outerColor: "grey"
-    property color outerBorderColor: "#0E1111"
-    property color innerColor: "#065465"
+    property color outerColor: "#9287ed"
+    property color outerBorderColor: "blue"
+    property color innerColor: "#9287ed"
 
     property real joystickDefaultX: (outerCircle.width - joystick.width) / 2 //centers the joystick in the middle of the outerCircle
     property real joystickDefaultY: (outerCircle.height - joystick.height) / 2
@@ -43,8 +43,8 @@ Comp__BASE {
 
                 color: root.innerColor
                 border.color: root.outerBorderColor
-                height: root.height * 0.4
-                width: root.width * 0.4
+                height: root.height * 0.3
+                width: root.width * 0.3
                 radius: root.width * 0.5
                 x: root.joystickDefaultX
                 y: root.joystickDefaultY
@@ -69,37 +69,36 @@ Comp__BASE {
                 if( touchPoints.length === 0)
                 return
 
-                //console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                console.log(touchPoints[0].x + " " + touchPoints[0].y)
                 console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
                 console.log(joystick.liveX + " droneX " + joystick.liveY + " droneY ")
 
                 if (touchPoints[0].x - (joystick.width / 2) >= 0 && touchPoints[0].x + (joystick.width / 2) <= root.width ) {
                     joystick.x = touchPoints[0].x - joystick.width / 2
-                    joystick.liveX = joystick.liveCenterX / (root.width / 3.33333333) /// 90
+                    joystick.liveX = joystick.liveCenterX / (root.width / 3.3333333333) /// 90
                 }
                 if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + (joystick.height / 2) <= root.height){
                     joystick.y = touchPoints[0].y - joystick.height / 2
-                    joystick.liveY = joystick.liveCenterY / (root.height / 3.33333333) /// 90
+                    joystick.liveY = joystick.liveCenterY / (root.height / 3.3333333333) /// 90
                 }
 
-                else {
-                    if (touchPoints[0].x < 0) {
+                    if (joystick.liveX < -1) {
                         joystick.x = 0
                         joystick.liveX = -1
                     }
-                    if (touchPoints[0].y < 0) {
+                    if (joystick.liveY < -1) {
                         joystick.y = 0
                         joystick.liveY = -1
                     }
-                    if (touchPoints[0].x > root.width) {
+                    if (joystick.liveX > 1) {
                         joystick.x = root.width - (joystick.width)
                         joystick.liveX = 1
                     }
-                    if (touchPoints[0].y > root.height) {
+                    if (joystick.liveY > 1) {
                         joystick.y = root.height - (joystick.height)
                         joystick.liveY = 1
                     }
-                }
+
             }
 
             onGestureStarted: {
