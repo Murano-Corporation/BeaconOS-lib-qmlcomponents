@@ -30,6 +30,7 @@ Screen_Raptor__BASE {
         }
         TableModelRaptorRoot.setIsSelected(beaconIDSelectedLast, false);
         beaconIDSelectedLast = beaconIDSelected;
+
         //signalBeaconIDSelected(beaconIDSelected);
 
     }
@@ -103,9 +104,8 @@ Screen_Raptor__BASE {
 
         anchors{
             left: parent.left
-            top: parent.top
             leftMargin: 20
-            topMargin: 110
+            verticalCenter: parent.verticalCenter
         }
         width: 100
         height: 500

@@ -33,6 +33,7 @@ Comp__BASE {
         }
     }
 
+
     function getSimpleMapNameString(mapTypeName)
     {
 
@@ -333,9 +334,7 @@ Comp__BASE {
             bottom: parent.bottom
         }
 
-        onZoomLevelChanged: compMapViewerRoot.zoomCurrent = zoomLevel
-
-
+        onZoomLevelChanged: {compMapViewerRoot.zoomCurrent = zoomLevel}
 
         copyrightsVisible: false
         activeMapType: supportedMapTypes[compMapViewerRoot.activeMapTypeIndex]
@@ -442,8 +441,8 @@ Comp__BASE {
                 assetType: model.asset_type
                 assetID: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
-                imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/AntennaFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DroneFill.svg"
-                //iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "White" : "#9287ED"
+                imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
+                iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
                 iconDetails.opacity: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? 1.0 : 0.9
                 onCenterOnPoint: {
 

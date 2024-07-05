@@ -7,9 +7,9 @@ Comp__BASE {
     height: 250 //scaleable!!!
     width: 250
 
-    property color outerColor: "#9287ed"
-    property color outerBorderColor: "blue"
-    property color innerColor: "#9287ed"
+    property color outerColor: "#ffffff"//"#9287ed"
+    property color outerBorderColor: "grey" //blue
+    property color innerColor: "#ffffff"//"#9287ed"
 
     property real joystickDefaultX: (outerCircle.width - joystick.width) / 2 //centers the joystick in the middle of the outerCircle
     property real joystickDefaultY: (outerCircle.height - joystick.height) / 2

@@ -5,12 +5,9 @@ Screen_Raptor__BASE {
 
     property string beaconIDSelected
     property var selectedItem
-    // property string lat: ""
-    // property string lon: ""
-    // property string altitude: ""
-    // property string deviceSpeed: ""
     property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
     property bool controlON: true
+    property bool hudON: true
 
     signal signalBeaconIDSelected(var beaconID)
 
@@ -25,8 +22,9 @@ Screen_Raptor__BASE {
     Component.onCompleted: {
         tmrDelayOnCompleted.start()
         console.log(selectedItem)
-
     }
+
+
 
     anchors.fill: parent
 
@@ -54,7 +52,8 @@ Screen_Raptor__BASE {
     CompBtnBreadcrumb {
         id: lblBeaconID
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+
 
         anchors {
             top: parent.top
@@ -72,7 +71,7 @@ Screen_Raptor__BASE {
 
     Item {
         id: compTargetBoundingBox1
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
         anchors{
             top: parent.top
             left: parent.left
@@ -81,70 +80,70 @@ Screen_Raptor__BASE {
             margins: 70
         }
 
-        // Rectangle{
-        //     anchors.top: parent.top
-        //     color: "#00FF94"
-        //     height: 2
-        //     width: 270
-        //     radius: 16
-        // }
-        // Rectangle{
-        //     anchors.left: parent.left
-        //     color: "#00FF94"
-        //     height: 123
-        //     width: 2
-        //     radius: 16
-        // }
+        Rectangle{
+            anchors.top: parent.top
+            color: "#00FF94"
+            height: 2
+            width: 270
+            radius: 16
+        }
+        Rectangle{
+            anchors.left: parent.left
+            color: "#00FF94"
+            height: 123
+            width: 2
+            radius: 16
+        }
 
-        // Rectangle{
-        //     anchors.top: parent.top
-        //     anchors.right: parent.right
-        //     color: "#00FF94"
-        //     height: 2
-        //     width: 270
-        //     radius: 16
-        // }
-        // Rectangle{
-        //     anchors.right: parent.right
-        //     color: "#00FF94"
-        //     height: 123
-        //     width: 2
-        //     radius: 16
-        // }
+        Rectangle{
+            anchors.top: parent.top
+            anchors.right: parent.right
+            color: "#00FF94"
+            height: 2
+            width: 270
+            radius: 16
+        }
+        Rectangle{
+            anchors.right: parent.right
+            color: "#00FF94"
+            height: 123
+            width: 2
+            radius: 16
+        }
 
-        // Rectangle{
-        //     anchors.bottom: parent.bottom
-        //     anchors.right: parent.right
-        //     color: "#00FF94"
-        //     height: 2
-        //     width: 270
-        //     radius: 16
-        // }
-        // Rectangle{
-        //     anchors.bottom: parent.bottom
-        //     anchors.right: parent.right
-        //     color: "#00FF94"
-        //     height: 123
-        //     width: 2
-        //     radius: 16
-        // }
+        Rectangle{
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            color: "#00FF94"
+            height: 2
+            width: 270
+            radius: 16
+        }
+        Rectangle{
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            color: "#00FF94"
+            height: 123
+            width: 2
+            radius: 16
+        }
 
-        // Rectangle{
-        //     anchors.bottom: parent.bottom
-        //     anchors.left: parent.left
-        //     color: "#00FF94"
-        //     height: 2
-        //     width: 270
-        //     radius: 16
-        // }
-        // Rectangle{
-        //     anchors.bottom: parent.bottom
-        //     anchors.left: parent.left
-        //     color: "#00FF94"
-        //     height: 123
-        //     width: 2
-        //     radius: 16
-        // }
+        Rectangle{
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: "#00FF94"
+            height: 2
+            width: 270
+            radius: 16
+        }
+        Rectangle{
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: "#00FF94"
+            height: 123
+            width: 2
+            radius: 16
+        }
     }
 
 
@@ -152,12 +151,9 @@ Screen_Raptor__BASE {
 
     Item{
         id: areaAltimeter
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         anchors.centerIn: parent
-
-        // height: 40
-        // width: 40
 
         Comp_Raptor_Altimeter{
 
@@ -169,10 +165,10 @@ Screen_Raptor__BASE {
 
     Rectangle {
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         border.color: "#00FF94"
-        border.width: 4
+        border.width: 3
         color: "transparent"
         height: 60
         width: 440
@@ -181,7 +177,7 @@ Screen_Raptor__BASE {
         anchors {
             right: lblBeaconID.left
             verticalCenter: lblBeaconID.verticalCenter
-            rightMargin: 220
+            rightMargin: 120
         }
 
 
@@ -190,14 +186,8 @@ Screen_Raptor__BASE {
 
             text: screen_RaptorControlRoot.beaconIDSelected ? dispText : ""
 
-            // font{
-            //     pixelSize: 26
-            // }
-
             anchors{
                 centerIn: parent
-                // fill: parent
-                // margins: 10
             }
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -206,172 +196,165 @@ Screen_Raptor__BASE {
         }
     }
 
-    // Rectangle {
-    //     id: areaTargetMetaData
+    Rectangle {
+        id: areaTargetMetaData
 
-    //     visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
-    //     height: 400
-    //     width: 360
-    //     radius: 16
+        height: screen_RaptorControlRoot.height * 0.48
+        width: screen_RaptorControlRoot.width * 0.17
+        radius: 16
 
-    //     color: "Transparent"
+        x: screen_RaptorControlRoot.width * 0.80
+        y: screen_RaptorControlRoot.height * 0.2
 
-    //     border{
-    //         width: 4
-    //         color: "#00FF94"
-    //     }
+        color: "Transparent"
 
-    //     Timer {
-    //         id: tmrNotTouched
+        border{
+            width: 3
+            color: "#00FF94"
+        }
 
-    //         interval: 2000
+        Timer {
+            id: tmrNotTouched
 
-    //         onTriggered: {
-    //             areaTargetMetaData.color = "Transparent"
-    //         }
-    //     }
+            interval: 2000
 
-    //     CompLabel{
-    //         id: lblDroneSwarm
-    //         anchors{
-    //             top: parent.top
-    //             left: parent.left
-    //             margins: 20
-    //         }
-    //         color: "#00FF94"
-    //         text: "Drone Swarm"
-    //         font.pixelSize: 30
-    //     }
+            onTriggered: {
+                areaTargetMetaData.color = "Transparent"
+            }
+        }
 
-    //     ListView{
-    //         id: metaDataList
+        CompLabel{
+            id: lblDroneSwarm
+            anchors{
+                top: parent.top
+                left: parent.left
+                margins: 20
+            }
+            color: "#00FF94"
+            text: "Drone Swarm"
+            font.pixelSize: 30
+        }
 
-    //         anchors{
-    //             top: lblDroneSwarm.bottom
-    //             topMargin: 20
-    //             left: lblDroneSwarm.left
-    //         }
-    //         height: parent.height
+        ListView{
+            id: metaDataList
 
-    //         model: [
-    //             {"label": "Asset Name", "value": "Drone Swarm"},
-    //             {"label": "Main Arm", "value": "No weapon"},
-    //             {"label": "Second Arm", "value": "- "},
-    //             {"label": "Peronnel", "value": "- "},
-    //             {"label": "Destroyed", "value": "23/47"},
-    //             {"label": "Health", "value": "- "},
-    //             {"label": "Range", "value": "20 kilometers"}
-    //         ]
+            anchors{
+                top: lblDroneSwarm.bottom
+                topMargin: 20
+                left: lblDroneSwarm.left
+            }
+            height: parent.height
 
-    //         delegate:Item{
-    //             height: 60
-    //             CompLabel{
-    //                 text: modelData.label + " : " + modelData.value
-    //                 color: "#00FF94"
-    //                 font.pixelSize: 20
-    //             }
-    //         }
-    //     }
+            model: [
+                {"label": "Asset Name", "value": "Drone Swarm"},
+                {"label": "Main Arm", "value": "No weapon"},
+                {"label": "Second Arm", "value": "- "},
+                {"label": "Peronnel", "value": "- "},
+                {"label": "Destroyed", "value": "23/47"},
+                {"label": "Health", "value": "- "},
+                {"label": "Range", "value": "20 kilometers"}
+            ]
 
-    //     Behavior on color{
+            delegate:Item{
+                height: 60
+                CompLabel{
+                    text: modelData.label + " : " + modelData.value
+                    color: "#00FF94"
+                    font.pixelSize: 20
+                }
+            }
+        }
 
-    //         ColorAnimation {
-    //             duration: 200
-    //         }
-    //     }
-    //     anchors.verticalCenter: imageCameraFeed.verticalCenter
-    //     anchors.left: imageCameraFeed.right
-    //     anchors.right: imageCameraFeed.left
-    //     anchors.top: imageCameraFeed.bottom
-    //     anchors.bottom: imageCameraFeed.top
-    //     anchors.leftMargin: -381
-    //     anchors.rightMargin: -1825
-    //     anchors.topMargin: -780
-    //     anchors.bottomMargin: -680
-    //     anchors.horizontalCenter: imageCameraFeed.horizontalCenter
+        Behavior on color{
 
-    //     MouseArea{
-    //         anchors.fill: parent
+            ColorAnimation {
+                duration: 200
+            }
+        }
 
-    //         onPressed: {
-    //             tmrNotTouched.stop()
-    //             areaTargetMetaData.color = "#80000000"
-    //         }
+        MouseArea{
+            anchors.fill: parent
 
-    //         onReleased: {
-    //             tmrNotTouched.start()
-    //         }
-    //     }
-    // }
+            onPressed: {
+                tmrNotTouched.stop()
+                areaTargetMetaData.color = "#80000000"
+            }
+
+            onReleased: {
+                tmrNotTouched.start()
+            }
+        }
+    }
 
 
-    // CompLabel{
-    //     id: areaClassifcation
+    CompLabel{
+        id: areaClassifcation
 
-    //     visible: screen_RaptorControlRoot.beaconIDSelected !== ""
-    //     x: 120//132
-    //     y: 937//737
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        x: 140//132
+        y: 140//737
 
-    //     color: "#00FF94"
-    //     text: "Drone Swarm"
-    //     font.pixelSize: 25
+        color: "#00FF94"
+        text: "Drone Swarm"
+        font.pixelSize: 25
 
 
 
-    //     Rectangle{
-    //         color: "Transparent"
-    //         z: -1
-    //         anchors.fill: parent
-    //         anchors.margins: -20
-    //         radius: 16
+        Rectangle{
+            color: "Transparent"
+            z: -1
+            anchors.fill: parent
+            anchors.margins: -20
+            radius: 16
 
-    //         border{
-    //             color: "#00FF94"
-    //             width: 3
-    //         }
+            border{
+                color: "#00FF94"
+                width: 3
+            }
 
-    //         Timer{
-    //             id: tmr_DelayFade
-    //             interval: 2000
+            Timer{
+                id: tmr_DelayFade
+                interval: 2000
 
-    //             onTriggered: {
-    //                 parent.color = "Transparent"
-    //             }
-    //         }
+                onTriggered: {
+                    parent.color = "Transparent"
+                }
+            }
 
 
-    //         Behavior on color{
+            Behavior on color{
 
-    //             ColorAnimation {
-    //                 duration: 200
-    //             }
-    //         }
+                ColorAnimation {
+                    duration: 200
+                }
+            }
 
-    //         MouseArea{
-    //             anchors.fill: parent
+            MouseArea{
+                anchors.fill: parent
 
-    //             onPressed: {
-    //                 tmr_DelayFade.stop()
-    //                 parent.color = "#80000000"
+                onPressed: {
+                    tmr_DelayFade.stop()
+                    parent.color = "#80000000"
 
-    //             }
+                }
 
-    //             onReleased: {
-    //                 tmr_DelayFade.start()
+                onReleased: {
+                    tmr_DelayFade.start()
 
-    //             }
-    //         }
-    //     }
-    // }
+                }
+            }
+        }
+    }
 
     Row{
         id: areaControlsRow
 
         height: 90
-        width: 450
+        width: 210//450
 
-        enabled: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
         opacity: screen_RaptorControlRoot.beaconIDSelected ? 1.0 : 0.3
 
         anchors{
@@ -382,29 +365,43 @@ Screen_Raptor__BASE {
 
         spacing: 30
 
+        // CompRaptorNavMenuItem {
+        //     id: menuItemRaptor
+        //     visible: false
+        //     opacity: 0.6
+
+        //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
+        //     imgIconColor: "White"
+        // }
+        // CompRaptorNavMenuItem {
+        //     id: menuItemControl
+        //     visible: false
+        //     opacity:0.6
+
+        //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
+        //     imgIconColor: "White"
+
+        // }
         CompRaptorNavMenuItem {
-            id: menuItemRaptor
-            visible: false
+            id: menuItemShowHideHud
+
             opacity: 0.6
 
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
-            imgIconColor: "White"
-        }
-        CompRaptorNavMenuItem {
-            id: menuItemControl
-            visible: false
-            opacity:0.6
+            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Controller.svg"
 
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
-            imgIconColor: "White"
+            imgIconColor: screen_RaptorControlRoot.hudON ? "Green" : "Red"
 
-        }
-        CompRaptorNavMenuItem {
-            id: menuItem3DReconstruction
-            visible: false
-            opacity: 0.6
-
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(screen_RaptorControlRoot.hudON){
+                        screen_RaptorControlRoot.hudON = false
+                    } else {
+                        screen_RaptorControlRoot.hudON = true
+                    }
+                    console.log("screen_RaptorControlRoot.hudON : " + screen_RaptorControlRoot.hudON)
+                }
+            }
 
         }
 
@@ -419,13 +416,12 @@ Screen_Raptor__BASE {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    console.log("screen_RaptorControlRoot.controlON : " + screen_RaptorControlRoot.controlON)
                     if(screen_RaptorControlRoot.controlON){
                         screen_RaptorControlRoot.controlON = false
                     } else {
                         screen_RaptorControlRoot.controlON = true
                     }
-
+                    console.log("screen_RaptorControlRoot.controlON : " + screen_RaptorControlRoot.controlON)
                 }
             }
 
@@ -442,7 +438,6 @@ Screen_Raptor__BASE {
 
         anchors.centerIn: parent
         visible: screen_RaptorControlRoot.beaconIDSelected === "" && !popupSelectedAssets.visible
-
         height: 200
         width: 400
 
@@ -457,7 +452,7 @@ Screen_Raptor__BASE {
         visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.09 - (stick1.width / 2)
-        y: root.height * 0.66
+        y: root.height * 0.72
         isThrottle: true
     }
     Comp_Drone_Gimble{
@@ -466,17 +461,17 @@ Screen_Raptor__BASE {
         visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.91 - (stick2.width / 2)
-        y: root.height * 0.66
+        y: root.height * 0.72
         isThrottle: false
     }
 
     Rectangle {
         id:deviceData
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         border.color: "#00FF94"
-        border.width: 4
+        border.width: 3
         color: "transparent"
         height: 60
         width: 240
@@ -484,18 +479,15 @@ Screen_Raptor__BASE {
 
         anchors {
             verticalCenter: lblBeaconID.verticalCenter
-            //margins: 140
-            //horizontalCenter: parent.horizontalCenter
             left: lblBeaconID.right
-            leftMargin: 220
+            leftMargin: 120
         }
 
         Row{
             id: row
+
             anchors{
                 centerIn: parent
-                // fill: parent
-                // margins: 10
             }
 
             spacing: 20
@@ -505,7 +497,7 @@ Screen_Raptor__BASE {
 
                 text: screen_RaptorControlRoot.beaconIDSelected ? DroneController.flightRemaining : ""
 
-                anchors.verticalCenter: row.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
 
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -518,9 +510,7 @@ Screen_Raptor__BASE {
                 id: btnBattery
                 height: 40
 
-                anchors{
-                    verticalCenter: deviceData.verticalCenter
-                }
+                anchors.verticalCenter: parent.verticalCenter
 
                 iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Battery100_All.svg"
                 iconColor: "#00FF94"

@@ -3,21 +3,21 @@ import QtQuick 2.15
 Item {
     id: comp_Raptor_Altimeter
 
-    // property alias compassAngle: compass.angle
-    // property alias rollAngle: roll.roll
-    // property alias tiltAngle: tilt.angle
+    property alias compassAngle: compass.angle
+    property alias rollAngle: roll.roll
+    property alias tiltAngle: tilt.angle
 
-    // Comp_Raptor_Altimeter_Roll {
-    //     id: roll
+    Comp_Raptor_Altimeter_Roll {
+        id: roll
 
-    //     anchors.centerIn: parent
-    // }
+        anchors.centerIn: parent
+    }
 
-    // Comp_Raptor_Altimeter_Tilt {
-    //     id: tilt
+    Comp_Raptor_Altimeter_Tilt {
+        id: tilt
 
-    //     anchors.centerIn: parent
-    // }
+        anchors.centerIn: parent
+    }
 
     Comp_Raptor_Altimeter_CrossHair {
         id: crosshair
@@ -25,11 +25,11 @@ Item {
         anchors.centerIn: parent
     }
 
-    // Comp_Raptor_Altimeter_Compass {
-    //     id: compass
+    Comp_Raptor_Altimeter_Compass {
+        id: compass
 
-    //     anchors.horizontalCenter: parent.horizontalCenter
-    //     anchors.bottom: parent.bottom
-    //     anchors.bottomMargin: 50
-    // }
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 50
+    }
 }

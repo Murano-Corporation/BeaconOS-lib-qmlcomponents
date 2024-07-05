@@ -7,7 +7,7 @@ import QtQml 2.12
 Item {
     id: compDeviceInfo
 
-    property alias labelTitle: lbltitle
+    //property alias labelTitle: lbltitle
     property bool isAntenna: true
     property alias isDeviceAntenna : compDeviceInfo.isAntenna
     property string deviceID: ""
@@ -15,13 +15,32 @@ Item {
     property var yVal
     property var listofDevices: []
     property var idx
+    property string selectedAction: ""
 
-    function setCoordinates(model){
-        var xValue = model.Latitude;
-        var yValue = model.Longitude/*
-       compDeviceInfo.xVal = xValue.split("° ")[0];
-       compDeviceInfo.yVal = yValue.split("° ")[0];*/
-        centerOnCoords(xValue, yValue);
+    function setCoordinates(x, y){
+        centerOnCoords(x, y);
+        //tmrAnimation.start()
+    }  //aj
+
+    // Timer {
+    //     id: tmrAnimation
+
+    //     interval: 500
+
+    //     onTriggered: {
+    //         centerOnCoords(xVal, yVal);
+    //     }
+    // }
+
+    function listItemClicked(model, index){
+        compDeviceInfo.deviceID = model.Beacon_ID;
+        compDeviceInfo.isAntenna = model.asset_type === "Antenna" ? true : false
+        compDeviceInfo.idx = index + 16
+        popupActions.open()
+        drawerDeviceInfo.height = devicemap.height - 400
+        listofDevices.currentIndex = index
+        compDeviceInfo.xVal = model.Latitude
+        compDeviceInfo.yVal = model.Longitude
     }
 
     signal centerOnCoords(var x, var y);
@@ -39,19 +58,19 @@ Item {
     //     radius: 20
     // }
 
-    CompLabel {
-        id: lbltitle
+    // CompLabel {
+    //     id: lbltitle
 
-        anchors{
-            top: parent.top
-            topMargin: 10
-            horizontalCenter: parent.horizontalCenter
-        }
-        font{
-            pixelSize: 25
-        }
+    //     anchors{
+    //         top: parent.top
+    //         topMargin: 10
+    //         horizontalCenter: parent.horizontalCenter
+    //     }
+    //     font{
+    //         pixelSize: 25
+    //     }
 
-    }
+    // }
 
     ListView {
         id: listofDevices
@@ -62,63 +81,77 @@ Item {
         spacing: 15
 
         anchors{
-            top: lbltitle.bottom
+            top: parent.top
             left: parent.left
             right: parent.right
 
-            //fill:parent
             topMargin: 10
             leftMargin: 10
             rightMargin: 10
             bottomMargin: 10
         }
 
-        height: parent.height - 60 //popupActions.opened ? (drawerDeviceInfo.height - popupActions.height - 100) : parent.height//height
+        height: parent.height - 20 //popupActions.opened ? (drawerDeviceInfo.height - popupActions.height - 100) : parent.height//height
 
         model: compDeviceInfo.listofDevices
         delegate: CompBtnBreadcrumb{
 
             width: parent.width
+            //height: 60
             Rectangle{
                 anchors.fill: parent
                 color: "Transparent"
+                radius: 20
                 border{
                     width: 3
                     color: "#9287ED"
-                }
-                visible: model.is_selected
+            }
+                visible: (listofDevices.currentIndex === index) && popupActions.visible
             }
             CompImageIcon{
+                id: imgDeviceIcon
 
                 anchors{
                     left: parent.left
                     top: parent.top
                     bottom: parent.bottom
                     leftMargin: 10
-                    rightMargin: 30
+                    rightMargin: 20
                 }
 
                 width: 40
-                source: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
+                source: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/AntennaFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DroneFill.svg"
             }
 
             //appSourceName: myModelData ? myModelData.appSource : '?'
-            text: model.Beacon_ID // + " - " + model.Latitude + ", " + model.Longitude
+            // CompLabel{
+
+            //     anchors{
+            //         verticalCenter: imgDeviceIcon.verticalCenter
+            //         left: imgDeviceIcon.right
+            //     }
+                text: model.location + " - " + model.Beacon_ID
+            //} // + " - " + model.Latitude + ", " + model.Longitude
+
+            //MouseArea{
+            //anchors.fill: parent
             onClicked: {
-                compDeviceInfo.deviceID = model.Beacon_ID;
-                compDeviceInfo.isAntenna = model.asset_type === "Antenna" ? true : false
-                compDeviceInfo.signalBeaconIDChanged(model.Beacon_ID);
-                compDeviceInfo.idx = index + 16
-                popupActions.open();
-                setCoordinates(model);
+                compDeviceInfo.listItemClicked(model, index)
             }
+
+            onPressAndHold: { //aj
+                compDeviceInfo.listItemClicked(model, index)
+                setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
+                devicemap.setZoomLevel(4.5)
+            }
+        //}
 
         }
 
         ScrollBar.vertical: ScrollBar{
             policy: ScrollBar.AlwaysOn
             width: 8
-            position: position + 4
+            //position: position + 4
             //topInset: 51
             topPadding: 10
             bottomPadding: 10
@@ -182,7 +215,8 @@ Item {
             width: 30
 
             onClicked: {
-                drawerDeviceInfo.height = devicemap.height
+                drawerDeviceInfo.height = devicemap.height - 100
+                devicemap.setZoomLevel(1.0)
                 popupActions.close()
             }
 
@@ -234,7 +268,7 @@ Item {
                         height: 40
                         width: 50
                         source: modelData[0]
-                        color: "#9287ED"
+                        color: "#ffffff"
                     }
 
                     CompLabel{
@@ -252,14 +286,78 @@ Item {
                         anchors.fill: parent
 
                         onClicked:{
+                            if(modelData[1] === "View"){
+                                setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
+                                devicemap.setZoomLevel(4.5)
+                                popupCameraFeed.open()
+                            }
                             if(modelData[1] === "Control"){
-                                popupActions.close();
+                                compDeviceInfo.signalBeaconIDChanged(compDeviceInfo.deviceID);
                                 raptorNavMenu.selectedScreen = "Control"
                             }
-
-                        }
+                       }
                     }
                 }
+            }
+        }
+    }
+
+    Comp__BASE_Popup{
+        id: popupCameraFeed
+
+        popupName: "Camera Feed"
+
+        background: CompBtnBreadcrumb {
+            anchors.fill: parent
+        }
+
+        height: 600
+        width: 600
+
+        x: (devicemap.width * 0.5) - (popupCameraFeed.width * 0.5)
+        y: (devicemap.height * 0.5) - (popupCameraFeed.height * 0.5)
+        BtnClose{
+            id: btnCloseCameraFeed
+
+            imageIcon{
+
+                image{
+                    antialiasing: true
+                    smooth: true
+                    cache: true
+                }
+
+                colorOverlay{
+                    antialiasing: true
+                    smooth: true
+                    cached: true
+                }
+
+            }
+
+            anchors{
+                right: parent.right
+                top:parent.top
+                margins: 10
+            }
+
+            height: 30
+            width: 30
+
+            onClicked: {
+                popupCameraFeed.close()
+            }
+
+        }
+
+        Image {
+            id: imageCameraFeed
+            source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
+            fillMode: Image.PreserveAspectCrop
+
+            anchors {
+                fill: parent
+                margins: 40
             }
         }
     }
