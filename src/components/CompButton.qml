@@ -8,6 +8,7 @@ Button {
     property alias backgroundColor: bgRect.color
     property alias fontColor: lblText.color
     property alias backgroundRect: bgRect
+    property alias lblBtnLbl: lblText
     //property alias font: lblText.font
     //property string text: ""
     property real borderWidthHorizontal: 20

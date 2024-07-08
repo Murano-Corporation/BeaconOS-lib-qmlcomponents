@@ -97,6 +97,9 @@ Item {
         delegate: CompBtnBreadcrumb{
 
             width: parent.width
+            lblBtnLbl.horizontalAlignment: Text.AlignLeft
+            lblBtnLbl.leftPadding: 50
+
             //height: 60
             Rectangle{
                 anchors.fill: parent
@@ -302,64 +305,8 @@ Item {
         }
     }
 
-    Comp__BASE_Popup{
-        id: popupCameraFeed
 
-        popupName: "Camera Feed"
 
-        background: CompBtnBreadcrumb {
-            anchors.fill: parent
-        }
 
-        height: 600
-        width: 600
-
-        x: (devicemap.width * 0.5) - (popupCameraFeed.width * 0.5)
-        y: (devicemap.height * 0.5) - (popupCameraFeed.height * 0.5)
-        BtnClose{
-            id: btnCloseCameraFeed
-
-            imageIcon{
-
-                image{
-                    antialiasing: true
-                    smooth: true
-                    cache: true
-                }
-
-                colorOverlay{
-                    antialiasing: true
-                    smooth: true
-                    cached: true
-                }
-
-            }
-
-            anchors{
-                right: parent.right
-                top:parent.top
-                margins: 10
-            }
-
-            height: 30
-            width: 30
-
-            onClicked: {
-                popupCameraFeed.close()
-            }
-
-        }
-
-        Image {
-            id: imageCameraFeed
-            source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
-            fillMode: Image.PreserveAspectCrop
-
-            anchors {
-                fill: parent
-                margins: 40
-            }
-        }
-    }
 }
 

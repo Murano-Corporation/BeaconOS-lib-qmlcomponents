@@ -366,67 +366,67 @@ Comp__BASE {
 
         }
 
-        MapItemView{
-            model: 1
+        // MapItemView{
+        //     model: 1
 
-            delegate: MapQuickItem{
+        //     delegate: MapQuickItem{
 
-                coordinate: mouseArea_CoordGrabber.coordinate
-                anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height)
+        //         coordinate: mouseArea_CoordGrabber.coordinate
+        //         anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height)
 
-                sourceItem: Item
-                {
-                    width: lbl.width
-                    height: iconPoint.y + iconPoint.height
+        //         sourceItem: Item
+        //         {
+        //             width: lbl.width
+        //             height: iconPoint.y + iconPoint.height
 
-                    CompLabel{
-                        id: lbl
-                        visible: false
-                        //text: "lat: %1; lon: %2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
-                        text: ""
+        //             CompLabel{
+        //                 id: lbl
+        //                 visible: false
+        //                 //text: "lat: %1; lon: %2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
+        //                 text: ""
 
-                        font{
-                            pixelSize: isDelta ? 24 : 40
-                        }
+        //                 font{
+        //                     pixelSize: isDelta ? 24 : 40
+        //                 }
 
-                        anchors{
-                            top: parent.top
-                            horizontalCenter: parent.horizontalCenter
-                        }
+        //                 anchors{
+        //                     top: parent.top
+        //                     horizontalCenter: parent.horizontalCenter
+        //                 }
 
-                        horizontalAlignment: Text.AlignHCenter
+        //                 horizontalAlignment: Text.AlignHCenter
 
-                    }
+        //             }
 
-                    DropShadow{
-                        anchors.fill: lbl
-                        source: lbl
+        //             DropShadow{
+        //                 anchors.fill: lbl
+        //                 source: lbl
 
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        color: "#000000"
-                        radius: 4
-                        samples: 16
-                        spread: 1.0
-                    }
+        //                 horizontalOffset: 0
+        //                 verticalOffset: 0
+        //                 color: "#000000"
+        //                 radius: 4
+        //                 samples: 16
+        //                 spread: 1.0
+        //             }
 
-                    CompImageIcon{
-                        id: iconPoint
+        //             // CompImageIcon{
+        //             //     id: iconPoint
 
-                        anchors{
-                            top: lbl.bottom
-                            horizontalCenter: lbl.horizontalCenter
-                        }
+        //             //     anchors{
+        //             //         top: lbl.bottom
+        //             //         horizontalCenter: lbl.horizontalCenter
+        //             //     }
 
-                        height: 32
-                        width: height
+        //             //     height: 32
+        //             //     width: height
 
-                        source: "file:///usr/share/BeaconOS-lib-images/images/DownArrowFill.svg"
-                        color: "#9287ED"
-                    }
-                }
-            }
-        }
+        //             //     source: "file:///usr/share/BeaconOS-lib-images/images/DownArrowFill.svg"
+        //             //     color: "#9287ED"
+        //             // }
+        //         }
+        //     }
+        // }
 
         MapItemView{
             id: mapView_Targets

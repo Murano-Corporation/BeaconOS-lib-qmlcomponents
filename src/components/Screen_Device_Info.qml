@@ -144,8 +144,56 @@ Item {
 
         }
 
+    }
 
+    Rectangle {
+        id: rectPopuoptarget
+        color: "transparent"
+        //opacity: 0.5
+        height: 400
+        width: 700
+        x: (devicemap.width * 0.5) -250
+        y: (devicemap.height * 0.5) - (500 * 0.5)
 
+        onXChanged:{
+            //console.log("X is now: ")
+            popupCameraFeed.mappedPoint = rectPopuoptarget.mapToItem(root.contentItem, 0,0)
+        }
+    }
+
+    Comp__BASE_Popup{
+        id: popupCameraFeed
+
+        popupName: "Camera Feed"
+
+        height: 300
+        width: 500
+
+        property point mappedPoint : rectPopuoptarget.mapToItem(root.contentItem, 0,0)
+        x: mappedPoint.x
+        y: mappedPoint.y
+        onMappedPointChanged:{
+            console.log("Mapped Point is now: " + mappedPoint)
+        }
+        background: Rectangle {
+            color: "transparent"
+            anchors.fill: parent
+        }
+        anchors.centerIn: undefined
+
+        onVisibleChanged: {
+            mappedPoint = rectPopuoptarget.mapToItem(root.contentItem, 0,0)
+        }
+
+        Image {
+            id: imageCameraFeed
+            source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
+            fillMode: Image.PreserveAspectCrop
+
+            anchors {
+                fill: parent
+            }
+        }
     }
 
 
