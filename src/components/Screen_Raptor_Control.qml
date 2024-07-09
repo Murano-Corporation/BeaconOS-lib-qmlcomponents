@@ -8,6 +8,8 @@ Screen_Raptor__BASE {
     property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
     property bool controlON: true
     property bool hudON: true
+    property var gimbal1Struct: DroneController.gimbalA
+    property var gimbal2Struct: DroneController.gimbalB
 
     signal signalBeaconIDSelected(var beaconID)
 
@@ -49,6 +51,18 @@ Screen_Raptor__BASE {
             when: DroneController.droneConnectionState === 2
         }
     ]
+
+    function setGimbal1Values(x_value, y_value){
+        var new_struct = screen_RaptorControlRoot.gimbal1Struct
+        new_struct.axisX_Value = x_value
+        new_struct.axisY_Value = y_value
+    }
+
+    function setGimbal2Values(x_value, y_value){
+        var new_struct = screen_RaptorControlRoot.gimbal2Struct
+        new_struct.axisX_Value = x_value
+        new_struct.axisY_Value = y_value
+    }
 
     anchors.fill: parent
 
@@ -170,17 +184,13 @@ Screen_Raptor__BASE {
         }
     }
 
-
-
-
-    Item{
+    Item {
         id: areaAltimeter
         visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         anchors.centerIn: parent
 
         Comp_Raptor_Altimeter{
-
             anchors.centerIn: parent
             height: 700
             width: 700
@@ -204,8 +214,7 @@ Screen_Raptor__BASE {
             rightMargin: 120
         }
 
-
-        CompLabel{
+        CompLabel {
             id: areaSelfCoordinates
 
             text: screen_RaptorControlRoot.beaconIDSelected ? dispText : ""
@@ -478,6 +487,14 @@ Screen_Raptor__BASE {
         x: root.width * 0.09 - (stick1.width / 2)
         y: root.height * 0.72
         isThrottle: true
+
+        onJoystickXValueChanged: {
+            setGimbal1Values(joystickXValue, joystickYValue)
+        }
+
+        onJoystickYValueChanged: {
+            setGimbal1Values(joystickXValue, joystickYValue)
+        }
     }
     Comp_Drone_Gimble{
         id: stick2
@@ -487,6 +504,14 @@ Screen_Raptor__BASE {
         x: root.width * 0.91 - (stick2.width / 2)
         y: root.height * 0.72
         isThrottle: false
+
+        onJoystickXValueChanged: {
+            setGimbal2Values(joystickXValue, joystickYValue)
+        }
+
+        onJoystickYValueChanged: {
+            setGimbal2Values(joystickXValue, joystickYValue)
+        }
     }
 
     Rectangle {

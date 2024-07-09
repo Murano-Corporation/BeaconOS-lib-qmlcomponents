@@ -14,6 +14,9 @@ Comp__BASE {
     property real joystickDefaultX: (outerCircle.width - joystick.width) / 2 //centers the joystick in the middle of the outerCircle
     property real joystickDefaultY: (outerCircle.height - joystick.height) / 2
 
+    property alias joystickXValue: joystick.finalX
+    property alias joystickYValue: joystick.finalY
+
     property bool isThrottle //for left stick true, right stick false
 
     Rectangle {
@@ -95,10 +98,10 @@ Comp__BASE {
                         joystick.finalY = -1
                     }
 
-                    console.log(touchPoints[0].x + " " + touchPoints[0].y)
-                    console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
-                    console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
-                    console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
+                    //console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                    //console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                    //console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                    //console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
             }
 
             onGestureStarted: {
@@ -109,19 +112,21 @@ Comp__BASE {
                 if (isThrottle === false) {
                     joystick.x = root.joystickDefaultX
                     joystick.y = root.joystickDefaultY
-                    console.log(touchPoints[0].x + " " + touchPoints[0].y)
-                    console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
-                    console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
-                    console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
+                    joystick.finalX = 0
+                    joystick.finalY = 0
+                    ////console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                    ////console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                    ////console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                    ////console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
 
                 }
                 else {
                     joystick.x = root.joystickDefaultX
                     joystick.finalX = 0
-                    console.log(touchPoints[0].x + " " + touchPoints[0].y)
-                    console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
-                    console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
-                    console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
+                    //console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                    //console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                    //console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                    //console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
                 }
 
                 joystick.opacity = 1.0
