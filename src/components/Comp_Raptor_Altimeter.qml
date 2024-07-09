@@ -30,5 +30,6 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 50
     }
 }

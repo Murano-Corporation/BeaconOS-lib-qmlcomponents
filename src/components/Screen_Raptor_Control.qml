@@ -3,13 +3,28 @@ import QtQuick 2.15
 Screen_Raptor__BASE {
     id: screen_RaptorControlRoot
 
-    property string beaconIDSelected : ""
+    property string beaconIDSelected
+    property var selectedItem
+    property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
+    property bool controlON: true
+    property bool hudON: true
 
-    signal signalBeaconIDSelected(string beacon_ID)
+    signal signalBeaconIDSelected(var beaconID)
+
+    onBeaconIDSelectedChanged: {
+        for (var i = 0; i < TableModelRaptorMap.length; i++) {
+            if (beaconIDSelected === TableModelRaptorMap[i].Beacon_ID) {
+                selectedItem = TableModelRaptorMap[i]
+            }
+        }
+    }
 
     Component.onCompleted: {
         tmrDelayOnCompleted.start()
+        console.log(selectedItem)
     }
+
+
 
     anchors.fill: parent
 
@@ -37,7 +52,8 @@ Screen_Raptor__BASE {
     CompBtnBreadcrumb {
         id: lblBeaconID
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+
 
         anchors {
             top: parent.top
@@ -55,13 +71,13 @@ Screen_Raptor__BASE {
 
     Item {
         id: compTargetBoundingBox1
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
         anchors{
             top: parent.top
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            margins: 100
+            margins: 70
         }
 
         Rectangle{
@@ -69,12 +85,14 @@ Screen_Raptor__BASE {
             color: "#00FF94"
             height: 2
             width: 270
+            radius: 16
         }
         Rectangle{
             anchors.left: parent.left
             color: "#00FF94"
             height: 123
             width: 2
+            radius: 16
         }
 
         Rectangle{
@@ -83,12 +101,14 @@ Screen_Raptor__BASE {
             color: "#00FF94"
             height: 2
             width: 270
+            radius: 16
         }
         Rectangle{
             anchors.right: parent.right
             color: "#00FF94"
             height: 123
             width: 2
+            radius: 16
         }
 
         Rectangle{
@@ -97,6 +117,7 @@ Screen_Raptor__BASE {
             color: "#00FF94"
             height: 2
             width: 270
+            radius: 16
         }
         Rectangle{
             anchors.bottom: parent.bottom
@@ -104,6 +125,7 @@ Screen_Raptor__BASE {
             color: "#00FF94"
             height: 123
             width: 2
+            radius: 16
         }
 
         Rectangle{
@@ -112,6 +134,7 @@ Screen_Raptor__BASE {
             color: "#00FF94"
             height: 2
             width: 270
+            radius: 16
         }
         Rectangle{
             anchors.bottom: parent.bottom
@@ -119,22 +142,18 @@ Screen_Raptor__BASE {
             color: "#00FF94"
             height: 123
             width: 2
+            radius: 16
         }
     }
 
 
 
 
-    Rectangle{
+    Item{
         id: areaAltimeter
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         anchors.centerIn: parent
-
-        height: 40
-        width: 40
-
-        color: "#80ff8899"
 
         Comp_Raptor_Altimeter{
 
@@ -144,43 +163,55 @@ Screen_Raptor__BASE {
         }
     }
 
-    CompLabel{
-        id: areaSelfCoordinates
+    Rectangle {
 
-        text: screen_RaptorControlRoot.beaconIDSelected ? "20.9584° N, 151.700° W" : ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
-        font{
-            pixelSize: 40
+        border.color: "#00FF94"
+        border.width: 3
+        color: "transparent"
+        height: 60
+        width: 440
+        radius: 20
+
+        anchors {
+            right: lblBeaconID.left
+            verticalCenter: lblBeaconID.verticalCenter
+            rightMargin: 120
         }
 
-        anchors{
-            top: parent.top
-            right: parent.right
-            margins: 20
+
+        CompLabel{
+            id: areaSelfCoordinates
+
+            text: screen_RaptorControlRoot.beaconIDSelected ? dispText : ""
+
+            anchors{
+                centerIn: parent
+            }
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            color: "#00FF94"
+
         }
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignRight
-
-        height: 67
-        width: 521
-
-        color: "#00FF94"
-
     }
 
     Rectangle {
         id: areaTargetMetaData
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
+        height: screen_RaptorControlRoot.height * 0.48
+        width: screen_RaptorControlRoot.width * 0.17
+        radius: 16
 
-        height: 500
-        width: 350
+        x: screen_RaptorControlRoot.width * 0.80
+        y: screen_RaptorControlRoot.height * 0.2
 
         color: "Transparent"
 
         border{
-            width: 4
+            width: 3
             color: "#00FF94"
         }
 
@@ -242,16 +273,6 @@ Screen_Raptor__BASE {
                 duration: 200
             }
         }
-        anchors.verticalCenter: imageCameraFeed.verticalCenter
-        anchors.left: imageCameraFeed.right
-        anchors.right: imageCameraFeed.left
-        anchors.top: imageCameraFeed.bottom
-        anchors.bottom: imageCameraFeed.top
-        anchors.leftMargin: -391
-        anchors.rightMargin: -1879
-        anchors.topMargin: -826
-        anchors.bottomMargin: -754
-        anchors.horizontalCenter: imageCameraFeed.horizontalCenter
 
         MouseArea{
             anchors.fill: parent
@@ -271,9 +292,9 @@ Screen_Raptor__BASE {
     CompLabel{
         id: areaClassifcation
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
-        x: 132
-        y: 737
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        x: 140//132
+        y: 140//737
 
         color: "#00FF94"
         text: "Drone Swarm"
@@ -286,6 +307,7 @@ Screen_Raptor__BASE {
             z: -1
             anchors.fill: parent
             anchors.margins: -20
+            radius: 16
 
             border{
                 color: "#00FF94"
@@ -326,44 +348,60 @@ Screen_Raptor__BASE {
         }
     }
 
-
     Row{
         id: areaControlsRow
 
         height: 90
-        width: 400
+        width: 210//450
 
-        enabled: screen_RaptorControlRoot.beaconIDSelected !== ""
+        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
         opacity: screen_RaptorControlRoot.beaconIDSelected ? 1.0 : 0.3
 
         anchors{
             bottom: parent.bottom
-            bottomMargin: 40
+            bottomMargin: 20
             horizontalCenter: parent.horizontalCenter
         }
 
         spacing: 30
 
+        // CompRaptorNavMenuItem {
+        //     id: menuItemRaptor
+        //     visible: false
+        //     opacity: 0.6
+
+        //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
+        //     imgIconColor: "White"
+        // }
+        // CompRaptorNavMenuItem {
+        //     id: menuItemControl
+        //     visible: false
+        //     opacity:0.6
+
+        //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
+        //     imgIconColor: "White"
+
+        // }
         CompRaptorNavMenuItem {
-            id: menuItemRaptor
+            id: menuItemShowHideHud
+
             opacity: 0.6
 
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
-            imgIconColor: "White"
-        }
-        CompRaptorNavMenuItem {
-            id: menuItemControl
-            opacity:0.6
+            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Controller.svg"
 
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
-            imgIconColor: "White"
+            imgIconColor: screen_RaptorControlRoot.hudON ? "Green" : "Red"
 
-        }
-        CompRaptorNavMenuItem {
-            id: menuItem3DReconstruction
-            opacity: 0.6
-
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(screen_RaptorControlRoot.hudON){
+                        screen_RaptorControlRoot.hudON = false
+                    } else {
+                        screen_RaptorControlRoot.hudON = true
+                    }
+                    console.log("screen_RaptorControlRoot.hudON : " + screen_RaptorControlRoot.hudON)
+                }
+            }
 
         }
 
@@ -372,6 +410,20 @@ Screen_Raptor__BASE {
             opacity: 0.6
 
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"
+
+            imgIconColor: screen_RaptorControlRoot.controlON ? "Green" : "Red"
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(screen_RaptorControlRoot.controlON){
+                        screen_RaptorControlRoot.controlON = false
+                    } else {
+                        screen_RaptorControlRoot.controlON = true
+                    }
+                    console.log("screen_RaptorControlRoot.controlON : " + screen_RaptorControlRoot.controlON)
+                }
+            }
 
         }
 
@@ -386,7 +438,6 @@ Screen_Raptor__BASE {
 
         anchors.centerIn: parent
         visible: screen_RaptorControlRoot.beaconIDSelected === "" && !popupSelectedAssets.visible
-
         height: 200
         width: 400
 
@@ -395,6 +446,142 @@ Screen_Raptor__BASE {
         onClicked: popupSelectedAssets.open()
     }
 
+    Comp_Drone_Gimble{
+        id: stick1
+
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        opacity: 0.25
+        x: root.width * 0.09 - (stick1.width / 2)
+        y: root.height * 0.72
+        isThrottle: true
+    }
+    Comp_Drone_Gimble{
+        id: stick2
+
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        opacity: 0.25
+        x: root.width * 0.91 - (stick2.width / 2)
+        y: root.height * 0.72
+        isThrottle: false
+    }
+
+    Rectangle {
+        id:deviceData
+
+        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+
+        border.color: "#00FF94"
+        border.width: 3
+        color: "transparent"
+        height: 60
+        width: 240
+        radius: 20
+
+        anchors {
+            verticalCenter: lblBeaconID.verticalCenter
+            left: lblBeaconID.right
+            leftMargin: 120
+        }
+
+        Row{
+            id: row
+
+            anchors{
+                centerIn: parent
+            }
+
+            spacing: 20
+
+            CompLabel{
+                id: deviceFlightRemaining
+
+                text: screen_RaptorControlRoot.beaconIDSelected ? DroneController.flightRemaining : ""
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+
+                color: "#00FF94"
+
+            }
+
+            CompIconBtn{
+                id: btnBattery
+                height: 40
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Battery100_All.svg"
+                iconColor: "#00FF94"
+            }
+
+            Item {
+                id: groupBars
+
+                property int bars: DroneController.deviceSignal
+                property color colorWeak: "#ffffff"
+                property color colorStrong: "#00FF94"
+                property real barWidth: width * 0.20
+
+                height: parent.height * 0.50
+                width: parent.width * ( 0.12 )
+                anchors.verticalCenter: parent.verticalCenter
+
+                Row {
+                    anchors.fill: parent
+                    spacing: 2
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+
+                        height: parent.height * 0.2
+                        width: groupBars.barWidth
+
+                        color: (groupBars.bars >= 1 ? groupBars.colorStrong : groupBars.colorWeak)
+                    }
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+
+                        height: parent.height * 0.4
+                        width: groupBars.barWidth
+
+                        color: (groupBars.bars >= 2 ? groupBars.colorStrong : groupBars.colorWeak)
+                    }
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+
+                        height: parent.height * 0.6
+                        width: groupBars.barWidth
+
+                        color: (groupBars.bars >= 3 ? groupBars.colorStrong : groupBars.colorWeak)
+                    }
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+
+                        height: parent.height * 0.8
+                        width: groupBars.barWidth
+
+                        color: (groupBars.bars >= 4 ? groupBars.colorStrong : groupBars.colorWeak)
+                    }
+
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+
+                        height: parent.height * 1.0
+                        width: groupBars.barWidth
+
+                        color: (groupBars.bars >= 5 ? groupBars.colorStrong : groupBars.colorWeak)
+                    }
+                }
+
+
+            }
+        }
+    }
 
 
 }

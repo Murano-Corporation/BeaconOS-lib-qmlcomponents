@@ -18,6 +18,7 @@ Loader{
     asynchronous: true
     anchors.fill: areaContents
 
+
     sourceComponent: Screen_Raptor_Delta {
         id: screen_Raptor_Delta
     }

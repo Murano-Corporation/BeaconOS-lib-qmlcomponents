@@ -11,8 +11,8 @@ Rectangle {
     color: "transparent"
     radius: 360
 
-    Component.onCompleted: {roll = 2160
-    }
+    // Component.onCompleted: {roll = 2160
+    // }
 
     Item {
         id: clipItem

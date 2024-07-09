@@ -33,6 +33,7 @@ Comp__BASE {
         }
     }
 
+
     function getSimpleMapNameString(mapTypeName)
     {
 
@@ -333,9 +334,7 @@ Comp__BASE {
             bottom: parent.bottom
         }
 
-        onZoomLevelChanged: compMapViewerRoot.zoomCurrent = zoomLevel
-
-
+        onZoomLevelChanged: {compMapViewerRoot.zoomCurrent = zoomLevel}
 
         copyrightsVisible: false
         activeMapType: supportedMapTypes[compMapViewerRoot.activeMapTypeIndex]
@@ -367,66 +366,67 @@ Comp__BASE {
 
         }
 
-        MapItemView{
-            model: 1
+        // MapItemView{
+        //     model: 1
 
-            delegate: MapQuickItem{
+        //     delegate: MapQuickItem{
 
-                coordinate: mouseArea_CoordGrabber.coordinate
-                anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height)
+        //         coordinate: mouseArea_CoordGrabber.coordinate
+        //         anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height)
 
-                sourceItem: Item
-                {
-                    width: lbl.width
-                    height: iconPoint.y + iconPoint.height
+        //         sourceItem: Item
+        //         {
+        //             width: lbl.width
+        //             height: iconPoint.y + iconPoint.height
 
-                    CompLabel{
-                        id: lbl
-                        visible: false
-                        text: "lat: %1; lon:%2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
+        //             CompLabel{
+        //                 id: lbl
+        //                 visible: false
+        //                 //text: "lat: %1; lon: %2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
+        //                 text: ""
 
-                        font{
-                            pixelSize: isDelta ? 24 : 40
-                        }
+        //                 font{
+        //                     pixelSize: isDelta ? 24 : 40
+        //                 }
 
-                        anchors{
-                            top: parent.top
-                            horizontalCenter: parent.horizontalCenter
-                        }
+        //                 anchors{
+        //                     top: parent.top
+        //                     horizontalCenter: parent.horizontalCenter
+        //                 }
 
-                        horizontalAlignment: Text.AlignHCenter
+        //                 horizontalAlignment: Text.AlignHCenter
 
-                    }
+        //             }
 
-                    DropShadow{
-                        anchors.fill: lbl
-                        source: lbl
+        //             DropShadow{
+        //                 anchors.fill: lbl
+        //                 source: lbl
 
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        color: "#000000"
-                        radius: 4
-                        samples: 16
-                        spread: 1.0
-                    }
+        //                 horizontalOffset: 0
+        //                 verticalOffset: 0
+        //                 color: "#000000"
+        //                 radius: 4
+        //                 samples: 16
+        //                 spread: 1.0
+        //             }
 
-                    CompImageIcon{
-                        id: iconPoint
+        //             // CompImageIcon{
+        //             //     id: iconPoint
 
-                        anchors{
-                            top: lbl.bottom
-                            horizontalCenter: lbl.horizontalCenter
-                        }
+        //             //     anchors{
+        //             //         top: lbl.bottom
+        //             //         horizontalCenter: lbl.horizontalCenter
+        //             //     }
 
-                        height: 32
-                        width: height
+        //             //     height: 32
+        //             //     width: height
 
-                        source: "file:///usr/share/BeaconOS-lib-images/images/DownArrowFill.svg"
-                        color: "#9287ED"
-                    }
-                }
-            }
-        }
+        //             //     source: "file:///usr/share/BeaconOS-lib-images/images/DownArrowFill.svg"
+        //             //     color: "#9287ED"
+        //             // }
+        //         }
+        //     }
+        // }
 
         MapItemView{
             id: mapView_Targets
@@ -439,8 +439,11 @@ Comp__BASE {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-                assetID: model.Beacon_ID
+                assetID: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
+                imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
+                iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
+                iconDetails.opacity: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? 1.0 : 0.9
                 onCenterOnPoint: {
 
                     if(compMapViewerRoot.selectedAssetDataModel === model)
