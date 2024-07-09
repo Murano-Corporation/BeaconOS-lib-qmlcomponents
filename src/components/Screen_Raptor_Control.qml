@@ -24,7 +24,31 @@ Screen_Raptor__BASE {
         console.log(selectedItem)
     }
 
+    readonly property string eSTATE_NO_ASSET_SELECTED: "State-No Asset Selected"
+    readonly property string eSTATE_CONNECTING: "State-Connecting"
+    readonly property string eSTATE_CONNECTED: "State-Connected"
 
+    state: eSTATE_NO_ASSET_SELECTED
+    onStateChanged: {
+        console.log('Drone Connection State is now: ' + state)
+    }
+    states: [
+        State{
+            name: eSTATE_NO_ASSET_SELECTED
+
+            when: DroneController.droneConnectionState === 0
+        },
+        State{
+            name: eSTATE_CONNECTING
+
+            when: DroneController.droneConnectionState === 1
+        },
+        State{
+            name: eSTATE_CONNECTED
+
+            when: DroneController.droneConnectionState === 2
+        }
+    ]
 
     anchors.fill: parent
 
@@ -42,8 +66,8 @@ Screen_Raptor__BASE {
     Image {
         id: imageCameraFeed
         visible: screen_RaptorControlRoot.beaconIDSelected !== ""
-        source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
-
+        //source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
+        source: "image://drone-camera/" + DroneController.imageProviderFrameId
         anchors {
             fill: parent
         }
