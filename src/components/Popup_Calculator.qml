@@ -28,7 +28,7 @@ Popup {
         maxX: screenWidth - containerRoot.width - 25 //not dynamic //for screen borders
         maxY: screenHeight - containerRoot.height - 25 // not dynamic //for screen borders
 
-        opacity: 0.6
+        opacity: 0.8
 
         //height: popup.minimumHeight
         //width: popup.minimumWidth
@@ -100,6 +100,7 @@ Popup {
             anchors.leftMargin: 20
             anchors.rightMargin: 20
             //anchors.margins: 20
+            keyFontSize: Math.min(containerRoot.height, containerRoot.width) * 0.04;
         }
     }
 }

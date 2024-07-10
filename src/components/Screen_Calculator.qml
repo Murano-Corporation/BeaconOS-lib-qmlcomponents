@@ -10,14 +10,14 @@ Screen__BASE {
     property int numKeyWidth: ((calculatorScreen.width * 0.23))
     property int numKeyHeight: calculatorScreen.height * 1.4
     property int numSpacing: root.width * 0.0223
+    property int keyFontSize: Math.min(root.height, root.width) * 0.06
     property string inputColor: "white"
     property string outputColor: "black"
     property string keyButtonsBgColor: "#065465"
     property string inputString: UtilityCalculator.sInputString
     property string answerString: UtilityCalculator.sAnswerString
     property var currentMenu: UtilityCalculator.sCurrentMenu
-
-
+    property bool varMenuOpen: false
 
     Column {
         id: calculatorScreen
@@ -33,12 +33,17 @@ Screen__BASE {
             id: outputScreen
 
             width: calculatorScreen.width
-            height: root.height * 0.18
+            height: varMenuOpen ? root.height * 0.94 : root.height * 0.18
             color: outputColor
+            // border.color: inputColor
+            // border.width: 2
             radius: 10
+
 
             TextInput{
                 id: inputText
+
+                visible: varMenuOpen ? false : true
 
                 text: inputString
                 color: "white"
@@ -56,6 +61,9 @@ Screen__BASE {
 
                 cursorDelegate: Rectangle {
                     id: cursorDelegate
+
+                    visible: varMenuOpen ? false : true
+
                     color: "white"
                     width: 2
                     height: 30
@@ -86,6 +94,10 @@ Screen__BASE {
                 Connections {
                     target: UtilityCalculator
                     function onSignal_KeyPressed(key) {
+                        if (answerText !== "") {
+                            answerText.clear()
+                        }
+
                         inputText.insert(inputText.cursorPosition, key)
                     }
                     function onSignal_Clear() {
@@ -93,18 +105,33 @@ Screen__BASE {
                         answerText.clear() //new
                     }
                     function onSignal_BackSpace() {
+                        if (answerText !== "") {
+                            answerText.clear()
+                        }
                         console.log(inputText.cursorPosition)
                         inputText.remove(inputText.cursorPosition - 1, inputText.cursorPosition)
                     }
                     function onSignal_Delete() {
+                        if (answerText !== "") {
+                            answerText.clear()
+                        }
                         console.log(inputText.cursorPosition)
                         inputText.remove(inputText.cursorPosition, inputText.cursorPosition + 1)
                     }
                     function onSignal_MoveCursorToLeft() {
+                        if (answerText !== "") {
+                            answerText.clear()
+                        }
                         inputText.cursorPosition--
                     }
                     function onSignal_MoveCursorToRight() {
+                        if (answerText !== "") {
+                            answerText.clear()
+                        }
                         inputText.cursorPosition++
+                    }
+                    function onSignal_OpenVarMenu() {
+                        varMenuOpen = true
                     }
 
                 }
@@ -113,6 +140,8 @@ Screen__BASE {
 
             TextInput{
                 id: answerText
+
+                visible: varMenuOpen ? false : true
 
                 text: answerString
                 enabled: false //new
@@ -136,6 +165,8 @@ Screen__BASE {
         Item{
             id: keyPad
 
+            visible: varMenuOpen ? false : true
+
             anchors {
                 leftMargin: 0.05 * parent.width
                 rightMargin: anchors.leftMargin
@@ -151,26 +182,25 @@ Screen__BASE {
                 Repeater{
                     model: 20
 
-                    Button{
+                    CompBtnBreadcrumb{
                         id: keyButtons
+
+                        visible: varMenuOpen ? false : true
 
                         width: root.width * 0.23
                         height: root.height * 0.14
 
-                        background: Rectangle {
-                            id: keyButtonsBg
-                            color: root.keyButtonsBgColor
-                            radius: 20
-                        }
+                        text: root.currentMenu[index]
+                        // color: "white"
+                        font.pixelSize: keyFontSize
+                        //font.pixelSize: Math.min(root.height, root.width) * 0.05
+                        //anchors.centerIn: parent
 
-                        CompLabel{
-                            id: keyButtonText
+                        // CompLabel{
+                        //     id: keyButtonText
 
-                            text: root.currentMenu[index]
-                            color: "white"
-                            font.pixelSize: Math.min(root.height, root.width) * 0.05
-                            anchors.centerIn: parent
-                        }
+
+                        // }
 
                         onClicked:{
                             //actions[index]()
@@ -180,6 +210,67 @@ Screen__BASE {
                 }
             }
         }
+
+        Item{
+            id: variableList
+
+            visible: varMenuOpen ? true : false
+
+            x: outputScreen.width * 0.01
+            y: outputScreen.height * 0.03
+
+            ListView{
+
+                width: outputScreen.width * 0.98
+                height: outputScreen.height * 0.94
+                spacing: outputScreen.height * 0.02
+
+                model: ListModel {
+                            ListElement { name: "Return" }
+                            ListElement { name: "Item 1 = 4526.39" }
+                            ListElement { name: "Item 2 = 52.26" }
+                            ListElement { name: "Item 3 = 0.237" }
+                            ListElement { name: "Item 4 = 4559" }
+                            ListElement { name: "Item 5 = 89.89" }
+                            ListElement { name: "Item 6 = 777" }
+                            ListElement { name: "Item 7 = 478.2" }
+                            ListElement { name: "Item 8 = 0.4" }
+                            ListElement { name: "Item 9 = 4178" }
+                            // Add more ListElements here to increase row count
+                        }
+
+                    delegate: CompBtnBreadcrumb{
+                        id: listButtons
+
+                        visible: varMenuOpen ? true : false
+
+                        width: outputScreen.width * 0.98
+                        height: outputScreen.height * 0.1
+                        text: model.name
+
+                        //root.currentMenu[index]
+                        //color: "white"
+                        font.pixelSize: Math.min(root.height, root.width) * 0.07
+                        //font.pixelSize: Math.min(root.height, root.width) * 0.05
+
+                        onClicked:{
+                            //actions[index]()
+                            UtilityCalculator.varMenu(index)
+                            varMenuOpen = false
+                            //set Menu to Main
+                        }
+                    }
+                    ScrollBar.vertical: ScrollBar{
+                        policy: ScrollBar.AlwaysOn
+                        width: 8
+                        //position: position + 4
+                        //topInset: 51
+                        topPadding: 10
+                        bottomPadding: 10
+                    }
+                }
+        }
+
     }
 }
 
