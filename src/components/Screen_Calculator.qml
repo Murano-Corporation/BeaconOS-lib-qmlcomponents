@@ -17,6 +17,7 @@ Screen__BASE {
     property string inputString: UtilityCalculator.sInputString
     property string answerString: UtilityCalculator.sAnswerString
     property var currentMenu: UtilityCalculator.sCurrentMenu
+    property var variables: UtilityCalculator.mVariables
     property bool varMenuOpen: false
 
     Column {
@@ -38,6 +39,12 @@ Screen__BASE {
             // border.color: inputColor
             // border.width: 2
             radius: 10
+
+            // Behavior on height{
+            //     NumberAnimation{
+            //         duration: 1000
+            //     }
+            // }
 
 
             TextInput{
@@ -226,49 +233,54 @@ Screen__BASE {
                 spacing: outputScreen.height * 0.02
 
                 model: ListModel {
-                            ListElement { name: "Return" }
-                            ListElement { name: "Item 1 = 4526.39" }
-                            ListElement { name: "Item 2 = 52.26" }
-                            ListElement { name: "Item 3 = 0.237" }
-                            ListElement { name: "Item 4 = 4559" }
-                            ListElement { name: "Item 5 = 89.89" }
-                            ListElement { name: "Item 6 = 777" }
-                            ListElement { name: "Item 7 = 478.2" }
-                            ListElement { name: "Item 8 = 0.4" }
-                            ListElement { name: "Item 9 = 4178" }
-                            // Add more ListElements here to increase row count
-                        }
+                    id: myModel
 
-                    delegate: CompBtnBreadcrumb{
-                        id: listButtons
+                }
 
-                        visible: varMenuOpen ? true : false
+                Component.onCompleted: {
+                    myModel.append({ "name": "Return"});
+                    for (var key in root.variables) {
+                        myModel.append({ "name": key, "value": root.variables[key]});
+                    }
+                    myModel.append({ "name": "New Variable"});
+                }
 
-                        width: outputScreen.width * 0.98
-                        height: outputScreen.height * 0.1
-                        text: model.name
+                delegate: CompBtnBreadcrumb{
+                    id: listButtons
 
-                        //root.currentMenu[index]
-                        //color: "white"
-                        font.pixelSize: Math.min(root.height, root.width) * 0.07
-                        //font.pixelSize: Math.min(root.height, root.width) * 0.05
+                    visible: varMenuOpen ? true : false
 
-                        onClicked:{
-                            //actions[index]()
-                            UtilityCalculator.varMenu(index)
-                            varMenuOpen = false
-                            //set Menu to Main
+                    width: outputScreen.width * 0.98
+                    height: outputScreen.height * 0.1
+                    text: {
+                        if (index !== 0 && index !== myModel.count - 1) {
+                            return model.name + " - " + model.value;
+                        } else {
+                            return model.name;
                         }
                     }
-                    ScrollBar.vertical: ScrollBar{
-                        policy: ScrollBar.AlwaysOn
-                        width: 8
-                        //position: position + 4
-                        //topInset: 51
-                        topPadding: 10
-                        bottomPadding: 10
+
+                    //root.currentMenu[index]
+                    //color: "white"
+                    font.pixelSize: Math.min(root.height, root.width) * 0.07
+                    //font.pixelSize: Math.min(root.height, root.width) * 0.05
+
+                    onClicked:{
+                        //actions[index]()
+                        UtilityCalculator.varMenu(index)
+                        varMenuOpen = false
+                        //set Menu to Main
                     }
                 }
+                ScrollBar.vertical: ScrollBar{
+                    policy: ScrollBar.AlwaysOn
+                    width: 8
+                    //position: position + 4
+                    //topInset: 51
+                    topPadding: 10
+                    bottomPadding: 10
+                }
+            }
         }
 
     }
