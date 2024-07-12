@@ -43,6 +43,13 @@ Screen__BASE {
             // Behavior on height{
             //     NumberAnimation{
             //         duration: 1000
+            //         // onStarted {
+            //         //     //all the true things become false
+            //         // }
+
+            //         // onCompleted {
+            //         //     //all the false things become true
+            //         // }
             //     }
             // }
 
@@ -101,10 +108,6 @@ Screen__BASE {
                 Connections {
                     target: UtilityCalculator
                     function onSignal_KeyPressed(key) {
-                        if (answerText !== "") {
-                            answerText.clear()
-                        }
-
                         inputText.insert(inputText.cursorPosition, key)
                     }
                     function onSignal_Clear() {
@@ -112,29 +115,17 @@ Screen__BASE {
                         answerText.clear() //new
                     }
                     function onSignal_BackSpace() {
-                        if (answerText !== "") {
-                            answerText.clear()
-                        }
                         console.log(inputText.cursorPosition)
                         inputText.remove(inputText.cursorPosition - 1, inputText.cursorPosition)
                     }
                     function onSignal_Delete() {
-                        if (answerText !== "") {
-                            answerText.clear()
-                        }
                         console.log(inputText.cursorPosition)
                         inputText.remove(inputText.cursorPosition, inputText.cursorPosition + 1)
                     }
                     function onSignal_MoveCursorToLeft() {
-                        if (answerText !== "") {
-                            answerText.clear()
-                        }
                         inputText.cursorPosition--
                     }
                     function onSignal_MoveCursorToRight() {
-                        if (answerText !== "") {
-                            answerText.clear()
-                        }
                         inputText.cursorPosition++
                     }
                     function onSignal_OpenVarMenu() {
@@ -227,6 +218,7 @@ Screen__BASE {
             y: outputScreen.height * 0.03
 
             ListView{
+                id: listView
 
                 width: outputScreen.width * 0.98
                 height: outputScreen.height * 0.94
@@ -234,27 +226,41 @@ Screen__BASE {
 
                 model: ListModel {
                     id: myModel
-
                 }
 
                 Component.onCompleted: {
-                    myModel.append({ "name": "Return"});
-                    for (var key in root.variables) {
-                        myModel.append({ "name": key, "value": root.variables[key]});
+                    listView.updateList();
+                }
+
+                Connections{
+                    target: UtilityCalculator
+                    function onSignal_VariablesChanged() {
+                        listView.updateList();
                     }
-                    myModel.append({ "name": "New Variable"});
+                }
+
+                function updateList() {
+                    myModel.clear();
+                    myModel.append({"name": "Return"});
+                    for (var key in root.variables) {
+                        myModel.append({
+                                           "name": key
+                                       });
+                    }
+                    myModel.append({"name": "New Variable"});
                 }
 
                 delegate: CompBtnBreadcrumb{
                     id: listButtons
 
                     visible: varMenuOpen ? true : false
-
+                    property bool isStoredVar: (index !== 0 && index !== myModel.count - 1)
+                    property string the_value: isStoredVar ? UtilityCalculator.getVariableValue(model.name) : "";
                     width: outputScreen.width * 0.98
                     height: outputScreen.height * 0.1
                     text: {
-                        if (index !== 0 && index !== myModel.count - 1) {
-                            return model.name + " - " + model.value;
+                        if (isStoredVar) {
+                            return model.name + " - " + the_value;
                         } else {
                             return model.name;
                         }
@@ -273,7 +279,7 @@ Screen__BASE {
                     }
                 }
                 ScrollBar.vertical: ScrollBar{
-                    policy: ScrollBar.AlwaysOn
+                    policy: ScrollBar.AsNeeded
                     width: 8
                     //position: position + 4
                     //topInset: 51
