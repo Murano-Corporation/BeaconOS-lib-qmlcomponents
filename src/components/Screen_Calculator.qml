@@ -131,6 +131,10 @@ Screen__BASE {
                     function onSignal_OpenVarMenu() {
                         varMenuOpen = true
                     }
+                    function onSignal_CloseVarMenu() {
+                        varMenuOpen = false
+                    }
+
 
                 }
 
@@ -173,20 +177,20 @@ Screen__BASE {
             }
 
             Grid{
-                columns: 4
-                columnSpacing: root.width * 0.02
-                rowSpacing: root.height * 0.02
+                columns: 7
+                columnSpacing: root.width * 0.01
+                rowSpacing: root.height * 0.01
 
                 Repeater{
-                    model: 20
+                    model: 35
 
                     CompBtnBreadcrumb{
                         id: keyButtons
 
                         visible: varMenuOpen ? false : true
 
-                        width: root.width * 0.23
-                        height: root.height * 0.14
+                        width: root.width * 0.131
+                        height: root.height * 0.148
 
                         text: root.currentMenu[index]
                         // color: "white"

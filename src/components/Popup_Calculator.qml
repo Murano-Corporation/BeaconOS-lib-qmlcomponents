@@ -12,8 +12,8 @@ Popup {
     property real screenHeight: parent.height
     property real screenWidth: parent.width
 
-    property real minimumWidth: 300
-    property real minimumHeight: 450
+    property real minimumWidth: 800
+    property real minimumHeight: 600
 
     modal: false
     closePolicy: Popup.NoAutoClose
