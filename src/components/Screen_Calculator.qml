@@ -64,7 +64,7 @@ Screen__BASE {
                 font.pixelSize: Math.min(root.height, root.width) * 0.07
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignTop
-                maximumLength: 50 // Set maximum length of text input to one line
+                maximumLength: 40 // Set maximum length of text input to one line
                 wrapMode: TextInput.NoWrap
                 selectByMouse: true
                 cursorVisible: true
@@ -112,7 +112,7 @@ Screen__BASE {
                     }
                     function onSignal_Clear() {
                         inputText.clear()
-                        answerText.clear() //new
+                        answerText.clear()
                     }
                     function onSignal_BackSpace() {
                         console.log(inputText.cursorPosition)
@@ -202,7 +202,7 @@ Screen__BASE {
 
                         onClicked:{
                             //actions[index]()
-                            UtilityCalculator.calculate(index)
+                            UtilityCalculator.main(index)
                         }
                     }
                 }
@@ -218,7 +218,9 @@ Screen__BASE {
             y: outputScreen.height * 0.03
 
             ListView{
-                id: listView
+                id: listViewVariables
+
+                property int indexOfExpanded: -1
 
                 width: outputScreen.width * 0.98
                 height: outputScreen.height * 0.94
@@ -229,13 +231,13 @@ Screen__BASE {
                 }
 
                 Component.onCompleted: {
-                    listView.updateList();
+                    listViewVariables.updateList();
                 }
 
                 Connections{
                     target: UtilityCalculator
                     function onSignal_VariablesChanged() {
-                        listView.updateList();
+                        listViewVariables.updateList();
                     }
                 }
 
@@ -253,17 +255,23 @@ Screen__BASE {
                 delegate: CompBtnBreadcrumb{
                     id: listButtons
 
+                    property bool isExpanded: index === listViewVariables.indexOfExpanded
+
                     visible: varMenuOpen ? true : false
                     property bool isStoredVar: (index !== 0 && index !== myModel.count - 1)
                     property string the_value: isStoredVar ? UtilityCalculator.getVariableValue(model.name) : "";
                     width: outputScreen.width * 0.98
-                    height: outputScreen.height * 0.1
+                    height: outputScreen.height * 0.1 * (isExpanded ? 2.1 : 1.0)
                     text: {
                         if (isStoredVar) {
                             return model.name + " - " + the_value;
                         } else {
                             return model.name;
                         }
+                    }
+                    textObject {
+                        verticalAlignment: listButtons.isExpanded ? Text.AlignTop : Text.AlignVCenter
+                        anchors.verticalCenter: listButtons.isExpanded ? undefined : iconImage.verticalCenter
                     }
 
                     //root.currentMenu[index]
@@ -272,10 +280,93 @@ Screen__BASE {
                     //font.pixelSize: Math.min(root.height, root.width) * 0.05
 
                     onClicked:{
-                        //actions[index]()
+
+                        listViewVariables.indexOfExpanded = -1
+
                         UtilityCalculator.varMenu(index)
                         varMenuOpen = false
-                        //set Menu to Main
+
+                        if (index === myModel.count - 1) {
+                            console.log("before focus")
+                            inputText.forceActiveFocus()
+                        }
+                    }
+
+                    onPressAndHold: {
+                        if (isStoredVar) {
+                            listViewVariables.indexOfExpanded = index
+                        }
+                    }
+
+                    Row {
+                        id: varHoldOptions
+
+                        visible: isExpanded
+
+                        spacing: useVarOption.width * 0.1
+
+                        y: parent.height * 0.4
+
+                        anchors {
+                            horizontalCenter: parent.horizontalCenter
+                        }
+
+                        CompBtnBreadcrumb {
+                            id: useVarOption
+
+                            height: listButtons.height * 0.52
+                            width: listButtons.width * 0.28
+
+                            text: "Use Variable"
+                            font.pixelSize: Math.min(root.height, root.width) * 0.07
+
+                            onClicked:{
+
+                                listViewVariables.indexOfExpanded = -1
+
+                                console.log("use")
+                                UtilityCalculator.varMenu(index)
+                                varMenuOpen = false
+                            }
+
+                        }
+                        CompBtnBreadcrumb {
+                            id: changeValOption
+
+                            height: useVarOption.height
+                            width: useVarOption.width
+
+                            text: "Change Value"
+                            font.pixelSize: useVarOption.font.pixelSize
+
+                            onClicked:{
+
+                                listViewVariables.indexOfExpanded = -1
+
+                                console.log("change")
+                                UtilityCalculator.changeVariable(index)
+                                varMenuOpen = false
+                            }
+
+                        }
+                        CompBtnBreadcrumb {
+                            id: deleteVarOption
+
+                            height: useVarOption.height
+                            width: useVarOption.width
+
+                            text: "Delete Variable"
+                            font.pixelSize: useVarOption.font.pixelSize
+
+                            onClicked:{
+
+                                listViewVariables.indexOfExpanded = -1
+
+                                console.log("delete")
+                                UtilityCalculator.deleteVariable(index)
+                            }
+
+                        }
                     }
                 }
                 ScrollBar.vertical: ScrollBar{
