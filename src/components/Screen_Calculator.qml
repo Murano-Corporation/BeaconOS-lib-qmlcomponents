@@ -20,6 +20,19 @@ Screen__BASE {
     property var variables: UtilityCalculator.mVariables
     property bool varMenuOpen: false
 
+
+    Timer {
+        id: fadeTimer
+        interval: 8000 //
+        repeat: false // Run only once
+        running: false // Not running initially
+
+        onTriggered: {
+            console.log("Timer triggered after 8 seconds")
+            UtilityCalculator.sAnswerString = ""
+        }
+    }
+
     Column {
         id: calculatorScreen
 
@@ -134,8 +147,6 @@ Screen__BASE {
                     function onSignal_CloseVarMenu() {
                         varMenuOpen = false
                     }
-
-
                 }
 
             }
@@ -154,6 +165,8 @@ Screen__BASE {
 
                 onTextChanged:{
                     UtilityCalculator.sAnswerString = text
+                    fadeTimer.running = false
+                    fadeTimer.running = true
                 }
 
                 anchors {
