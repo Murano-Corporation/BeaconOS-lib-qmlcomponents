@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
+import CONSTANTS 1.0
 
 Screen__BASE {
     id: root
@@ -16,10 +17,12 @@ Screen__BASE {
     property string keyButtonsBgColor: "#065465"
     property string inputString: UtilityCalculator.sInputString
     property string answerString: UtilityCalculator.sAnswerString
+    property string streamString: UtilityCalculator.sStream
     property var currentMenu: UtilityCalculator.sCurrentMenu
     property var variables: UtilityCalculator.mVariables
     property bool varMenuOpen: false
-
+    //property bool streamMenuOpen: false
+    property bool streamingText: UtilityCalculator.bStreamingText
 
     Timer {
         id: fadeTimer
@@ -30,6 +33,7 @@ Screen__BASE {
         onTriggered: {
             console.log("Timer triggered after 8 seconds")
             UtilityCalculator.sAnswerString = ""
+            fadeTimer.running = false
         }
     }
 
@@ -46,8 +50,10 @@ Screen__BASE {
         Rectangle{
             id: outputScreen
 
+            clip: true
+
             width: calculatorScreen.width
-            height: varMenuOpen ? root.height * 0.94 : root.height * 0.18
+            height: (varMenuOpen) ? root.height * 0.94 : root.height * 0.18
             color: outputColor
             // border.color: inputColor
             // border.width: 2
@@ -70,14 +76,14 @@ Screen__BASE {
             TextInput{
                 id: inputText
 
-                visible: varMenuOpen ? false : true
+                visible: (varMenuOpen || streamingText) ? false : true
 
                 text: inputString
                 color: "white"
-                font.pixelSize: Math.min(root.height, root.width) * 0.07
+                font.pixelSize: Math.min(root.height, root.width) * 0.05
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignTop
-                maximumLength: 40 // Set maximum length of text input to one line
+                maximumLength: 60 // Set maximum length of text input to one line
                 wrapMode: TextInput.NoWrap
                 selectByMouse: true
                 cursorVisible: true
@@ -89,7 +95,7 @@ Screen__BASE {
                 cursorDelegate: Rectangle {
                     id: cursorDelegate
 
-                    visible: varMenuOpen ? false : true
+                    visible: (varMenuOpen || streamingText) ? false : true
 
                     color: "white"
                     width: 2
@@ -147,6 +153,14 @@ Screen__BASE {
                     function onSignal_CloseVarMenu() {
                         varMenuOpen = false
                     }
+
+                    // function onSignal_OpenStreamMenu() {
+                    //     //streamMenuOpen = true
+                    //     streamingText = false
+                    // }
+                    // function onSignal_CloseStreamMenu() {
+                    //     //streamMenuOpen = false
+                    // }
                 }
 
             }
@@ -154,18 +168,17 @@ Screen__BASE {
             TextInput{
                 id: answerText
 
-                visible: varMenuOpen ? false : true
+                visible: (varMenuOpen || streamingText) ? false : true
 
                 text: answerString
                 enabled: false //new
                 color: "red"
-                font.pixelSize: Math.min(root.height, root.width) * 0.07
+                font.pixelSize: Math.min(root.height, root.width) * 0.05
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignBottom
 
                 onTextChanged:{
                     UtilityCalculator.sAnswerString = text
-                    fadeTimer.running = false
                     fadeTimer.running = true
                 }
 
@@ -175,67 +188,103 @@ Screen__BASE {
                     bottomMargin: parent.height * 0.05
                 }
             }
-        }
 
-        Item{
-            id: keyPad
+            CompLabel{
+                id: streamText
 
-            visible: varMenuOpen ? false : true
+                visible: (streamingText) ? true : false
 
-            anchors {
-                leftMargin: 0.05 * parent.width
-                rightMargin: anchors.leftMargin
-                bottom: parent.bottom
-                bottomMargin: parent.height * 0.8
-            }
+                // Rectangle {
+                //     anchors.fill: parent
+                //     border.color: "green"
+                //     color: "transparent"
+                // }
 
-            Grid{
-                columns: 7
-                columnSpacing: root.width * 0.01
-                rowSpacing: root.height * 0.01
+                text: streamString
 
-                Repeater{
-                    model: 35
+                color: "white"
+                font.pixelSize: Math.min(root.height, root.width) * 0.07
+                horizontalAlignment: Text.AlignHCenter
+                //verticalAlignment: streamMenuOpen ? Text.Align : Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
 
-                    CompBtnBreadcrumb{
-                        id: keyButtons
+                // anchors {
+                //     fill: parent
+                //     top: parent.top
+                //     topMargin: streamMenuOpen ? parent.height * 0.1 : parent.height * 0.3
 
-                        visible: varMenuOpen ? false : true
+                // }
 
-                        width: root.width * 0.131
-                        height: root.height * 0.148
+                transform: Translate {
+                    //reset on destroyed
+                    id: scrollTranslate
 
-                        text: root.currentMenu[index]
-                        // color: "white"
-                        font.pixelSize: keyFontSize
-                        //font.pixelSize: Math.min(root.height, root.width) * 0.05
-                        //anchors.centerIn: parent
+                    x: outputScreen.width
 
-                        // CompLabel{
-                        //     id: keyButtonText
-
-
-                        // }
-
-                        onClicked:{
-                            //actions[index]()
-                            UtilityCalculator.main(index)
+                    Behavior on x {
+                        id: behaveScroll
+                        NumberAnimation {
+                            duration: 1000
                         }
                     }
+
+                }
+
+                Timer {
+                    id: scrollTimer
+
+                    property int xTranslateIncrement: -400
+                    property int endOfText: scrollTranslate.x + streamText.width
+
+                    interval: 1000
+                    repeat: true
+
+                    onTriggered: {
+                        if(endOfText < 0) {
+                            behaveScroll.enabled = false
+                            scrollTranslate.x = outputScreen.width
+                            behaveScroll.enabled = true
+                        }
+                        scrollTranslate.x += xTranslateIncrement
+                        //console.log(endOfText)
+
+                    }
+
+                }
+
+                Component.onCompleted: {
+                    scrollTimer.start()
                 }
             }
-        }
 
-        Item{
-            id: variableList
+            // TextInput{
+            //     id: streamText
 
-            visible: varMenuOpen ? true : false
+            //     visible: (streamingText) ? true : false //!streamMenuOpen
 
-            x: outputScreen.width * 0.01
-            y: outputScreen.height * 0.03
+            //     text: streamString
+            //     enabled: false //new
+            //     color: "blue"
+            //     font.pixelSize: Math.min(root.height, root.width) * 0.07
+            //     horizontalAlignment: Qt.AlignLeft
+            //     verticalAlignment: Qt.AlignVCenter
+
+            //     anchors {
+            //         fill: parent
+            //         bottom: parent.bottom
+            //         bottomMargin: parent.height * 0.05
+            //     }
+            // }
+
+
 
             ListView{
                 id: listViewVariables
+
+                visible: (varMenuOpen ? true : false)
+
+                x: outputScreen.width * 0.01
+                y: outputScreen.height * 0.03
 
                 property int indexOfExpanded: -1
 
@@ -305,7 +354,7 @@ Screen__BASE {
 
                         if (index === myModel.count - 1) {
                             console.log("before focus")
-                            inputText.forceActiveFocus()
+                            inputText.forceActiveFocus() //opens keyboard automatically
                         }
                     }
 
@@ -389,14 +438,267 @@ Screen__BASE {
                 ScrollBar.vertical: ScrollBar{
                     policy: ScrollBar.AsNeeded
                     width: 8
-                    //position: position + 4
-                    //topInset: 51
                     topPadding: 10
                     bottomPadding: 10
                 }
             }
         }
 
+        Item{
+            id: keyPad
+
+            visible: varMenuOpen ? false : true
+
+            anchors {
+                leftMargin: 0.05 * parent.width
+                rightMargin: anchors.leftMargin
+                bottom: parent.bottom
+                bottomMargin: parent.height * 0.8
+            }
+
+            Grid{
+                columns: 7
+                columnSpacing: root.width * 0.01
+                rowSpacing: root.height * 0.01
+
+                Repeater{
+                    model: 35
+
+                    CompBtnBreadcrumb{
+                        id: keyButtons
+
+                        visible: (varMenuOpen) ? false : true
+
+                        width: root.width * 0.1 //root.width * 0.131
+                        height: root.height * 0.148
+
+                        text: root.currentMenu[index]
+                        // color: "white"
+                        font.pixelSize: keyFontSize
+                        //font.pixelSize: Math.min(root.height, root.width) * 0.05
+                        //anchors.centerIn: parent
+
+                        onClicked:{
+                            //actions[index]()
+                            UtilityCalculator.main(index)
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    Column {
+        id: itemStreamMenu
+
+        //height: root.height * 0.7
+        //width: root.width * 0.2
+
+        spacing: 70
+
+        visible: varMenuOpen === false
+
+        anchors {
+            fill: parent
+            topMargin: parent.height * 0.21
+            rightMargin: parent.width * 0.01
+            bottomMargin: parent.height * 0.013
+            leftMargin: parent.width * 0.78
+        }
+
+        CompCombobox{
+            id: comboBeaconID
+
+            // MouseArea {
+            //     anchors.fill: parent
+            //     onClicked: {
+            //         console.log("heifjaeofj")
+            //     }
+            // }
+
+            height: itemStreamMenu.height * 0.08
+            width: itemStreamMenu.width
+
+            unselectedText: "Select Beacon ID"
+            textRole: "Beacon_ID"
+            model: TableModelAssetDashboardGridView
+
+            valueFontSize: Math.min(root.height, root.width) * 0.04
+
+            onCurrentIndexChanged: {
+                console.log("Current Index Changed to: " + currentIndex)
+            }
+            onCurrentTextChanged: {
+                console.log("Current text changed to: " + currentText)
+            }
+
+            delegate: ItemDelegate{
+                width: comboBeaconID.width
+                height: comboBeaconID.optionItemHeight
+
+                background: Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "#9287ED"
+                    anchors.bottom: parent.bottom
+                }
+
+                contentItem: CompLabel{
+                    text: model.Beacon_ID
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                    color: comboBeaconID.currentTextColor
+                    font.pixelSize: Math.min(root.height, root.width) * 0.04
+                    MouseArea{
+                        anchors.fill: parent
+
+                        onClicked: {
+                            console.log("clicked")
+                            comboBeaconID.currentIndex = index
+                            comboBeaconID.popup.close()
+                            SystemController.targetBeaconID = model.Beacon_ID
+                        }
+                    }
+                }
+
+                highlighted: comboBeaconID.highlightedIndex === index
+            }
+
+        }
+
+        ListView {
+            id: listviewParams
+
+            visible: comboBeaconID.currentIndex !== -1
+            spacing: 8
+
+            height: itemStreamMenu.height * 0.73
+            width: itemStreamMenu.width
+
+            // Rectangle {
+            //     visible: varMenuOpen === false
+            //     anchors.fill: listviewParams
+            //     color: "green"
+            //     radius: 20
+            //     opacity: 0.3
+            // }
+
+            // Rectangle {
+            //     anchors.fill: parent
+            //     color: "yellow"
+            // }
+
+            model: TableModelHealthDashboard
+            delegate: CompBtnBreadcrumb {
+                id: listViewParamsDelegate
+                height: root.height * 0.059
+                width: listviewParams.width
+
+                Row {
+                    property bool isSelected: model.is_selected
+
+                    CompLabel {
+                        text: "  " + model.ParamName
+                        elide: Text.ElideRight
+                        width: root.width * 0.12
+                        height: listViewParamsDelegate.height
+                        font.pixelSize: Math.min(root.height, root.width) * 0.02
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
+                    CompLabel{
+                        text: "     " + model.value + " " + model.unit
+                        width: root.width * 0.08
+                        height: listViewParamsDelegate.height
+                        font.pixelSize: Math.min(root.height, root.width) * 0.02
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+
+                    }
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+
+                        var isSelectedNow = model.is_selected
+                        //console.log("Is Selected Now: " + isSelectedNow)
+                        isSelectedNow = !isSelectedNow
+                        console.log("...Is Selected Now: " + isSelectedNow)
+                        UtilityCalculator.setParamNameTracked(model.ParamName, isSelectedNow);
+                        listviewParams.model.setData(listviewParams.model.indexOfData(Constants.DataRole_ParamName,model.ParamName), isSelectedNow, Constants.DataRole_IsSelected)
+                        console.log("isSelected: " + model.is_selected)
+                    }
+
+                    onPressAndHold: {
+                        console.log("press and hold")
+                        var newParamName = (model.ParamName).replace(/\s/g, "")
+                        console.log(newParamName)
+                        inputText.insert(inputText.cursorPosition, "@" + newParamName)
+                        newParamName = ""
+                    }
+                }
+
+                Rectangle{
+                    anchors.fill: parent
+
+                    color: "transparent"//index % 2 ? "#80ff00ff" : "#8000ff00"
+                    border.color: model.is_selected ? "blue" : "white"
+                    radius: 20
+                }
+            }
+
+
+        }
+    }
+
+
+    // Row {
+    //     id: rowOptions
+
+    //     //visible: isExpanded
+
+    //     height: itemStreamMenu.height * 0.1
+    //     width: (streamOption.width * 2) + rowOptions.spacing
+
+    //     spacing: streamOption.width * 1.2
+
+    //     anchors {
+    //         bottom: itemStreamMenu.bottom
+    //         bottomMargin: 60
+    //         horizontalCenter: parent.horizontalCenter
+    //     }
+
+    //     // CompBtnBreadcrumb {
+    //     //     id: streamOption
+
+    //     //     height: rowOptions.height
+    //     //     width: itemStreamMenu.width * 0.28
+
+    //     //     text: "Stream"
+    //     //     font.pixelSize: Math.min(root.height, root.width) * 0.07
+
+    //     //     onClicked:{
+    //     //         streamMenuOpen = false
+    //     //         streamingText = true
+    //     //     }
+
+    //     // }
+    //     // CompBtnBreadcrumb {
+    //     //     id: cancelOption
+
+    //     //     height: streamOption.height
+    //     //     width: streamOption.width
+
+    //     //     text: "Cancel"
+    //     //     font.pixelSize: streamOption.font.pixelSize
+
+    //     //     onClicked:{
+    //     //         streamMenuOpen = false
+    //     //         streamingText = false
+    //     //     }
+
+    //     // }
+    // }
 }
 
