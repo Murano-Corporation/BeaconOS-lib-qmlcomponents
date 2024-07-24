@@ -635,6 +635,8 @@ Screen__BASE {
                         var newParamName = (model.ParamName).replace(/\s/g, "")
                         console.log(newParamName)
                         inputText.insert(inputText.cursorPosition, "@" + newParamName)
+                        // inputText.insert(inputText.cursorPosition, "@[" + newParamName + "]")
+
                         newParamName = ""
                     }
                 }
