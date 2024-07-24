@@ -501,7 +501,7 @@ Screen__BASE {
         //height: root.height * 0.7
         //width: root.width * 0.2
 
-        spacing: 70
+        spacing: root.height * 0.07
 
         anchors {
             fill: parent
@@ -575,9 +575,9 @@ Screen__BASE {
             id: listviewParams
 
             visible: comboBeaconID.currentIndex !== -1
-            spacing: 8
+            spacing: root.height * 0.007
 
-            height: dataModelMenu.height * 0.73
+            height: dataModelMenu.height * 0.75
             width: dataModelMenu.width
 
             // Rectangle {
