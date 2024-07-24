@@ -21,6 +21,7 @@ Screen__BASE {
     property var currentMenu: UtilityCalculator.sCurrentMenu
     property var variables: UtilityCalculator.mVariables
     property bool varMenuOpen: false
+    property bool dataModelMenuOpen: false
     //property bool streamMenuOpen: false
     property bool streamingText: UtilityCalculator.bStreamingText
 
@@ -152,6 +153,10 @@ Screen__BASE {
                     }
                     function onSignal_CloseVarMenu() {
                         varMenuOpen = false
+                    }
+
+                    function onSignal_ToggleDataModels() {
+                        dataModelMenuOpen = !dataModelMenuOpen
                     }
 
                     // function onSignal_OpenStreamMenu() {
@@ -469,7 +474,7 @@ Screen__BASE {
 
                         visible: (varMenuOpen) ? false : true
 
-                        width: root.width * 0.1 //root.width * 0.131
+                        width: dataModelMenuOpen ? root.width * 0.1 : root.width * 0.131
                         height: root.height * 0.148
 
                         text: root.currentMenu[index]
@@ -489,14 +494,14 @@ Screen__BASE {
     }
 
     Column {
-        id: itemStreamMenu
+        id: dataModelMenu
+
+        visible: dataModelMenuOpen && varMenuOpen === false
 
         //height: root.height * 0.7
         //width: root.width * 0.2
 
         spacing: 70
-
-        visible: varMenuOpen === false
 
         anchors {
             fill: parent
@@ -516,8 +521,8 @@ Screen__BASE {
             //     }
             // }
 
-            height: itemStreamMenu.height * 0.08
-            width: itemStreamMenu.width
+            height: dataModelMenu.height * 0.08
+            width: dataModelMenu.width
 
             unselectedText: "Select Beacon ID"
             textRole: "Beacon_ID"
@@ -572,8 +577,8 @@ Screen__BASE {
             visible: comboBeaconID.currentIndex !== -1
             spacing: 8
 
-            height: itemStreamMenu.height * 0.73
-            width: itemStreamMenu.width
+            height: dataModelMenu.height * 0.73
+            width: dataModelMenu.width
 
             // Rectangle {
             //     visible: varMenuOpen === false
@@ -634,8 +639,8 @@ Screen__BASE {
                         console.log("press and hold")
                         var newParamName = (model.ParamName).replace(/\s/g, "")
                         console.log(newParamName)
-                        inputText.insert(inputText.cursorPosition, "@" + newParamName)
-                        // inputText.insert(inputText.cursorPosition, "@[" + newParamName + "]")
+                        //inputText.insert(inputText.cursorPosition, "@" + newParamName)
+                        inputText.insert(inputText.cursorPosition, "@[" + newParamName + "]")
 
                         newParamName = ""
                     }
@@ -660,13 +665,13 @@ Screen__BASE {
 
     //     //visible: isExpanded
 
-    //     height: itemStreamMenu.height * 0.1
+    //     height: dataModelMenu.height * 0.1
     //     width: (streamOption.width * 2) + rowOptions.spacing
 
     //     spacing: streamOption.width * 1.2
 
     //     anchors {
-    //         bottom: itemStreamMenu.bottom
+    //         bottom: dataModelMenu.bottom
     //         bottomMargin: 60
     //         horizontalCenter: parent.horizontalCenter
     //     }
@@ -675,7 +680,7 @@ Screen__BASE {
     //     //     id: streamOption
 
     //     //     height: rowOptions.height
-    //     //     width: itemStreamMenu.width * 0.28
+    //     //     width: dataModelMenu.width * 0.28
 
     //     //     text: "Stream"
     //     //     font.pixelSize: Math.min(root.height, root.width) * 0.07
