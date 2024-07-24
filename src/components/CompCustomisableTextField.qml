@@ -27,8 +27,13 @@ Comp__BASE {
             {
                 return;
             }
+            if(parent.isPopupComponent === true)
+            {
+                InputHandler.slot_OnPopupFocusChanged(popupName, focus)
+            } else {
+                InputHandler.slot_OnFocusChanged(this, mapToGlobal(0,0), Qt.size(compCustomisableTextField.width, compCustomisableTextField.height))
 
-            InputHandler.slot_OnFocusChanged(this, mapToGlobal(0,0), Qt.size(compCustomisableTextField.width, compCustomisableTextField.height))
+            }
         }
 
 

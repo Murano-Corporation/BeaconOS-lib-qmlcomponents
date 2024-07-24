@@ -10,7 +10,8 @@ Screen_Raptor__BASE {
     property bool hudON: true
     property var gimbal1Struct: DroneController.gimbalA
     property var gimbal2Struct: DroneController.gimbalB
-
+    property var detectionInfo: DroneController.detectionInfo
+    property real batteryPercent: DroneController.deviceBattery
     signal signalBeaconIDSelected(var beaconID)
 
     onBeaconIDSelectedChanged: {
@@ -85,6 +86,12 @@ Screen_Raptor__BASE {
         anchors {
             fill: parent
         }
+
+        Rectangle{
+            visible: !DroneController.watchdogOk
+            anchors.fill: parent
+            color: "#DD000000"
+        }
     }
 
     CompBtnBreadcrumb {
@@ -109,8 +116,10 @@ Screen_Raptor__BASE {
 
     Item {
         id: compTargetBoundingBox1
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
-        anchors{
+
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.detectionInfo.valid && screen_RaptorControlRoot.hudON
+
+        anchors {
             top: parent.top
             left: parent.left
             right: parent.right
@@ -157,6 +166,7 @@ Screen_Raptor__BASE {
             width: 270
             radius: 16
         }
+
         Rectangle{
             anchors.bottom: parent.bottom
             anchors.right: parent.right
@@ -186,14 +196,31 @@ Screen_Raptor__BASE {
 
     Item {
         id: areaAltimeter
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         anchors.centerIn: parent
 
         Comp_Raptor_Altimeter{
+            id: attitudeMeter
             anchors.centerIn: parent
             height: 700
             width: 700
+
+            Connections{
+                target: DroneController
+
+                function onSignal_YawChanged(){
+                    attitudeMeter.compassAngle = DroneController.yaw
+                }
+
+                function onSignal_PitchChanged(){
+                    attitudeMeter.tiltAngle = DroneController.pitch
+                }
+
+                function onSignal_RollChanged(){
+                    attitudeMeter.rollAngle = DroneController.roll
+                }
+            }
         }
     }
 
@@ -232,7 +259,7 @@ Screen_Raptor__BASE {
     Rectangle {
         id: areaTargetMetaData
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         height: screen_RaptorControlRoot.height * 0.48
         width: screen_RaptorControlRoot.width * 0.17
@@ -322,10 +349,10 @@ Screen_Raptor__BASE {
     }
 
 
-    CompLabel{
+    CompLabel {
         id: areaClassifcation
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
         x: 140//132
         y: 140//737
 
@@ -381,13 +408,13 @@ Screen_Raptor__BASE {
         }
     }
 
-    Row{
+    Row {
         id: areaControlsRow
 
         height: 90
         width: 210//450
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        //visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== ""
         opacity: screen_RaptorControlRoot.beaconIDSelected ? 1.0 : 0.3
 
         anchors{
@@ -460,10 +487,52 @@ Screen_Raptor__BASE {
 
         }
 
+        CompRaptorNavMenuItem {
+            id: menuItemQuickCommands
+            opacity: 0.6
+
+            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"
+
+            imgIconColor: screen_RaptorControlRoot.controlON ? "Green" : "Red"
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    popupRaptorControlQuickCommands.visible ? popupRaptorControlQuickCommands.close() : popupRaptorControlQuickCommands.open()
+                }
+            }
+
+        }
+    }
+
+    Popup_Raptor_Control_QuickCommands {
+        id: popupRaptorControlQuickCommands
+
+        onOpenPopup_Parameters: popupRaptorControlParameterView.open()
+    }
+
+    Popup_Raptor_Control_Messages {
+        id: popupRaptorControlMessages
+
+        width: stick2.x  - (stick1.x + stick1.width)
+    }
+
+
+    Popup_Raptor_Control_ParamSeter {
+        id: popupRaptorControlParamSeter
+    }
+
+
+    Popup_Raptor_Control_ManualCommand {
+        id: popupRaptorControlManualCommand
     }
 
     PopupAsset {
         id: popupSelectedAssets
+    }
+
+    PopupRaptorControlParameterView {
+        id: popupRaptorControlParameterView
     }
 
     CompBtnBreadcrumb{
@@ -479,10 +548,135 @@ Screen_Raptor__BASE {
         onClicked: popupSelectedAssets.open()
     }
 
+    Rectangle{
+        id: areaFlightModes
+
+        anchors{
+            top: stick1.top
+            left: stick1.right
+            bottom: parent.bottom
+            right: stick2.left
+        }
+
+        color: "#80ffffff"
+
+        CompLabel{
+            id: lblFlightMode
+
+            text: "Sys. State: " + DroneController.sSystemState + "; - Flight Mode: " + DroneController.flightMode + "; - Land State: " + DroneController.sLandedState + "; - GPS Fix Type: " + DroneController.sGpsFixType + "; GPS Sats: " + DroneController.gpsSatellitesAvailable
+
+            anchors {
+                bottom: parent.top
+                bottomMargin: 20
+                left: parent.left
+            }
+
+            Rectangle{
+                anchors.fill: parent
+                anchors.margins: -10
+                radius: 10
+                z: -1
+
+                color: "#80000000"
+            }
+        }
+
+        Row{
+            property int btnWidth: 200
+            anchors.fill: parent
+            spacing: 64
+            CompBtnBreadcrumb{
+                id: btnLoiter
+
+                text: "LOITER"
+                onClicked: DroneController.sendCommand("set_mode_loiter")
+                width: parent.btnWidth
+            }
+
+            CompBtnBreadcrumb{
+                id: btnRtl
+
+                text: "RTL"
+                onClicked: DroneController.sendCommand("set_mode_rtl")
+                width: parent.btnWidth
+            }
+
+            CompBtnBreadcrumb{
+                id: btnLand
+
+                text: "LAND"
+                onClicked: DroneController.sendCommand("set_mode_land")
+                width: parent.btnWidth
+            }
+
+            CompBtnBreadcrumb{
+                id: btnStabilize
+
+                text: "STABILIZE"
+                onClicked: DroneController.sendCommand("set_mode_stabilize")
+                width: parent.btnWidth
+            }
+
+            CompBtnBreadcrumb{
+                id: btnBreak
+
+                text: "BRAKE"
+                onClicked: DroneController.sendCommand("set_mode_brake")
+                width: parent.btnWidth
+            }
+        }
+    }
+
+    Rectangle {
+        id: btnEStop
+
+        property bool isActive: false
+
+        anchors{
+            bottom: stick1.top
+            left: stick1.left
+            right: stick1.right
+        }
+
+        height: width
+        radius: 0.5 * height
+        color: isActive ? "green" : "red"
+
+        CompLabel {
+            id: lblEStopTitle
+            text: "E-STOP"
+
+            anchors.centerIn: parent
+        }
+
+        CompLabel {
+            id: lblEStopState
+            text: btnEStop.isActive ? "ARMED" : ""
+
+            anchors {
+                top: lblEStopTitle.bottom
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                btnEStop.isActive = !btnEStop.isActive
+                DroneController.setEStopArmed(btnEStop.isActive)
+            }
+        }
+
+    }
+
     Comp_Drone_Gimble{
         id: stick1
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.09 - (stick1.width / 2)
         y: root.height * 0.72
@@ -499,7 +693,7 @@ Screen_Raptor__BASE {
     Comp_Drone_Gimble{
         id: stick2
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.91 - (stick2.width / 2)
         y: root.height * 0.72
@@ -517,7 +711,7 @@ Screen_Raptor__BASE {
     Rectangle {
         id:deviceData
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         border.color: "#00FF94"
         border.width: 3
@@ -559,9 +753,24 @@ Screen_Raptor__BASE {
                 id: btnBattery
                 height: 40
 
+
                 anchors.verticalCenter: parent.verticalCenter
 
-                iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Battery100_All.svg"
+                iconUrl: {
+
+                    ///console.log('Battery Percentage is: ' + screen_RaptorControlRoot.batteryPercent)
+                    if(screen_RaptorControlRoot.batteryPercent <= 25)
+
+                        return "file:///usr/share/BeaconOS-lib-images/images/BatteryLow_All.svg"
+                    else if(screen_RaptorControlRoot.batteryPercent <= 50)
+                        return "file:///usr/share/BeaconOS-lib-images/images/Battery25_All.svg"
+                    else if(screen_RaptorControlRoot.batteryPercent <= 75)
+                        return "file:///usr/share/BeaconOS-lib-images/images/Battery50_All.svg"
+                    else if(screen_RaptorControlRoot.batteryPercent <= 80)
+                        return "file:///usr/share/BeaconOS-lib-images/images/Battery75_All.svg"
+                    else
+                        return "file:///usr/share/BeaconOS-lib-images/images/Battery100_All.svg"
+                }
                 iconColor: "#00FF94"
             }
 

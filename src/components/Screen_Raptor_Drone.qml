@@ -28,7 +28,6 @@ Screen__BASE {
         anchors.centerIn: root
         radius: 20
         color: root.droneCamColor
-
     }
 
     Comp_Drone_Gimble{
@@ -39,6 +38,45 @@ Screen__BASE {
         y: root.height * 0.54
         isThrottle: true
     }
+
+
+    Rectangle{
+        id: btnEStop
+
+        property bool isArmed: false
+
+        width: stick1.width
+        height: width
+
+        radius: 0.5 * height
+
+        color: isArmed ? "Green" : "Red"
+
+        CompLabel{
+            id: lblEStop
+            anchors.centerIn: parent
+            text: "E-STOP"
+        }
+
+        CompLabel{
+            anchors.top: lblEStop.bottom
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            text: isArmed ? "ARMED" : "disarmed"
+        }
+
+        MouseArea{
+            anchors.fill: parent
+
+            onClicked:{
+                btnEStop.isArmed = !btnEStop.isArmed
+
+                DroneController.setEStopArmed(btnEStop.isArmed)
+            }
+        }
+    }
+
     Comp_Drone_Gimble{
         id: stick2
 

@@ -12,7 +12,13 @@ Rectangle {
     property real minX: zero - compassImage.width + 4
     property real maxX: zero + compassImage.width - 4
 
-    property alias angle: compassImageTranslate.x
+    property real angle: 0.00
+
+    onAngleChanged: {
+
+
+        compassImageTranslate.x = angle
+    }
 
     // Component.onCompleted: {
     // timter.start()
@@ -67,8 +73,8 @@ Rectangle {
                 x: compRaptorAltimeterCompassRoot.zero
 
                 onXChanged:{
-                    //console.log("yo:: " + compassImageTranslate.x)
-                    //console.log("minX: " + minX + " maxX: " + maxX)
+                    ///console.log("yo:: " + compassImageTranslate.x)
+                    ///console.log("minX: " + minX + " maxX: " + maxX)
                     if( x <= compRaptorAltimeterCompassRoot.minX || x >= compRaptorAltimeterCompassRoot.maxX)
                     {
                         behaviourX.enabled = false
@@ -77,16 +83,16 @@ Rectangle {
                     }
                 }
 
-                Behavior on x {
-                    id: behaviourX
+                //Behavior on x {
+                //    id: behaviourX
 
-                    enabled: true
-                    NumberAnimation{
-                        id: compassAnimation
+                //    enabled: true
+                //    NumberAnimation{
+                //        id: compassAnimation
 
-                        duration: 3000
-                    }
-                }
+                //        duration: 10
+                //    }
+                //}
             }
         }
         Image {

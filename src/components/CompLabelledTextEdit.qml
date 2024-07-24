@@ -1,10 +1,11 @@
-import QtQuick 2.0
+import QtQuick 2.15
 
 Item{
     id: compLabelledTextEdit
 
     property bool isReadonly: true
     property bool showDevRects: false
+    property bool selectAllOnPress: true
     property alias label: lbl
     property alias textEdit: edt
     property alias text: lbl.text
@@ -18,6 +19,8 @@ Item{
     property real __controlWidthActual: width - spacing
     property real __labelWidthActual: __controlWidthActual * labelWidthPercentage
     property real __editWidthActual: __controlWidthActual * editWidthPercentage
+
+    signal pressedLabel
 
     height: 60
     width: 600
@@ -34,7 +37,7 @@ Item{
     }
 
 
-    Row{
+    Row {
         id: row
 
         anchors{
@@ -64,6 +67,11 @@ Item{
                 }
             }
 
+            MouseArea{
+                anchors.fill: parent
+                onClicked: compLabelledTextEdit.pressedLabel()
+
+            }
 
         }
 
@@ -85,6 +93,21 @@ Item{
             }
 
             color: "#80ffffff"
+
+            onActiveFocusChanged: {
+                if( edt.activeFocus === true)
+                {
+                    edt.selectAll()
+                }
+            }
+
+            //MouseArea{
+            //    anchors.fill: parent
+
+            //    propagateComposedEvents: true
+            //
+            //    onDoubleClicked: edt.selectAll()
+            //}
 
             Loader {
                 active: compLabelledTextEdit.showDevRects

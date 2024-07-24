@@ -6,7 +6,7 @@ Item {
 
     property bool isDelta: (targetDevice === Constants.ETargetDevice_Delta)
     property bool isOmega: (targetDevice === Constants.ETargetDevice_Omega)
-
+    property bool isPopupComponent: false
     // onTargetDeviceChanged: {
         // console.log("Target Device is now: " + targetDevice)
     // }

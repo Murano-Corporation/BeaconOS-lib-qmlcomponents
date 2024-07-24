@@ -35,11 +35,11 @@ Rectangle {
                 origin.y: rollImage.height * 0.5
                 angle: compRaptorAltimeterRollRoot.roll
 
-                Behavior on angle{
-                    NumberAnimation{
-                        duration: 60000
-                    }
-                }
+                //Behavior on angle{
+                //    NumberAnimation{
+                //        duration: 10
+                //    }
+                //}
             }
         }
     }

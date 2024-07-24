@@ -250,6 +250,11 @@
         <file>Comp_Drone_Gimble.qml</file>
         <file>Screen_Calculator.qml</file>
         <file>Popup_Calculator.qml</file>
+        <file>Popup_Raptor_Control_ManualCommand.qml</file>
+        <file>Popup_Raptor_Control_ParamSeter.qml</file>
+        <file>Popup_Raptor_Control_Messages.qml</file>
+        <file>Popup_Raptor_Control_QuickCommands.qml</file>
+        <file>PopupRaptorControlParameterView.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal"/>
 </RCC>

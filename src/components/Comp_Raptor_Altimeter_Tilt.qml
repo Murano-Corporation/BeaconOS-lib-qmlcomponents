@@ -67,16 +67,16 @@ Rectangle {
                     }
                 }
 
-                Behavior on y{
-                    id: behaviourY
+                //Behavior on y{
+                //    id: behaviourY
 
-                    enabled: true
-                    NumberAnimation{
-                        id: tiltAnimation
+                //    enabled: true
+                //    NumberAnimation{
+                //        id: tiltAnimation
 
-                        duration: 3000
-                    }
-                }
+                //        duration: 10
+                //    }
+                //}
             }
 
         }

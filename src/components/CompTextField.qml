@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.15
 
-Item{
+Comp__BASE{
     id: compTextField
 
     property alias radius: rectBG.radius
@@ -9,8 +9,8 @@ Item{
     property alias lblText: lbl.text
     property alias lblWidth: lbl.width
     property alias lblFontPixelSize: lbl.font.pixelSize
-    property alias textEditWidth: rectBG.width
-    property alias textEditHeight: rectBG.height
+    property alias textEditWidth: focusEdt.width
+    property alias textEditHeight: focusEdt.height
     property alias text: edt.text
     property alias placeholderText: edt.placeholderText
     property alias edtEchoMode: edt.echoMode
@@ -60,9 +60,8 @@ Item{
 
             color: "transparent"
 
-            TextField {
-                id: edt
-
+            FocusScope{
+                id: focusEdt
                 anchors{
                     fill: parent
                     leftMargin: rectBG.radius
@@ -71,31 +70,57 @@ Item{
                     bottomMargin: 10
                 }
 
+                onFocusChanged: {
+                    if(!focus)
+                    {
+                        return;
+                    }
+                    if(compTextField.isPopupComponent === true)
+                    {
+                        InputHandler.slot_OnPopupFocusChanged(popupName, focus)
+                    } else {
+                        InputHandler.slot_OnFocusChanged(this, mapToGlobal(0,0), Qt.size(edt.width, edt.height))
 
-                color: "White"
-                placeholderTextColor: "Grey"
-
-                placeholderText: qsTr("Enter SSID...")
-
-                verticalAlignment: "AlignVCenter"
-                font.pixelSize: 20
-                font.family: "Lato"
-                font.weight: Font.Normal
-
-                background: Item {}
-
-                onReleased: {
-                    edt.selectAll()
+                    }
                 }
 
-                onActiveFocusChanged: {
-                    if(edt.activeFocus)
+                TextField {
+                    id: edt
+
+                    anchors{
+                        fill: parent
+                    }
+
+
+                    color: "White"
+                    placeholderTextColor: "Grey"
+
+                    placeholderText: qsTr("Enter SSID...")
+
+                    verticalAlignment: "AlignVCenter"
+                    font.pixelSize: 20
+                    font.family: "Lato"
+                    font.weight: Font.Normal
+
+                    background: Item {}
+
+                    onReleased: {
                         edt.selectAll()
-                }
-                // onFocusChanged: {
+                    }
+
+                    onActiveFocusChanged: {
+                        if(edt.activeFocus)
+                            edt.selectAll()
+                    }
+                    // onFocusChanged: {
                     // selectAllText()
-                // }
+                    // }
+                }
+
             }
+
+
+
         }
     }
 }
