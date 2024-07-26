@@ -428,10 +428,11 @@ Comp__BASE {
         //     }
         // }
 
+
+
         MapItemView{
             id: mapView_Targets
             model: compMapViewerRoot.listAssets
-
 
             delegate: CompMapAssetItem {
                 id: compMapAssetItem
@@ -439,19 +440,22 @@ Comp__BASE {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-                assetID: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
+                assetID: model.Beacon_ID//(model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
                 imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
                 iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
                 iconDetails.opacity: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? 1.0 : 0.9
-                onCenterOnPoint: {
+                is_selected: model.is_selected
 
+                onCenterOnPoint: {
+                    if(!(model.asset_type === "Antenna" || model.asset_type === "Drone")){
                     if(compMapViewerRoot.selectedAssetDataModel === model)
                     {
                         compMapViewerRoot.selectedAssetDataModel = undefined
                     } else {
                         compMapViewerRoot.selectedAssetDataModel = model
                     }
+                }
 
                     compMapViewerRoot.centerOnPoint(coordinate)
                 }

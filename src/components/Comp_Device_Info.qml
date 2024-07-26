@@ -35,12 +35,13 @@ Item {
     function listItemClicked(model, index){
         compDeviceInfo.deviceID = model.Beacon_ID;
         compDeviceInfo.isAntenna = model.asset_type === "Antenna" ? true : false
-        compDeviceInfo.idx = index + 16
-        popupActions.open()
-        drawerDeviceInfo.height = devicemap.height - 400
+        //compDeviceInfo.idx = index + 16
+        //popupActions.open()
+        //drawerDeviceInfo.height = devicemap.height - 400
         listofDevices.currentIndex = index
         compDeviceInfo.xVal = model.Latitude
         compDeviceInfo.yVal = model.Longitude
+        compDeviceInfo.signalBeaconIDChanged(compDeviceInfo.deviceID);
     }
 
     signal centerOnCoords(var x, var y);
@@ -96,7 +97,7 @@ Item {
         model: compDeviceInfo.listofDevices
         delegate: CompBtnBreadcrumb{
 
-            width: parent.width
+            width: parent.width - 15
             lblBtnLbl.horizontalAlignment: Text.AlignLeft
             lblBtnLbl.leftPadding: 50
 
@@ -107,9 +108,9 @@ Item {
                 radius: 20
                 border{
                     width: 3
-                    color: "#9287ED"
-            }
-                visible: (listofDevices.currentIndex === index) && popupActions.visible
+                    color: "#ffffff"
+                }
+                visible: model.is_selected//(listofDevices.currentIndex === index)// && popupActions.visible
             }
             CompImageIcon{
                 id: imgDeviceIcon
@@ -125,21 +126,11 @@ Item {
                 width: 40
                 source: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/AntennaFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DroneFill.svg"
             }
-
-            //appSourceName: myModelData ? myModelData.appSource : '?'
-            // CompLabel{
-
-            //     anchors{
-            //         verticalCenter: imgDeviceIcon.verticalCenter
-            //         left: imgDeviceIcon.right
-            //     }
-                text: model.location + " - " + model.Beacon_ID
-            //} // + " - " + model.Latitude + ", " + model.Longitude
-
-            //MouseArea{
-            //anchors.fill: parent
+            text: model.location + " - " + model.Beacon_ID
             onClicked: {
                 compDeviceInfo.listItemClicked(model, index)
+                setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
+                devicemap.setZoomLevel(4.5)
             }
 
             onPressAndHold: { //aj
@@ -147,163 +138,164 @@ Item {
                 setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
                 devicemap.setZoomLevel(4.5)
             }
-        //}
 
         }
 
         ScrollBar.vertical: ScrollBar{
             policy: ScrollBar.AlwaysOn
             width: 8
-            //position: position + 4
-            //topInset: 51
             topPadding: 10
             bottomPadding: 10
         }
     }
 
-    Popup {
-        id: popupActions
-        height: 288 //compDeviceInfo.isAntenna ? 160 : 270
-        width: listofDevices.width + 20
-        closePolicy: Popup.NoAutoClose
+    //    Popup {
+    //        id: popupActions
+    //        height: 288 //compDeviceInfo.isAntenna ? 160 : 270
+    //        width: listofDevices.width + 20
+    //        closePolicy: Popup.NoAutoClose
 
-        x: listofDevices.x - 10
-        //y: listofDevices.y * 13.6
-        y: drawerDeviceInfo.height + 10
-        background: CompBtnBreadcrumb{
-            anchors.fill: parent
-            //color: "#0d1929"
-            //radius: 20
-        }
+    //        x: listofDevices.x - 10
+    //        //y: listofDevices.y * 13.6
+    //        y: drawerDeviceInfo.height + 10
+    //        background: CompBtnBreadcrumb{
+    //            anchors.fill: parent
+    //            //color: "#0d1929"
+    //            //radius: 20
+    //        }
 
-        CompLabel {
-            id: lblPopuptitle
+    //        CompLabel {
+    //            id: lblPopuptitle
 
-            anchors{
-                top: parent.top
-                //topMargin: 20
-                horizontalCenter: parent.horizontalCenter
-            }
+    //            anchors{
+    //                top: parent.top
+    //                //topMargin: 20
+    //                horizontalCenter: parent.horizontalCenter
+    //            }
 
-            font.pixelSize: 20
-            text: "Device ID: " + compDeviceInfo.deviceID
+    //            font.pixelSize: 20
+    //            text: "Device ID: " + compDeviceInfo.deviceID
 
-        }
+    //        }
 
-        BtnClose{
-            id: btnClose
+    //        BtnClose{
+    //            id: btnClose
 
-            imageIcon{
+    //            imageIcon{
 
-                image{
-                    antialiasing: true
-                    smooth: true
-                    cache: true
-                }
+    //                image{
+    //                    antialiasing: true
+    //                    smooth: true
+    //                    cache: true
+    //                }
 
-                colorOverlay{
-                    antialiasing: true
-                    smooth: true
-                    cached: true
-                }
+    //                colorOverlay{
+    //                    antialiasing: true
+    //                    smooth: true
+    //                    cached: true
+    //                }
 
-            }
+    //            }
 
-            anchors{
-                right: parent.right
-                verticalCenter: lblPopuptitle.verticalCenter
-            }
+    //            anchors{
+    //                right: parent.right
+    //                verticalCenter: lblPopuptitle.verticalCenter
+    //            }
 
-            height: 30
-            width: 30
+    //            height: 30
+    //            width: 30
 
-            onClicked: {
-                drawerDeviceInfo.height = devicemap.height - 100
-                devicemap.setZoomLevel(1.0)
-                popupActions.close()
-            }
+    //            onClicked: {
+    //                drawerDeviceInfo.height = devicemap.height - 100
+    //                devicemap.setZoomLevel(1.0)
+    //                popupActions.close()
+    //            }
 
-        }
+    //        }
 
-        GridView {
-            id: gridViewActions
+    //        GridView {
+    //            id: gridViewActions
 
-            interactive: false
-            anchors.fill: parent
-            anchors.topMargin: 40
-            anchors.leftMargin: 10
+    //            interactive: false
+    //            anchors.fill: parent
+    //            anchors.topMargin: 40
+    //            anchors.leftMargin: 10
 
-            model: [
-                ["file:///usr/share/BeaconOS-lib-images/images/Hide.svg", "View"],
-                ["file:///usr/share/BeaconOS-lib-images/images/Control.svg", "Control"],
-                ["file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg", " Digital Twin"],
-                ["file:///usr/share/BeaconOS-lib-images/images/FlightPlannerIcon.svg", "Fly"]
-            ]
+    //            model: [
+    //                ["file:///usr/share/BeaconOS-lib-images/images/Hide.svg", "View"],
+    //                ["file:///usr/share/BeaconOS-lib-images/images/Control.svg", "Control"],
+    //                ["file:///usr/share/BeaconOS-lib-images/images/3DReconstruction.svg", " Digital Twin"],
+    //                ["file:///usr/share/BeaconOS-lib-images/images/FlightPlannerIcon.svg", "Fly"]
+    //            ]
 
-            cellHeight: height / 2
-            cellWidth:  width / 2
+    //            cellHeight: height / 2
+    //            cellWidth:  width / 2
 
-            //cellHeight: height / 4
-            //cellWidth: width
+    //            //cellHeight: height / 4
+    //            //cellWidth: width
 
-            delegate: Item{
+    //            delegate: Item{
 
-                //color: "Pink"
+    //                //color: "Pink"
 
-                enabled: (index !== 3 && compDeviceInfo.isAntenna) || (!compDeviceInfo.isAntenna)
-                opacity: 1.0
-                height: gridViewActions.cellHeight
-                width: gridViewActions.cellWidth
-                CompBtnBreadcrumb {
+    //                enabled: (index !== 3 && compDeviceInfo.isAntenna) || (!compDeviceInfo.isAntenna)
+    //                opacity: 1.0
+    //                height: gridViewActions.cellHeight
+    //                width: gridViewActions.cellWidth
+    //                CompBtnBreadcrumb {
 
-                    height: parent.height * 0.80
-                    width: parent.width * 0.90
-                    anchors.centerIn: parent
+    //                    height: parent.height * 0.80
+    //                    width: parent.width * 0.90
+    //                    anchors.centerIn: parent
 
-                    CompImageIcon {
-                        id: iconImg
-                        anchors{
-                            horizontalCenter: parent.horizontalCenter
-                            top: parent.top
-                            topMargin: 10
-                        }
+    //                    CompImageIcon {
+    //                        id: iconImg
+    //                        anchors{
+    //                            horizontalCenter: parent.horizontalCenter
+    //                            top: parent.top
+    //                            topMargin: 10
+    //                        }
 
-                        height: 40
-                        width: 50
-                        source: modelData[0]
-                        color: "#ffffff"
-                    }
+    //                        height: 40
+    //                        width: 50
+    //                        source: modelData[0]
+    //                        color: "#ffffff"
+    //                    }
 
-                    CompLabel{
-                        anchors{
-                            horizontalCenter: parent.horizontalCenter
-                            top: iconImg.bottom
-                            //topMargin: 10
-                        }
-                        clip: true
-                        text: modelData[1]
-                        font.pixelSize: 18
-                    }
+    //                    CompLabel{
+    //                        anchors{
+    //                            horizontalCenter: parent.horizontalCenter
+    //                            top: iconImg.bottom
+    //                            //topMargin: 10
+    //                        }
+    //                        clip: true
+    //                        text: modelData[1]
+    //                        font.pixelSize: 18
+    //                    }
 
-                    MouseArea {
-                        anchors.fill: parent
+    //                    MouseArea {
+    //                        anchors.fill: parent
 
-                        onClicked:{
-                            if(modelData[1] === "View"){
-                                setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
-                                devicemap.setZoomLevel(4.5)
-                                popupCameraFeed.open()
-                            }
-                            if(modelData[1] === "Control"){
-                                compDeviceInfo.signalBeaconIDChanged(compDeviceInfo.deviceID);
-                                raptorNavMenu.selectedScreen = "Control"
-                            }
-                       }
-                    }
-                }
-            }
-        }
-    }
+    //                        onClicked:{
+
+
+    //                            if(modelData[1] === "View"){
+    //                                setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
+    //                                devicemap.setZoomLevel(4.5)
+    //                                popupCameraFeed.open()
+    //                            }
+    //                            if(modelData[1] === "Control"){
+    //                                compDeviceInfo.signalBeaconIDChanged(compDeviceInfo.deviceID);
+    //                                raptorNavMenu.selectedScreen = "Control"
+    //                            }
+
+
+    //                       }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
 
 
 

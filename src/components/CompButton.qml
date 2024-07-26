@@ -9,7 +9,10 @@ Button {
     property alias fontColor: lblText.color
     property alias backgroundRect: bgRect
     property alias lblBtnLbl: lblText
-    //property alias font: lblText.font
+    property alias lblFont: lblText.font
+
+    property alias iconImage: iconIamge
+
     //property string text: ""
     property real borderWidthHorizontal: 20
     background: Rectangle {
@@ -133,11 +136,11 @@ Button {
             font.weight: compButton.font.weight
 
 
-            //Rectangle{
+            // Rectangle{
             //    anchors.fill: parent
-            //
+
             //    color: "#800000ff"
-            //}
+            // }
         }
 
     }

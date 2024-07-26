@@ -11,6 +11,7 @@ Comp__BASE_MapQuickItem {
     property alias assetTypelbl: lblAssetType
     property string imgSource
     property alias iconDetails: colorOverlayMapPin
+    property bool is_selected: false
 
     anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height * 0.5)
     coordinate: QtPositioning.coordinate(lat, lon)
@@ -19,7 +20,7 @@ Comp__BASE_MapQuickItem {
     }
 
     onAssetTypeChanged:{
-        sourceItem.assetTypeText = assetID
+        sourceItem.assetTypeText = (assetType === "Antenna" || assetType === "Drone") ? "" : assetID
     }
 
     sourceItem:
@@ -46,6 +47,20 @@ Comp__BASE_MapQuickItem {
             }
 
 
+        }
+
+        Rectangle {
+            visible: (assetType === "Antenna" || assetType === "Drone") && is_selected
+            //anchors.fill: parent
+            x: assetType === "Drone" ? imgSub.x : imgSub.x - 1
+            y: assetType === "Drone" ? imgSub.y + 13 : imgSub.y + 12
+            width: assetType === "Drone" ? 52 : 54
+            height: assetType === "Drone" ? 52 : 54
+            color: "transparent"
+            //opacity: 0.5
+            border.color: "white"
+            border.width: 3
+            radius: 15
         }
 
         ColorOverlay{
@@ -81,6 +96,9 @@ Comp__BASE_MapQuickItem {
 
             onClicked: {
                 compMapAssetItemRoot.centerOnPoint(coordinate)
+                if(assetType === "Antenna" || assetType === "Drone"){
+                    screen_Raptor_Delta_Root.beaconIDSelected = compMapAssetItemRoot.assetID
+                }
             }
 
             onDoubleClicked: {
