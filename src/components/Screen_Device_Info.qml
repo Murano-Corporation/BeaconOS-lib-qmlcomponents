@@ -29,7 +29,7 @@ Item {
             //right: parent.right
             bottom: parent.bottom
         }
-        width: drawerDeviceInfo.position === 1.0 ?  1510 : 1920
+        width: drawerDeviceInfo.position === 1.0 ?  1460 : 1920
 
         showMapTypes: false
         Component.onCompleted: setZoomLevel(1.0)
@@ -107,7 +107,7 @@ Item {
 
         height: devicemap.height - 100// - areaToolbar.height - 200
 
-        width: 400
+        width: root.width * 0.215
 
         edge: Qt.RightEdge
         y: 85

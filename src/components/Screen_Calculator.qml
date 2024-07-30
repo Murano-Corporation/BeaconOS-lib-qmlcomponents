@@ -6,12 +6,12 @@ import CONSTANTS 1.0
 Screen__BASE {
     id: root
 
-    screenName: "Calculator"
+    screenName: "Einstein"
 
     property int numKeyWidth: ((calculatorScreen.width * 0.23))
     property int numKeyHeight: calculatorScreen.height * 1.4
     property int numSpacing: root.width * 0.0223
-    property int keyFontSize: Math.min(root.height, root.width) * 0.06
+    property int keyFontSize: Math.min(root.height, root.width) * 0.04
     property string inputColor: "white"
     property string outputColor: "black"
     property string keyButtonsBgColor: "#065465"
@@ -20,8 +20,10 @@ Screen__BASE {
     property string streamString: UtilityCalculator.sStream
     property var currentMenu: UtilityCalculator.sCurrentMenu
     property var variables: UtilityCalculator.mVariables
+    property var history: UtilityCalculator.mHistory
     property bool varMenuOpen: false
     property bool dataModelMenuOpen: false
+    property bool historyMenuOpen: false
     //property bool streamMenuOpen: false
     property bool streamingText: UtilityCalculator.bStreamingText
 
@@ -48,7 +50,7 @@ Screen__BASE {
             topMargin: 0.01 * parent.height
         }
 
-        Rectangle{
+        Rectangle {
             id: outputScreen
 
             clip: true
@@ -157,6 +159,12 @@ Screen__BASE {
 
                     function onSignal_ToggleDataModels() {
                         dataModelMenuOpen = !dataModelMenuOpen
+                        historyMenuOpen = false
+                    }
+
+                    function onSignal_ToggleHistoryMenu() {
+                        historyMenuOpen = !historyMenuOpen
+                        dataModelMenuOpen = false
                     }
 
                     // function onSignal_OpenStreamMenu() {
@@ -447,6 +455,7 @@ Screen__BASE {
                     bottomPadding: 10
                 }
             }
+
         }
 
         Item{
@@ -474,7 +483,7 @@ Screen__BASE {
 
                         visible: (varMenuOpen) ? false : true
 
-                        width: dataModelMenuOpen ? root.width * 0.1 : root.width * 0.131
+                        width: dataModelMenuOpen || historyMenuOpen ? root.width * 0.09 : root.width * 0.131
                         height: root.height * 0.148
 
                         text: root.currentMenu[index]
@@ -496,19 +505,19 @@ Screen__BASE {
     Column {
         id: dataModelMenu
 
-        visible: dataModelMenuOpen && varMenuOpen === false
+        visible: dataModelMenuOpen && varMenuOpen === false && historyMenuOpen === false
 
         //height: root.height * 0.7
         //width: root.width * 0.2
 
-        spacing: root.height * 0.07
+        spacing: root.height * 0.1
 
         anchors {
             fill: parent
             topMargin: parent.height * 0.21
             rightMargin: parent.width * 0.01
             bottomMargin: parent.height * 0.013
-            leftMargin: parent.width * 0.78
+            leftMargin: parent.width * 0.71
         }
 
         CompCombobox{
@@ -521,7 +530,7 @@ Screen__BASE {
             //     }
             // }
 
-            height: dataModelMenu.height * 0.08
+            height: dataModelMenu.height * 0.12
             width: dataModelMenu.width
 
             unselectedText: "Select Beacon ID"
@@ -539,7 +548,7 @@ Screen__BASE {
 
             delegate: ItemDelegate{
                 width: comboBeaconID.width
-                height: comboBeaconID.optionItemHeight
+                height: comboBeaconID.height * 0.5
 
                 background: Rectangle {
                     width: parent.width
@@ -577,7 +586,7 @@ Screen__BASE {
             visible: comboBeaconID.currentIndex !== -1
             spacing: root.height * 0.007
 
-            height: dataModelMenu.height * 0.75
+            height: dataModelMenu.height * 0.64
             width: dataModelMenu.width
 
             // Rectangle {
@@ -596,7 +605,7 @@ Screen__BASE {
             model: TableModelHealthDashboard
             delegate: CompBtnBreadcrumb {
                 id: listViewParamsDelegate
-                height: root.height * 0.059
+                height: root.height * 0.08
                 width: listviewParams.width
 
                 Row {
@@ -605,9 +614,9 @@ Screen__BASE {
                     CompLabel {
                         text: "  " + model.ParamName
                         elide: Text.ElideRight
-                        width: root.width * 0.12
+                        width: root.width * 0.19
                         height: listViewParamsDelegate.height
-                        font.pixelSize: Math.min(root.height, root.width) * 0.02
+                        font.pixelSize: Math.min(root.height, root.width) * 0.03
                         verticalAlignment: Text.AlignVCenter
                     }
 
@@ -615,7 +624,7 @@ Screen__BASE {
                         text: "     " + model.value + " " + model.unit
                         width: root.width * 0.08
                         height: listViewParamsDelegate.height
-                        font.pixelSize: Math.min(root.height, root.width) * 0.02
+                        font.pixelSize: Math.min(root.height, root.width) * 0.03
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
 
@@ -650,13 +659,114 @@ Screen__BASE {
                     anchors.fill: parent
 
                     color: "transparent"//index % 2 ? "#80ff00ff" : "#8000ff00"
-                    border.color: model.is_selected ? "blue" : "white"
+                    border.color: model.is_selected ? "blue" : "transparent"
                     radius: 20
                 }
             }
 
 
         }
+    }
+
+
+
+    ListView {
+        id: listviewHistory
+
+        visible: historyMenuOpen && varMenuOpen === false && dataModelMenuOpen === false
+
+        spacing: root.height * 0.007
+
+        height: listviewHistory.height * 0.64
+        width: listviewHistory.width
+
+        // Rectangle {
+        //     visible: varMenuOpen === false
+        //     anchors.fill: listviewParams
+        //     color: "green"
+        //     radius: 20
+        //     opacity: 0.3
+        // }
+
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "yellow"
+        // }
+
+        anchors {
+            fill: parent
+            topMargin: parent.height * 0.21
+            rightMargin: parent.width * 0.01
+            bottomMargin: parent.height * 0.013
+            leftMargin: parent.width * 0.71
+        }
+
+        model: ListModel {
+            id: historyModel
+        }
+
+        Component.onCompleted: {
+            listviewHistory.updateHistory();
+        }
+
+        Connections{
+            target: UtilityCalculator
+            function onSignal_HistoryChanged() {
+                listviewHistory.updateHistory();
+            }
+        }
+
+        function updateHistory() {
+            historyModel.clear();
+            for (var key in root.history) {
+                historyModel.append({
+                                        "name": key
+                                    });
+                historyModel.append({
+                                        "name": key
+                                    });
+            }
+            console.log("historyModel: " + historyModel)
+
+        }
+
+        delegate: CompBtnBreadcrumb {
+            id: listViewHistoryDelegate
+            height: root.height * 0.08
+            width: listviewHistory.width
+
+            property string historyVal: UtilityCalculator.getHistoryValue(model.name);
+
+            CompLabel {
+                id: historyText
+                text: ((index % 2) === 0) ? model.name : historyVal
+                width: listViewHistoryDelegate.width
+                height: listViewHistoryDelegate.height
+                font.pixelSize: Math.min(root.height, root.width) * 0.03
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                rightPadding: root.width * 0.02
+            }
+
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    console.log("historyText.text:" + historyText.text)
+                }
+
+            }
+
+            // Rectangle{
+            //     anchors.fill: parent
+
+            //     color: "transparent"//index % 2 ? "#80ff00ff" : "#8000ff00"
+            //     border.color: model.is_selected ? "blue" : "transparent"
+            //     radius: 20
+            // }
+        }
+
+
     }
 
 

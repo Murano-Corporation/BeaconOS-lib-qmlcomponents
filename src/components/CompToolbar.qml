@@ -163,7 +163,7 @@ Item {
             id: btnCalculator
             height: btnHeight
 
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Calculator.svg"
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Einstein.svg"
             iconColor: btnIconColor
             iconHeight: btnIconSize
 
