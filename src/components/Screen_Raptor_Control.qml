@@ -673,6 +673,37 @@ Screen_Raptor__BASE {
 
     }
 
+    Rectangle {
+        id: btnPursuitActive
+        property bool isActive: false
+
+        anchors{
+            bottom: stick2.top
+            left: stick2.left
+            right: stick2.right
+        }
+
+        height: width
+        radius: 0.5 * height
+        color: isActive ? "green" : "red"
+
+        CompLabel {
+            text: "Pursuit"
+
+            anchors.centerIn: parent
+        }
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                btnPursuitActive.isActive = !btnPursuitActive.isActive
+                DroneController.setPursuitModeActive(btnPursuitActive.isActive)
+            }
+        }
+    }
+
+
     Comp_Drone_Gimble{
         id: stick1
 
