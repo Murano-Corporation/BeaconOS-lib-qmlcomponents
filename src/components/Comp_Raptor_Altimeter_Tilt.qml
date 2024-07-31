@@ -61,9 +61,9 @@ Rectangle {
                     //console.log("minY: " + minY + " maxY: " + maxY)
                     if( y <= compRaptorAltimerTiltRoot.minY || y >= compRaptorAltimerTiltRoot.maxY)
                     {
-                        behaviourY.enabled = false
+                        //behaviourY.enabled = false
                         y = compRaptorAltimerTiltRoot.zero
-                        behaviourY.enabled = true
+                        //behaviourY.enabled = true
                     }
                 }
 

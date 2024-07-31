@@ -20,7 +20,7 @@ Screen__BASE {
     property string streamString: UtilityCalculator.sStream
     property var currentMenu: UtilityCalculator.sCurrentMenu
     property var variables: UtilityCalculator.mVariables
-    property var history: UtilityCalculator.mHistory
+    property var history: UtilityCalculator.vHistory
     property bool varMenuOpen: false
     property bool dataModelMenuOpen: false
     property bool historyMenuOpen: false
@@ -36,7 +36,6 @@ Screen__BASE {
         onTriggered: {
             console.log("Timer triggered after 8 seconds")
             UtilityCalculator.sAnswerString = ""
-            fadeTimer.running = false
         }
     }
 
@@ -192,7 +191,11 @@ Screen__BASE {
 
                 onTextChanged:{
                     UtilityCalculator.sAnswerString = text
-                    fadeTimer.running = true
+                    //console.log("Text changed")
+                    if(text !== "") {
+                        fadeTimer.running = true
+                        //console.log("Timer running")
+                    }
                 }
 
                 anchors {
@@ -668,7 +671,28 @@ Screen__BASE {
         }
     }
 
+    CompLabel {
+        id: historyLabel
 
+        visible: historyMenuOpen && varMenuOpen === false && dataModelMenuOpen === false
+
+        height: 70
+        width: listviewHistory.width
+
+        text: "History:"
+        font.pixelSize: Math.min(root.height, root.width) * 0.03
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+
+        anchors {
+            top: parent.top
+            topMargin: parent.height * 0.19
+            bottom: root.height * 0.76
+            right: listviewHistory.right
+            left: listviewHistory.left
+
+        }
+    }
 
     ListView {
         id: listviewHistory
@@ -677,8 +701,8 @@ Screen__BASE {
 
         spacing: root.height * 0.007
 
-        height: listviewHistory.height * 0.64
-        width: listviewHistory.width
+        height: root.height * 0.4
+        width: root.width * 0.3
 
         // Rectangle {
         //     visible: varMenuOpen === false
@@ -695,67 +719,96 @@ Screen__BASE {
 
         anchors {
             fill: parent
-            topMargin: parent.height * 0.21
+            topMargin: root.height * 0.38
             rightMargin: parent.width * 0.01
-            bottomMargin: parent.height * 0.013
+            bottomMargin: parent.height * 0.15 //changed
             leftMargin: parent.width * 0.71
         }
 
-        model: ListModel {
-            id: historyModel
-        }
+        model: TableModelCalculatorHistory
 
-        Component.onCompleted: {
-            listviewHistory.updateHistory();
-        }
+        // Component.onCompleted: {
+        //     listviewHistory.updateHistory();
+        // }
 
-        Connections{
-            target: UtilityCalculator
-            function onSignal_HistoryChanged() {
-                listviewHistory.updateHistory();
-            }
-        }
+        //Connections{
+        //    target: UtilityCalculator
+        //    function onSignal_HistoryChanged() {
+        //        listviewHistory.updateHistory();
+        //    }
+        //}
 
-        function updateHistory() {
-            historyModel.clear();
-            for (var key in root.history) {
-                historyModel.append({
-                                        "name": key
-                                    });
-                historyModel.append({
-                                        "name": key
-                                    });
-            }
-            console.log("historyModel: " + historyModel)
-
-        }
+        //function updateHistory() {
+        //    historyModel.clear();
+        //    var historyList = UtilityCalculator.getHistory(); // Assuming this returns QVector<QPair<QString, QVariant>>
+        //    for (var i = 0; i < historyList.length; i++) {
+        //        var pair = historyList[i];
+        //        historyModel.append({
+        //            "name": pair.first
+        //        });
+        //        historyModel.append({
+        //            "name": pair.second.toString()
+        //        });
+        //    }
+        //    console.log("historyModel: " + historyModel)
+        //}
 
         delegate: CompBtnBreadcrumb {
             id: listViewHistoryDelegate
-            height: root.height * 0.08
+            height: colContents.height
             width: listviewHistory.width
 
-            property string historyVal: UtilityCalculator.getHistoryValue(model.name);
+            property string equation: model.text
+            property string value: model.value
 
-            CompLabel {
-                id: historyText
-                text: ((index % 2) === 0) ? model.name : historyVal
-                width: listViewHistoryDelegate.width
-                height: listViewHistoryDelegate.height
-                font.pixelSize: Math.min(root.height, root.width) * 0.03
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignRight
-                rightPadding: root.width * 0.02
-            }
+            Column{
+                id: colContents
 
+                width: listviewHistory.width
 
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    console.log("historyText.text:" + historyText.text)
+                CompLabel {
+                    id: historyEquation
+                    text: listViewHistoryDelegate.equation
+                    width: listviewHistory.width
+                    height: root.height * 0.065
+                    elide: Text.ElideRight
+                    font.pixelSize: Math.min(root.height, root.width) * 0.03
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignRight
+                    rightPadding: root.width * 0.02
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            console.log("historyEquation.text:" + historyEquation.text)
+                            inputText.insert(inputText.cursorPosition, historyEquation.text)
+                        }
+
+                    }
                 }
 
+                CompLabel {
+                    id: historyAnswer
+                    text: listViewHistoryDelegate.value
+                    width: listviewHistory.width
+                    height: root.height * 0.065
+                    font.pixelSize: Math.min(root.height, root.width) * 0.03
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignRight
+                    rightPadding: root.width * 0.02
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            console.log("historyAnswer.text:" + historyAnswer.text)
+                            inputText.insert(inputText.cursorPosition, historyAnswer.text)
+                        }
+
+                    }
+                }
             }
+
+
 
             // Rectangle{
             //     anchors.fill: parent
