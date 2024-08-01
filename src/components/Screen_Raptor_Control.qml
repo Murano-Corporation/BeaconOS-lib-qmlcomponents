@@ -1,17 +1,20 @@
 import QtQuick 2.15
+import CONSTANTS 1.0
 
 Screen_Raptor__BASE {
     id: screen_RaptorControlRoot
 
     property string beaconIDSelected
     property var selectedItem
-    property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
+    property var controllerSource: DroneController
+    property int controlledDeviceType: Constants.ERaptorDeviceType_Drone
+    property string dispText: controllerSource.latitude + ", " + controllerSource.longitude + ", " + controllerSource.altitude + " " + controllerSource.deviceSpeed
     property bool controlON: true
     property bool hudON: true
-    property var gimbal1Struct: DroneController.gimbalA
-    property var gimbal2Struct: DroneController.gimbalB
-    property var detectionInfo: DroneController.detectionInfo
-    property real batteryPercent: DroneController.deviceBattery
+    property var gimbal1Struct: controllerSource.gimbalA
+    property var gimbal2Struct: controllerSource.gimbalB
+    property var detectionInfo: controllerSource.detectionInfo
+    property real batteryPercent: controllerSource.deviceBattery
     signal signalBeaconIDSelected(var beaconID)
 
     onBeaconIDSelectedChanged: {
@@ -589,7 +592,7 @@ Screen_Raptor__BASE {
                 id: btnLoiter
 
                 text: "LOITER"
-                onClicked: DroneController.sendCommand("set_mode_loiter")
+                onClicked: DroneController.sendCommand("set_mode_loiter", "flightcontroller")
                 width: parent.btnWidth
             }
 
@@ -597,7 +600,7 @@ Screen_Raptor__BASE {
                 id: btnRtl
 
                 text: "RTL"
-                onClicked: DroneController.sendCommand("set_mode_rtl")
+                onClicked: DroneController.sendCommand("set_mode_rtl", "flightcontroller")
                 width: parent.btnWidth
             }
 
@@ -605,7 +608,7 @@ Screen_Raptor__BASE {
                 id: btnLand
 
                 text: "LAND"
-                onClicked: DroneController.sendCommand("set_mode_land")
+                onClicked: DroneController.sendCommand("set_mode_land", "flightcontroller")
                 width: parent.btnWidth
             }
 
@@ -613,7 +616,7 @@ Screen_Raptor__BASE {
                 id: btnStabilize
 
                 text: "STABILIZE"
-                onClicked: DroneController.sendCommand("set_mode_stabilize")
+                onClicked: DroneController.sendCommand("set_mode_stabilize","flightcontroller")
                 width: parent.btnWidth
             }
 
@@ -621,7 +624,7 @@ Screen_Raptor__BASE {
                 id: btnBreak
 
                 text: "BRAKE"
-                onClicked: DroneController.sendCommand("set_mode_brake")
+                onClicked: DroneController.sendCommand("set_mode_brake","flightcontroller")
                 width: parent.btnWidth
             }
         }

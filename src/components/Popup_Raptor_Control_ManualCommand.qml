@@ -87,7 +87,7 @@ Comp__BASE_Popup{
                     width: parent.width
 
                     model: DroneController.listCommandNames
-                    textRole: undefined
+                    //textRole: undefined
 
                     delegate: ItemDelegate{
                         width: comboCommandId.width

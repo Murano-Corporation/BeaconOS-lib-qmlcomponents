@@ -67,7 +67,7 @@ Comp__BASE_Popup{
                 CompCombobox {
                     id: edtParamId
 
-                    textRole: undefined
+                    //textRole: undefined
 
                     model: DroneController.listParameterNames
                     width: parent.width
