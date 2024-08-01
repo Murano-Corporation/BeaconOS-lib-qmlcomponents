@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.12
 
 Screen_Raptor__BASE {
     id: screen_RaptorControlRoot
@@ -8,6 +9,7 @@ Screen_Raptor__BASE {
     property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
     property bool controlON: true
     property bool hudON: true
+    property bool extraControls: false
     property var gimbal1Struct: DroneController.gimbalA
     property var gimbal2Struct: DroneController.gimbalB
     property var detectionInfo: DroneController.detectionInfo
@@ -33,7 +35,7 @@ Screen_Raptor__BASE {
 
     state: eSTATE_NO_ASSET_SELECTED
     onStateChanged: {
-        console.log('Drone Connection State is now: ' + state)
+        //console.log('Drone Connection State is now: ' + state)
     }
     states: [
         State{
@@ -408,102 +410,41 @@ Screen_Raptor__BASE {
         }
     }
 
-    Row {
-        id: areaControlsRow
+    // Row {
+    //     id: areaControlsRow
 
-        height: 90
-        width: 210//450
+    //     height: 90
+    //     width: 210//450
 
-        //visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== ""
-        opacity: screen_RaptorControlRoot.beaconIDSelected ? 1.0 : 0.3
+    //     //visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== ""
+    //     opacity: screen_RaptorControlRoot.beaconIDSelected ? 1.0 : 0.3
 
-        anchors{
-            bottom: parent.bottom
-            bottomMargin: 20
-            horizontalCenter: parent.horizontalCenter
-        }
+    //     anchors{
+    //         bottom: parent.bottom
+    //         bottomMargin: 20
+    //         horizontalCenter: parent.horizontalCenter
+    //     }
 
-        spacing: 30
+    //     spacing: 30
 
-        // CompRaptorNavMenuItem {
-        //     id: menuItemRaptor
-        //     visible: false
-        //     opacity: 0.6
+    //     // CompRaptorNavMenuItem {
+    //     //     id: menuItemRaptor
+    //     //     visible: false
+    //     //     opacity: 0.6
 
-        //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
-        //     imgIconColor: "White"
-        // }
-        // CompRaptorNavMenuItem {
-        //     id: menuItemControl
-        //     visible: false
-        //     opacity:0.6
+    //     //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Camera.svg"
+    //     //     imgIconColor: "White"
+    //     // }
+    //     // CompRaptorNavMenuItem {
+    //     //     id: menuItemControl
+    //     //     visible: false
+    //     //     opacity:0.6
 
-        //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
-        //     imgIconColor: "White"
+    //     //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Video.svg"
+    //     //     imgIconColor: "White"
 
-        // }
-        CompRaptorNavMenuItem {
-            id: menuItemShowHideHud
-
-            opacity: 0.6
-
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Controller.svg"
-
-            imgIconColor: screen_RaptorControlRoot.hudON ? "Green" : "Red"
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if(screen_RaptorControlRoot.hudON){
-                        screen_RaptorControlRoot.hudON = false
-                    } else {
-                        screen_RaptorControlRoot.hudON = true
-                    }
-                    console.log("screen_RaptorControlRoot.hudON : " + screen_RaptorControlRoot.hudON)
-                }
-            }
-
-        }
-
-        CompRaptorNavMenuItem {
-            id: menuItemFlightPlanner
-            opacity: 0.6
-
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"
-
-            imgIconColor: screen_RaptorControlRoot.controlON ? "Green" : "Red"
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if(screen_RaptorControlRoot.controlON){
-                        screen_RaptorControlRoot.controlON = false
-                    } else {
-                        screen_RaptorControlRoot.controlON = true
-                    }
-                    console.log("screen_RaptorControlRoot.controlON : " + screen_RaptorControlRoot.controlON)
-                }
-            }
-
-        }
-
-        CompRaptorNavMenuItem {
-            id: menuItemQuickCommands
-            opacity: 0.6
-
-            imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"
-
-            imgIconColor: screen_RaptorControlRoot.controlON ? "Green" : "Red"
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    popupRaptorControlQuickCommands.visible ? popupRaptorControlQuickCommands.close() : popupRaptorControlQuickCommands.open()
-                }
-            }
-
-        }
-    }
+    //     // }
+    // }
 
     Popup_Raptor_Control_QuickCommands {
         id: popupRaptorControlQuickCommands
@@ -558,17 +499,20 @@ Screen_Raptor__BASE {
             right: stick2.left
         }
 
-        color: "#80ffffff"
+        color: "transparent"
 
         CompLabel{
             id: lblFlightMode
+
+            visible: true //DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
 
             text: "Sys. State: " + DroneController.sSystemState + "; - Flight Mode: " + DroneController.flightMode + "; - Land State: " + DroneController.sLandedState + "; - GPS Fix Type: " + DroneController.sGpsFixType + "; GPS Sats: " + DroneController.gpsSatellitesAvailable
 
             anchors {
                 bottom: parent.top
                 bottomMargin: 20
-                left: parent.left
+                //left: parent.left
+                horizontalCenter: parent.horizontalCenter
             }
 
             Rectangle{
@@ -581,102 +525,23 @@ Screen_Raptor__BASE {
             }
         }
 
-        Row{
-            property int btnWidth: 200
-            anchors.fill: parent
-            spacing: 64
-            CompBtnBreadcrumb{
-                id: btnLoiter
+        CompRaptorDroneScrollMenu {
+            visible: true
 
-                text: "LOITER"
-                onClicked: DroneController.sendCommand("set_mode_loiter")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnRtl
-
-                text: "RTL"
-                onClicked: DroneController.sendCommand("set_mode_rtl")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnLand
-
-                text: "LAND"
-                onClicked: DroneController.sendCommand("set_mode_land")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnStabilize
-
-                text: "STABILIZE"
-                onClicked: DroneController.sendCommand("set_mode_stabilize")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnBreak
-
-                text: "BRAKE"
-                onClicked: DroneController.sendCommand("set_mode_brake")
-                width: parent.btnWidth
+            anchors{
+                top: lblFlightMode.bottom
+                topMargin: 100
+                horizontalCenter: lblFlightMode.horizontalCenter
             }
         }
     }
 
-    Rectangle {
-        id: btnEStop
 
-        property bool isActive: false
-
-        anchors{
-            bottom: stick1.top
-            left: stick1.left
-            right: stick1.right
-        }
-
-        height: width
-        radius: 0.5 * height
-        color: isActive ? "green" : "red"
-
-        CompLabel {
-            id: lblEStopTitle
-            text: "E-STOP"
-
-            anchors.centerIn: parent
-        }
-
-        CompLabel {
-            id: lblEStopState
-            text: btnEStop.isActive ? "ARMED" : ""
-
-            anchors {
-                top: lblEStopTitle.bottom
-                bottom: parent.bottom
-                horizontalCenter: parent.horizontalCenter
-            }
-
-            verticalAlignment: Text.AlignVCenter
-        }
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                btnEStop.isActive = !btnEStop.isActive
-                DroneController.setEStopArmed(btnEStop.isActive)
-            }
-        }
-
-    }
 
     Comp_Drone_Gimble{
         id: stick1
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        visible: true //DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.09 - (stick1.width / 2)
         y: root.height * 0.72
@@ -693,7 +558,7 @@ Screen_Raptor__BASE {
     Comp_Drone_Gimble{
         id: stick2
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        visible: true//DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.91 - (stick2.width / 2)
         y: root.height * 0.72
@@ -835,11 +700,54 @@ Screen_Raptor__BASE {
                         color: (groupBars.bars >= 5 ? groupBars.colorStrong : groupBars.colorWeak)
                     }
                 }
-
-
             }
         }
     }
-
-
 }
+
+
+// Rectangle {
+//     id: btnEStop
+
+//     property bool isActive: false
+
+//     anchors{
+//         bottom: stick1.top
+//         left: stick1.left
+//         right: stick1.right
+//     }
+
+//     height: width
+//     radius: 0.5 * height
+//     color: isActive ? "green" : "red"
+
+//     CompLabel {
+//         id: lblEStopTitle
+//         text: "E-STOP"
+
+//         anchors.centerIn: parent
+//     }
+
+//     CompLabel {
+//         id: lblEStopState
+//         text: btnEStop.isActive ? "ARMED" : ""
+
+//         anchors {
+//             top: lblEStopTitle.bottom
+//             bottom: parent.bottom
+//             horizontalCenter: parent.horizontalCenter
+//         }
+
+//         verticalAlignment: Text.AlignVCenter
+//     }
+
+//     MouseArea {
+//         anchors.fill: parent
+
+//         onClicked: {
+//             btnEStop.isActive = !btnEStop.isActive
+//             DroneController.setEStopArmed(btnEStop.isActive)
+//         }
+//     }
+
+// }
