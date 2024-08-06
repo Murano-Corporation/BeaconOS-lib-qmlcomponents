@@ -8,9 +8,10 @@ Screen_Raptor__BASE {
     property string beaconIDSelected: ""
     property var selectedItem
     property string dispText: DroneController.latitude + ", " + DroneController.longitude + ", " + DroneController.altitude + " " + DroneController.deviceSpeed
-    property bool controlON: false
+    property bool controlON: true
     property bool hudON: true
     property bool lblFlightModeOn: false
+    property bool miniMapToggle: false
     property var gimbal1Struct: DroneController.gimbalA
     property var gimbal2Struct: DroneController.gimbalB
     property var detectionInfo: DroneController.detectionInfo
@@ -74,15 +75,19 @@ Screen_Raptor__BASE {
         id: deviceScreen
 
         width: 1920
+        height: 1080
 
-        anchors{
-            top: parent.top
-            //topMargin: 20
-            left: parent.left
-            //right: parent.right
-            bottom: parent.bottom
-        }
+        x: 0
+        y: 0
+        z: miniMapToggle ? 0 : 1
 
+        enabled: miniMapToggle ? false : true
+        visible: miniMapToggle ? false : true
+
+
+        // anchors{
+        //     fill: parent
+        // }
 
         // Timer {
         //     id: tmrDelayOnCompleted
@@ -95,21 +100,6 @@ Screen_Raptor__BASE {
         //     }
         // }
 
-        Image {
-            id: imageCameraFeed
-            visible: screen_RaptorControlRoot.beaconIDSelected !== ""
-            //source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
-            source: "image://drone-camera/" + DroneController.imageProviderFrameId
-            anchors {
-                fill: parent
-            }
-
-            Rectangle{
-                visible: !DroneController.watchdogOk
-                anchors.fill: parent
-                color: "#DD000000"
-            }
-        }
 
         CompBtnBreadcrumb {
             id: lblBeaconID
@@ -243,39 +233,6 @@ Screen_Raptor__BASE {
                         attitudeMeter.rollAngle = DroneController.roll
                     }
                 }
-            }
-        }
-
-        Rectangle {
-            id: assetCoords
-
-            visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
-
-            border.color: "#00FF94"
-            border.width: 3
-            color: "transparent"
-            height: 60
-            width: 440
-            radius: 20
-
-            anchors {
-                right: lblBeaconID.left
-                verticalCenter: lblBeaconID.verticalCenter
-                rightMargin: 120
-            }
-
-            CompLabel {
-                id: areaSelfCoordinates
-
-                text: screen_RaptorControlRoot.beaconIDSelected ? dispText : ""
-
-                anchors{
-                    centerIn: parent
-                }
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                color: "#00FF94"
-
             }
         }
 
@@ -515,12 +472,9 @@ Screen_Raptor__BASE {
             fontPixelSize: 22
 
             anchors {
-                bottom: parent.bottom
-                //left: parent.left
-                left: stick1.right
-                right: stick2.left
-                top: stick1.bottom
-                margins: 10
+                top: parent.top
+                topMargin: 20
+                horizontalCenter: parent.horizontalCenter
             }
 
             Rectangle{
@@ -545,34 +499,31 @@ Screen_Raptor__BASE {
             }
         }
 
-        // Rectangle {
-        //     anchors.fill: compRaptorDroneGridView
-        //     color: "green"
-        // }
 
         Drawer{
-            id: drawerDroneGridMenu
+            id: drawerDroneGridMenuControl
 
             interactive: (beaconIDSelected === "") ? false : true
-            visible: (beaconIDSelected === "") ? false : true
+            visible: (beaconIDSelected !== "" && !miniMapToggle && screen_Raptor_Delta_Root.bButtonLayout) ? true : false
 
             closePolicy: Popup.NoAutoClose
             dim: false
             modal: false
 
             width: 220 //235
-            height: 550
+            height: 578
             edge: Qt.RightEdge
             y: 250
             //x: 200
+            rightPadding: 10
 
             onVisibleChanged: {
-                if (!drawerDroneGridMenu.visible) {
-                    console.log("Drawer is closed")
+                if (!drawerDroneGridMenuControl.visible) {
+                    //console.log("Drawer is closed")
                     bButtonLayout = false
                 }
                 else {
-                    console.log("Drawer is open")
+                    //console.log("Drawer is open")
                     bButtonLayout = true
                 }
             }
@@ -581,6 +532,9 @@ Screen_Raptor__BASE {
 
             CompBtnBreadcrumb{
                 anchors.fill: parent
+
+                visible: (beaconIDSelected !== "" && !miniMapToggle && screen_Raptor_Delta_Root.bButtonLayout) ? true : false
+
                 //color: "#000000"
                 //radius: 20
             }
@@ -593,12 +547,12 @@ Screen_Raptor__BASE {
             CompRaptorDroneGridView{
                 id: compRaptorDroneGridView
 
+                visible: (beaconIDSelected !== "" && !miniMapToggle && screen_Raptor_Delta_Root.bButtonLayout) ? true : false
+
                 transform: Scale {
                     xScale: 0.8
                     yScale: 0.8
                 }
-
-                visible: bButtonLayout && screen_RaptorControlRoot.beaconIDSelected !== ""
 
                 anchors{
                     top: parent.top
@@ -621,19 +575,78 @@ Screen_Raptor__BASE {
             }
         }
 
+        Rectangle {
+           anchors {
+               top: parent.top
+               topMargin: 100
+               left: parent.left
+               leftMargin: 200
+           }
+           height: 100
+           width: 100
+           color: "green"
+           MouseArea {
+               anchors.fill: parent
+               onClicked: {
+                   console.log("drawerDroneGridMenuControl.visible: " + drawerDroneGridMenuControl.visible)
+                   console.log("!miniMapToggle: " + !miniMapToggle)
+                   console.log("beaconIDSelected !== : " + (beaconIDSelected !== ""))
+                   console.log("screen_Raptor_Delta_Root.bButtonLayout: " + screen_Raptor_Delta_Root.bButtonLayout)
+               }
+           }
+        }
+
+
+        CompImageIcon{
+            id: openRightGridViewControl
+            opacity: 0.6
+            visible: !drawerDroneGridMenuControl.visible && (beaconIDSelected !== "")
+
+            Rectangle {
+                anchors.fill: parent
+                color: "yellow"
+                opacity: 0.3
+            }
+
+            anchors{
+                right: deviceScreen.right
+                verticalCenter: parent.verticalCenter
+            }
+
+
+            height: 578
+            width: 48
+
+            source: "file:///usr/share/BeaconOS-lib-images/images/RightOpen.svg"
+            //color: "White"
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    console.log("OPENING EXTRA BUTTONS DRAWER!!!")
+
+                    drawerDroneGridMenuControl.visible = !drawerDroneGridMenuControl.visible
+                    //drawerDroneGridMenuControl.open()
+
+                    console.log("Drawer open status after:", drawerDroneGridMenuControl.visible);
+                }
+            }
+        }
+
         Comp_Drone_Gimble{
             id: stick1
 
-            visible: screen_RaptorControlRoot.controlON && !drawerDeviceInfo.visible && !drawerDroneGridMenu.visible//DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
-            opacity: 0.25
+            visible: screen_RaptorControlRoot.controlON && beaconIDSelected !== ""//DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+            opacity: 0.1
             // x: root.width * 0.09 - (stick1.width / 2)
             // y: root.height * 0.72
             anchors {
                 left: parent.left
-                leftMargin: 60
+                leftMargin: 770
                 bottom: parent.bottom
-                bottomMargin: 60
-                //leftMargin: drawerDeviceInfo.visible ? drawerDeviceInfo.width + 30 : 0
+                bottomMargin: 10
+                //leftMargin: drawerDeviceInfoControl.visible ? drawerDeviceInfoControl.width + 30 : 0
             }
             isThrottle: true
 
@@ -648,16 +661,16 @@ Screen_Raptor__BASE {
         Comp_Drone_Gimble{
             id: stick2
 
-            visible: screen_RaptorControlRoot.controlON && !drawerDeviceInfo.visible && !drawerDroneGridMenu.visible//DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
-            opacity: 0.25
+            visible: screen_RaptorControlRoot.controlON && beaconIDSelected !== ""//DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+            opacity: 0.1
             //x: root.width * 0.91 - (stick2.width / 2)
             //y: root.height * 0.72
             anchors {
                 right: parent.right
-                rightMargin: 60
+                rightMargin: 770
                 bottom: parent.bottom
-                bottomMargin: 60
-                //rightMargin: drawerDeviceInfo.visible ? drawerDeviceInfo.width + 60 : 60
+                bottomMargin: 10
+                //rightMargin: drawerDeviceInfoControl.visible ? drawerDeviceInfoControl.width + 60 : 60
             }
 
             isThrottle: false
@@ -674,21 +687,20 @@ Screen_Raptor__BASE {
         Rectangle {
             id:deviceData
 
-            visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+            visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON//DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
-            border.color: "#00FF94"
-            border.width: 3
+            //border.color: "#00FF94"
+            //border.width: 3
             color: "transparent"
             height: 60
             width: 240
             radius: 20
 
             anchors {
-                verticalCenter: lblBeaconID.verticalCenter
-                // left: lblBeaconID.right
-                // leftMargin: 120
                 right: parent.right
-                rightMargin: 370
+                rightMargin: 50
+                top: assetCoordsSpeed.bottom
+                topMargin: 20
             }
 
             Row{
@@ -806,24 +818,59 @@ Screen_Raptor__BASE {
             }
         }
 
-        Drawer{
-            id: drawerDeviceInfo
+        Rectangle {
+            id: assetCoordsSpeed
 
-            interactive: (beaconIDSelected === "") ? false : true
-            visible: (beaconIDSelected === "") ? false : true
+            visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+
+            //border.color: "#00FF94"
+            //border.width: 3
+            color: "transparent"
+            height: 60
+            width: 440
+            radius: 20
+
+            anchors {
+                right: parent.right
+                top: parent.top
+                topMargin: 100
+                rightMargin: 20
+            }
+
+            CompLabel {
+                id: areaSelfCoordinates
+
+                text: screen_RaptorControlRoot.beaconIDSelected ? dispText : ""
+
+                anchors{
+                    centerIn: parent
+                }
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: "#00FF94"
+
+            }
+        }
+
+        Drawer{
+            id: drawerDeviceInfoControl
 
             closePolicy: Popup.NoAutoClose
             dim: false
             modal: false
 
-            height: deviceScreen.height - 220// - areaToolbar.height - 200
+            height: 780
 
-            width: root.width * 0.215
+            width: 415
 
             edge: Qt.LeftEdge
             y: 140
 
             leftPadding: 10
+
+            // MouseArea {
+            //     anchors.fill: openLeftDeviceInfoControl
+            // }
 
             CompBtnBreadcrumb{
                 anchors.fill: parent
@@ -854,7 +901,7 @@ Screen_Raptor__BASE {
 
                                              screen_RaptorControlRoot.beaconIDSelected = bid
                                              signalBeaconIDSelected(bid)
-                                             drawerDroneGridMenu.open()
+                                             drawerDroneGridMenuControl.open()
 
 
                                          }
@@ -867,13 +914,18 @@ Screen_Raptor__BASE {
         CompImageIcon{
             id: openLeftDeviceInfoControl
             opacity: 0.6
-            visible: drawerDeviceInfo.position < 1.0
+            visible: !drawerDeviceInfoControl.visible
 
             anchors{
                 left: deviceScreen.left
                 verticalCenter: parent.verticalCenter
             }
 
+            Rectangle {
+                anchors.fill: parent
+                color: "yellow"
+                opacity: 0.3
+            }
 
             height: 578
             width: 48
@@ -885,44 +937,13 @@ Screen_Raptor__BASE {
                 anchors.fill: parent
 
                 onClicked: {
-                    console.log("Drawer open status before:", drawerDeviceInfo.visible);
+                    console.log("Drawer open status before:", drawerDeviceInfoControl.visible);
                     console.log("OPENING DEVICE INFO DRAWER!!!")
 
-                    drawerDeviceInfo.visible = !drawerDeviceInfo.visible
-                    //drawerDeviceInfo.open()
+                    drawerDeviceInfoControl.visible = !drawerDeviceInfoControl.visible
+                    //drawerDeviceInfoControl.open()
 
-                    console.log("Drawer open status after:", drawerDeviceInfo.visible);
-                }
-            }
-        }
-
-        CompImageIcon{
-            id: openRightGridViewControl
-            opacity: 0.6
-            visible: (drawerDroneGridMenu.position < 1.0) && (beaconIDSelected !== "")
-
-            anchors{
-                right: deviceScreen.right
-                verticalCenter: parent.verticalCenter
-            }
-
-
-            height: 578
-            width: 48
-
-            source: "file:///usr/share/BeaconOS-lib-images/images/RightOpen.svg"
-            //color: "White"
-
-            MouseArea {
-                anchors.fill: parent
-
-                onClicked: {
-                    console.log("OPENING EXTRA BUTTONS DRAWER!!!")
-
-                    drawerDroneGridMenu.visible = !drawerDroneGridMenu.visible
-                    //drawerDroneGridMenu.open()
-
-                    console.log("Drawer open status after:", drawerDroneGridMenu.visible);
+                    console.log("Drawer open status after:", drawerDeviceInfoControl.visible);
                 }
             }
         }
@@ -930,37 +951,104 @@ Screen_Raptor__BASE {
 
     }
 
-    CompImageIcon {
-        id: miniMapTestImg
+    Image {
+        id: imageCameraFeed
+        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        //source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
+        source: "image://drone-camera/" + DroneController.imageProviderFrameId
 
-        visible: !screen_RaptorControlRoot.controlON && !drawerDeviceInfo.visible && (beaconIDSelected !== "")
+        Rectangle {
+            anchors.fill: parent
+            opacity: 0.3
+            color: "blue"
+        }
 
-        height: 132
-        width: 221
+        x: miniMapToggle ? 100 : 0
+        y: miniMapToggle ? 850 : 0
+        z: miniMapToggle ? 1 : 0
+        height: miniMapToggle ? 216 : 1080
+        width: miniMapToggle ? 360 : 1920
 
-        scale: 1.4
-
-        // Rectangle {
-        //     anchors.fill: parent
-        //     color: "blue"
-        //     opacity: 0.8
+        // anchors {
+        //     fill: parent
         // }
 
-        anchors {
-            bottom: parent.bottom
-            bottomMargin: 60
-            left: parent.left
-            leftMargin: 100
-        }
+        // Rectangle{
+        //     visible: !DroneController.watchdogOk
+        //     anchors.fill: parent
+        //     color: "#DD000000"
+        // }
+    }
 
-        source: "file:///usr/share/BeaconOS-lib-images/images/miniMapTest.png"
+    MouseArea {
+        id: miniMapMouseArea
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                console.log("miniMap clicked!")
-            }
+        //visible: hudON && !drawerDeviceInfoControl.visible && beaconIDSelected !== ""
+        enabled: hudON && !drawerDeviceInfoControl.visible && beaconIDSelected !== ""// && miniMapToggle
+
+        x: 100
+        y: 850
+        z: 2
+        height: 216
+        width: 360
+
+        onClicked: {
+
+            // console.log("miniMap clicked!")
+
+            // console.log("imageCameraFeed.x : " + imageCameraFeed.x)
+            // console.log("imageCameraFeed.y : " + imageCameraFeed.y)
+            // console.log("imageCameraFeed.z : " + imageCameraFeed.z)
+            // console.log("imageCameraFeed.width : " + imageCameraFeed.width)
+            // console.log("imageCameraFeed.height : " + imageCameraFeed.height)
+
+            // console.log("miniMapTestImg.x : " + miniMapTestImg.x)
+            // console.log("miniMapTestImg.y : " + miniMapTestImg.y)
+            // console.log("miniMapTestImg.z : " + miniMapTestImg.z)
+            // console.log("miniMapTestImg.width : " + miniMapTestImg.width)
+            // console.log("miniMapTestImg.height : " + miniMapTestImg.height)
+
+            // console.log("BEFORE^^^")
+
+            miniMapToggle = !miniMapToggle
+
+            // console.log("imageCameraFeed.x : " + imageCameraFeed.x)
+            // console.log("imageCameraFeed.y : " + imageCameraFeed.y)
+            // console.log("imageCameraFeed.z : " + imageCameraFeed.z)
+            // console.log("imageCameraFeed.width : " + imageCameraFeed.width)
+            // console.log("imageCameraFeed.height : " + imageCameraFeed.height)
+
+            // console.log("miniMapTestImg.x : " + miniMapTestImg.x)
+            // console.log("miniMapTestImg.y : " + miniMapTestImg.y)
+            // console.log("miniMapTestImg.z : " + miniMapTestImg.z)
+            // console.log("miniMapTestImg.width : " + miniMapTestImg.width)
+            // console.log("miniMapTestImg.height : " + miniMapTestImg.height)
         }
+    }
+
+    CompMapViewer{
+        id: miniMap
+
+        visible: hudON && !drawerDeviceInfoControl.visible && beaconIDSelected !== ""
+        enabled: hudON && !drawerDeviceInfoControl.visible && beaconIDSelected !== ""// && miniMapToggle
+
+        x: !miniMapToggle ? 100 : 0
+        y: !miniMapToggle ? 850 : 0
+        z: !miniMapToggle ? 1 : 0
+        height: !miniMapToggle ? 216 : 1080
+        width: !miniMapToggle ? 360 : 1920
+
+        showMapTypes: false
+
+        Component.onCompleted: {setZoomLevel(15.0)
+            // if(miniMapToggle){
+            //     setZoomLevel(15.0)
+            // } else {
+            //     setZoomLevel(15.0)
+            // }
+        }
+        activeMapTypeIndex: 4
+        listAssets: TableModelRaptorMap
     }
 }
 

@@ -4,8 +4,8 @@ import QtQuick 2.15
 Comp__BASE {
     id: root
 
-    height: 250 //scaleable!!!
-    width: 250
+    height: 180 //scaleable!!!
+    width: 180
 
     property color outerColor: "#ffffff"//"#9287ed"
     property color outerBorderColor: "grey" //blue
@@ -20,18 +20,20 @@ Comp__BASE {
     property bool isThrottle //for left stick true, right stick false
 
     Rectangle {
-        id: outerBox //purely aesthetics
+        id: outerBox
 
         color: root.innerColor
         height: root.height
         width: root.width
         border.color: root.outerBorderColor
         border.width: 1
-        radius: 20
+        radius: 30
         anchors.centerIn: root
 
         Rectangle {
-            id: outerCircle
+            id: outerCircle //purely aesthetics
+
+            visible: false
 
             color: root.outerColor
             height: root.height
@@ -40,25 +42,27 @@ Comp__BASE {
             border.width: 1
             radius: root.width * 0.5
             anchors.centerIn: parent
+        }
 
-            Rectangle {
-                id: joystick
+        Rectangle {
+            id: joystick
 
-                color: root.innerColor
-                border.color: root.outerBorderColor
-                height: root.height * 0.3
-                width: root.width * 0.3
-                radius: root.width * 0.5
-                x: root.joystickDefaultX
-                y: root.joystickDefaultY
+            visible: true
 
-                property real liveCenterX: joystick.x + (joystick.width / 2) - (root.width / 2) //live location in relation to the center of the outer circle
-                property real liveCenterY: joystick.y + (joystick.height / 2) - (root.height / 2)
+            color: root.innerColor
+            border.color: root.outerBorderColor
+            height: root.height * 0.15
+            width: root.width * 0.15
+            radius: root.width * 0.5
+            x: root.joystickDefaultX
+            y: root.joystickDefaultY
 
-                property real finalX
-                property real finalY
+            property real liveCenterX: joystick.x + (joystick.width / 2) - (root.width / 2) //live location in relation to the center of the outer circle
+            property real liveCenterY: joystick.y + (joystick.height / 2) - (root.height / 2)
 
-            }
+            property real finalX
+            property real finalY
+
         }
 
         MultiPointTouchArea {
@@ -69,43 +73,43 @@ Comp__BASE {
 
             onTouchUpdated: touchPoints => {
 
-                if( touchPoints.length === 0)
-                return
+                                if( touchPoints.length === 0)
+                                return
 
-                if (touchPoints[0].x - (joystick.width / 2) >= 0 && touchPoints[0].x + (joystick.width / 2) <= root.width ) {
-                    joystick.x = touchPoints[0].x - joystick.width / 2
-                    joystick.finalX = (joystick.liveCenterX / 87.5) /// 90
-                }
-                if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + (joystick.height / 2) <= root.height){
-                    joystick.y = touchPoints[0].y - joystick.height / 2
-                    joystick.finalY = -(joystick.liveCenterY / 87.5) /// 90
-                }
+                                if (touchPoints[0].x - (joystick.width / 2) >= 0 && touchPoints[0].x + (joystick.width / 2) <= root.width ) {
+                                    joystick.x = touchPoints[0].x - joystick.width / 2
+                                    joystick.finalX = (joystick.liveCenterX / 87.5) /// 90
+                                }
+                                if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + (joystick.height / 2) <= root.height){
+                                    joystick.y = touchPoints[0].y - joystick.height / 2
+                                    joystick.finalY = -(joystick.liveCenterY / 87.5) /// 90
+                                }
 
-                    if (touchPoints[0].x < (joystick.width / 2)) {
-                        joystick.x = 0
-                        joystick.finalX = -1
-                    }
-                    if (touchPoints[0].y < (joystick.height / 2)) {
-                        joystick.y = 0
-                        joystick.finalY = 1
-                    }
-                    if (touchPoints[0].x > (root.width - (joystick.width / 2))) {
-                        joystick.x = root.width - (joystick.width)
-                        joystick.finalX = 1
-                    }
-                    if (touchPoints[0].y > (root.height - (joystick.height / 2))) {
-                        joystick.y = root.height - (joystick.height)
-                        joystick.finalY = -1
-                    }
+                                if (touchPoints[0].x < (joystick.width / 2)) {
+                                    joystick.x = 0
+                                    joystick.finalX = -1
+                                }
+                                if (touchPoints[0].y < (joystick.height / 2)) {
+                                    joystick.y = 0
+                                    joystick.finalY = 1
+                                }
+                                if (touchPoints[0].x > (root.width - (joystick.width / 2))) {
+                                    joystick.x = root.width - (joystick.width)
+                                    joystick.finalX = 1
+                                }
+                                if (touchPoints[0].y > (root.height - (joystick.height / 2))) {
+                                    joystick.y = root.height - (joystick.height)
+                                    joystick.finalY = -1
+                                }
 
-                    //console.log(touchPoints[0].x + " " + touchPoints[0].y)
-                    //console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
-                    //console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
-                    //console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
-            }
+                                //console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                                //console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                                //console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                                //console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
+                            }
 
             onGestureStarted: {
-               joystick.opacity = 0.8
+                joystick.opacity = 0.8
             }
 
             onReleased: {
