@@ -17,6 +17,11 @@ Comp__BASE {
     property alias joystickXValue: joystick.finalX
     property alias joystickYValue: joystick.finalY
 
+    property real deadZoneX: 0.25
+    property real deadZoneY: 0.25
+    readonly property real rootHalfWidth: width * 0.5
+    readonly property real rootHalfHeight: height * 0.5
+
     property bool isThrottle //for left stick true, right stick false
 
     Rectangle {
@@ -51,9 +56,10 @@ Comp__BASE {
                 radius: root.width * 0.5
                 x: root.joystickDefaultX
                 y: root.joystickDefaultY
-
-                property real liveCenterX: joystick.x + (joystick.width / 2) - (root.width / 2) //live location in relation to the center of the outer circle
-                property real liveCenterY: joystick.y + (joystick.height / 2) - (root.height / 2)
+                readonly property real joystickHalfWidth: width * 0.5
+                readonly property real joystickHalfHeight: height * 0.5
+                property real liveCenterX: joystick.x + joystickHalfWidth - rootHalfWidth //live location in relation to the center of the outer circle
+                property real liveCenterY: joystick.y + joystickHalfWidth - rootHalfHeight
 
                 property real finalX
                 property real finalY
@@ -69,43 +75,43 @@ Comp__BASE {
 
             onTouchUpdated: touchPoints => {
 
-                if( touchPoints.length === 0)
-                return
+                                if( touchPoints.length === 0)
+                                return
 
-                if (touchPoints[0].x - (joystick.width / 2) >= 0 && touchPoints[0].x + (joystick.width / 2) <= root.width ) {
-                    joystick.x = touchPoints[0].x - joystick.width / 2
-                    joystick.finalX = (joystick.liveCenterX / 87.5) /// 90
-                }
-                if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + (joystick.height / 2) <= root.height){
-                    joystick.y = touchPoints[0].y - joystick.height / 2
-                    joystick.finalY = -(joystick.liveCenterY / 87.5) /// 90
-                }
+                                if (touchPoints[0].x - joystick.joystickHalfWidth >= 0 && touchPoints[0].x + joystick.joystickHalfWidth <= root.width ) {
+                                    joystick.x = touchPoints[0].x - joystick.joystickHalfWidth
+                                    joystick.finalX = (joystick.liveCenterX / 87.5) /// 90
+                                }
+                                if (touchPoints[0].y - (joystick.width / 2) >= 0 && touchPoints[0].y + joystick.joystickHalfHeight <= root.height){
+                                    joystick.y = touchPoints[0].y - joystick.joystickHalfHeight
+                                    joystick.finalY = -(joystick.liveCenterY / 87.5) /// 90
+                                }
 
-                    if (touchPoints[0].x < (joystick.width / 2)) {
-                        joystick.x = 0
-                        joystick.finalX = -1
-                    }
-                    if (touchPoints[0].y < (joystick.height / 2)) {
-                        joystick.y = 0
-                        joystick.finalY = 1
-                    }
-                    if (touchPoints[0].x > (root.width - (joystick.width / 2))) {
-                        joystick.x = root.width - (joystick.width)
-                        joystick.finalX = 1
-                    }
-                    if (touchPoints[0].y > (root.height - (joystick.height / 2))) {
-                        joystick.y = root.height - (joystick.height)
-                        joystick.finalY = -1
-                    }
+                                if (touchPoints[0].x < (joystick.joystickHalfWidth)) {
+                                    joystick.x = 0
+                                    joystick.finalX = -1
+                                }
+                                if (touchPoints[0].y < (joystick.joystickHalfHeight)) {
+                                    joystick.y = 0
+                                    joystick.finalY = 1
+                                }
+                                if (touchPoints[0].x > (root.width - (joystick.joystickHalfWidth))) {
+                                    joystick.x = root.width - (joystick.width)
+                                    joystick.finalX = 1
+                                }
+                                if (touchPoints[0].y > (root.height - (joystick.joystickHalfHeight))) {
+                                    joystick.y = root.height - (joystick.height)
+                                    joystick.finalY = -1
+                                }
 
-                    //console.log(touchPoints[0].x + " " + touchPoints[0].y)
-                    //console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
-                    //console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
-                    //console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
-            }
+                                //console.log(touchPoints[0].x + " " + touchPoints[0].y)
+                                //console.log(joystick.liveCenterX + " liveCenterX " + joystick.liveCenterY + " liveCenterY ") //circle radius is 150
+                                //console.log(joystick.finalX + " finalX " + joystick.finalY + " finalY ")
+                                //console.log(joystick.x + " joystick.x " + joystick.y + " joystick.y")
+                            }
 
             onGestureStarted: {
-               joystick.opacity = 0.8
+                joystick.opacity = 0.8
             }
 
             onReleased: {

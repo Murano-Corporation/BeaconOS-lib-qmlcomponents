@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import CONSTANTS 1.0
 
 Screen_Raptor__BASE {
@@ -6,15 +7,30 @@ Screen_Raptor__BASE {
 
     property string beaconIDSelected
     property var selectedItem
-    property var controllerSource: DroneController
+    property var controllerSource: isDrone ? DroneController : isAntenna ? AntennaController : undefined
     property int controlledDeviceType: Constants.ERaptorDeviceType_Drone
-    property string dispText: controllerSource.latitude + ", " + controllerSource.longitude + ", " + controllerSource.altitude + " " + controllerSource.deviceSpeed
+    readonly property bool isNullSource: controllerSource === undefined
+    readonly property int deviceConnectionState: isNullSource ? -1 : controllerSource.droneConnectionState
+    readonly property bool isDrone: controlledDeviceType === Constants.ERaptorDeviceType_Drone
+    readonly property bool isAntenna: controlledDeviceType === Constants.ERaptorDeviceType_Antenna
+    readonly property string imageProviderString: isDrone ? "drone-camera" : isAntenna ? "antenna-camera" : ""
+    readonly property string imageAltProviderString: "antenna-camera-ir"
+    onImageProviderStringChanged: console.log("Image Provider String changed to: " + imageProviderString)
+    property string dispText: isDrone ? dispText_Drone : isAntenna ? dispText_Antenna : "???"
+    readonly property string dispText_Drone: isNullSource ? "" : controllerSource.latitude + ", " + controllerSource.longitude + ", " + controllerSource.altitude + " " + controllerSource.deviceSpeed
+    readonly property string dispText_Antenna: isNullSource ? "" : controllerSource.latitude + ", " + controllerSource.longitude + ", " + controllerSource.altitude
     property bool controlON: true
     property bool hudON: true
-    property var gimbal1Struct: controllerSource.gimbalA
-    property var gimbal2Struct: controllerSource.gimbalB
-    property var detectionInfo: controllerSource.detectionInfo
-    property real batteryPercent: controllerSource.deviceBattery
+    readonly property bool isEStopArmed: isNullSource ? true : controllerSource.isEStopArmed
+    onIsEStopArmedChanged: {
+        console.log("EStop is armed: " + isEStopArmed)
+    }
+
+    property var gimbal1Struct: isNullSource ? {} : controllerSource.gimbalA
+    property var gimbal2Struct: isNullSource ? {} : controllerSource.gimbalB
+    property var detectionInfo: isNullSource ? {} : controllerSource.detectionInfo
+    property real batteryPercent: isDrone ? controllerSource.deviceBattery : 1.0
+    readonly property bool watchdogOk: true //isNullSource ? false : controllerSource.watchdogOk
     signal signalBeaconIDSelected(var beaconID)
 
     onBeaconIDSelectedChanged: {
@@ -34,6 +50,7 @@ Screen_Raptor__BASE {
     readonly property string eSTATE_CONNECTING: "State-Connecting"
     readonly property string eSTATE_CONNECTED: "State-Connected"
 
+
     state: eSTATE_NO_ASSET_SELECTED
     onStateChanged: {
         console.log('Drone Connection State is now: ' + state)
@@ -42,17 +59,17 @@ Screen_Raptor__BASE {
         State{
             name: eSTATE_NO_ASSET_SELECTED
 
-            when: DroneController.droneConnectionState === 0
+            when: screen_RaptorControlRoot.deviceConnectionState === 0
         },
         State{
             name: eSTATE_CONNECTING
 
-            when: DroneController.droneConnectionState === 1
+            when: screen_RaptorControlRoot.deviceConnectionState === 1
         },
         State{
             name: eSTATE_CONNECTED
 
-            when: DroneController.droneConnectionState === 2
+            when: screen_RaptorControlRoot.deviceConnectionState === 2
         }
     ]
 
@@ -85,15 +102,27 @@ Screen_Raptor__BASE {
         id: imageCameraFeed
         visible: screen_RaptorControlRoot.beaconIDSelected !== ""
         //source: "file:///usr/share/BeaconOS-lib-images/images/sunsetSwarm 1.png"
-        source: "image://drone-camera/" + DroneController.imageProviderFrameId
+        source: screen_RaptorControlRoot.isNullSource ? "" : "image://" + screen_RaptorControlRoot.imageProviderString + "/" + screen_RaptorControlRoot.controllerSource.imageProviderFrameId
         anchors {
             fill: parent
         }
 
         Rectangle{
-            visible: !DroneController.watchdogOk
+            visible: !screen_RaptorControlRoot.watchdogOk
             anchors.fill: parent
             color: "#DD000000"
+        }
+    }
+
+    Image {
+        id: imageCameraFeed_Alt
+
+        visible: imageCameraFeed.visible && screen_RaptorControlRoot.isAntenna
+        opacity: 0.5
+        source: "image://" + screen_RaptorControlRoot.imageAltProviderString + "/" + screen_RaptorControlRoot.controllerSource.imageProviderIRFrameId
+
+        anchors {
+            fill: imageCameraFeed
         }
     }
 
@@ -117,89 +146,18 @@ Screen_Raptor__BASE {
         onClicked: popupSelectedAssets.open()
     }
 
-    Item {
+    CompRaptorTargetBoundingBox {
         id: compTargetBoundingBox1
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.detectionInfo.valid && screen_RaptorControlRoot.hudON
+        visible: screen_RaptorControlRoot.watchdogOk && screen_RaptorControlRoot.detectionInfo.valid && screen_RaptorControlRoot.hudON
 
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            margins: 70
-        }
+        detectionInfo: screen_RaptorControlRoot.controllerSource.detectionInfo.rectDetection
 
-        Rectangle{
-            anchors.top: parent.top
-            color: "#00FF94"
-            height: 2
-            width: 270
-            radius: 16
-        }
-        Rectangle{
-            anchors.left: parent.left
-            color: "#00FF94"
-            height: 123
-            width: 2
-            radius: 16
-        }
-
-        Rectangle{
-            anchors.top: parent.top
-            anchors.right: parent.right
-            color: "#00FF94"
-            height: 2
-            width: 270
-            radius: 16
-        }
-        Rectangle{
-            anchors.right: parent.right
-            color: "#00FF94"
-            height: 123
-            width: 2
-            radius: 16
-        }
-
-        Rectangle{
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            color: "#00FF94"
-            height: 2
-            width: 270
-            radius: 16
-        }
-
-        Rectangle{
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            color: "#00FF94"
-            height: 123
-            width: 2
-            radius: 16
-        }
-
-        Rectangle{
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: "#00FF94"
-            height: 2
-            width: 270
-            radius: 16
-        }
-        Rectangle{
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            color: "#00FF94"
-            height: 123
-            width: 2
-            radius: 16
-        }
     }
 
     Item {
         id: areaAltimeter
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: screen_RaptorControlRoot.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         anchors.centerIn: parent
 
@@ -210,18 +168,19 @@ Screen_Raptor__BASE {
             width: 700
 
             Connections{
-                target: DroneController
+                enabled: !screen_RaptorControlRoot.isNullSource
+                target: screen_RaptorControlRoot.controllerSource
 
                 function onSignal_YawChanged(){
-                    attitudeMeter.compassAngle = DroneController.yaw
+                    attitudeMeter.compassAngle = screen_RaptorControlRoot.controllerSource.yaw
                 }
 
                 function onSignal_PitchChanged(){
-                    attitudeMeter.tiltAngle = DroneController.pitch
+                    attitudeMeter.tiltAngle = screen_RaptorControlRoot.controllerSource.pitch
                 }
 
                 function onSignal_RollChanged(){
-                    attitudeMeter.rollAngle = DroneController.roll
+                    attitudeMeter.rollAngle = screen_RaptorControlRoot.controllerSource.roll
                 }
             }
         }
@@ -262,7 +221,7 @@ Screen_Raptor__BASE {
     Rectangle {
         id: areaTargetMetaData
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: screen_RaptorControlRoot.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         height: screen_RaptorControlRoot.height * 0.48
         width: screen_RaptorControlRoot.width * 0.17
@@ -355,7 +314,7 @@ Screen_Raptor__BASE {
     CompLabel {
         id: areaClassifcation
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: screen_RaptorControlRoot.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
         x: 140//132
         y: 140//737
 
@@ -410,6 +369,127 @@ Screen_Raptor__BASE {
             }
         }
     }
+
+    Rectangle{
+        id: areaFlightModes
+
+        anchors{
+            left: stick1.right
+            bottom: areaControlsRow.top
+            right: stick2.left
+        }
+
+        color: "#80ffffff"
+        height: 64
+        Rectangle{
+            anchors.fill: listviewTextFlightmode
+
+            color: "#80ffffff"
+        }
+
+        ListView{
+            id: listviewTextFlightmode
+            anchors{
+                left: parent.left
+                right: parent.right
+                bottom: parent.top
+            }
+
+            height: 64
+
+            clip: true
+            orientation: ListView.Horizontal
+            boundsBehavior: Flickable.StopAtBounds
+            model: 1
+            delegate: CompLabel{
+                id: lblFlightMode
+
+                readonly property string text_drone: screen_RaptorControlRoot.isDrone ? "Sys. State: " + DroneController.sSystemState + "; - Flight Mode: " + DroneController.flightMode + "; - Land State: " + DroneController.sLandedState + "; - GPS Fix Type: " + DroneController.sGpsFixType + "; GPS Sats: " + DroneController.gpsSatellitesAvailable : ""
+                readonly property string text_antenna: screen_RaptorControlRoot.isAntenna ? "Antenna" : ""
+                text: screen_RaptorControlRoot.isDrone ? text_drone : screen_RaptorControlRoot.isAntenna ? text_antenna : "???"
+
+                Rectangle{
+                    anchors.fill: parent
+                    anchors.margins: -10
+                    radius: 10
+                    z: -1
+
+                    color: "#80000000"
+                }
+            }
+
+
+        }
+
+
+        ListView{
+            anchors{
+                fill: parent
+            }
+
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            model: 1
+
+            orientation: ListView.Horizontal
+
+            delegate: Row {
+                visible: isDrone
+                property int btnWidth: 200
+                spacing: 64
+                CompBtnBreadcrumb{
+                    id: btnLoiter
+
+                    text: "LOITER"
+                    onClicked: DroneController.sendCommand("set_mode_loiter", "flightcontroller")
+                    width: parent.btnWidth
+                }
+
+                CompBtnBreadcrumb{
+                    id: btnGuided
+
+                    text: "GUIDED"
+                    onClicked: DroneController.sendCommand("set_mode_guided", "flightcontroller")
+                    width: parent.btnWidth
+                }
+
+                CompBtnBreadcrumb{
+                    id: btnRtl
+
+                    text: "RTL"
+                    onClicked: DroneController.sendCommand("set_mode_rtl", "flightcontroller")
+                    width: parent.btnWidth
+                }
+
+                CompBtnBreadcrumb{
+                    id: btnLand
+
+                    text: "LAND"
+                    onClicked: DroneController.sendCommand("set_mode_land", "flightcontroller")
+                    width: parent.btnWidth
+                }
+
+                CompBtnBreadcrumb{
+                    id: btnStabilize
+
+                    text: "STABILIZE"
+                    onClicked: DroneController.sendCommand("set_mode_stabilize","flightcontroller")
+                    width: parent.btnWidth
+                }
+
+                CompBtnBreadcrumb{
+                    id: btnBreak
+
+                    text: "BRAKE"
+                    onClicked: DroneController.sendCommand("set_mode_brake","flightcontroller")
+                    width: parent.btnWidth
+                }
+            }
+
+        }
+
+    }
+
 
     Row {
         id: areaControlsRow
@@ -551,89 +631,11 @@ Screen_Raptor__BASE {
         onClicked: popupSelectedAssets.open()
     }
 
-    Rectangle{
-        id: areaFlightModes
-
-        anchors{
-            top: stick1.top
-            left: stick1.right
-            bottom: parent.bottom
-            right: stick2.left
-        }
-
-        color: "#80ffffff"
-
-        CompLabel{
-            id: lblFlightMode
-
-            text: "Sys. State: " + DroneController.sSystemState + "; - Flight Mode: " + DroneController.flightMode + "; - Land State: " + DroneController.sLandedState + "; - GPS Fix Type: " + DroneController.sGpsFixType + "; GPS Sats: " + DroneController.gpsSatellitesAvailable
-
-            anchors {
-                bottom: parent.top
-                bottomMargin: 20
-                left: parent.left
-            }
-
-            Rectangle{
-                anchors.fill: parent
-                anchors.margins: -10
-                radius: 10
-                z: -1
-
-                color: "#80000000"
-            }
-        }
-
-        Row{
-            property int btnWidth: 200
-            anchors.fill: parent
-            spacing: 64
-            CompBtnBreadcrumb{
-                id: btnLoiter
-
-                text: "LOITER"
-                onClicked: DroneController.sendCommand("set_mode_loiter", "flightcontroller")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnRtl
-
-                text: "RTL"
-                onClicked: DroneController.sendCommand("set_mode_rtl", "flightcontroller")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnLand
-
-                text: "LAND"
-                onClicked: DroneController.sendCommand("set_mode_land", "flightcontroller")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnStabilize
-
-                text: "STABILIZE"
-                onClicked: DroneController.sendCommand("set_mode_stabilize","flightcontroller")
-                width: parent.btnWidth
-            }
-
-            CompBtnBreadcrumb{
-                id: btnBreak
-
-                text: "BRAKE"
-                onClicked: DroneController.sendCommand("set_mode_brake","flightcontroller")
-                width: parent.btnWidth
-            }
-        }
-    }
 
     Rectangle {
         id: btnEStop
 
-        property bool isActive: false
+        property bool isActive: screen_RaptorControlRoot.isEStopArmed
 
         anchors{
             bottom: stick1.top
@@ -669,8 +671,26 @@ Screen_Raptor__BASE {
             anchors.fill: parent
 
             onClicked: {
-                btnEStop.isActive = !btnEStop.isActive
-                DroneController.setEStopArmed(btnEStop.isActive)
+                if(screen_RaptorControlRoot.isNullSource)
+                {
+                    console.log('Screen Raptor Control: Null source found on EStop Pressed')
+                    return
+                }
+
+                try{
+                    //console.log("EStop arm pressed before...")
+                    var isArmedCurrently = screen_RaptorControlRoot.controllerSource.isEStopArmed
+                    //console.log("...currently: " + isArmedCurrently)
+                    isArmedCurrently = !isArmedCurrently
+                    //console.log("...toggled: " + isArmedCurrently)
+                    //console.log("...isNonNull: " + screen_RaptorControlRoot.controllerSource)
+                    screen_RaptorControlRoot.controllerSource.isEStopArmed = isArmedCurrently
+
+                    //console.log("EStop arm pressed after...")
+                } catch(exception){
+                    console.log("[EXCEPTION] - Screen_Raptor_Control : OnClicked of EStop Button : Exception: " + exception)
+                }
+
             }
         }
 
@@ -679,7 +699,7 @@ Screen_Raptor__BASE {
     Rectangle {
         id: btnPursuitActive
         property bool isActive: false
-
+        visible: screen_RaptorControlRoot.isDrone
         anchors{
             bottom: stick2.top
             left: stick2.left
@@ -701,20 +721,49 @@ Screen_Raptor__BASE {
 
             onClicked: {
                 btnPursuitActive.isActive = !btnPursuitActive.isActive
-                DroneController.setPursuitModeActive(btnPursuitActive.isActive)
+                screen_RaptorControlRoot.controllerSource.setPursuitModeActive(btnPursuitActive.isActive)
+            }
+        }
+    }
+
+    Rectangle {
+        id: btnPursuitFollowActive
+
+        visible: screen_RaptorControlRoot.isDrone
+        anchors{
+            bottom: btnPursuitActive.top
+            left: btnPursuitActive.left
+            right: btnPursuitActive.right
+        }
+
+        height: width
+        radius: 0.5 * height
+        color: isActive ? "green" : "red"
+
+        CompLabel {
+            text: "Follow"
+
+            anchors.centerIn: parent
+        }
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                screen_RaptorControlRoot.controllerSource.setPursuitModeFollow(true)
             }
         }
     }
 
 
-    Comp_Drone_Gimble{
+    Comp_Drone_Gimble {
         id: stick1
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        visible: screen_RaptorControlRoot.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
         opacity: 0.25
         x: root.width * 0.09 - (stick1.width / 2)
         y: root.height * 0.72
-        isThrottle: true
+        isThrottle: false
 
         onJoystickXValueChanged: {
             setGimbal1Values(joystickXValue, joystickYValue)
@@ -724,10 +773,10 @@ Screen_Raptor__BASE {
             setGimbal1Values(joystickXValue, joystickYValue)
         }
     }
-    Comp_Drone_Gimble{
+    Comp_Drone_Gimble {
         id: stick2
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.controlON
+        visible: screen_RaptorControlRoot.isDrone && stick1.visible
         opacity: 0.25
         x: root.width * 0.91 - (stick2.width / 2)
         y: root.height * 0.72
@@ -745,7 +794,7 @@ Screen_Raptor__BASE {
     Rectangle {
         id:deviceData
 
-        visible: DroneController.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
+        visible: screen_RaptorControlRoot.isDrone && screen_RaptorControlRoot.controllerSource.watchdogOk && screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.hudON
 
         border.color: "#00FF94"
         border.width: 3
@@ -811,7 +860,7 @@ Screen_Raptor__BASE {
             Item {
                 id: groupBars
 
-                property int bars: DroneController.deviceSignal
+                property int bars: screen_RaptorControlRoot.isNullSource ? 0 : screen_RaptorControlRoot.controllerSource.deviceSignal
                 property color colorWeak: "#ffffff"
                 property color colorStrong: "#00FF94"
                 property real barWidth: width * 0.20
@@ -875,5 +924,20 @@ Screen_Raptor__BASE {
         }
     }
 
+    Rectangle{
+        id: rectEStopActiveDimmer
+        visible: screen_RaptorControlRoot.isEStopArmed
+        anchors{
+            fill: parent
+        }
 
+        color: "#80000000"
+
+        CompLabel{
+            anchors.centerIn: parent
+
+            text: "E-STOP ACTIVE"
+        }
+
+    }
 }

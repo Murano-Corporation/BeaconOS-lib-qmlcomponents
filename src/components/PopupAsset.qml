@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import CONSTANTS 1.0
 
 Comp__BASE_Popup{
     id: popupSelectedAssets
@@ -78,6 +79,7 @@ Comp__BASE_Popup{
             onClicked: {
                 screen_RaptorControlRoot.beaconIDSelected = model.Beacon_ID;
                 screen_RaptorControlRoot.selectedItem = model;
+                screen_RaptorControlRoot.controlledDeviceType = (model.asset_type === "Antenna" ? Constants.ERaptorDeviceType_Antenna : Constants.ERaptorDeviceType_Drone)
                 assetsList.currentIndex = index
                 signalBeaconIDSelected(model.Beacon_ID);
             }

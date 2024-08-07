@@ -255,6 +255,7 @@
         <file>Popup_Raptor_Control_Messages.qml</file>
         <file>Popup_Raptor_Control_QuickCommands.qml</file>
         <file>PopupRaptorControlParameterView.qml</file>
+        <file>CompRaptorTargetBoundingBox.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal"/>
 </RCC>
