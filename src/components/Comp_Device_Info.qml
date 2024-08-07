@@ -15,6 +15,11 @@ Item {
     property var yVal
     property var listofDevices: []
     property var idx
+    //property CompMapViewer compMapViewer
+
+    signal signal_onItemClicked
+    signal signal_onItemLongPressed
+
     property string selectedAction: ""
 
     function setCoordinates(x, y){
@@ -130,13 +135,16 @@ Item {
             onClicked: {
                 compDeviceInfo.listItemClicked(model, index)
                 setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
-                devicemap.setZoomLevel(4.5)
+                compDeviceInfo.signal_onItemClicked()
+                console.log("model.is_selected for "+ model.Beacon_ID + " is set to " + model.is_selected)
+                //compDeviceInfo.compMapViewer.setZoomLevel(4.5)
             }
 
             onPressAndHold: { //aj
                 compDeviceInfo.listItemClicked(model, index)
                 setCoordinates(compDeviceInfo.xVal, compDeviceInfo.yVal)
-                devicemap.setZoomLevel(4.5)
+                //compDeviceInfo.compMapViewer.setZoomLevel(4.5)
+                compDeviceInfo.signal_onItemLongPressed()
             }
 
         }

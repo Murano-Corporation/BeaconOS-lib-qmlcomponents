@@ -3,8 +3,9 @@ import QtQuick 2.15
 Comp__BASE_Popup{
     id: popupRaptorControlParameterView
     popupName: "Raptor.Control: Parameter View"
-    height: 900
+    height: 700
     width: 600
+    compBaseRadius: 20
 
     CompPopupBG{
         id: bg
@@ -80,11 +81,13 @@ Comp__BASE_Popup{
             Row {
                 id: rowControls
 
-                height: 90
+                height: 80
                 width: parent.width
 
                 CompBtnBreadcrumb{
-                    height: parent.height
+                    height: edtSetValue.height * 0.9
+
+                    anchors.verticalCenter: parent.verticalCenter
 
                     text: "Update"
 
@@ -107,9 +110,11 @@ Comp__BASE_Popup{
                 CompBtnBreadcrumb{
                     id: btnSet
 
+                    anchors.verticalCenter: parent.verticalCenter
+
 
                     enabled: (listViewParameters.indexSelected !== lblNull && edtSetValue.text.length > 0)
-                    height: parent.height
+                    height: edtSetValue.height * 0.9
 
                     text: "Apply"
 
@@ -117,6 +122,24 @@ Comp__BASE_Popup{
                         DroneController.sendCommand_SetParam(listViewParameters.indexSelected.paramId, edtSetValue.text)
                     }
                 }
+
+                // CompRaptorNavMenuItem{
+                //     id: resetBtn
+
+                //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/RefreshCircle.svg"
+                //     width: parent.width
+                //     height: 90
+                //     onClicked: popupRaptorControlParamSeter.onReset()
+                // }
+
+                // CompRaptorNavMenuItem{
+                //     id: executeBtn
+
+                //     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/PlayCircle.svg"
+                //     width: parent.width
+                //     height: 90
+                //     onClicked: DroneController.sendCommand_SetParam(listViewParameters.indexSelected.paramId, edtSetValue.text)
+                // }
             }
         }
     }

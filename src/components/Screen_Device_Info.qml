@@ -43,7 +43,7 @@ Item {
     CompImageIcon{
         id: openDeviceInfo
         opacity: 0.6
-        visible: drawerDeviceInfo.position < 1.0
+        visible: drawerDeviceInfo.position < 0.01
 
         y: 320
 
@@ -66,8 +66,13 @@ Item {
             onClicked: {
                 //console.log("Drawer open status before:", drawerDeviceInfo.visible);
                 //console.log("OPENING DEVICE INFO DRAWER!!!")
-
-                drawerDeviceInfo.visible = !drawerDeviceInfo.visible
+                if (drawerDeviceInfo.visible === true) {
+                    drawerDeviceInfo.visible = false
+                    drawerDeviceInfo.visible = true
+                }
+                else {
+                    drawerDeviceInfo.visible = true
+                }
                 //drawerDeviceInfo.open()
 
                 //console.log("Drawer open status after:", drawerDeviceInfo.visible);

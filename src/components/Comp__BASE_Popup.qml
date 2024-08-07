@@ -5,6 +5,7 @@ Popup {
     id: popup_root
     property alias targetDevice: compBase.targetDevice
     property alias base: compBase
+    property int compBaseRadius: 0
     required property string popupName
 
     enabled: !DisplayController.isBusy
@@ -18,6 +19,7 @@ Popup {
 
     background: Rectangle{
         color: "#80000000"
+        radius: compBaseRadius
     }
     Comp__BASE{
         id: compBase

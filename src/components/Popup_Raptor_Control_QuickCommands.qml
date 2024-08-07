@@ -3,85 +3,147 @@ import QtQuick 2.15
 Comp__BASE_Popup{
     id: popupRaptorControlQuickCommands
 
+    property bool droneArmed: false
+
     height: 600
-    width: 400
+    width: 570
+    compBaseRadius: 20
 
     modal: false
 
     signal openPopup_Parameters()
 
-    Column {
+    CompPopupBG {
+        id: bg
         anchors.fill: parent
-        anchors.margins: 20
 
-        CompBtnBreadcrumb {
-            id: btn_Arm
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "blue"
+        // }
 
-            text: "ARM Drone"
+        Grid{
 
-            onClicked: {
-                DroneController.sendCommand_Arm()
-                popupRaptorControlQuickCommands.close()
-                popupRaptorControlPrearmChecks.open()
+            //anchors.fill: parent
+            height: popupRaptorControlQuickCommands.height * 0.733
+            width: popupRaptorControlQuickCommands.width * 0.737
+
+            anchors.centerIn: parent
+            columns: 2
+            rows: 3
+            columnSpacing: parent.width * 0.18
+            rowSpacing: parent.height * 0.06
+
+            CompRaptorNavMenuItem{
+                id: btn_ArmDisArm
+
+                width: popupRaptorControlQuickCommands.width * 0.28
+                height: popupRaptorControlQuickCommands.height * 0.2
+
+                imgIconSrc: droneArmed ? "file:///usr/share/BeaconOS-lib-images/images/Armed.svg" : "file:///usr/share/BeaconOS-lib-images/images/DisArmed.svg"
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: {
+                        console.log("armed/disarmed")
+                        if (!droneArmed) {
+                            DroneController.sendCommand_Arm()
+                            popupRaptorControlQuickCommands.close()
+                            popupRaptorControlPrearmChecks.open()
+                        }
+                        else {
+                            DroneController.sendCommand_Disarm()
+                        }
+                        droneArmed = !droneArmed
+                    }
+                }
             }
-        }
 
-        CompBtnBreadcrumb{
-            id: btn_Disarm
+            CompRaptorNavMenuItem{
+                id: btn_RestartFlightController
 
-            text: "DISARM Drone"
+                width: popupRaptorControlQuickCommands.width * 0.28
+                height: popupRaptorControlQuickCommands.height * 0.2
 
-            onClicked: DroneController.sendCommand_Disarm()
-        }
+                imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Refresh.svg"
 
-        CompBtnBreadcrumb{
-            id: btn_RestartFlightController
+                MouseArea {
+                    anchors.fill: parent
 
-            text: "RESTART Flight Control"
-
-            onClicked: DroneController.sendCommand_FlightController_Restart();
-        }
-
-        CompBtnBreadcrumb {
-            id: btn_ShowMessages
-
-            text: "Messages"
-
-            onClicked: {
-                popupRaptorControlQuickCommands.close();
-                popupRaptorControlMessages.open();}
-        }
-
-        CompBtnBreadcrumb {
-            id: btn_ShowManualCommands
-
-            text: "Manual CMDs"
-
-            onClicked: {
-                popupRaptorControlQuickCommands.close();
-                popupRaptorControlManualCommand.open();
+                    onClicked:{
+                        console.log("restart")
+                        DroneController.sendCommand_FlightController_Restart();
+                    }
+                }
             }
-        }
 
-        CompBtnBreadcrumb {
-            id: btn_ShowParameterEntry
+            CompRaptorNavMenuItem{
+                id: btn_ShowMessages
 
-            text: "Set Params"
+                width: popupRaptorControlQuickCommands.width * 0.28
+                height: popupRaptorControlQuickCommands.height * 0.2
 
-            onClicked: {
-                popupRaptorControlQuickCommands.close();
-                popupRaptorControlParamSeter.open();
+                imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/MessageCMD.svg"
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked:{
+                        popupRaptorControlQuickCommands.close();
+                        popupRaptorControlMessages.open();}
+                }
             }
-        }
+            CompRaptorNavMenuItem{
+                id: btn_ShowManualCommands
 
-        CompBtnBreadcrumb {
-            id: btn_ShowParameterViewer
+                width: popupRaptorControlQuickCommands.width * 0.28
+                height: popupRaptorControlQuickCommands.height * 0.2
 
-            text: "View Params"
+                imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ManualCMD.svg"
 
-            onClicked: {
-                popupRaptorControlQuickCommands.close();
-                popupRaptorControlQuickCommands.openPopup_Parameters()
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked:{
+                        popupRaptorControlQuickCommands.close();
+                        popupRaptorControlManualCommand.open();
+                    }
+                }
+            }
+            CompRaptorNavMenuItem{
+                id: btn_ShowParameterEntry
+
+                width: popupRaptorControlQuickCommands.width * 0.28
+                height: popupRaptorControlQuickCommands.height * 0.2
+
+                imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/SetParam.svg"
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked:{
+                        popupRaptorControlQuickCommands.close();
+                        popupRaptorControlParamSeter.open();
+                    }
+                }
+            }
+            CompRaptorNavMenuItem{
+                id: btn_ShowParameterViewer
+
+                width: popupRaptorControlQuickCommands.width * 0.28
+                height: popupRaptorControlQuickCommands.height * 0.2
+
+                imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ViewParam.svg"
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked:{
+                        popupRaptorControlQuickCommands.close();
+                        popupRaptorControlQuickCommands.openPopup_Parameters()
+                    }
+                }
             }
         }
     }

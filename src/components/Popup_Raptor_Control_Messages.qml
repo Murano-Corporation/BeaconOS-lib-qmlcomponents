@@ -6,13 +6,14 @@ Comp__BASE_Popup{
         height: 600
         width: 400
 
+        compBaseRadius: 20
+
+
         modal: true
 
         CompPopupBG {
             id: bg
             anchors.fill: parent
-
-
 
             CompLabel{
                 id: lblPrearmChecks

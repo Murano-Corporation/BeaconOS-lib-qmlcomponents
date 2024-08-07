@@ -12,7 +12,7 @@ Comp__BASE {
     property var selectedAssetDataModel: undefined
     property bool showAssets: true
     property bool captureMouseCoords: false
-    property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 4 : 0
+    property int activeMapTypeIndex: (screenToLoad === "Raptor") ? (1) : (mapPlugin.name === 'mapboxgl' ? 4 : 0)
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property alias targetListDelegate: mapView_Targets.delegate
     property alias tilt: map.tilt
@@ -137,6 +137,9 @@ Comp__BASE {
             top: parent.top
             left: parent.left
             right: parent.right
+            //bottom: parent.bottom
+            topMargin: raptorNavMenu.selectedScreen === "Raptor" ? 100 : 0
+
         }
 
         height: compMapViewerRoot.showMapTypes ? (isDelta ? 64 : 110) : 0
@@ -356,13 +359,16 @@ Comp__BASE {
 
             property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
 
-            //enabled: compMapViewerRoot.captureMouseCoords
+            enabled: compMapViewerRoot.captureMouseCoords
             visible: enabled
 
             anchors.fill: parent
             //hoverEnabled: true
             propagateComposedEvents: true
 
+            onClicked: {
+                console.log("map.toCoordinate(Qt.point(mouseX, mouseY)): " + map.toCoordinate(Qt.point(mouseX, mouseY)))
+            }
 
         }
 
@@ -449,13 +455,13 @@ Comp__BASE {
 
                 onCenterOnPoint: {
                     if(!(model.asset_type === "Antenna" || model.asset_type === "Drone")){
-                    if(compMapViewerRoot.selectedAssetDataModel === model)
-                    {
-                        compMapViewerRoot.selectedAssetDataModel = undefined
-                    } else {
-                        compMapViewerRoot.selectedAssetDataModel = model
+                        if(compMapViewerRoot.selectedAssetDataModel === model)
+                        {
+                            compMapViewerRoot.selectedAssetDataModel = undefined
+                        } else {
+                            compMapViewerRoot.selectedAssetDataModel = model
+                        }
                     }
-                }
 
                     compMapViewerRoot.centerOnPoint(coordinate)
                 }

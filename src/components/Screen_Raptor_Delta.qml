@@ -7,7 +7,7 @@ Screen_Raptor__BASE {
     property string beaconIDSelected: ""
     property var beaconIDSelectedLast
     property bool bButtonLayout: false// raptorNavMenu.selectedScreen === "Control" ? true : false
-
+    property bool controlRightClosed: ldrControl.drawerRightClosed
 
     // property string lat
     // property string lon
@@ -67,31 +67,8 @@ Screen_Raptor__BASE {
 
             onBeaconIDSelectedChanged: {
                 screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
-                //console.log("BEACON ID CHANGED IN SCREEN RAPTOR");
 
             }
-
-            // onLatChanged: {
-            //     screen_Raptor_Delta_Root.lat = lat
-            //     //console.log("LATITUDE CHANGED IN SCREEN RAPTOR");
-            // }
-
-            // onLonChanged: {
-            //     screen_Raptor_Delta_Root.lon = lon
-            //     //console.log("LONGITUDE CHANGED IN SCREEN RAPTOR");
-            // }
-
-            // onAltitudeChanged: {
-            //     screen_Raptor_Delta_Root.altitude = altitude
-            //     console.log("ALTITUDE CHANGED IN SCREEN RAPTOR");
-            // }
-
-            // onDeviceSpeedChanged: {
-            //     screen_Raptor_Delta_Root.deviceSpeed = deviceSpeed
-            //     console.log("DEVICE SPEED CHANGED IN SCREEN RAPTOR");
-            // }
-
-            //onBeaconIDSelectedChanged: screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
         }
     }
 
@@ -102,11 +79,28 @@ Screen_Raptor__BASE {
         asynchronous: true
         active: raptorNavMenu.selectedScreen === "Control"
         sourceComponent: Screen_Raptor_Control{
+            id: ldrControl
+
+            onDrawerRightVisibleChanged: {
+                if (drawerRightVisible === true) {
+                    raptorNavMenu.visible = true
+                    raptorNavMenu.visible = false
+                    console.log("raptor nav to false")
+                }
+                else {
+                    raptorNavMenu.visible = true
+                    console.log("raptor nav to true")
+                }
+
+                console.log("drawerRightVisible : " + drawerRightVisible)
+                console.log("drawerRightClosed : " + drawerRightClosed)
+                console.log("controlRightClosed : " + controlRightClosed)
+                console.log("bButtonLayout : " + bButtonLayout)
+            }
 
             beaconIDSelected: screen_Raptor_Delta_Root.beaconIDSelected
             onSignalBeaconIDSelected: {
                 screen_Raptor_Delta_Root.beaconIDSelected = beaconIDSelected
-                //console.log("Signal caught in RaptorControl loader")
             }
 
         }

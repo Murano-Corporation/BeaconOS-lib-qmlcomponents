@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 Comp__BASE_Popup{
     id: popupRaptorControlParamSeter
 
+    compBaseRadius: 20
+
     property int editHeight: 60
     property string paramName: edtParamId.displayText
     property var structMavlinkParamSelected: {
@@ -24,7 +26,7 @@ Comp__BASE_Popup{
     property string paramUnits: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.units
     property string paramIncrements: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.incrementString
     popupName: "Raptor.Control: Parameter Set"
-    height: 900
+    height: 800
     width: 700
 
     function onSubmit(){

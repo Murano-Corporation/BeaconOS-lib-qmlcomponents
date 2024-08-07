@@ -40,6 +40,7 @@ RESOURCES += \
 #RESOURCES += $${LIB_QMLCOMPONENTS_QML_DIR}
 
 DISTFILES += \
+    src/components/CompRaptorDroneMenuVertical.qml \
     src/shaders/shader_fragment.frag \
     src/shaders/shader_vertex.glsl
 

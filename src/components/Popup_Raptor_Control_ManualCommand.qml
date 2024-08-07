@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 Comp__BASE_Popup{
     id: popupRaptorControlManualCommand
 
+    compBaseRadius: 20
+
     property int editHeight: 60
     property var commandStructSelected: comboCommandId.displayText === "" ? undefined : DroneController.getCommandDefinition(comboCommandId.displayText)
     property string commandDescription: commandStructSelected === undefined ? "" : commandStructSelected.description
@@ -13,7 +15,7 @@ Comp__BASE_Popup{
     property bool awaitingAck: false
 
     popupName: "Raptor.Control: Manual Command"
-    height: 900
+    height: 800
     width: 700
 
     Connections{
@@ -75,6 +77,8 @@ Comp__BASE_Popup{
             Column {
                 anchors.fill: parent
                 anchors.margins: bg.radiusBG
+
+                spacing: 10
 
                 CompLabel {
                     id: lblManualCommands
