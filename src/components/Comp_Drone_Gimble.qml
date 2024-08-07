@@ -4,8 +4,8 @@ import QtQuick 2.15
 Comp__BASE {
     id: root
 
-    height: 250 //scaleable!!!
-    width: 250
+    height: 180 //scaleable!!!
+    width: 180
 
     property color outerColor: "#ffffff"//"#9287ed"
     property color outerBorderColor: "grey" //blue
@@ -25,18 +25,20 @@ Comp__BASE {
     property bool isThrottle //for left stick true, right stick false
 
     Rectangle {
-        id: outerBox //purely aesthetics
+        id: outerBox
 
         color: root.innerColor
         height: root.height
         width: root.width
         border.color: root.outerBorderColor
         border.width: 1
-        radius: 20
+        radius: 30
         anchors.centerIn: root
 
         Rectangle {
-            id: outerCircle
+            id: outerCircle //purely aesthetics
+
+            visible: false
 
             color: root.outerColor
             height: root.height
@@ -45,9 +47,10 @@ Comp__BASE {
             border.width: 1
             radius: root.width * 0.5
             anchors.centerIn: parent
+        }
 
-            Rectangle {
-                id: joystick
+        Rectangle {
+            id: joystick
 
                 color: root.innerColor
                 border.color: root.outerBorderColor
@@ -64,7 +67,9 @@ Comp__BASE {
                 property real finalX
                 property real finalY
 
-            }
+            property real finalX
+            property real finalY
+
         }
 
         MultiPointTouchArea {

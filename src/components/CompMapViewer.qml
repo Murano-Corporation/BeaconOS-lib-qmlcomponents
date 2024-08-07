@@ -12,7 +12,7 @@ Comp__BASE {
     property var selectedAssetDataModel: undefined
     property bool showAssets: true
     property bool captureMouseCoords: false
-    property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 4 : 0
+    property int activeMapTypeIndex: (screenToLoad === "Raptor") ? (1) : (mapPlugin.name === 'mapboxgl' ? 4 : 0)
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property alias targetListDelegate: mapView_Targets.delegate
     property alias tilt: map.tilt
@@ -137,6 +137,9 @@ Comp__BASE {
             top: parent.top
             left: parent.left
             right: parent.right
+            //bottom: parent.bottom
+            topMargin: raptorNavMenu.selectedScreen === "Raptor" ? 100 : 0
+
         }
 
         height: compMapViewerRoot.showMapTypes ? (isDelta ? 64 : 110) : 0
@@ -356,13 +359,16 @@ Comp__BASE {
 
             property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
 
-            //enabled: compMapViewerRoot.captureMouseCoords
+            enabled: compMapViewerRoot.captureMouseCoords
             visible: enabled
 
             anchors.fill: parent
             //hoverEnabled: true
             propagateComposedEvents: true
 
+            onClicked: {
+                console.log("map.toCoordinate(Qt.point(mouseX, mouseY)): " + map.toCoordinate(Qt.point(mouseX, mouseY)))
+            }
 
         }
 
@@ -428,10 +434,11 @@ Comp__BASE {
         //     }
         // }
 
+
+
         MapItemView{
             id: mapView_Targets
             model: compMapViewerRoot.listAssets
-
 
             delegate: CompMapAssetItem {
                 id: compMapAssetItem
@@ -439,18 +446,21 @@ Comp__BASE {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-                assetID: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
+                assetID: model.Beacon_ID//(model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
                 imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
                 iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
                 iconDetails.opacity: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? 1.0 : 0.9
-                onCenterOnPoint: {
+                is_selected: model.is_selected
 
-                    if(compMapViewerRoot.selectedAssetDataModel === model)
-                    {
-                        compMapViewerRoot.selectedAssetDataModel = undefined
-                    } else {
-                        compMapViewerRoot.selectedAssetDataModel = model
+                onCenterOnPoint: {
+                    if(!(model.asset_type === "Antenna" || model.asset_type === "Drone")){
+                        if(compMapViewerRoot.selectedAssetDataModel === model)
+                        {
+                            compMapViewerRoot.selectedAssetDataModel = undefined
+                        } else {
+                            compMapViewerRoot.selectedAssetDataModel = model
+                        }
                     }
 
                     compMapViewerRoot.centerOnPoint(coordinate)

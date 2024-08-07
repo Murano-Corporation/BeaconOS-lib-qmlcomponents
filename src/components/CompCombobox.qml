@@ -10,7 +10,7 @@ ComboBox {
     property real currentFontSize: 24
     property string unselectedText: qsTr("Select")
     property alias valueFontSize: comboFilters.currentFontSize
-    property real optionItemHeight : 50
+    property real optionItemHeight: 50
     property alias optionsHeight: comboFilters.optionItemHeight
 
     textRole: "key"

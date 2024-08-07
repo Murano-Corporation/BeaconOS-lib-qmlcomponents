@@ -8,7 +8,7 @@ Item {
     property real btnHeight: 30
     property real battPercent: 100.0
     property real wifiStrength: 100.0
-    property color btnIconColor: "#80FFFFFF"
+    property color btnIconColor: (screenToLoad === "Raptor") ? "white" : "#80FFFFFF"
     property int btnIconSize: 30
     property var listOfBreadcrumbNames: SingletonScreenManager.listOfBreadcrumbs
     //onListOfBreadcrumbNamesChanged: {
@@ -163,7 +163,7 @@ Item {
             id: btnCalculator
             height: btnHeight
 
-            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Calculator.svg"
+            iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Einstein.svg"
             iconColor: btnIconColor
             iconHeight: btnIconSize
 

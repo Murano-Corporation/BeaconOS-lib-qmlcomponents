@@ -9,7 +9,7 @@ Item {
         id: col
 
         anchors.fill: parent
-        spacing: 30
+        spacing: 20
 
         CompRaptorNavMenuItem {
             id: menuItemRaptor

@@ -15,23 +15,27 @@ Item {
     // property string deviceSpeed
     // property var selectedItem
 
-    onBeaconIDSelectedChanged: {
-        console.log("BEACON ID CHANGED IN SCREEN DEVICE INFO");
-    }
+    // onBeaconIDSelectedChanged: {
+    //     console.log("BEACON ID CHANGED IN SCREEN DEVICE INFO");
+    // }
+
+
+
 
     CompMapViewer{
         id: devicemap
 
         anchors{
             top: parent.top
-            //topMargin: 20
             left: parent.left
-            //right: parent.right
             bottom: parent.bottom
         }
-        width: drawerDeviceInfo.position === 1.0 ?  1510 : 1920
+        width: 1920//drawerDeviceInfo.position === 1.0 ?  1460 : 1920
 
-        showMapTypes: false
+        showMapTypes: true
+
+
+
         Component.onCompleted: setZoomLevel(1.0)
         listAssets: TableModelRaptorMap
     }
@@ -39,64 +43,73 @@ Item {
     CompImageIcon{
         id: openDeviceInfo
         opacity: 0.6
-        visible: drawerDeviceInfo.position < 1.0
+        visible: drawerDeviceInfo.position < 0.01
+
+        y: 320
 
         anchors{
-            right: devicemap.right
-            verticalCenter: parent.verticalCenter
+            left: devicemap.left
+            //leftMargin: 48
+            //verticalCenter: parent.verticalCenter
+            //topMargin: 120
         }
 
         height: 578
         width: 48
 
-        source: "file:///usr/share/BeaconOS-lib-images/images/Expander_Flipped.svg"
-        color: "White"
+        source: "file:///usr/share/BeaconOS-lib-images/images/LeftOpen.svg"
+        //color: "White"
 
         MouseArea {
             anchors.fill: parent
 
             onClicked: {
-                console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
-                console.log("OPENING DEVICE INFO DRAWER!!!")
+                //console.log("Drawer open status before:", drawerDeviceInfo.visible);
+                //console.log("OPENING DEVICE INFO DRAWER!!!")
+                if (drawerDeviceInfo.visible === true) {
+                    drawerDeviceInfo.visible = false
+                    drawerDeviceInfo.visible = true
+                }
+                else {
+                    drawerDeviceInfo.visible = true
+                }
+                //drawerDeviceInfo.open()
 
-                drawerDeviceInfo.visible = !drawerDeviceInfo.visible
-                drawerDeviceInfo.open()
-
-                console.log(drawerDeviceInfo.visible)
+                //console.log("Drawer open status after:", drawerDeviceInfo.visible);
             }
         }
     }
 
 
-    CompImageIcon{
-        id: closeDeviceInfo
+    // CompImageIcon{
+    //     id: closeDeviceInfo
 
-        opacity: 0.6
-        visible: drawerDeviceInfo.position === 1.0
+    //     opacity: 0.6
+    //     visible: drawerDeviceInfo.position === 1.0
 
-        anchors{
-            right: devicemap.right
-            verticalCenter: parent.verticalCenter
-        }
+    //     anchors{
+    //         right: drawerDeviceInfo.left
+    //         verticalCenter: parent.verticalCenter
+    //     }
 
-        height: 578
-        width: 48
+    //     height: 578
+    //     width: 48
 
-        source: "file:///usr/share/BeaconOS-lib-images/images/Expander.svg"
-        color: "White"
+    //     source: "file:///usr/share/BeaconOS-lib-images/images/Expander.svg"
+    //     color: "White"
 
-        MouseArea {
-            anchors.fill: parent
+    //     MouseArea {
+    //         anchors.fill: parent
 
-            onClicked: {
-                console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
-                console.log("CLOSING DEVICE INFO DRAWER!!!")
-                drawerDeviceInfo.visible = !drawerDeviceInfo.visible
-                drawerDeviceInfo.close()
-                console.log(drawerDeviceInfo.visible)
-            }
-        }
-    }
+    //         onClicked: {
+    //             console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
+    //             console.log("CLOSING DEVICE INFO DRAWER!!!")
+    //             drawerDeviceInfo.visible = !drawerDeviceInfo.visible
+    //             drawerDeviceInfo.close()
+    //             console.log(drawerDeviceInfo.visible)
+    //         }
+    //     }
+    // }
 
     Drawer{
         id: drawerDeviceInfo
@@ -105,17 +118,25 @@ Item {
         dim: false
         modal: false
 
-        height: devicemap.height - 100// - areaToolbar.height - 200
+        height: devicemap.height - 220// - areaToolbar.height - 200
 
-        width: 400
+        width: root.width * 0.215
 
-        edge: Qt.RightEdge
-        y: 85
+        edge: Qt.LeftEdge
+        y: 200
+        //x: 200
 
-        rightPadding: 10
+        leftPadding: 10
 
         CompBtnBreadcrumb{
-            anchors.fill: parent
+            anchors{
+                fill: parent
+                // top: parent.top
+                // left: parent.left
+                // right: parent.right
+                // bottom: parent.bottom
+                // topMargin: 100
+            }
             //color: "#000000"
             //radius: 20
         }
@@ -126,7 +147,12 @@ Item {
         Comp_Device_Info{
             id: deviceInfo
 
+            //compMapViewer: devicemap
+            onSignal_onItemClicked: devicemap.setZoomLevel(4.5)
+            onSignal_onItemLongPressed: devicemap.setZoomLevel(4.5)
+
             anchors.fill: parent
+            anchors.topMargin: 20
 
             //labelTitle.text: "Devices"
             //isDeviceAntenna: true
@@ -134,7 +160,7 @@ Item {
 
             onCenterOnCoords: devicemap.centerOnPointXY(x, y)
             onSignalBeaconIDChanged: (bid)=>{
-                console.log("Signal caught")
+                //console.log("Signal " + bid + " caught")
 
                 screenDeviceInfoRoot.beaconIDSelected = bid
 
