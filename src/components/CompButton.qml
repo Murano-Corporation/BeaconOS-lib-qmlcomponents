@@ -10,6 +10,7 @@ Button {
     property alias backgroundRect: bgRect
     property alias lblBtnLbl: lblText
     property alias lblFont: lblText.font
+    property alias bkgdVis: bgRect.visible
 
     property alias iconImage: iconIamge
 

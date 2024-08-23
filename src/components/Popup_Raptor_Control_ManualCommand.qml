@@ -6,7 +6,7 @@ Comp__BASE_Popup{
 
     compBaseRadius: 20
 
-    property int editHeight: 60
+    property int editHeight: 40
     property var commandStructSelected: comboCommandId.displayText === "" ? undefined : DroneController.getCommandDefinition(comboCommandId.displayText)
     property string commandDescription: commandStructSelected === undefined ? "" : commandStructSelected.description
     property int commandID: commandStructSelected === undefined ? "" : commandStructSelected.cmdId
@@ -149,6 +149,8 @@ Comp__BASE_Popup{
                     isReadonly: false
                     width: parent.width
                     height: popupRaptorControlManualCommand.editHeight
+                    label.font.pixelSize: 20
+
                 }
 
                 Column{
@@ -160,7 +162,7 @@ Comp__BASE_Popup{
                         delegate: CompLabelledTextEdit {
                             id: edtParam0
                             property var propertyInfo: popupRaptorControlManualCommand.commandStructSelected.getParamInfo(index)
-
+                            label.font.pixelSize: edtConfirmation.label.font.pixelSize
                             enabled: propertyInfo.label !== "Empty" && propertyInfo.label !== "Reserved"
 
                             text:  propertyInfo.label + ":"

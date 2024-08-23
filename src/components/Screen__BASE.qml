@@ -7,7 +7,7 @@ Comp__BASE {
     property bool bCanLeaveScreen: true
     property bool bAttemptingToLeaveScreen: false;
     property bool bOverRideOverLaySettings: true
-
+    property bool bIsPopup: false
 
     Connections{
         target: SingletonScreenManager

@@ -3,14 +3,19 @@ import QtQuick 2.0
 CompGlassRect {
     id: compRaptorNavMenuItemRoot
 
+    property alias imageIcon: imgIcon
+    property alias imgIconSrc: imgIcon.source
+    property alias imgIconColor: imgIcon.color
+
+    signal clicked()
+    signal longPressed()
+
+
     height: 90
     width: 90
 
     anchors.fill: undefined
 
-    property alias imgIconSrc: imgIcon.source
-    property alias imgIconColor: imgIcon.color
-    signal clicked()
 
     CompImageIcon{
         id: imgIcon
@@ -21,6 +26,7 @@ CompGlassRect {
 
     MouseArea{
         anchors.fill: parent
-        onClicked: compRaptorNavMenuItemRoot.clicked()
+        onClicked: parent.clicked()
+        onPressAndHold: parent.longPressed()
     }
 }

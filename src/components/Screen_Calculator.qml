@@ -687,7 +687,8 @@ Screen__BASE {
         anchors {
             top: parent.top
             topMargin: parent.height * 0.19
-            bottom: root.height * 0.76
+            bottom: parent.bottom
+            bottomMargin: root.height * 0.76
             right: listviewHistory.right
             left: listviewHistory.left
 

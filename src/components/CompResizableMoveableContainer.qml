@@ -4,25 +4,18 @@ Comp__BASE {
     id: compResizableMoveableContainerRoot
 
     property bool showDevLabels: false
+    property int minX: 0
+    property int minY: 0
+    property int maxX: root.contentItem.width - dragAreaWidth
+    property int maxY: root.contentItem.height - dragAreaHeight
+    property int xBeforeStash
+    property int yBeforeStash
+    property real minimumWidth: 400
+    property real minimumHeight: 300
+    property real moveAreaRightOffset: 40
     property real dragAreaHeight: 40
     property real dragAreaWidth: 40
 
-    property int minX: 0
-    property int minY: 0
-
-    property int maxX: root.contentItem.width - dragAreaWidth
-    property int maxY: root.contentItem.height - dragAreaHeight
-
-    property real minimumWidth: 400
-    property real minimumHeight: 300
-
-    //property real maximumWidth: 1080
-    //property real maximumHeight: 1920
-
-    property real moveAreaRightOffset: 40
-
-    property int xBeforeStash
-    property int yBeforeStash
 
     Component.onCompleted:{
         updateResizeRectPos()
@@ -190,13 +183,12 @@ Comp__BASE {
         active: compResizableMoveableContainerRoot.showDevLabels
         anchors{
             left: parent.left
-            leftMargin: 40
-            bottom: parent.bottom
+            top: parent.bottom
         }
 
         sourceComponent: CompLabel{
             id: dev_lblSize
-            z: 100
+            z: 10000
 
 
             text: "w: " + compResizableMoveableContainerRoot.width + " h: " + compResizableMoveableContainerRoot.height + " x: " + compResizableMoveableContainerRoot.x + " y: " + compResizableMoveableContainerRoot.y

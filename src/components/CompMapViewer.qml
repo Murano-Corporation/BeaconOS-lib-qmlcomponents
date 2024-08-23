@@ -12,7 +12,7 @@ Comp__BASE {
     property var selectedAssetDataModel: undefined
     property bool showAssets: true
     property bool captureMouseCoords: false
-    property int activeMapTypeIndex: (screenToLoad === "Raptor") ? (1) : (mapPlugin.name === 'mapboxgl' ? 4 : 0)
+    property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 1 : 0//(screenToLoad === "Raptor") ? (1) : (mapPlugin.name === 'mapboxgl' ? 4 : 0)
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property alias targetListDelegate: mapView_Targets.delegate
     property alias tilt: map.tilt

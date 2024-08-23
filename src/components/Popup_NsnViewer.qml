@@ -92,6 +92,12 @@ Popup {
             var startOrigin = SingletonOverlayManager.getPopupOrigin("NSN Viewer")
             var startSize = SingletonOverlayManager.getPopupSize("NSN Viewer")
 
+            if(startSize.width <= minimumWidth)
+                startSize.width = minimumWidth
+
+            if(startSize.height <= minimumHeight)
+                startSize.height = minimumHeight
+
             console.log("Setting start size to: " + startSize)
             console.log("Setting start origin to: " + startOrigin);
 

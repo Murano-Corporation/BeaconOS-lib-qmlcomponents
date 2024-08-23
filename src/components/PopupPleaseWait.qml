@@ -9,18 +9,17 @@ Popup {
     property string pleaseWaitMessage: qsTr("Please Wait")
     property Item contentCenterTarget
     property rect contentCenterPoint
-
-
+    property alias timeoutTimer: timerTimeout
+    property bool timeoutEnabled: true
     width: root.contentItem.width
     height: root.contentItem.height
 
-    anchors{
+    anchors {
         centerIn: Overlay.overlay
     }
 
     background: Rectangle {
         color: "#80000000"
-
     }
 
     //Rectangle{
@@ -31,14 +30,12 @@ Popup {
     //    height: contentCenterPoint.height
     //    width: contentCenterPoint.width
     //}
-
     onOpened: {
-
+        if (timeoutEnabled === false)
+            return
 
         timerTimeout.interval = CameraController.imageProcessTimeout
         var timeout = CameraController.imageProcessTimeout
-
-        console.log("Timeout is : " + timeout)
         timerTimeout.start()
     }
 
@@ -46,15 +43,13 @@ Popup {
         timerTimeout.stop()
     }
 
-    Timer{
+    Timer {
         id: timerTimeout
 
         onTriggered: {
-            console.error("CAMERA IMAGE PROCESSING TIMEDOUT");
+            console.error("CAMERA IMAGE PROCESSING TIMEDOUT")
             popupPleaseWait.close()
         }
-
-
     }
 
     Item {
@@ -64,13 +59,15 @@ Popup {
 
         width: 400
 
-        x: (popupPleaseWait.contentCenterPoint.x + (0.5 * popupPleaseWait.contentCenterPoint.width)) - (width * 0.5)
-        y: (popupPleaseWait.contentCenterPoint.y + (0.5 * popupPleaseWait.contentCenterPoint.height)) - (height * 0.5)
-        CompLabel{
+        x: (popupPleaseWait.contentCenterPoint.x
+            + (0.5 * popupPleaseWait.contentCenterPoint.width)) - (width * 0.5)
+        y: (popupPleaseWait.contentCenterPoint.y
+            + (0.5 * popupPleaseWait.contentCenterPoint.height)) - (height * 0.5)
+        CompLabel {
             id: lblMessage
 
             text: popupPleaseWait.pleaseWaitMessage
-            anchors{
+            anchors {
                 top: parent.top
                 horizontalCenter: parent.horizontalCenter
             }
@@ -81,7 +78,7 @@ Popup {
 
             indeterminate: true
 
-            anchors{
+            anchors {
                 top: lblMessage.bottom
                 topMargin: 20
 

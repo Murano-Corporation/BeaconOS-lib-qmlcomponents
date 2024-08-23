@@ -213,12 +213,16 @@ Item {
 
             Column{
                 id: colContents
+                spacing: 15
                 CompButton{
                     id: btnOptionLogout
 
                     text: qsTr("Logout")
 
                     height: btnHeight
+                    //anchors.bottomMargin: 20
+                    fontColor: "Black"
+                    bkgdVis: false
 
                     onClicked: {
                         Actions.signal_Request_Logout()
@@ -232,6 +236,8 @@ Item {
                     text: qsTr("Power Off");
 
                     height: btnHeight
+                    fontColor: "Black"
+                    bkgdVis: false
 
                     onClicked: {
                         Actions.signal_Request_Shutdown()

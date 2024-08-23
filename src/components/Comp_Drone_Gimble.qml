@@ -52,20 +52,17 @@ Comp__BASE {
         Rectangle {
             id: joystick
 
-                color: root.innerColor
-                border.color: root.outerBorderColor
-                height: root.height * 0.3
-                width: root.width * 0.3
-                radius: root.width * 0.5
-                x: root.joystickDefaultX
-                y: root.joystickDefaultY
-                readonly property real joystickHalfWidth: width * 0.5
-                readonly property real joystickHalfHeight: height * 0.5
-                property real liveCenterX: joystick.x + joystickHalfWidth - rootHalfWidth //live location in relation to the center of the outer circle
-                property real liveCenterY: joystick.y + joystickHalfWidth - rootHalfHeight
-
-                property real finalX
-                property real finalY
+            color: root.innerColor
+            border.color: root.outerBorderColor
+            height: root.height * 0.3
+            width: root.width * 0.3
+            radius: root.width * 0.5
+            x: root.joystickDefaultX
+            y: root.joystickDefaultY
+            readonly property real joystickHalfWidth: width * 0.5
+            readonly property real joystickHalfHeight: height * 0.5
+            property real liveCenterX: joystick.x + joystickHalfWidth - rootHalfWidth //live location in relation to the center of the outer circle
+            property real liveCenterY: joystick.y + joystickHalfWidth - rootHalfHeight
 
             property real finalX
             property real finalY

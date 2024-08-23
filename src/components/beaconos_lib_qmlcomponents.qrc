@@ -256,6 +256,16 @@
         <file>Popup_Raptor_Control_QuickCommands.qml</file>
         <file>PopupRaptorControlParameterView.qml</file>
         <file>CompRaptorTargetBoundingBox.qml</file>
+        <file>CompRaptorDroneGridView.qml</file>
+        <file>DrawerRaptorDroneControlQuickActions.qml</file>
+        <file>CompRaptorControlDeviceData.qml</file>
+        <file>DrawerRaptorDeviceInfoControl.qml</file>
+        <file>CompRaptorRadialPopoutMenu.qml</file>
+        <file>DelegateRaptorRadialMenuItem.qml</file>
+        <file>Screen_WorkOrder.qml</file>
+        <file>Screen_Gallery.qml</file>
+        <file>CompTextEditor.qml</file>
+        <file>CompPdfViewer.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal"/>
 </RCC>
