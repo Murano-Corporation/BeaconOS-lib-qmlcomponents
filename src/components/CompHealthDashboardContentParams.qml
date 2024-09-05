@@ -7,12 +7,14 @@ import CONSTANTS 1.0
 Comp__BASE {
     id: compHealthDashboardContentParams
 
-    property bool canShowGraphView: view === 'Graph' && graphViewTarget !== 'null'
-    property var listOfHeaders: ["Name", "Value", "Units","Min", "Max"]
+    property bool canShowGraphView: view === 'Graph'
+                                    && graphViewTarget !== 'null'
+    property var listOfHeaders: ["Name", "Value", "Units", "Min", "Max"]
     property var listOfParams: TableModelHealthDashboard
     property string graphViewTarget: 'null'
     property string graphViewUnits: "UNITS"
     property string view: "List"
+
 
     /** Possible Values:
       - params = Non-MTConnect Parameters
@@ -27,12 +29,11 @@ Comp__BASE {
 
     property string floatingBreadCrumbName: 'null'
 
-    signal forceViewModeMaximized()
-    signal forceViewType(string viewType);
-    signal setGridBtnVisible(bool isVisible);
-    signal setListBtnVisible(bool isVisible);
-    signal paramSelected(string paramName);
-
+    signal forceViewModeMaximized
+    signal forceViewType(string viewType)
+    signal setGridBtnVisible(bool isVisible)
+    signal setListBtnVisible(bool isVisible)
+    signal paramSelected(string paramName)
 
     onGraphViewTargetChanged: {
         paramSelected(graphViewTarget)
@@ -41,8 +42,7 @@ Comp__BASE {
     }
 
     onFloatingBreadCrumbNameChanged: {
-        if(floatingBreadCrumbName === 'null')
-        {
+        if (floatingBreadCrumbName === 'null') {
             galleryInstanceId = -1
             graphViewTarget = 'null'
 
@@ -51,20 +51,19 @@ Comp__BASE {
     }
 
     onTargetDataChanged: {
-        if(targetData === 'gallery')
-        {
+        if (targetData === 'gallery') {
 
-            if(Settings.cameraGalleryPrefsPreferGridViewForImageData)
-            {
+            if (Settings.cameraGalleryPrefsPreferGridViewForImageData) {
                 forceViewType('Grid')
             }
 
-            if(Settings.cameraGalleryPrefsAutoMaximizeOnGalleryTarget)
-            {    forceViewModeMaximized()}
+            if (Settings.cameraGalleryPrefsAutoMaximizeOnGalleryTarget) {
+                forceViewModeMaximized()
+            }
         } else {
-            //console.log("Enforcing list view for params")
 
-            if(true)
+            //console.log("Enforcing list view for params")
+            if (true)
                 forceViewType('Grid')
             else
                 forceViewType('List')
@@ -72,18 +71,16 @@ Comp__BASE {
     }
 
     onGalleryInstanceIdChanged: {
-        if(galleryInstanceId === -1)
-        {
-            return;
+        if (galleryInstanceId === -1) {
+            return
         }
 
-        if(Settings.cameraGalleryPrefsAutoMaximizeOnIndexChange)
-        {
-            forceViewModeMaximized();
+        if (Settings.cameraGalleryPrefsAutoMaximizeOnIndexChange) {
+            forceViewModeMaximized()
         }
     }
 
-    Item{
+    Item {
         id: groupFilters
 
         visible: (targetData === "param_mtc")
@@ -93,18 +90,18 @@ Comp__BASE {
         property real comboHeight: 41
         property real comboFontPixelSize: 20
 
-        anchors{
+        anchors {
             top: parent.top
             left: parent.left
             right: parent.right
         }
 
-        height: (visible ? childrenRect.height : 0 )
+        height: (visible ? childrenRect.height : 0)
 
         CompCombobox {
             id: comboCategory
 
-            anchors{
+            anchors {
                 top: parent.top
                 left: parent.left
             }
@@ -119,7 +116,7 @@ Comp__BASE {
         CompCombobox {
             id: comboSample
 
-            anchors{
+            anchors {
                 top: comboCategory.top
                 left: comboCategory.right
                 leftMargin: parent.comboSpacing
@@ -135,7 +132,7 @@ Comp__BASE {
         CompCombobox {
             id: comboConentration
 
-            anchors{
+            anchors {
                 top: comboSample.top
                 left: comboSample.right
                 leftMargin: parent.comboSpacing
@@ -151,7 +148,7 @@ Comp__BASE {
         CompCombobox {
             id: comboItem
 
-            anchors{
+            anchors {
                 top: comboConentration.top
                 left: comboConentration.right
                 leftMargin: parent.comboSpacing
@@ -163,11 +160,9 @@ Comp__BASE {
             displayText: qsTr("Item")
             fontPixelSize: comboCategory.fontPixelSize
         }
-
     }
 
-
-    Loader{
+    Loader {
         id: loaderTableView
 
         active: compHealthDashboardContentParams.view === "List"
@@ -185,25 +180,20 @@ Comp__BASE {
 
         asynchronous: true
 
-        sourceComponent:
-            TableView {
+        sourceComponent: TableView {
             id: tableView
 
             property int selectedRow: -1
             property color gridLineColor: "#4D4A5F"
-            //property var listOfColumnWidths: [600, 150, 150, 200, 200]
-            //property var listOfColumnWidthRatios: [0.45, 0.15, 0.10, 0.15, 0.15]
-            //property var listOfColumnWidthsCurrent: [600,150,200,200,200]
             property real tableWidthMax: 1717
             property real startingWidth: 0
 
-            signal columnWidthsUpdated()
+            signal columnWidthsUpdated
 
-
-            Connections{
+            Connections {
                 target: compHealthDashboardContentParams
 
-                function onTableViewSelectedRowChanged(){
+                function onTableViewSelectedRowChanged() {
                     tableView.selectedRow = compHealthDashboardContentParams.tableViewSelectedRow
                 }
             }
@@ -211,30 +201,23 @@ Comp__BASE {
             Component.onCompleted: {
                 startingWidth = width
                 //tmrDelayPopulate.start()
-                tableView.model = visible ? Qt.binding(function(){ return compHealthDashboardContentParams.dataModel}) : undefined
+                tableView.model = visible ? Qt.binding(function () {
+                    return compHealthDashboardContentParams.dataModel
+                }) : undefined
 
                 tableView.selectedRow = compHealthDashboardContentParams.tableViewSelectedRow
             }
-
-            //onRowsChanged: {
-            //    //console.log("Table width now: " + width)
-
-            //    forceLayout()
-            //    //update()
-            //}
 
             clip: true
 
             onVisibleChanged: {
 
-                if(visible === false)
-                {
+                if (visible === false) {
                     return
                 }
 
                 setGridBtnVisible(true)
                 setListBtnVisible(true)
-
             }
 
             boundsBehavior: Flickable.StopAtBounds
@@ -255,29 +238,27 @@ Comp__BASE {
 
                 opacity: selectedRow === -1 ? 1.0 : (selectedRow === myRow ? 1.0 : 0.5)
 
-                dataType: (targetData === "params" ? (model.column === 5 ? "actions" : "text") : (model.column === 1 ? "image" :  "text"))
+                dataType: (targetData === "params" ? (model.column === 5 ? "actions" : "text") : (model.column === 1 ? "image" : "text"))
 
                 onClicked: {
-                    if(selectedRow === myRow)
-                    {
+                    if (selectedRow === myRow) {
                         tableView.selectedRow = -1
                         compHealthDashboardContentParams.tableViewSelectedRow = -1
-                        compHealthDashboardContentParams.graphViewTarget= "null"
-                        compHealthDashboardContentParams.graphViewUnits= "UNITS"
+                        compHealthDashboardContentParams.graphViewTarget = "null"
+                        compHealthDashboardContentParams.graphViewUnits = "UNITS"
                     } else {
                         tableView.selectedRow = myRow
                         compHealthDashboardContentParams.tableViewSelectedRow = myRow
                         compHealthDashboardContentParams.graphViewTarget = paramName
-                        compHealthDashboardContentParams.graphViewUnits= myModel.unit
+                        compHealthDashboardContentParams.graphViewUnits = myModel.unit
                     }
-
                 }
 
                 onPressAndHold: {
                     tooltip1.open()
                 }
 
-                CompTooltip{
+                CompTooltip {
                     id: tooltip1
                     text: parent.myModel.tooltip_text
                     contentItem: Text {
@@ -292,38 +273,29 @@ Comp__BASE {
                     }
                 }
 
-
                 onActionClickedShowGraph: paramName => {
 
-                                              compHealthDashboardContentParams.graphViewTarget = paramName
+                                              compHealthDashboardContentParams.graphViewTarget
+                                              = paramName
                                           }
-
             }
 
-
             rowHeightProvider: row => {
-                                   if(isDelta)
-                                   return 51;
+                                   if (isDelta)
+                                   return 51
                                    else
-                                   return 100;
-
+                                   return 100
                                }
 
             columnWidthProvider: col => {
-                                     if(!tableView.model || tableView.model === undefined)
-                                     return;
+                                     if (!tableView.model
+                                         || tableView.model === undefined)
+                                     return
 
-                                     var varICol = col + 0;
-                                     //console.log("Updating column width for " + varICol)
-                                     //var widthRatio = tableView.listOfColumnWidthRatios[col]
-                                     //var widthMin = tableView.listOfColumnWidths[col]
-                                     //var tableWidthCurrent = tableView.width
-                                     //var widthCalcd = tableWidthCurrent * widthRatio
-                                     //var maxWidth = Math.max(widthMin, widthCalcd)
-
-                                     //tableView.listOfColumnWidthsCurrent[col] = maxWidth
-                                     //tableView.columnWidthsUpdated()
-                                     var ret = tableView.model.headerData(varICol, Qt.Horizontal ,Constants.DataRole_HeaderData_ColumnWidth)
+                                     var varICol = col + 0
+                                     var ret = tableView.model.headerData(
+                                         varICol, Qt.Horizontal,
+                                         Constants.DataRole_HeaderData_ColumnWidth)
 
                                      return ret
                                  }
@@ -331,8 +303,7 @@ Comp__BASE {
             topMargin: isDelta ? 51 : 100
             rightMargin: 8
 
-
-            Row{
+            Row {
                 id: columHeader
 
                 y: tableView.contentY
@@ -341,25 +312,16 @@ Comp__BASE {
                 Repeater {
                     model: tableView.columns > 0 ? tableView.columns : 1
 
-                    Rectangle{
+                    Rectangle {
 
                         property int col: index
 
                         width: tableView.columnWidthProvider(index)
                         height: isDelta ? 52 : 100
-
                         color: "#333958"
 
-                        //Connections{
-                        //    target: tableView
-
-                        //    function onColumnWidthsUpdated(){
-                        //        width = tableView.listOfColumnWidthsCurrent[index]
-                        //    }
-                        //}
-
-                        Rectangle{
-                            anchors{
+                        Rectangle {
+                            anchors {
                                 left: parent.left
                                 top: parent.top
                                 bottom: parent.bottom
@@ -369,9 +331,9 @@ Comp__BASE {
                             color: tableView.gridLineColor
                         }
 
-                        Rectangle{
+                        Rectangle {
 
-                            anchors{
+                            anchors {
                                 right: parent.right
                                 top: parent.top
                                 bottom: parent.bottom
@@ -381,79 +343,68 @@ Comp__BASE {
                             color: tableView.gridLineColor
                         }
 
-                        Rectangle{
+                        Rectangle {
 
-                            anchors{
+                            anchors {
                                 right: parent.right
                                 left: parent.left
                                 top: parent.top
-
                             }
 
                             height: 2
                             color: tableView.gridLineColor
                         }
 
-                        Rectangle{
+                        Rectangle {
 
-                            anchors{
+                            anchors {
                                 right: parent.right
                                 left: parent.left
                                 bottom: parent.bottom
-
                             }
 
                             height: 2
                             color: tableView.gridLineColor
                         }
 
-                        CompLabel{
+                        CompLabel {
 
-                            anchors{
+                            anchors {
                                 fill: parent
                             }
 
-                            text: tableView.model ? tableView.model.headerData(modelData, Qt.Horizontal) : ""
-                            font{
+                            text: tableView.model ? tableView.model.headerData(
+                                                        modelData,
+                                                        Qt.Horizontal) : ""
+                            font {
                                 pixelSize: isDelta ? 20 : 35
                             }
 
                             horizontalAlignment: "AlignHCenter"
                             verticalAlignment: "AlignVCenter"
                         }
-
                     }
-
-
                 }
             }
 
-
-            //            ScrollBar.horizontal: ScrollBar{
-            //                policy:  ScrollBar.AsNeeded
-
-            //                height: 8
-            //            }
-
-            ScrollBar.vertical: ScrollBar{
-                policy:  ScrollBar.AsNeeded
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
                 width: 8
                 //topInset: 51
                 topPadding: 51
             }
-
         }
-
     }
 
-    Loader{
+    Loader {
         id: loaderGridView
 
-        active: compHealthDashboardContentParams.view === "Grid" && !compHealthDashboardContentParams.showGalleryInstance && !loaderGraphView.active
+        active: compHealthDashboardContentParams.view === "Grid"
+                && !compHealthDashboardContentParams.showGalleryInstance
+                && !loaderGraphView.active
         onActiveChanged: {
 
-            if(active === false)
-            {
+            if (active === false) {
                 return
             }
 
@@ -461,7 +412,7 @@ Comp__BASE {
             setListBtnVisible(true)
         }
         asynchronous: true
-        anchors{
+        anchors {
             top: groupFilters.bottom
             left: groupFilters.left
             right: groupFilters.right
@@ -478,14 +429,18 @@ Comp__BASE {
 
             clip: true
 
-            cellWidth: isDelta ? (compHealthDashboardContentParams.targetData === 'params' ? 354.33 : (387 + cellPadding)) : 600
-            cellHeight: isDelta ? (compHealthDashboardContentParams.targetData === 'params' ? 355 : (375 + cellPadding)) : 600
+            cellWidth: isDelta ? (compHealthDashboardContentParams.targetData
+                                  === 'params' ? 354.33 : (387 + cellPadding)) : 600
+            cellHeight: isDelta ? (compHealthDashboardContentParams.targetData
+                                   === 'params' ? 355 : (375 + cellPadding)) : 600
             model: visible ? compHealthDashboardContentParams.dataModel : undefined
             onModelChanged: {
 
                 //console.log('TableViewSelectedRow now: ' + compHealthDashboardContentParams.tableViewSelectedRow)
                 gridView.currentIndex = compHealthDashboardContentParams.tableViewSelectedRow
-                gridView.positionViewAtIndex(compHealthDashboardContentParams.tableViewSelectedRow, GridView.Center)
+                gridView.positionViewAtIndex(
+                            compHealthDashboardContentParams.tableViewSelectedRow,
+                            GridView.Center)
             }
 
             onCurrentIndexChanged: {
@@ -493,22 +448,19 @@ Comp__BASE {
                 compHealthDashboardContentParams.tableViewSelectedRow = currentIndex
             }
 
-            DelegateChooser{
+            DelegateChooser {
                 id: delChooser
                 role: "data_type"
 
-                DelegateChoice{
-                    roleValue: 0; //UNKNOWN
-                    CompHealthDashboardUnhandledType{
-
-                    }
-
+                DelegateChoice {
+                    roleValue: 0 //UNKNOWN
+                    CompHealthDashboardUnhandledType {}
                 }
 
-                DelegateChoice{
-                    roleValue: 1; //Gauge
+                DelegateChoice {
+                    roleValue: 1 //Gauge
 
-                    Item{
+                    Item {
                         height: gridView.cellHeight
                         width: gridView.cellWidth
 
@@ -534,23 +486,24 @@ Comp__BASE {
                             value: valueNum
                             min: valueMin
                             max: valueMax
-                            paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : "")
+                            paramName: model.ParamName
+                                       + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : "")
                             units: model.unit
                             severity: valueSeverity
-                            valueText: SingletonUtils.convertNumberToString(value, 'f', 0)
+                            valueText: SingletonUtils.convertNumberToString(
+                                           value, 'f', 0)
                             stepSize: 0.01
 
-
-
-                            MouseArea{
+                            MouseArea {
                                 id: mouseAreaGauges
 
-                                anchors{
+                                anchors {
                                     fill: parent
                                 }
 
                                 onClicked: {
-                                    compHealthDashboardContentParams.graphViewTarget  = parent.paramName
+                                    compHealthDashboardContentParams.graphViewTarget
+                                            = parent.paramName
                                     compHealthDashboardContentParams.graphViewUnits = parent.units
                                     gridView.currentIndex = index
                                 }
@@ -559,7 +512,7 @@ Comp__BASE {
                                     tooltip2.open()
                                 }
 
-                                CompTooltip{
+                                CompTooltip {
                                     id: tooltip2
                                     text: gaugeRoot.myModel.tooltip_text
                                     contentItem: Text {
@@ -573,19 +526,14 @@ Comp__BASE {
                                     }
                                 }
                             }
-
-
                         }
-
-
                     }
-
                 }
 
-                DelegateChoice{
+                DelegateChoice {
                     roleValue: 2 //STATUS TEXT
 
-                    Item{
+                    Item {
                         height: gridView.cellHeight
                         width: gridView.cellWidth
 
@@ -595,52 +543,43 @@ Comp__BASE {
                             property bool isMultiSystemPresent: model.is_multisystem_present
                             property string sourceID: model.source
 
-                            paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                            paramName: model.ParamName
+                                       + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
                             valueText: model.value
 
                             height: gridView.cellHeight - 61
                             width: gridView.cellWidth - 75
                             anchors.centerIn: parent
-
                         }
-
                     }
                 }
 
-                DelegateChoice{
-                    roleValue: 3; //INDICATOR
-                    CompHealthDashboardUnhandledType{
-
-                    }
+                DelegateChoice {
+                    roleValue: 3 //INDICATOR
+                    CompHealthDashboardUnhandledType {}
                 }
 
-                DelegateChoice{
-                    roleValue: 4; //MTConnect...
-                    CompHealthDashboardUnhandledType{
-
-
-                    }
-
-
+                DelegateChoice {
+                    roleValue: 4 //MTConnect...
+                    CompHealthDashboardUnhandledType {}
                 }
 
-                DelegateChoice{
+                DelegateChoice {
                     roleValue: 5 //GALLERY ITEM
-                    Item{
+                    Item {
                         height: gridView.cellHeight
                         width: gridView.cellWidth
 
-                        CompProcdImageItem{
+                        CompProcdImageItem {
                             imgSourceName: model ? model.img_path : ''
 
                             property int myIndex: model ? model.row : -1
                             property string idPrefix: qsTr("IMG ")
-                            imgId: idPrefix + (myIndex <= 8 ? ("0"+ (myIndex+1)) : (myIndex+1))
+                            imgId: idPrefix + (myIndex <= 8 ? ("0" + (myIndex + 1)) : (myIndex + 1))
 
                             imgTimestamp: model ? model.timestamp_short : ''
 
                             //result: model ? model.inference : ''
-
                             height: gridView.cellHeight - gridView.cellPadding
                             width: gridView.cellWidth - gridView.cellPadding
                             anchors.centerIn: parent
@@ -648,74 +587,68 @@ Comp__BASE {
                             onClicked: {
                                 compHealthDashboardContentParams.galleryInstanceId = myIndex
                             }
-
                         }
-
                     }
                 }
 
-                DelegateChoice{
+                DelegateChoice {
                     roleValue: 6
 
-                    Item{
+                    Item {
                         width: gridView.cellWidth
                         height: gridView.cellHeight
 
-                        CompParamView_LED{
+                        CompParamView_LED {
                             property bool isMultiSystemPresent: model.is_multisystem_present
                             property string sourceID: model.source
 
-                            paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                            paramName: model.ParamName
+                                       + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
                             valueText: model.value
 
                             height: gridView.cellHeight - 61
                             width: gridView.cellWidth - 75
                             anchors.centerIn: parent
-
-
                         }
-
                     }
-
                 }
 
-                DelegateChoice{
+                DelegateChoice {
                     roleValue: 7
-                    Item{
+                    Item {
                         height: gridView.cellHeight
                         width: gridView.cellWidth
 
-                        CompParamView_LED{
+                        CompParamView_LED {
                             property bool isMultiSystemPresent: model.is_multisystem_present
                             property string sourceID: model.source
 
                             isOnBad: true
 
-                            paramName: model.ParamName + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
+                            paramName: model.ParamName
+                                       + (isMultiSystemPresent ? ("\n[" + sourceID + "]") : '')
                             valueText: model.value
 
                             height: gridView.cellHeight - 61
                             width: gridView.cellWidth - 75
                             anchors.centerIn: parent
-
                         }
-
                     }
-
                 }
             }
 
-            delegate: delChooser;
+            delegate: delChooser
 
             highlight: Item {
-                width: gridView.cellWidth; height: gridView.cellHeight
+                width: gridView.cellWidth
+                height: gridView.cellHeight
                 CompGlassRect {}
             }
             highlightFollowsCurrentItem: true
             focus: true
 
-            ScrollBar.vertical: ScrollBar{
-                policy:  ScrollBar.AsNeeded
+            ScrollBar.vertical: ScrollBar {
+                policy: ScrollBar.AsNeeded
                 width: 8
                 //topInset: 51
                 topPadding: 51
@@ -723,22 +656,20 @@ Comp__BASE {
 
             Component.onCompleted: {
                 gridView.currentIndex = compHealthDashboardContentParams.tableViewSelectedRow
-                gridView.positionViewAtIndex(compHealthDashboardContentParams.tableViewSelectedRow, GridView.Center)
+                gridView.positionViewAtIndex(
+                            compHealthDashboardContentParams.tableViewSelectedRow,
+                            GridView.Center)
             }
-
         }
-
-
     }
 
-
-    Loader{
+    Loader {
         id: loaderGalleryInstanceView
 
-        active: compHealthDashboardContentParams.showGalleryInstance && !loaderGraphView.active
-        onActiveChanged:{
-            if(active === false)
-            {
+        active: compHealthDashboardContentParams.showGalleryInstance
+                && !loaderGraphView.active
+        onActiveChanged: {
+            if (active === false) {
                 return
             }
 
@@ -746,62 +677,53 @@ Comp__BASE {
             compHealthDashboardContentParams.setListBtnVisible(false)
         }
         asynchronous: true
-        anchors{
+        anchors {
             top: groupFilters.bottom
             left: groupFilters.left
             right: groupFilters.right
             bottom: parent.bottom
         }
 
-        sourceComponent:    CompGalleryInstanceView {
+        sourceComponent: CompGalleryInstanceView {
             id: galleryInstanceView
 
-            visible: compHealthDashboardContentParams.showGalleryInstance && !compHealthDashboardContentGraphView.visible
+            visible: compHealthDashboardContentParams.showGalleryInstance
+                     && !compHealthDashboardContentGraphView.visible
             onVisibleChanged: {
 
             }
-
-
-
 
             imageIndex: compHealthDashboardContentParams.galleryInstanceId
             maxImageIndex: CameraController.processedImgCount
 
             onBreadcrumbNameChanged: {
-                compHealthDashboardContentParams.floatingBreadCrumbName = galleryInstanceView.breadcrumbName
+                compHealthDashboardContentParams.floatingBreadCrumbName
+                        = galleryInstanceView.breadcrumbName
             }
 
             onIndexChanged: newIndex => {
                                 compHealthDashboardContentParams.galleryInstanceId = newIndex
                             }
         }
-
     }
 
-
-    Loader{
+    Loader {
         id: loaderGraphView
 
         active: compHealthDashboardContentParams.canShowGraphView
-        anchors{
+        anchors {
             top: groupFilters.bottom
             left: groupFilters.left
             right: groupFilters.right
             bottom: parent.bottom
         }
 
-        sourceComponent:     CompHealthDashboardContentGraphView {
+        sourceComponent: CompHealthDashboardContentGraphView {
             id: compHealthDashboardContentGraphView
 
-
             valueUnits: compHealthDashboardContentParams.graphViewUnits
-
-
-
         }
     }
-
-
 }
 
 /*##^##
@@ -809,3 +731,4 @@ Designer {
     D{i:0;autoSize:true;height:480;width:640}
 }
 ##^##*/
+

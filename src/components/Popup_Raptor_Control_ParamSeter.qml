@@ -1,42 +1,49 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import Murano.Beacon.Raptor.DeviceControllers 1.0
 
-Comp__BASE_Popup{
+Comp__BASE_Popup {
     id: popupRaptorControlParamSeter
 
     compBaseRadius: 20
 
+    property RaptorDroneController controller
+
     property int editHeight: 60
     property string paramName: edtParamId.displayText
     property var structMavlinkParamSelected: {
-        if(edtParamId.currentIndex !== -1 && paramName !== "")
-        {
-            return DroneController.getParameterDefinition(paramName)
-        }
-        else{
+        if (edtParamId.currentIndex !== -1 && paramName !== "") {
+            return controller.getParameterDefinition(paramName)
+        } else {
             return undefined
         }
     }
 
-    property string paramDescription: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.description
-    property string paramNotes: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.notes
-    property string paramValues: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.valuesString
+    property string paramDescription: structMavlinkParamSelected
+                                      === undefined ? "" : structMavlinkParamSelected.description
+    property string paramNotes: structMavlinkParamSelected
+                                === undefined ? "" : structMavlinkParamSelected.notes
+    property string paramValues: structMavlinkParamSelected
+                                 === undefined ? "" : structMavlinkParamSelected.valuesString
     property string paramBitMask: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.bitmaskValuesString
-    property string paramRange: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.rangeString
-    property string paramUnits: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.units
-    property string paramIncrements: structMavlinkParamSelected === undefined ? "" : structMavlinkParamSelected.incrementString
+    property string paramRange: structMavlinkParamSelected
+                                === undefined ? "" : structMavlinkParamSelected.rangeString
+    property string paramUnits: structMavlinkParamSelected
+                                === undefined ? "" : structMavlinkParamSelected.units
+    property string paramIncrements: structMavlinkParamSelected
+                                     === undefined ? "" : structMavlinkParamSelected.incrementString
     popupName: "Raptor.Control: Parameter Set"
     height: 800
     width: 700
 
-    function onSubmit(){
+    function onSubmit() {
         var param = edtParamId.displayText
         var param_value = edtParamValue.value
 
-        DroneController.sendCommand_SetParam(param, param_value);
+        controller.sendCommand_SetParam(param, param_value)
     }
 
-    function onReset(){
+    function onReset() {
 
         edtParamId.displayText = ''
         edtParamValue.value = '0'
@@ -45,22 +52,21 @@ Comp__BASE_Popup{
     CompPopupBG {
         id: bgPopupRaptorDroneSetParams
 
-        FocusScope{
+        FocusScope {
             anchors.fill: parent
 
             onFocusChanged: {
                 InputHandler.slot_OnPopupFocusChanged(popupName, focus)
-
             }
 
             Column {
                 spacing: 10
-                anchors{
+                anchors {
                     fill: parent
                     margins: bgPopupRaptorDroneSetParams.radiusBG
                 }
 
-                CompLabel{
+                CompLabel {
                     id: lblSetParams
 
                     text: "Set Drone Parameters"
@@ -70,10 +76,9 @@ Comp__BASE_Popup{
                     id: edtParamId
 
                     //textRole: undefined
-
-                    model: DroneController.listParameterNames
+                    model: controller.listParameterNames
                     width: parent.width
-                    delegate: ItemDelegate{
+                    delegate: ItemDelegate {
                         width: edtParamId.width
                         height: edtParamId.optionItemHeight
 
@@ -84,13 +89,13 @@ Comp__BASE_Popup{
                             anchors.bottom: parent.bottom
                         }
 
-                        contentItem: CompLabel{
+                        contentItem: CompLabel {
                             text: modelData
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                             color: edtParamId.currentTextColor
                             //font.pixelSize: 40
-                            MouseArea{
+                            MouseArea {
                                 anchors.fill: parent
 
                                 onClicked: {
@@ -105,34 +110,31 @@ Comp__BASE_Popup{
                     }
                 }
 
-
-
-                ScrollView{
+                ScrollView {
                     id: scrollViewParamMetaData
                     width: parent.width
                     height: 300
                     clip: true
+
                     //boundsBehavior: Flickable.StopAtBounds
-
-
-                    Column{
+                    Column {
                         width: parent.width
                         spacing: 40
-                        CompLabel{
+                        CompLabel {
 
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramDescription !== ""
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramDescription !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
 
                             text: popupRaptorControlParamSeter.paramDescription
-
-
                         }
 
-                        CompLabel{
+                        CompLabel {
 
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramNotes !== ""
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramNotes !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
@@ -142,9 +144,10 @@ Comp__BASE_Popup{
                             color: "#80000000"
                         }
 
-                        CompLabel{
+                        CompLabel {
 
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramRange !== ""
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramRange !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
@@ -152,8 +155,9 @@ Comp__BASE_Popup{
                             text: "RANGE:     " + popupRaptorControlParamSeter.paramRange
                         }
 
-                        CompLabel{
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramIncrements !== ""
+                        CompLabel {
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramIncrements !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
@@ -161,9 +165,10 @@ Comp__BASE_Popup{
                             text: "INCREMENT:     " + popupRaptorControlParamSeter.paramIncrements
                         }
 
-                        CompLabel{
+                        CompLabel {
 
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramUnits !== ""
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramUnits !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
@@ -171,9 +176,10 @@ Comp__BASE_Popup{
                             text: "UNITS:     " + popupRaptorControlParamSeter.paramUnits
                         }
 
-                        CompLabel{
+                        CompLabel {
 
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramBitMask !== ""
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramBitMask !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
@@ -181,20 +187,18 @@ Comp__BASE_Popup{
                             text: "BITMASK:     \n" + popupRaptorControlParamSeter.paramBitMask
                         }
 
-                        CompLabel{
+                        CompLabel {
 
-                            visible: edtParamId.currentIndex !== -1 && popupRaptorControlParamSeter.paramValues !== ""
+                            visible: edtParamId.currentIndex !== -1
+                                     && popupRaptorControlParamSeter.paramValues !== ""
 
                             width: parent.width
                             wrapMode: Text.WordWrap
 
                             text: "VALUES:\n" + popupRaptorControlParamSeter.paramValues
                         }
-
                     }
-
                 }
-
 
                 CompLabelledTextEdit {
                     id: edtParamValue
@@ -207,22 +211,20 @@ Comp__BASE_Popup{
                     height: popupRaptorControlParamSeter.editHeight
                 }
 
-                CompBtnBreadcrumb{
+                CompBtnBreadcrumb {
                     text: "RESET"
                     width: parent.width
                     height: 90
                     onClicked: popupRaptorControlParamSeter.onReset()
                 }
 
-                CompBtnBreadcrumb{
+                CompBtnBreadcrumb {
                     text: "EXECUTE"
                     width: parent.width
                     height: 90
                     onClicked: popupRaptorControlParamSeter.onSubmit()
                 }
-
             }
-
         }
     }
 }

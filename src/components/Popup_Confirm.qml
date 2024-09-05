@@ -1,8 +1,12 @@
 import QtQuick 2.0
 
-Popup__BASE{
+Popup__BASE {
     id: popup_confirm_root
 
+    property alias titleText: lblTitle.text
+    property alias messageText: lblMessage.text
+    property alias acceptText: btnAccept.text
+    property alias declineText: btnReject.text
     property alias titleControl: lblTitle
     property alias messageControl: lblMessage
     property alias acceptControl: btnAccept
@@ -10,27 +14,24 @@ Popup__BASE{
     property bool isResponseSent: false
     popupName: "Confirmation"
 
-    signal accepted()
-    signal declined()
+    signal accepted
+    signal declined
 
-    Component.onCompleted: open()
-
-    CompPopupBG{
+    CompPopupBG {
         id: bg
 
         width: 600
-        height: colContents.height
-                + colContents.anchors.bottomMargin
+        height: colContents.height + colContents.anchors.bottomMargin
                 + colContents.anchors.topMargin
 
         anchors.centerIn: parent
         anchors.fill: undefined
     }
 
-    Column{
+    Column {
         id: colContents
 
-        anchors{
+        anchors {
             left: bg.left
             right: bg.right
             top: bg.top
@@ -40,24 +41,24 @@ Popup__BASE{
 
         spacing: 20
 
-        CompLabel{
+        CompLabel {
             id: lblTitle
             width: parent.width
-            visible:  text !== ""
+            visible: text !== ""
             wrapMode: Text.WordWrap
         }
 
-        CompLabel{
+        CompLabel {
             id: lblMessage
 
-            visible:  text !== ""
+            visible: text !== ""
             width: parent.width
             wrapMode: Text.WordWrap
 
             bottomPadding: 40
         }
 
-        Row{
+        Row {
             id: rowControls
 
             height: 60
@@ -67,7 +68,7 @@ Popup__BASE{
 
             layoutDirection: Qt.RightToLeft
 
-            CompBtnBreadcrumb{
+            CompBtnBreadcrumb {
                 id: btnReject
 
                 visible: text !== ""
@@ -78,7 +79,7 @@ Popup__BASE{
                 onClicked: popup_confirm_root.declined()
             }
 
-            CompBtnBreadcrumb{
+            CompBtnBreadcrumb {
                 id: btnAccept
 
                 visible: text !== ""
@@ -89,8 +90,5 @@ Popup__BASE{
                 onClicked: popup_confirm_root.accepted()
             }
         }
-
     }
-
-
 }

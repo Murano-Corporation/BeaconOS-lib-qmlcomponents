@@ -21,34 +21,28 @@ Screen__BASE {
     property bool hasGeneratorAssets: false
     property bool hasAnyAssets: false
 
-
     onSelectedAssetTypeChanged: {
-        TableModelAssetDashboardGridView.slot_SetFilter_Type(selectedAssetType);
+        TableModelAssetDashboardGridView.slot_SetFilter_Type(selectedAssetType)
     }
 
     onSearchStringChanged: {
-        TableModelAssetDashboardGridView.slot_SetFilter_String(searchString);
+        TableModelAssetDashboardGridView.slot_SetFilter_String(searchString)
     }
 
     Component.onCompleted: {
 
         ///TODO - CHANGE THIS TO HAPPEN IN TOPIC BEACON ID OBJECT
-
-
         lblAllAssets.clicked()
-        MqttTopicHealth.slot_Unsubscribe();
-        MqttTopicBeaconIdDict.slot_Subscribe();
-        MqttTopicBeaconIdDict.slot_UpdateBeaconIdModelFilters();
-
-
+        MqttTopicHealth.slot_Unsubscribe()
+        MqttTopicBeaconIdDict.slot_Subscribe()
+        MqttTopicBeaconIdDict.slot_UpdateBeaconIdModelFilters()
     }
 
-    Item{
+    Item {
         id: groupTopControls
 
         //width: isDelta ? 1800 : width
-
-        anchors{
+        anchors {
             top: parent.top
             topMargin: isDelta ? 0 : 150
             left: parent.left
@@ -60,11 +54,10 @@ Screen__BASE {
 
         height: isDelta ? lblScreenName.height : 100
 
-
         CompLabel {
             id: lblScreenName
 
-            anchors{
+            anchors {
                 top: parent.top
                 left: parent.left
             }
@@ -75,7 +68,7 @@ Screen__BASE {
         CompCustomisableTextField {
             id: compCustomisableTextField
 
-            anchors{
+            anchors {
                 left: isDelta ? lblScreenName.right : parent.left
                 leftMargin: isDelta ? 181 : 0
                 //bottom: lblScreenName.bottom
@@ -92,13 +85,12 @@ Screen__BASE {
             btnClearSize: isDelta ? 23 : 60
 
             onTextChanged: searchString = text
-
         }
 
         CompCombobox {
             id: comboFilters
 
-            anchors{
+            anchors {
                 left: isDelta ? undefined : compCustomisableTextField.left
                 leftMargin: isDelta ? 20 : 0
                 right: comboSort.left
@@ -116,7 +108,7 @@ Screen__BASE {
         CompCombobox {
             id: comboSort
 
-            anchors{
+            anchors {
                 right: btnGridView.left
                 rightMargin: 20
                 bottom: comboFilters.bottom
@@ -124,13 +116,12 @@ Screen__BASE {
             }
 
             displayText: qsTr("Sort")
-
         }
 
         CompIconBtn {
             id: btnGridView
 
-            anchors{
+            anchors {
                 verticalCenter: btnListView.verticalCenter
                 right: btnListView.left
                 rightMargin: 20
@@ -148,7 +139,7 @@ Screen__BASE {
 
             enabled: false
 
-            anchors{
+            anchors {
                 rightMargin: 20
                 right: btnMapView.left
                 verticalCenter: btnMapView.verticalCenter
@@ -176,18 +167,12 @@ Screen__BASE {
 
             onClicked: selectedViewMode = "Map"
         }
-
-
-
-
-
     }
-
 
     Rectangle {
         id: contentBG
 
-        anchors{
+        anchors {
             top: groupTopControls.bottom
             topMargin: isDelta ? 40 : 225
             left: groupTopControls.left
@@ -216,11 +201,11 @@ Screen__BASE {
                 //enabled: hasAnyAssets
                 text: qsTr("All Assets")
                 color: selectedAssetType === text ? "White" : "#80ffffff"
-                font{
+                font {
                     pixelSize: 35
                 }
 
-                function clicked(){
+                function clicked() {
                     selectedAssetType = text
                     selectAssetLabelWidth = width
                     selectedAssetLabelX = x
@@ -235,7 +220,7 @@ Screen__BASE {
                 }
             }
 
-            Repeater{
+            Repeater {
                 id: rptAssetTypeButtons
 
                 model: screenAssetDashboardRoot.listOfAssetTypes
@@ -244,9 +229,10 @@ Screen__BASE {
                     id: lblDieselGenerators
                     //enabled: hasGeneratorAssets
                     text: modelData
-                    color: screenAssetDashboardRoot.selectedAssetType === text ? "White" : "#80ffffff"
+                    color: screenAssetDashboardRoot.selectedAssetType
+                           === text ? "White" : "#80ffffff"
 
-                    font{
+                    font {
                         pixelSize: 35
                     }
 
@@ -260,10 +246,9 @@ Screen__BASE {
                     }
                 }
             }
-
         }
 
-        Rectangle{
+        Rectangle {
             id: assetUnderscoreBg
 
             anchors.top: rowAssetTypes.bottom
@@ -274,8 +259,6 @@ Screen__BASE {
             height: 6
 
             color: "#4D4A5F"
-
-
         }
 
         Rectangle {
@@ -287,12 +270,11 @@ Screen__BASE {
             radius: 3
             color: "#80FFFFFF"
 
-            x: (rowAssetTypes.anchors.leftMargin -10) + (selectedAssetLabelX)
+            x: (rowAssetTypes.anchors.leftMargin - 10) + (selectedAssetLabelX)
             width: (20) + (selectAssetLabelWidth)
-
         }
 
-        Loader{
+        Loader {
             id: ldrTableView
 
             active: screenAssetDashboardRoot.selectedViewMode === "List"
@@ -306,7 +288,7 @@ Screen__BASE {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 40
 
-            sourceComponent: TableView{
+            sourceComponent: TableView {
                 id: tableView
 
                 boundsBehavior: Flickable.StopAtBounds
@@ -315,19 +297,17 @@ Screen__BASE {
 
                 model: TableModelAssetDashboardGridView
 
-                delegate: CompLabel{
+                delegate: CompLabel {
                     text: model.display
 
-                    font{
+                    font {
                         pixelSize: 16
                     }
                 }
             }
-
         }
 
-
-        Loader{
+        Loader {
             id: ldrGridView
 
             active: screenAssetDashboardRoot.selectedViewMode === "Grid"
@@ -347,45 +327,31 @@ Screen__BASE {
 
                 model: TableModelAssetDashboardGridView
 
-
                 cellWidth: isDelta ? ((width - leftMargin) * 0.25) : 480
                 cellHeight: isDelta ? (368 + 46) : 480
 
-                delegate: CompAssetDashboardGridItem{
+                delegate: CompAssetDashboardGridItem {
 
                     assetName: model.asset_name
                     //assetState: modelData.Asset_Status
-                    beaconID: model.Beacon_ID
+                    beaconID: model.beacon_id
                     beaconState: model.status
                     assetType: model.asset_type
-
                 }
-
             }
-
         }
 
-
-        Loader{
+        Loader {
             id: ldrMapView
             active: screenAssetDashboardRoot.selectedViewMode === "Map"
 
-            anchors{
+            anchors {
                 fill: ldrTableView
             }
 
             sourceComponent: CompAssetMapView {
                 id: compAssetMapView
-
-
             }
-
-
         }
-
-
     }
-
-
-
 }

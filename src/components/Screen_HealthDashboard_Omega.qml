@@ -80,7 +80,7 @@ Item{
 
     Loader {
 
-        id: loaderLiveData
+        id: loadderLiveData
 
         asynchronous: true
 

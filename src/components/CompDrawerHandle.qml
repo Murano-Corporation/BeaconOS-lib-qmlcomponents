@@ -11,9 +11,6 @@ Item{
 
     signal clicked()
 
-    anchors{
-        horizontalCenter: parent.horizontalCenter
-    }
 
     width: 610
     height: 70

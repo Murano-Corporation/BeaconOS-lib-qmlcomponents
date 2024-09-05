@@ -6,7 +6,7 @@ Comp__BASE {
 
     anchors.fill: parent
 
-    Rectangle{
+    Rectangle {
         anchors.fill: parent
 
         color: "black"
@@ -14,15 +14,34 @@ Comp__BASE {
 
     property bool showAnimatedGradient: Settings.gfxShowAnimatedBg
 
-    Video{
+    Video {
         id: videoSource
 
         anchors.fill: parent
 
+        transform: [
+            Rotation {
+                origin {
+                    x: videoSource.width * 0.5
+                    y: videoSource.height * 0.5
+                }
+
+                angle: compAnimatedGradientBgRoot.isOmega ? 90 : 0
+            },
+
+            Scale {
+                origin {
+                    x: videoSource.width * 0.5
+                    y: videoSource.height * 0.5
+                }
+
+                xScale: compAnimatedGradientBgRoot.isOmega ? 2 : 1
+                yScale: compAnimatedGradientBgRoot.isOmega ? 2 : 1
+            }
+        ]
         property int indexLoopAt: Settings.gfxAnimBgLoopAtIndex
         property int indexLoopTo: Settings.gfxAnimBgLoopToIndex
         property double configPlaybackRate: Settings.animatedGradientPlaybackRate
-
 
         source: "file://" + GlobalConstants.videoPath + "Gradient_4K.mp4"
 
@@ -31,10 +50,9 @@ Comp__BASE {
         playbackRate: configPlaybackRate > 0 ? configPlaybackRate : 1.0
 
         onPositionChanged: {
-            //console.log("Position now: " + position)
 
-            if(position >= indexLoopAt)
-            {
+            //console.log("Position now: " + position)
+            if (position >= indexLoopAt) {
 
                 videoSource.seek(indexLoopTo)
             }
@@ -43,19 +61,14 @@ Comp__BASE {
         //onErrorChanged: {
         //    console.log("Video Error Now: " + errorString)
         //}
-        //
         //onAvailabilityChanged: {
         //    console.log("Video Availability now: " + availability)
         //}
-        //
         //onBufferProgressChanged: {
         //    console.log("Video Buffer Progress now: " + bufferProgress)
         //}
-        //
-        //
         //onStatusChanged: {
         //    console.log("Video status now: " + status)
-        //
         //    if(status === MediaPlayer.EndOfMedia)
         //    {
         //        console.log("...End of media")
@@ -64,18 +77,15 @@ Comp__BASE {
 
         //onPlaybackStateChanged: {
         //    console.log("Video playback state now: " + playbackState)
-        //
         //    if(playbackState === MediaPlayer.PlayingState)
         //    {
         //        console.log("...Playing")
         //    }
-        //
         //    if(playbackState === MediaPlayer.PausedState )
         //    {
         //        console.log("...Paused. Playing...")
         //        videoSource.play()
         //    }
-        //
         //    if(playbackState === MediaPlayer.StoppedState)
         //    {
         //        console.log("...Stopped")
@@ -88,17 +98,7 @@ Comp__BASE {
         //    console.log("Video playback rate now: " + playbackRate)
         //}
     }
-
-
-}
-
-
-//    property point ptTL: Qt.point(192.0, 108.0)
-//    property point ptTR: Qt.point(compAnimatedGradientBgRoot.width - 192.0, 108.0)
-//    property point ptBR: Qt.point(compAnimatedGradientBgRoot.width - 192.0, compAnimatedGradientBgRoot.height - 108.0)
-//    property point ptBL: Qt.point(192.0, compAnimatedGradientBgRoot.height - 108.0)
-
-//    property color colorBG: "#101C29";
+} //    property point ptTL: Qt.point(192.0, 108.0)//    property point ptTR: Qt.point(compAnimatedGradientBgRoot.width - 192.0, 108.0)//    property point ptBR: Qt.point(compAnimatedGradientBgRoot.width - 192.0, compAnimatedGradientBgRoot.height - 108.0)//    property point ptBL: Qt.point(192.0, compAnimatedGradientBgRoot.height - 108.0)//    property color colorBG: "#101C29";
 //    property color color1: "#2C2F40"
 //    property color color2: "#080A12"
 //    property color color3: "#080B16"
@@ -110,9 +110,6 @@ Comp__BASE {
 //    property int blurSamples: 8
 //    property bool blurTransparentBorder: true
 //    property real halfWidth: parent.height * 0.5
-
-
-
 
 //    Rectangle{
 //        id: rectBg
@@ -140,8 +137,6 @@ Comp__BASE {
 
 //            color: compAnimatedGradientBgRoot.color1
 //        }
-
-
 
 //        GaussianBlur{
 //            id: blur0
@@ -245,8 +240,6 @@ Comp__BASE {
 //            smooth: true
 //        }
 
-
-
 //    }
 
 //    //Rectangle{
@@ -258,8 +251,6 @@ Comp__BASE {
 //    //  x: ptTR.x
 //    //  y: ptTR.y
 //    //}
-
-
 
 //    SequentialAnimation{
 
@@ -445,8 +436,10 @@ Comp__BASE {
 
 //    }
 
+
 /*##^##
 Designer {
     D{i:0;autoSize:true;formeditorZoom:0.25;height:1080;width:1920}
 }
 ##^##*/
+

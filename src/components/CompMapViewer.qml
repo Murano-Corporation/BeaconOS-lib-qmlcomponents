@@ -7,12 +7,12 @@ import QtGraphicalEffects 1.0
 Comp__BASE {
     id: compMapViewerRoot
 
-    property point centerPoint: Qt.point(0,0)
+    property point centerPoint: Qt.point(0, 0)
     property var listAssets: TableModelAssetDashboardGridView
     property var selectedAssetDataModel: undefined
     property bool showAssets: true
     property bool captureMouseCoords: false
-    property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 1 : 0//(screenToLoad === "Raptor") ? (1) : (mapPlugin.name === 'mapboxgl' ? 4 : 0)
+    property int activeMapTypeIndex: mapPlugin.name === 'mapboxgl' ? 1 : 0 //(screenToLoad === "Raptor") ? (1) : (mapPlugin.name === 'mapboxgl' ? 4 : 0)
     property int maxMapTypeIndex: map.supportedMapTypes.length
     property alias targetListDelegate: mapView_Targets.delegate
     property alias tilt: map.tilt
@@ -25,21 +25,17 @@ Comp__BASE {
     property real zoomCurrent
 
     onSelectedAssetDataModelChanged: {
-        if(selectedAssetDataModel === undefined)
-        {
+        if (selectedAssetDataModel === undefined) {
             popupSelectedAsset.close()
         } else {
             popupSelectedAsset.open()
         }
     }
 
-
-    function getSimpleMapNameString(mapTypeName)
-    {
+    function getSimpleMapNameString(mapTypeName) {
 
         //console.log("Map name: " + mapTypeName)
-        switch(mapTypeName)
-        {
+        switch (mapTypeName) {
         case " ":
             return qsTr("No Map")
         case "mapbox://styles/mapbox/streets-v10":
@@ -71,23 +67,19 @@ Comp__BASE {
         return "?"
     }
 
-    function setActiveMapTypeIndex(index)
-    {
+    function setActiveMapTypeIndex(index) {
         activeMapTypeIndex = index
     }
 
-    function clear(){
+    function clear() {}
 
-    }
-
-    function setZoomLevel(zoomLevel)
-    {
+    function setZoomLevel(zoomLevel) {
         map.zoomLevel = zoomLevel
     }
 
-    function addPoint(lat, lon, type)
-    {
-        var mapPoint = Qt.createQmlObject('import QtLocation 5.3; MapCircle {}', compMapViewerRoot)
+    function addPoint(lat, lon, type) {
+        var mapPoint = Qt.createQmlObject(
+                    'import QtLocation 5.3; MapCircle {}', compMapViewerRoot)
         var coords = QtPositioning.coordinate(lat, lon)
         mapPoint.center = coords
         mapPoint.radius = 20
@@ -95,27 +87,20 @@ Comp__BASE {
 
         map.addMapItem(mapPoint)
 
-
         var toAdd = compClickableMapItem.createObject(compMapViewerRoot)
         toAdd.coordinate = coords
         map.addMapItem(toAdd)
 
-
         compMapViewerRoot.centerPoint = Qt.point(lat, lon)
-
     }
 
-    function centerOnPointXY(x, y)
-    {
-        centerOnPoint(QtPositioning.coordinate(x,y))
+    function centerOnPointXY(x, y) {
+        centerOnPoint(QtPositioning.coordinate(x, y))
     }
 
-    function centerOnPoint(coords)
-    {
+    function centerOnPoint(coords) {
         map.center = coords
     }
-
-
 
     //    Component {
     //        id: highlight
@@ -129,17 +114,16 @@ Comp__BASE {
     //            radius: 5
     //        }
     //    }
-    ListView{
+    ListView {
         id: listMapTypes
 
         visible: compMapViewerRoot.showMapTypes
-        anchors{
+        anchors {
             top: parent.top
             left: parent.left
             right: parent.right
             //bottom: parent.bottom
             topMargin: raptorNavMenu.selectedScreen === "Raptor" ? 100 : 0
-
         }
 
         height: compMapViewerRoot.showMapTypes ? (isDelta ? 64 : 110) : 0
@@ -150,7 +134,7 @@ Comp__BASE {
         model: map.supportedMapTypes
         onModelChanged: currentIndex = -1
 
-        delegate: CompBtnBreadcrumb{
+        delegate: CompBtnBreadcrumb {
             text: getSimpleMapNameString(model.name)
 
             height: isDelta ? 64 : 100
@@ -163,7 +147,8 @@ Comp__BASE {
         }
         highlightMoveVelocity: 6000
         highlight: Rectangle {
-            width: listMapTypes.cellWidth; height: listMapTypes.cellHeight
+            width: listMapTypes.cellWidth
+            height: listMapTypes.cellHeight
             border {
                 width: 4
                 color: "#9287ED"
@@ -171,15 +156,15 @@ Comp__BASE {
             color: "Transparent"
             radius: 20
 
-            Behavior on width{
-                SpringAnimation{
+            Behavior on width {
+                SpringAnimation {
                     spring: 3
                     damping: 0.2
                 }
             }
 
             Behavior on x {
-                SpringAnimation{
+                SpringAnimation {
                     spring: 3
                     damping: 0.2
                 }
@@ -189,8 +174,8 @@ Comp__BASE {
         highlightFollowsCurrentItem: true
         focus: true
 
-        ScrollBar.horizontal: ScrollBar{
-            policy:  ScrollBar.AsNeeded
+        ScrollBar.horizontal: ScrollBar {
+            policy: ScrollBar.AsNeeded
 
             height: ListView.height
         }
@@ -199,45 +184,41 @@ Comp__BASE {
     onActiveMapTypeIndexChanged: {
         //console.log("Active map type index now: " + activeMapTypeIndex)
         //console.log("Supported map types count: " + map.supportedMapTypes.length)
-        if(map.supportedMapTypes.length === 0)
-        {
-            console.error("NO SUPPORTED MAP TYPES");
-            return;
-        }
-        else if(activeMapTypeIndex <= -1)
-        {
+        if (map.supportedMapTypes.length === 0) {
+            console.error("NO SUPPORTED MAP TYPES")
+            return
+        } else if (activeMapTypeIndex <= -1) {
             activeMapTypeIndex = 0
             return
-        } else if(activeMapTypeIndex >= maxMapTypeIndex)
-        {
-            activeMapTypeIndex = maxMapTypeIndex-1
+        } else if (activeMapTypeIndex >= maxMapTypeIndex) {
+            activeMapTypeIndex = maxMapTypeIndex - 1
             return
         }
 
         map.activeMapType = map.supportedMapTypes[activeMapTypeIndex]
     }
 
-
-    Component{
+    Component {
         id: compClickableMapItem
 
-        MapQuickItem{
+        MapQuickItem {
 
-            anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height * 0.5)
+            anchorPoint: Qt.point(sourceItem.width * 0.5,
+                                  sourceItem.height * 0.5)
 
             onCoordinateChanged: {
                 sourceItem.coords = coordinate
                 console.log("compClickableMapItem:: Coordinates now " + coordinate)
             }
 
-            sourceItem: ImgAssetVehicle{
+            sourceItem: ImgAssetVehicle {
                 id: imgSub
                 height: 100
                 width: 100
 
                 property var coords
 
-                MouseArea{
+                MouseArea {
                     anchors.fill: parent
 
                     onClicked: {
@@ -253,12 +234,9 @@ Comp__BASE {
         }
     }
 
-
-
     onCenterPointChanged: {
         map.center = QtPositioning.coordinate(centerPoint.x, centerPoint.y)
         map.fitViewportToVisibleMapItems()
-
 
         //map.addMapItem()
     }
@@ -266,7 +244,6 @@ Comp__BASE {
     //Component.onCompleted: {
     //    //console.log("Available Map Types:")
     //    //console.log("Supported Plugin Service Providers " + mapPlugin.availableServiceProviders)
-    //
     //    //for(var j = 0; j < map.supportedMapTypes.length; j++)
     //    //{
     //    //    var mapTypeCurrent = map.supportedMapTypes[j]
@@ -284,34 +261,29 @@ Comp__BASE {
     //    //    console.log(" --- MetaData: " + metaData)
     //    //    console.log(" ")
     //    //}
-    //
-    //
-    //
     //}
-    //
-
     Plugin {
         id: mapPlugin
 
         preferred: ["mapboxgl", "osm"]
+
         //required: Plugin.OnlineMappingFeature | Plugin.OfflineMappingFeature | Plugin.LocalizedMappingFeature |
         //          Plugin.NoPlacesFeatures | Plugin.NoRoutingFeatures | Plugin.AnyGeocodingFeatures
-
-        PluginParameter{
+        PluginParameter {
             name: "esri.token"
             value: "AAPK89749ac0dd3e4a108bedf722e117c92ah5KdAZ_1yGyeBOSzoW7gPur9Fy0jHoq2aXa9SlwgTxhhfP0qyw3rvgD67YGQwakb"
         }
 
-        PluginParameter{
+        PluginParameter {
             name: "osm.access_token"
             value: "242e69891b264077a78f5f9f87e095c0"
         }
 
-        PluginParameter{
+        PluginParameter {
             name: "mapbox.access_token"
             value: "sk.eyJ1IjoiYWp0LW11cmFubyIsImEiOiJjbHFjbWQzOXkwM3BvMnhxdzh5M3ZmbDZiIn0.dGKKlVL8RAT4Od4-TtIEbg"
         }
-        PluginParameter{
+        PluginParameter {
             name: "mapboxgl.access_token"
             value: "sk.eyJ1IjoiYWp0LW11cmFubyIsImEiOiJjbHFjbWQzOXkwM3BvMnhxdzh5M3ZmbDZiIn0.dGKKlVL8RAT4Od4-TtIEbg"
         }
@@ -329,7 +301,7 @@ Comp__BASE {
 
     Map {
         id: map
-        anchors{
+        anchors {
             top: listMapTypes.bottom
             topMargin: compMapViewerRoot.showMapTypes ? 20 : 0
             left: parent.left
@@ -337,25 +309,24 @@ Comp__BASE {
             bottom: parent.bottom
         }
 
-        onZoomLevelChanged: {compMapViewerRoot.zoomCurrent = zoomLevel}
+        onZoomLevelChanged: {
+            compMapViewerRoot.zoomCurrent = zoomLevel
+        }
 
         copyrightsVisible: false
         activeMapType: supportedMapTypes[compMapViewerRoot.activeMapTypeIndex]
         plugin: mapPlugin
         center: QtPositioning.coordinate(center.x, centerPoint.y)
 
-        MapPolyline{
+        MapPolyline {
             id: mapPolyLineMain
 
             line.width: 5
             line.color: "blue"
-
-
         }
 
-        MouseArea
-        {
-            id:mouseArea_CoordGrabber
+        MouseArea {
+            id: mouseArea_CoordGrabber
 
             property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
 
@@ -367,9 +338,9 @@ Comp__BASE {
             propagateComposedEvents: true
 
             onClicked: {
-                console.log("map.toCoordinate(Qt.point(mouseX, mouseY)): " + map.toCoordinate(Qt.point(mouseX, mouseY)))
+                console.log("map.toCoordinate(Qt.point(mouseX, mouseY)): " + map.toCoordinate(
+                                Qt.point(mouseX, mouseY)))
             }
-
         }
 
         // MapItemView{
@@ -433,10 +404,7 @@ Comp__BASE {
         //         }
         //     }
         // }
-
-
-
-        MapItemView{
+        MapItemView {
             id: mapView_Targets
             model: compMapViewerRoot.listAssets
 
@@ -446,17 +414,19 @@ Comp__BASE {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
-                assetID: model.Beacon_ID//(model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
+                assetID: model.beacon_id //(model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
                 imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
-                iconDetails.color: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
-                iconDetails.opacity: (model.asset_type === "Antenna" || model.asset_type === "Drone") ? 1.0 : 0.9
+                iconDetails.color: (model.asset_type === "Antenna"
+                                    || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
+                iconDetails.opacity: (model.asset_type === "Antenna"
+                                      || model.asset_type === "Drone") ? 1.0 : 0.9
                 is_selected: model.is_selected
 
                 onCenterOnPoint: {
-                    if(!(model.asset_type === "Antenna" || model.asset_type === "Drone")){
-                        if(compMapViewerRoot.selectedAssetDataModel === model)
-                        {
+                    if (!(model.asset_type === "Antenna"
+                          || model.asset_type === "Drone")) {
+                        if (compMapViewerRoot.selectedAssetDataModel === model) {
                             compMapViewerRoot.selectedAssetDataModel = undefined
                         } else {
                             compMapViewerRoot.selectedAssetDataModel = model
@@ -467,18 +437,11 @@ Comp__BASE {
                 }
                 onFitViewportToVisibleMapItems: map.fitViewportToVisibleMapItems()
             }
-
         }
-
-
-
     }
 
-
-
-    Popup{
+    Popup {
         id: popupSelectedAsset
-
 
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
         focus: true
@@ -486,11 +449,11 @@ Comp__BASE {
 
         height: map.height
         width: map.width
-        background: Rectangle{
+        background: Rectangle {
             color: "#80000000"
 
-            MouseArea{
-                anchors{
+            MouseArea {
+                anchors {
                     fill: parent
                 }
 
@@ -501,7 +464,7 @@ Comp__BASE {
             compMapViewerRoot.selectedAssetDataModel = undefined
         }
 
-        CompAssetDashboardGridItem{
+        CompAssetDashboardGridItem {
             id: selectAssetItem
 
             property var modelData: visible ? selectedAssetDataModel : undefined
@@ -509,17 +472,13 @@ Comp__BASE {
             height: 375
             width: 387
 
-
             onEnabledChanged: {
-                if(enabled)
-                {
+                if (enabled) {
                     focus = true
                 }
             }
 
-
-
-            anchors{
+            anchors {
                 centerIn: parent
                 horizontalCenterOffset: -width
             }
@@ -527,20 +486,11 @@ Comp__BASE {
             //onFocusChanged: {
             //    console.log("My focus is now: "  + focus)
             //}
-
-
             assetName: modelData ? modelData.asset_name : ''
             beaconID: modelData ? modelData.Beacon_ID : ''
             assetState: modelData ? modelData.Asset_Status : ''
             beaconState: modelData ? modelData.status : ''
             assetType: modelData ? modelData.asset_type : ''
         }
-
     }
-
-
-
-
-
-
 }

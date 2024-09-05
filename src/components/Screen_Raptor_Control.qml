@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import Qt.labs.qmlmodels 1.0
 
 import CONSTANTS 1.0
+import Murano.Beacon.Raptor.DeviceControllers 1.0
 
 Screen_Raptor__BASE {
     id: screen_RaptorControlRoot
@@ -34,12 +35,12 @@ Screen_Raptor__BASE {
     property string beaconIDSelected: ""
     property string dispText: isDrone ? dispText_Drone : isAntenna ? dispText_Antenna : "???"
     property int controlledDeviceType: Constants.ERaptorDeviceType_Drone
-    property real batteryPercent: DroneController.deviceBattery
-    property var gimbal1Struct: DroneController.gimbalA
-    property var gimbal2Struct: DroneController.gimbalB
-    property var detectionInfo: DroneController.detectionInfo
+    property real batteryPercent: raptorDroneController.deviceBattery
+    property var gimbal1Struct: raptorDroneController.gimbalA
+    property var gimbal2Struct: raptorDroneController.gimbalB
+    property var detectionInfo: raptorDroneController.detectionInfo
     property var selectedItem
-    property var controllerSource: isDrone ? DroneController : isAntenna ? AntennaController : undefined
+    property var controllerSource: isDrone ? raptorDroneController : isAntenna ? raptorAntennaController : undefined
 
     signal signalBeaconIDSelected(var beaconID)
     signal setShowButtonPanel(var bShowButonPanel)
@@ -47,24 +48,25 @@ Screen_Raptor__BASE {
     anchors.fill: parent
     state: eSTATE_NO_ASSET_SELECTED
     states: [
-        State{
+        State {
             name: eSTATE_NO_ASSET_SELECTED
 
             when: screen_RaptorControlRoot.deviceConnectionState === 0
         },
-        State{
+        State {
             name: eSTATE_CONNECTING
 
             when: screen_RaptorControlRoot.deviceConnectionState === 1
         },
-        State{
+        State {
             name: eSTATE_CONNECTED
 
             when: screen_RaptorControlRoot.deviceConnectionState === 2
         }
     ]
 
-    onImageProviderStringChanged: console.log("Image Provider String changed to: " + imageProviderString)
+    onImageProviderStringChanged: console.log(
+                                      "Image Provider String changed to: " + imageProviderString)
 
     onBeaconIDSelectedChanged: {
         for (var i = 0; i < TableModelRaptorMap.length; i++) {
@@ -74,19 +76,30 @@ Screen_Raptor__BASE {
         }
     }
 
-
-    function setGimbal1Values(x_value, y_value){
+    function setGimbal1Values(x_value, y_value) {
         var new_struct = screen_RaptorControlRoot.gimbal1Struct
 
         new_struct.axisX_Value = x_value
         new_struct.axisY_Value = y_value
     }
 
-    function setGimbal2Values(x_value, y_value){
+    function setGimbal2Values(x_value, y_value) {
         var new_struct = screen_RaptorControlRoot.gimbal2Struct
 
         new_struct.axisX_Value = x_value
         new_struct.axisY_Value = y_value
+    }
+
+    RaptorDroneController {
+        id: raptorDroneController
+
+        Component.onCompleted: {
+            raptorDroneController.connectToDevice("10.2.18.97")
+        }
+    }
+
+    RaptorAntennaController {
+        id: raptorAntennaController
     }
 
     Item {
@@ -101,7 +114,7 @@ Screen_Raptor__BASE {
         Item {
             id: compTargetBoundingBox1
 
-            visible: DroneController.watchdogOk
+            visible: raptorDroneController.watchdogOk
                      && screen_RaptorControlRoot.detectionInfo.valid
                      && screen_RaptorControlRoot.hudON
 
@@ -113,14 +126,14 @@ Screen_Raptor__BASE {
                 margins: 70
             }
 
-            Rectangle{
+            Rectangle {
                 anchors.top: parent.top
                 color: "#00FF94"
                 height: 2
                 width: 270
                 radius: 16
             }
-            Rectangle{
+            Rectangle {
                 anchors.left: parent.left
                 color: "#00FF94"
                 height: 123
@@ -128,7 +141,7 @@ Screen_Raptor__BASE {
                 radius: 16
             }
 
-            Rectangle{
+            Rectangle {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 color: "#00FF94"
@@ -136,7 +149,7 @@ Screen_Raptor__BASE {
                 width: 270
                 radius: 16
             }
-            Rectangle{
+            Rectangle {
                 anchors.right: parent.right
                 color: "#00FF94"
                 height: 123
@@ -144,7 +157,7 @@ Screen_Raptor__BASE {
                 radius: 16
             }
 
-            Rectangle{
+            Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 color: "#00FF94"
@@ -153,7 +166,7 @@ Screen_Raptor__BASE {
                 radius: 16
             }
 
-            Rectangle{
+            Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 color: "#00FF94"
@@ -162,7 +175,7 @@ Screen_Raptor__BASE {
                 radius: 16
             }
 
-            Rectangle{
+            Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 color: "#00FF94"
@@ -170,7 +183,7 @@ Screen_Raptor__BASE {
                 width: 270
                 radius: 16
             }
-            Rectangle{
+            Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 color: "#00FF94"
@@ -180,7 +193,7 @@ Screen_Raptor__BASE {
             }
         }
 
-        Comp_Raptor_Altimeter{
+        Comp_Raptor_Altimeter {
             id: attitudeMeter
 
             visible: screen_RaptorControlRoot.hudON
@@ -193,26 +206,25 @@ Screen_Raptor__BASE {
                 xScale: 0.8
                 yScale: 0.8
 
-                origin{
+                origin {
                     x: attitudeMeter.width * 0.5
                     y: attitudeMeter.height * 0.5
-
                 }
             }
 
-            Connections{
-                target: DroneController
+            Connections {
+                target: raptorDroneController
 
-                function onSignal_YawChanged(){
-                    attitudeMeter.compassAngle = DroneController.yaw
+                function onSignal_YawChanged() {
+                    attitudeMeter.compassAngle = raptorDroneController.yaw
                 }
 
-                function onSignal_PitchChanged(){
-                    attitudeMeter.tiltAngle = DroneController.pitch
+                function onSignal_PitchChanged() {
+                    attitudeMeter.tiltAngle = raptorDroneController.pitch
                 }
 
-                function onSignal_RollChanged(){
-                    attitudeMeter.rollAngle = DroneController.roll
+                function onSignal_RollChanged() {
+                    attitudeMeter.rollAngle = raptorDroneController.roll
                 }
             }
         }
@@ -220,36 +232,38 @@ Screen_Raptor__BASE {
         Popup_Raptor_Control_Messages {
             id: popupRaptorControlMessages
 
+            controller: raptorDroneController
             startSize: Qt.size(500, 580)
             startPoint: Qt.point(81.0, 249.0)
         }
 
         Popup_Raptor_Control_ParamSeter {
             id: popupRaptorControlParamSeter
+
+            controller: raptorDroneController
         }
 
         Popup_Raptor_Control_ManualCommand {
             id: popupRaptorControlManualCommand
+
+            controller: raptorDroneController
         }
 
         PopupRaptorControlParameterView {
             id: popupRaptorControlParameterView
+
+            controller: raptorDroneController
         }
 
-        CompLabel{
+        CompLabel {
             id: lblFlightMode
 
-            visible: lblFlightModeOn //&& DroneController.watchdogOk
-            text: "Sys. State: "
-                  + DroneController.sSystemState
-                  + "; - Flight Mode: "
-                  + DroneController.flightMode
-                  + "; - Land State: "
-                  + DroneController.sLandedState
-                  + "; - GPS Fix Type: "
-                  + DroneController.sGpsFixType
-                  + "; GPS Sats: "
-                  + DroneController.gpsSatellitesAvailable
+            visible: lblFlightModeOn //&& raptorDroneController.watchdogOk
+            text: "Sys. State: " + raptorDroneController.sSystemState
+                  + "; - Flight Mode: " + raptorDroneController.flightMode
+                  + "; - Land State: " + raptorDroneController.sLandedState
+                  + "; - GPS Fix Type: " + raptorDroneController.sGpsFixType
+                  + "; GPS Sats: " + raptorDroneController.gpsSatellitesAvailable
             fontPixelSize: 22
 
             anchors {
@@ -258,9 +272,9 @@ Screen_Raptor__BASE {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            Rectangle{
+            Rectangle {
                 anchors.fill: parent
-                anchors{
+                anchors {
                     leftMargin: -20
                     rightMargin: -20
                 }
@@ -272,7 +286,7 @@ Screen_Raptor__BASE {
             }
         }
 
-        CompImageIcon{
+        CompImageIcon {
             id: openRightGridViewControl
 
             source: "file:///usr/share/BeaconOS-lib-images/images/RightOpen.svg"
@@ -281,12 +295,10 @@ Screen_Raptor__BASE {
             width: 48
             opacity: 0.6
 
-            anchors{
+            anchors {
                 right: deviceScreen.right
                 verticalCenter: parent.verticalCenter
             }
-
-
 
             MouseArea {
                 anchors.fill: parent
@@ -296,22 +308,23 @@ Screen_Raptor__BASE {
                     if (drawerRaptorDroneControlQuickActions.visible === true) {
                         drawerRaptorDroneControlQuickActions.visible = false
                         drawerRaptorDroneControlQuickActions.visible = true
-                    }
-                    else {
+                    } else {
                         drawerRaptorDroneControlQuickActions.visible = true
                     }
 
-                    console.log("Drawer open status after:", drawerRaptorDroneControlQuickActions.visible);
+                    console.log("Drawer open status after:",
+                                drawerRaptorDroneControlQuickActions.visible)
                 }
             }
         }
 
-        Comp_Drone_Gimble{
+        Comp_Drone_Gimble {
             id: stick1
 
             //THIS NEEDS TO STAY FALSE SO IT BEHAVES LIKE DJI DRONE CONTROLLER
             isThrottle: false
-            visible: screen_RaptorControlRoot.controlON && beaconIDSelected !== ""//&& DroneController.watchdogOk
+            visible: screen_RaptorControlRoot.controlON
+                     && beaconIDSelected !== "" //&& DroneController.watchdogOk
             opacity: 0.3
 
             anchors {
@@ -337,7 +350,7 @@ Screen_Raptor__BASE {
             width: height
             imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/ESTOP.svg"
 
-            anchors{
+            anchors {
                 left: popoutMenuLeft.right
                 leftMargin: 0.5 * width
 
@@ -345,15 +358,17 @@ Screen_Raptor__BASE {
             }
 
             onClicked: {
-                screen_RaptorControlRoot.controllerSource.isEStopArmed = !screen_RaptorControlRoot.isEStopArmed
+                screen_RaptorControlRoot.controllerSource.isEStopArmed
+                        = !screen_RaptorControlRoot.isEStopArmed
             }
         }
 
-        Comp_Drone_Gimble{
+        Comp_Drone_Gimble {
             id: stick2
 
             isThrottle: false
-            visible: screen_RaptorControlRoot.controlON && beaconIDSelected !== ""
+            visible: screen_RaptorControlRoot.controlON
+                     && beaconIDSelected !== ""
             opacity: 0.3
 
             anchors {
@@ -375,7 +390,9 @@ Screen_Raptor__BASE {
         CompRaptorControlDeviceData {
             id: compRaptorControlDeviceData
 
-            visible: screen_RaptorControlRoot.beaconIDSelected !== "" && screen_RaptorControlRoot.dataON
+            controller: raptorDroneController
+            visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+                     && screen_RaptorControlRoot.dataON
             height: openRightGridViewControl.height
 
             batteryPercent: screen_RaptorControlRoot.batteryPercent
@@ -386,11 +403,9 @@ Screen_Raptor__BASE {
                 rightMargin: (drawerRaptorDroneControlQuickActions.position > 0.7) ? 220 : 155
                 verticalCenter: parent.verticalCenter
             }
-
-
         }
 
-        CompImageIcon{
+        CompImageIcon {
             id: openLeftDeviceInfoControl
 
             source: "file:///usr/share/BeaconOS-lib-images/images/LeftOpen.svg"
@@ -399,7 +414,7 @@ Screen_Raptor__BASE {
             opacity: 0.6
             visible: drawerLeftClosed
 
-            anchors{
+            anchors {
                 left: deviceScreen.left
                 verticalCenter: parent.verticalCenter
             }
@@ -411,8 +426,7 @@ Screen_Raptor__BASE {
                     if (drawerRaptorDeviceInfoControl.visible === true) {
                         drawerRaptorDeviceInfoControl.visible = false
                         drawerRaptorDeviceInfoControl.visible = true
-                    }
-                    else {
+                    } else {
                         drawerRaptorDeviceInfoControl.visible = true
                     }
                 }
@@ -425,7 +439,7 @@ Screen_Raptor__BASE {
             edge: Qt.LeftEdge
             y: 140
 
-            onSignalBeaconIDChanged: (bid)=>{
+            onSignalBeaconIDChanged: bid => {
 
                                          screen_RaptorControlRoot.beaconIDSelected = bid
                                          signalBeaconIDSelected(bid)
@@ -439,27 +453,104 @@ Screen_Raptor__BASE {
             edge: Qt.RightEdge
             y: 250
             interactive: (beaconIDSelected === "") ? false : true
-            visible: (beaconIDSelected !== "" && !miniMapToggle && showButtonPanel) ? true : false
+            visible: (beaconIDSelected !== "" && !miniMapToggle
+                      && showButtonPanel) ? true : false
 
             onVisibleChanged: {
                 if (!drawerRaptorDroneControlQuickActions.visible) {
                     setShowButtonPanel(false)
-                }
-                else {
+                } else {
                     setShowButtonPanel(true)
                 }
             }
 
             model: ListModel {
-                ListElement { isActive: function(){ return true}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/Refresh.svg"; action: function(){DroneController.sendCommand_FlightController_Restart(); drawerRaptorDroneControlQuickActions.close()}}
-                ListElement { isActive: function(){ return popupRaptorControlMessages.isOpen }; iconPath: "file:///usr/share/BeaconOS-lib-images/images/MessageCMD.svg"; action: function(){ popupRaptorControlMessages.toggleOpen(); drawerRaptorDroneControlQuickActions.close() }}
-                ListElement { isActive: function(){ return true}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/ManualCMD.svg"; action: function(){ popupRaptorControlManualCommand.open(); drawerRaptorDroneControlQuickActions.close() }}
-                ListElement { isActive: function(){ return true}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/ViewParam.svg"; action: function(){ popupRaptorControlParameterView.open(); drawerRaptorDroneControlQuickActions.close() }}
-                ListElement { isActive: function(){ return screen_RaptorControlRoot.hudON}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/HUD.svg"; action: function(){ screen_RaptorControlRoot.hudON = !screen_RaptorControlRoot.hudON }}
-                ListElement { isActive: function(){ return screen_RaptorControlRoot.mapON}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/MAP.svg"; action: function(){ screen_RaptorControlRoot.mapON = !screen_RaptorControlRoot.mapON }}
-                ListElement { isActive: function(){ return screen_RaptorControlRoot.dataON}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/DATA.svg"; action: function(){ screen_RaptorControlRoot.dataON = !screen_RaptorControlRoot.dataON }}
-                ListElement { isActive: function(){ return screen_RaptorControlRoot.controlON}; iconPath: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"; action: function(){ screen_RaptorControlRoot.controlON = !screen_RaptorControlRoot.controlON }}
-                ListElement { isActive: function(){ return screen_RaptorControlRoot.lblFlightModeOn} ; iconPath: "file:///usr/share/BeaconOS-lib-images/images/Analytics.svg"; action: function(){ screen_RaptorControlRoot.lblFlightModeOn = !screen_RaptorControlRoot.lblFlightModeOn }}
+                ListElement {
+                    isActive: function () {
+                        return true
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/Refresh.svg"
+                    action: function () {
+                        raptorDroneController.sendCommand_FlightController_Restart()
+                        drawerRaptorDroneControlQuickActions.close()
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return popupRaptorControlMessages.isOpen
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/MessageCMD.svg"
+                    action: function () {
+                        popupRaptorControlMessages.toggleOpen()
+                        drawerRaptorDroneControlQuickActions.close()
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return true
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/ManualCMD.svg"
+                    action: function () {
+                        popupRaptorControlManualCommand.open()
+                        drawerRaptorDroneControlQuickActions.close()
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return true
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/ViewParam.svg"
+                    action: function () {
+                        popupRaptorControlParameterView.open()
+                        drawerRaptorDroneControlQuickActions.close()
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return screen_RaptorControlRoot.hudON
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/HUD.svg"
+                    action: function () {
+                        screen_RaptorControlRoot.hudON = !screen_RaptorControlRoot.hudON
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return screen_RaptorControlRoot.mapON
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/MAP.svg"
+                    action: function () {
+                        screen_RaptorControlRoot.mapON = !screen_RaptorControlRoot.mapON
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return screen_RaptorControlRoot.dataON
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/DATA.svg"
+                    action: function () {
+                        screen_RaptorControlRoot.dataON = !screen_RaptorControlRoot.dataON
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return screen_RaptorControlRoot.controlON
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/ControlEnabled.svg"
+                    action: function () {
+                        screen_RaptorControlRoot.controlON = !screen_RaptorControlRoot.controlON
+                    }
+                }
+                ListElement {
+                    isActive: function () {
+                        return screen_RaptorControlRoot.lblFlightModeOn
+                    }
+                    iconPath: "file:///usr/share/BeaconOS-lib-images/images/Analytics.svg"
+                    action: function () {
+                        screen_RaptorControlRoot.lblFlightModeOn
+                                = !screen_RaptorControlRoot.lblFlightModeOn
+                    }
+                }
             }
         }
 
@@ -474,53 +565,69 @@ Screen_Raptor__BASE {
                 bottom: stick1.bottom
             }
 
-            model: ListModel{
-                ListElement{
+            model: ListModel {
+                ListElement {
                     type: "default"
-                    is_enabled: function(){ return !screen_RaptorControlRoot.isArmed}
+                    is_enabled: function () {
+                        return !screen_RaptorControlRoot.isArmed
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Armed.svg"
                     tooltip_text: "Set the drone to the ARMed state, engaging the motors."
-                    action: function(){
-                        DroneController.sendCommand_Arm()
+                    action: function () {
+                        raptorDroneController.sendCommand_Arm()
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "default"
-                    is_enabled: function(){ return screen_RaptorControlRoot.isArmed}
+                    is_enabled: function () {
+                        return screen_RaptorControlRoot.isArmed
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/DisArmed.svg"
                     tooltip_text: "Set the drone to the DISARMed state, disengaging the motors."
-                    action: function(){
-                        DroneController.sendCommand_Disarm()
+                    action: function () {
+                        raptorDroneController.sendCommand_Disarm()
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "default"
-                    is_enabled: function(){ return screen_RaptorControlRoot.isArmed }
-                    is_active: function(){ return DroneController.flightMode === "TAKEOFF" }
+                    is_enabled: function () {
+                        return screen_RaptorControlRoot.isArmed
+                    }
+                    is_active: function () {
+                        return raptorDroneController.flightMode === "TAKEOFF"
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/AutoTakeoff.svg"
                     tooltip_text: "Have the drone take-off from the current location and to the specified altitude."
-                    action: function(){
-                        DroneController.sendCommand("takeoff", "flightcontroller")
-
+                    action: function () {
+                        raptorDroneController.sendCommand("takeoff",
+                                                          "flightcontroller")
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "default"
-                    is_enabled: function(){ return screen_RaptorControlRoot.isArmed}
+                    is_enabled: function () {
+                        return screen_RaptorControlRoot.isArmed
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/R2H.svg"
                     tooltip_text: "Have the drone return to the specified altitude above the established HOME."
-                    action: function(){
-                        DroneController.sendCommand("set_mode_rtl", "flightcontroller")
+                    action: function () {
+                        raptorDroneController.sendCommand("set_mode_rtl",
+                                                          "flightcontroller")
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "default"
-                    is_enabled: function(){ return screen_RaptorControlRoot.isArmed}
-                    is_active: function(){ return Dronecontroller.flightMode === "LAND" }
+                    is_enabled: function () {
+                        return screen_RaptorControlRoot.isArmed
+                    }
+                    is_active: function () {
+                        return raptorDroneController.flightMode === "LAND"
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/AutoLand.svg"
                     tooltip_text: "Have the drone automatically control descent while allowing the operator to maintain LEFT, RIGHT, FRONT, and BACK movement."
-                    action: function(){
-                        DroneController.sendCommand("set_mode_land", "flightcontroller")
+                    action: function () {
+                        raptorDroneController.sendCommand("set_mode_land",
+                                                          "flightcontroller")
                     }
                 }
             }
@@ -531,58 +638,76 @@ Screen_Raptor__BASE {
 
             orientation: 4
 
-            anchors{
+            anchors {
                 right: stick2.left
                 rightMargin: 0.5 * width
                 bottom: stick2.bottom
             }
 
-            model: ListModel{
-                ListElement{
+            model: ListModel {
+                ListElement {
                     type: "drone_state"
-                    is_enabled: function(){ return true}
-                    is_active: function(){ return DroneController.flightMode === "STABILIZE" }
+                    is_enabled: function () {
+                        return true
+                    }
+                    is_active: function () {
+                        return raptorDroneController.flightMode === "STABILIZE"
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Stabilize.svg"
                     drone_state: "Stabilize"
 
-                    action: function(){
-                        DroneController.sendCommand("set_mode_stabilize", "flightcontroller")
+                    action: function () {
+                        raptorDroneController.sendCommand("set_mode_stabilize",
+                                                          "flightcontroller")
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "drone_state"
-                    is_enabled: function(){ return true}
-                    is_active: function(){ return DroneController.flightMode === "LOITER" }
+                    is_enabled: function () {
+                        return true
+                    }
+                    is_active: function () {
+                        return raptorDroneController.flightMode === "LOITER"
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Loiter.svg"
                     drone_state: "Loiter"
-                    action: function(){
-                        DroneController.sendCommand("set_mode_loiter", "flightcontroller")
+                    action: function () {
+                        raptorDroneController.sendCommand("set_mode_loiter",
+                                                          "flightcontroller")
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "drone_state"
-                    is_enabled: function(){ return true}
-                    is_active: function(){ return DroneController.flightMode === "GUIDED" }
+                    is_enabled: function () {
+                        return true
+                    }
+                    is_active: function () {
+                        return raptorDroneController.flightMode === "GUIDED"
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Guided.svg"
                     drone_state: "Guided"
-                    action: function(){
-                        DroneController.sendCommand("set_mode_guided", "flightcontroller")
-
+                    action: function () {
+                        raptorDroneController.sendCommand("set_mode_guided",
+                                                          "flightcontroller")
                     }
                 }
-                ListElement{
+                ListElement {
                     type: "pursuit_state"
-                    is_enabled: function(){ return true}
-                    is_active: function(){ return DroneController.bPursuitEnabled }
+                    is_enabled: function () {
+                        return true
+                    }
+                    is_active: function () {
+                        return raptorDroneController.bPursuitEnabled
+                    }
                     imgIconSrc: "file:///usr/share/BeaconOS-lib-images/images/Pursuit.svg"
                     pursuit_state: "Detect"
-                    action: function(){
-                        DroneController.snedCommand_PursuitModeActiveSet( !DroneController.bPursuitEnabled)
+                    action: function () {
+                        raptorDroneController.snedCommand_PursuitModeActiveSet(
+                                    !raptorDroneController.bPursuitEnabled)
                     }
                 }
             }
         }
-
     }
 
     Item {
@@ -591,7 +716,7 @@ Screen_Raptor__BASE {
         height: 216
         width: 360
 
-        anchors{
+        anchors {
             bottom: parent.bottom
             bottomMargin: stick1.anchors.bottomMargin
             horizontalCenter: parent.horizontalCenter
@@ -601,8 +726,11 @@ Screen_Raptor__BASE {
     Image {
         id: imageCameraFeed
 
-        visible: screen_RaptorControlRoot.beaconIDSelected !== ""
-        source: "image://drone-camera/" + DroneController.imageProviderFrameId
+        //visible: screen_RaptorControlRoot.beaconIDSelected !== ""
+        source: raptorDroneController.sImageProviderURL_Primary
+        onSourceChanged: {
+            console.log("My source is now: " + source)
+        }
         height: miniMapToggle ? areaMiniViewer.height : 1080
         width: miniMapToggle ? areaMiniViewer.width : 1920
         x: miniMapToggle ? areaMiniViewer.x : 0
@@ -610,25 +738,25 @@ Screen_Raptor__BASE {
         z: miniMapToggle ? 1 : 0
 
         Behavior on width {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
 
         Behavior on x {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
 
         Behavior on y {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
 
         Behavior on height {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
@@ -647,7 +775,7 @@ Screen_Raptor__BASE {
         }
     }
 
-    CompMapViewer{
+    CompMapViewer {
         id: miniMap
 
         visible: mapON && drawerLeftClosed && beaconIDSelected !== ""
@@ -666,29 +794,27 @@ Screen_Raptor__BASE {
         }
 
         Behavior on width {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
 
         Behavior on x {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
 
         Behavior on y {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
 
         Behavior on height {
-            NumberAnimation{
+            NumberAnimation {
                 duration: 250
             }
         }
-
-
     }
 }

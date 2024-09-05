@@ -1,56 +1,62 @@
 import QtQuick 2.15
 
-Comp__BASE_Popup{
+import Murano.Beacon.Raptor.DeviceControllers 1.0
+
+Comp__BASE_Popup {
     id: popupRaptorControlParameterView
+
+    property RaptorDroneController controller
+
     popupName: "Raptor.Control: Parameter View"
     height: 700
     width: 600
     compBaseRadius: 20
 
-    CompPopupBG{
+    CompPopupBG {
         id: bg
 
-        Column{
+        Column {
             id: col
-            anchors{
-                fill:parent
+            anchors {
+                fill: parent
                 margins: bg.radiusBG
             }
 
             spacing: 20
 
-            CompLabel{
+            CompLabel {
                 id: lblTitle
 
                 text: "Drone Parameters"
             }
 
-            CompCustomisableTextField{
+            CompCustomisableTextField {
                 id: edtSearch
                 isPopupComponent: true
                 width: parent.width
                 height: 41
                 onTextChanged: {
-                    TableModelRaptorDroneParameters_All.setSearchString(text)
+                    controller.pDataModel_Params_All.setSearchString(text)
                 }
             }
 
-
-            ListView{
+            ListView {
                 id: listViewParameters
 
                 property CompLabel indexSelected: lblNull
-                CompLabel{
+                CompLabel {
                     id: lblNull
                     visible: false
                 }
-                height: (bg.height - (col.anchors.margins * 2)) - (lblTitle.height + parent.spacing + edtSearch.height + parent.spacing + rowControls.height + parent.spacing)
+                height: (bg.height - (col.anchors.margins * 2))
+                        - (lblTitle.height + parent.spacing + edtSearch.height
+                           + parent.spacing + rowControls.height + parent.spacing)
                 width: parent.width
 
-                model: TableModelRaptorDroneParameters_All
+                model: controller.pDataModel_Params_All
                 spacing: 64
 
-                delegate: CompLabel{
+                delegate: CompLabel {
                     property bool isSelected: this === listViewParameters.indexSelected
                     property string paramId: model.param_id
                     property string paramValue: model.param_value
@@ -58,17 +64,17 @@ Comp__BASE_Popup{
 
                     width: listViewParameters.width
 
-                    text: "[" + model.param_index + "] - " + paramId + ": (" + paramType + ") " + paramValue
+                    text: "[" + model.param_index + "] - " + paramId + ": ("
+                          + paramType + ") " + paramValue
 
-                    Rectangle{
+                    Rectangle {
                         visible: parent.isSelected
                         z: -1
                         anchors.fill: parent
                         color: "#80FFFF00"
-
                     }
 
-                    MouseArea{
+                    MouseArea {
                         anchors.fill: parent
 
                         onClicked: {
@@ -84,42 +90,46 @@ Comp__BASE_Popup{
                 height: 80
                 width: parent.width
 
-                CompBtnBreadcrumb{
+                CompBtnBreadcrumb {
                     height: edtSetValue.height * 0.9
 
                     anchors.verticalCenter: parent.verticalCenter
 
                     text: "Update"
 
-                    onClicked: DroneController.sendCommand("list_all_params",{})
+                    onClicked: controller.sendCommand("list_all_params", {})
                 }
 
-                CompTextField{
+                CompTextField {
                     id: edtSetValue
                     isPopupComponent: true
                     enabled: listViewParameters.indexSelected !== lblNull
                     height: parent.height
                     lblText: ""
                     lblWidth: 0
-                    textEditWidth:  300
+                    textEditWidth: 300
                     width: 300
-                    placeholderText: listViewParameters.indexSelected === lblNull ? "Select Parameter Above" : listViewParameters.indexSelected.paramValue
-                    text: listViewParameters.indexSelected === lblNull ? "" : listViewParameters.indexSelected.paramValue
+                    placeholderText: listViewParameters.indexSelected
+                                     === lblNull ? "Select Parameter Above" : listViewParameters.indexSelected.paramValue
+                    text: listViewParameters.indexSelected
+                          === lblNull ? "" : listViewParameters.indexSelected.paramValue
                 }
 
-                CompBtnBreadcrumb{
+                CompBtnBreadcrumb {
                     id: btnSet
 
                     anchors.verticalCenter: parent.verticalCenter
 
-
-                    enabled: (listViewParameters.indexSelected !== lblNull && edtSetValue.text.length > 0)
+                    enabled: (listViewParameters.indexSelected !== lblNull
+                              && edtSetValue.text.length > 0)
                     height: edtSetValue.height * 0.9
 
                     text: "Apply"
 
                     onClicked: {
-                        DroneController.sendCommand_SetParam(listViewParameters.indexSelected.paramId, edtSetValue.text)
+                        controller.sendCommand_SetParam(
+                                    listViewParameters.indexSelected.paramId,
+                                    edtSetValue.text)
                     }
                 }
 

@@ -1,10 +1,13 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
+
 import CONSTANTS 1.0
+import Murano.Beacon.Raptor.DeviceControllers 1.0
 
 Rectangle {
     id: compRaptorControlDeviceData
 
+    required property RaptorDroneController controller
     required property int batteryPercent
     required property string dispText
     property int itemHeight: 60
@@ -13,29 +16,27 @@ Rectangle {
     color: "transparent"
     radius: 20
 
-
-    Component{
+    Component {
         id: delegateRaptorControlDevicesItem
 
-        Item{
+        Item {
             height: compRaptorControlDeviceData.itemHeight
             width: column.width
 
-            CompLabel{
+            CompLabel {
                 id: lblText
                 text: model.text + ":"
                 fontPixelSize: 16
-                anchors{
+                anchors {
                     left: parent.left
                     top: parent.top
                     bottom: parent.bottom
                 }
-
             }
 
-            CompLabel{
+            CompLabel {
                 text: model.value()
-                anchors{
+                anchors {
                     left: lblText.right
                     leftMargin: 20
                     top: parent.top
@@ -48,7 +49,7 @@ Rectangle {
         }
     }
 
-    Rectangle{
+    Rectangle {
         anchors.fill: parent
         opacity: 0.6
         radius: 10
@@ -77,14 +78,14 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
 
-            anchors{
+            anchors {
                 left: parent.left
                 right: parent.right
             }
 
-            CompIconBtn{
+            CompIconBtn {
                 iconUrl: column.isDeviceExpanded ? "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DownFill.svg"
-                anchors{
+                anchors {
                     right: parent.right
                     top: parent.top
                     bottom: parent.bottom
@@ -92,7 +93,6 @@ Rectangle {
 
                 onClicked: column.isDeviceExpanded = !column.isDeviceExpanded
             }
-
         }
 
         ListView {
@@ -101,99 +101,123 @@ Rectangle {
             width: parent.width
             clip: true
 
-            Rectangle{
+            Rectangle {
                 anchors.fill: parent
                 color: "#80000000"
                 z: -1
             }
 
-            Behavior on height{
-                NumberAnimation{
+            Behavior on height {
+                NumberAnimation {
                     duration: 250
                 }
             }
 
-            model: ListModel{
+            model: ListModel {
 
-                ListElement{
+                ListElement {
                     text: "Pursuit State"
-                    value: function(){ return DroneController.sPursuitState }
+                    value: function () {
+                        return controller.sPursuitState
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Sys. State"
-                    value: function(){ return DroneController.sSystemState }
+                    value: function () {
+                        return controller.sSystemState
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Flight Mode"
-                    value: function(){ return DroneController.flightMode }
+                    value: function () {
+                        return controller.flightMode
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Land State"
-                    value: function(){ return DroneController.sLandedState }
+                    value: function () {
+                        return controller.sLandedState
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "GPS Fix Type"
-                    value: function(){ return DroneController.sGpsFixType }
+                    value: function () {
+                        return controller.sGpsFixType
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "GPS Sats. Count"
-                    value: function(){ return DroneController.gpsSatellitesAvailable }
+                    value: function () {
+                        return controller.gpsSatellitesAvailable
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Battery"
-                    value: function(){return compRaptorControlDeviceData.batteryPercent}
+                    value: function () {
+                        return compRaptorControlDeviceData.batteryPercent
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Flight Remaining"
-                    value: function(){ return DroneController.flightRemaining}
+                    value: function () {
+                        return controller.flightRemaining
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Latitude"
-                    value: function(){ return DroneController.latitude}
+                    value: function () {
+                        return controller.latitude
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Longitude"
-                    value: function(){ return DroneController.longitude}
+                    value: function () {
+                        return controller.longitude
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Heading"
-                    value: function(){ return DroneController.altitude}
+                    value: function () {
+                        return controller.altitude
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Speed"
-                    value: function(){ return DroneController.deviceSpeed}
+                    value: function () {
+                        return controller.deviceSpeed
+                    }
                 }
             }
 
             delegate: delegateRaptorControlDevicesItem
         }
 
-        CompLabel{
+        CompLabel {
             id: lblTarData
 
             text: "Target Data"
             fontPixelSize: lblDevData.fontPixelSize
             verticalAlignment: lblDevData.verticalAlignment
             horizontalAlignment: lblDevData.horizontalAlignment
-            anchors{
+            anchors {
                 left: parent.left
                 right: parent.right
             }
 
-            CompIconBtn{
+            CompIconBtn {
                 iconUrl: column.isTargetExpanded ? "file:///usr/share/BeaconOS-lib-images/images/RightFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DownFill.svg"
-                anchors{
+                anchors {
                     right: parent.right
                     top: parent.top
                     bottom: parent.bottom
@@ -209,42 +233,51 @@ Rectangle {
             height: column.isTargetExpanded ? (column.isDeviceExpanded ? column.nonLabelHeight * 0.5 : column.nonLabelHeight) : 0
             width: parent.width
             clip: true
-            model: ListModel{
-                ListElement{
+            model: ListModel {
+                ListElement {
                     text: "Sample Data 1"
-                    value: function(){ return "Sample Value 1"}
+                    value: function () {
+                        return "Sample Value 1"
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Sample Data 2"
-                    value: function(){ return "Sample Value 2"}
+                    value: function () {
+                        return "Sample Value 2"
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Sample Data 3"
-                    value: function(){ return "Sample Value 3"}
+                    value: function () {
+                        return "Sample Value 3"
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Sample Data 4"
-                    value: function(){ return "Sample Value 4"}
+                    value: function () {
+                        return "Sample Value 4"
+                    }
                 }
 
-                ListElement{
+                ListElement {
                     text: "Sample Data 5"
-                    value: function(){ return "Sample Value 5"}
+                    value: function () {
+                        return "Sample Value 5"
+                    }
                 }
             }
             delegate: delegateRaptorControlDevicesItem
 
-            Behavior on height{
-                NumberAnimation{
+            Behavior on height {
+                NumberAnimation {
                     duration: 250
                 }
             }
 
-
-            Rectangle{
+            Rectangle {
                 anchors.fill: parent
                 color: "#80000000"
                 z: -1

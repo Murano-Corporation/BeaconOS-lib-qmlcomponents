@@ -1,27 +1,32 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import Murano.Beacon.Raptor.DeviceControllers 1.0
 
-Comp__BASE_Popup{
+Comp__BASE_Popup {
     id: popupRaptorControlManualCommand
 
     compBaseRadius: 20
 
+    property RaptorDroneController controller
     property int editHeight: 40
-    property var commandStructSelected: comboCommandId.displayText === "" ? undefined : DroneController.getCommandDefinition(comboCommandId.displayText)
-    property string commandDescription: commandStructSelected === undefined ? "" : commandStructSelected.description
+    property var commandStructSelected: comboCommandId.displayText
+                                        === "" ? undefined : controller.getCommandDefinition(
+                                                     comboCommandId.displayText)
+    property string commandDescription: commandStructSelected
+                                        === undefined ? "" : commandStructSelected.description
     property int commandID: commandStructSelected === undefined ? "" : commandStructSelected.cmdId
     property var commandPropertyList: commandStructSelected === undefined ? undefined : commandStructSelected.listParamInfo
-    property var listUserValues: [0,0,0,0,0,0,0]
+    property var listUserValues: [0, 0, 0, 0, 0, 0, 0]
     property bool awaitingAck: false
 
     popupName: "Raptor.Control: Manual Command"
     height: 800
     width: 700
 
-    Connections{
-        target: DroneController
+    Connections {
+        target: controller
 
-        function onSignal_CmdAckReceived(cmd_id, i_result){
+        function onSignal_CmdAckReceived(cmd_id, i_result) {
             awaitingAck = false
 
             tooltipAck.cmd = cmd_id
@@ -30,7 +35,7 @@ Comp__BASE_Popup{
         }
     }
 
-    function onSubmit(){
+    function onSubmit() {
         var cmd = popupRaptorControlManualCommand.commandID
         var conf = edtConfirmation.value
         var p0 = popupRaptorControlManualCommand.listUserValues[0]
@@ -42,18 +47,19 @@ Comp__BASE_Popup{
         var p6 = popupRaptorControlManualCommand.listUserValues[6]
         var p7 = popupRaptorControlManualCommand.listUserValues[7]
 
-        DroneController.sendCommand_Execute(cmd, conf, p0, p1, p2, p3, p4, p5, p6, p7);
+        controller.sendCommand_Execute(cmd, conf, p0, p1, p2, p3, p4,
+                                       p5, p6, p7)
     }
 
-    function onReset(){
+    function onReset() {
 
         edtCmdId.value = "0"
         edtConfirmation.value = "0"
 
-        popupRaptorControlManualCommand.listUserValues = [0,0,0,0,0,0,0]
+        popupRaptorControlManualCommand.listUserValues = [0, 0, 0, 0, 0, 0, 0]
     }
 
-    ToolTip{
+    ToolTip {
         id: tooltipAck
 
         property string cmd: ""
@@ -64,14 +70,13 @@ Comp__BASE_Popup{
         timeout: 5000
     }
 
-    CompPopupBG{
+    CompPopupBG {
         id: bg
-        FocusScope{
+        FocusScope {
             anchors.fill: parent
 
             onFocusChanged: {
                 InputHandler.slot_OnPopupFocusChanged(popupName, focus)
-
             }
 
             Column {
@@ -86,14 +91,14 @@ Comp__BASE_Popup{
                     text: "Manual Command"
                 }
 
-                CompCombobox{
+                CompCombobox {
                     id: comboCommandId
                     width: parent.width
 
-                    model: DroneController.listCommandNames
-                    //textRole: undefined
+                    model: controller.listCommandNames
 
-                    delegate: ItemDelegate{
+                    //textRole: undefined
+                    delegate: ItemDelegate {
                         width: comboCommandId.width
                         height: comboCommandId.optionItemHeight
 
@@ -104,13 +109,13 @@ Comp__BASE_Popup{
                             anchors.bottom: parent.bottom
                         }
 
-                        contentItem: CompLabel{
+                        contentItem: CompLabel {
                             text: modelData
                             verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
                             color: comboCommandId.currentTextColor
                             //font.pixelSize: 40
-                            MouseArea{
+                            MouseArea {
                                 anchors.fill: parent
 
                                 onClicked: {
@@ -123,14 +128,13 @@ Comp__BASE_Popup{
 
                         highlighted: comboCommandId.highlightedIndex === index
                     }
-
                 }
 
-                ScrollView{
+                ScrollView {
                     height: 100
                     width: parent.width
                     clip: true
-                    CompLabel{
+                    CompLabel {
                         id: lblDescription
 
                         width: comboCommandId.width
@@ -150,22 +154,23 @@ Comp__BASE_Popup{
                     width: parent.width
                     height: popupRaptorControlManualCommand.editHeight
                     label.font.pixelSize: 20
-
                 }
 
-                Column{
+                Column {
                     width: parent.width
 
-                    Repeater{
+                    Repeater {
                         model: commandPropertyList
 
                         delegate: CompLabelledTextEdit {
                             id: edtParam0
-                            property var propertyInfo: popupRaptorControlManualCommand.commandStructSelected.getParamInfo(index)
+                            property var propertyInfo: popupRaptorControlManualCommand.commandStructSelected.getParamInfo(
+                                                           index)
                             label.font.pixelSize: edtConfirmation.label.font.pixelSize
-                            enabled: propertyInfo.label !== "Empty" && propertyInfo.label !== "Reserved"
+                            enabled: propertyInfo.label !== "Empty"
+                                     && propertyInfo.label !== "Reserved"
 
-                            text:  propertyInfo.label + ":"
+                            text: propertyInfo.label + ":"
                             textEdit.inputMethodHints: Qt.ImhDigitsOnly
                             value: '0'
                             isReadonly: false
@@ -190,24 +195,21 @@ Comp__BASE_Popup{
 
                                 tooltip.show(sRet, 3000)
                             }
-                            ToolTip{
+                            ToolTip {
                                 id: tooltip
-
                             }
-
                         }
                     }
-
                 }
 
-                CompBtnBreadcrumb{
+                CompBtnBreadcrumb {
                     text: "RESET"
                     width: parent.width
                     height: 90
                     onClicked: popupRaptorControlManualCommand.onReset()
                 }
 
-                CompBtnBreadcrumb{
+                CompBtnBreadcrumb {
                     text: "EXECUTE"
 
                     enabled: !popupRaptorControlManualCommand.awaitingAck
@@ -217,7 +219,6 @@ Comp__BASE_Popup{
                     onClicked: popupRaptorControlManualCommand.onSubmit()
                 }
             }
-
         }
     }
 }

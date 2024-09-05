@@ -1,45 +1,48 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
+import Murano.Beacon.Raptor.DeviceControllers 1.0
 
-
-CompResizableMoveableContainer{
+CompResizableMoveableContainer {
     id: contentsRoot
 
-    property point startPoint: Qt.point(0,0)
-    property size startSize: {width: 400; height: 600}
+    required property RaptorDroneController controller
+    property point startPoint: Qt.point(0, 0)
+    property size startSize: {
+        width: 400
+        height: 600
+    }
     readonly property bool isOpen: visible
 
-    visible:  false
+    visible: false
     showDevLabels: true
     minimumHeight: 90
     minimumWidth: 400
 
-    function toggleOpen(){
-        if(isOpen)
+    function toggleOpen() {
+        if (isOpen)
             close()
         else
             open()
     }
 
-    function open(){
+    function open() {
         contentsRoot.visible = true
     }
 
-    function close(){
+    function close() {
         contentsRoot.visible = false
     }
 
-    Component.onCompleted:{
+    Component.onCompleted: {
 
-
-        if(startSize.width <= minimumWidth)
+        if (startSize.width <= minimumWidth)
             startSize.width = minimumWidth
 
-        if(startSize.height <= minimumHeight)
+        if (startSize.height <= minimumHeight)
             startSize.height = minimumHeight
 
         console.log("Setting start size to: " + startSize)
-        console.log("Setting start origin to: " + startPoint);
+        console.log("Setting start origin to: " + startPoint)
 
         contentsRoot.x = startPoint.x
         contentsRoot.y = startPoint.y
@@ -51,10 +54,10 @@ CompResizableMoveableContainer{
         id: bg
         anchors.fill: parent
 
-        CompLabel{
+        CompLabel {
             id: lblPrearmChecks
 
-            anchors{
+            anchors {
                 top: parent.top
                 left: parent.left
                 right: parent.right
@@ -67,7 +70,6 @@ CompResizableMoveableContainer{
         ListView {
             id: listPrearmChecks
 
-
             property int lblWidth_Severity: 64
             property int lblWidth_Text: width - lblWidth_Severity - lblSpacing
             property int lblSpacing: 40
@@ -78,13 +80,13 @@ CompResizableMoveableContainer{
 
             boundsBehavior: Flickable.StopAtBounds
             clip: true
-            model: TableModelDroneMessages
+            model: controller.pDataModel_Messages
 
             onCountChanged: {
                 listPrearmChecks.currentIndex = (listPrearmChecks.count - 1)
             }
 
-            anchors{
+            anchors {
                 top: lblPrearmChecks.bottom
                 left: lblPrearmChecks.left
                 right: lblPrearmChecks.right
@@ -108,7 +110,7 @@ CompResizableMoveableContainer{
                     width: listPrearmChecks.lblWidth_Severity
                     text: parent.severity
                     verticalAlignment: Text.AlignTop
-                    anchors{
+                    anchors {
                         top: parent.top
                         left: parent.left
                         bottom: parent.bottom
@@ -122,20 +124,14 @@ CompResizableMoveableContainer{
                     text: parent.text
                     verticalAlignment: Text.AlignTop
                     wrapMode: Text.WordWrap
-                    anchors{
+                    anchors {
                         top: parent.top
                         left: lblSeverity.right
                         leftMargin: listPrearmChecks.lblSpacing
                         bottom: parent.bottom
                     }
                 }
-
-
             }
         }
     }
-
 }
-
-
-
