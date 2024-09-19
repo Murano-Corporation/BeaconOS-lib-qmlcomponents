@@ -341,18 +341,20 @@ Comp__BASE {
                 lat: model.Latitude
                 lon: model.Longitude
                 assetType: model.asset_type
+                onAssetTypeChanged: {
+                    console.log("Asset Type is now: " + assetType)
+                }
                 assetID: model.beacon_id //(model.asset_type === "Antenna" || model.asset_type === "Drone") ? "" : model.Beacon_ID
                 assetTypelbl.font.pixelSize: isDelta ? 20 : 40
-                imgSource: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
-                iconDetails.color: (model.asset_type === "Antenna"
-                                    || model.asset_type === "Drone") ? "Transparent" : "#9287ED"
-                iconDetails.opacity: (model.asset_type === "Antenna"
-                                      || model.asset_type === "Drone") ? 1.0 : 0.9
+                imgSource: model.asset_type === 1 ? "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg" : "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
+                iconDetails.color: (model.asset_type === 1
+                                    || model.asset_type === 0) ? "Transparent" : "#9287ED"
+                iconDetails.opacity: (model.asset_type === 1
+                                      || model.asset_type === 0) ? 1.0 : 0.9
                 is_selected: model.is_selected
 
                 onCenterOnPoint: {
-                    if (!(model.asset_type === "Antenna"
-                          || model.asset_type === "Drone")) {
+                    if (!(model.asset_type === 1 || model.asset_type === 0)) {
                         if (compMapViewerRoot.selectedAssetDataModel === model) {
                             compMapViewerRoot.selectedAssetDataModel = undefined
                         } else {
