@@ -259,6 +259,12 @@ Screen__BASE {
                  && screenGalleryRoot.fileExt_Selected === "pdf"
         fileUrl: visible ? screenGalleryRoot.filePath_Selected : "undefined"
         anchors.fill: rectContents
+
+        //Rectangle {
+        //    anchors.fill: parent
+
+        //    color: '#80ff0000'
+        //}
     }
 
     Item {

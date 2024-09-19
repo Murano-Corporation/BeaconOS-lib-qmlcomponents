@@ -3,12 +3,12 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
 import QtQml 2.12
+import CONSTANTS 1.0
 
 Item {
     id: compDeviceInfo
 
-
-    property alias isDeviceAntenna : compDeviceInfo.isAntenna
+    property alias isDeviceAntenna: compDeviceInfo.isAntenna
     property bool isAntenna: true
     property string deviceID: ""
     property string selectedAction: ""
@@ -17,33 +17,31 @@ Item {
     property var listofDevices: []
     property var idx
 
-
     signal signal_onItemClicked
     signal signal_onItemLongPressed
-    signal centerOnCoords(var x, var y);
-    signal signalBeaconIDChanged(var Beacon_ID);
+    signal centerOnCoords(var x, var y)
+    signal signalBeaconIDChanged(var Beacon_ID)
+    signal signalSelectedItemChanged(var model)
 
-
-    function listItemClicked(model, index){
-        compDeviceInfo.deviceID = model.Beacon_ID;
+    function listItemClicked(model, index) {
+        compDeviceInfo.deviceID = model.beacon_id
         compDeviceInfo.isAntenna = model.asset_type === "Antenna" ? true : false
         listofDevices.currentIndex = index
         compDeviceInfo.xVal = model.Latitude
         compDeviceInfo.yVal = model.Longitude
 
-        compDeviceInfo.signalBeaconIDChanged(compDeviceInfo.deviceID);
+        compDeviceInfo.signalSelectedItemChanged(model)
+        compDeviceInfo.signalBeaconIDChanged(compDeviceInfo.deviceID)
     }
-
 
     ListView {
         id: listofDevices
-
 
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
         height: parent.height - 20
-        anchors{
+        anchors {
             top: parent.top
             left: parent.left
             right: parent.right
@@ -65,24 +63,24 @@ Item {
         model: compDeviceInfo.listofDevices
         delegate: CompBtnBreadcrumb {
 
-            text: model.location + " - " + model.Beacon_ID
+            text: model.location + " - " + model.beacon_id
             width: parent.width - 15
             lblBtnLbl.horizontalAlignment: Text.AlignLeft
             lblBtnLbl.leftPadding: 50
 
-
             onClicked: {
                 compDeviceInfo.listItemClicked(model, index)
-                compDeviceInfo.centerOnCoords(compDeviceInfo.xVal, compDeviceInfo.yVal)
+                compDeviceInfo.centerOnCoords(compDeviceInfo.xVal,
+                                              compDeviceInfo.yVal)
                 compDeviceInfo.signal_onItemClicked()
             }
 
             onPressAndHold: {
                 compDeviceInfo.listItemClicked(model, index)
-                compDeviceInfo.centerOnCoords(compDeviceInfo.xVal, compDeviceInfo.yVal)
+                compDeviceInfo.centerOnCoords(compDeviceInfo.xVal,
+                                              compDeviceInfo.yVal)
                 compDeviceInfo.signal_onItemLongPressed()
             }
-
 
             Rectangle {
                 visible: model.is_selected
@@ -94,13 +92,12 @@ Item {
                     width: 3
                     color: "#ffffff"
                 }
-
             }
 
             CompImageIcon {
                 id: imgDeviceIcon
 
-                source: model.asset_type === "Antenna" ? "file:///usr/share/BeaconOS-lib-images/images/AntennaFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DroneFill.svg"
+                source: model.asset_type === Constants.ERaptorDeviceType_Antenna ? "file:///usr/share/BeaconOS-lib-images/images/AntennaFill.svg" : "file:///usr/share/BeaconOS-lib-images/images/DroneFill.svg"
 
                 width: 40
                 anchors {
@@ -109,9 +106,8 @@ Item {
                     bottom: parent.bottom
                     leftMargin: 10
                     rightMargin: 20
-                }   
+                }
             }
         }
     }
 }
-

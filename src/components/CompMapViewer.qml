@@ -102,18 +102,6 @@ Comp__BASE {
         map.center = coords
     }
 
-    //    Component {
-    //        id: highlight
-    //        Rectangle {
-    //            width: listMapTypes.cellWidth; height: listMapTypes.cellHeight
-    //            border {
-    //                width: 4
-    //                color: "#9287ED"
-    //            }
-    //            color: "Transparent"
-    //            radius: 5
-    //        }
-    //    }
     ListView {
         id: listMapTypes
 
@@ -343,67 +331,6 @@ Comp__BASE {
             }
         }
 
-        // MapItemView{
-        //     model: 1
-
-        //     delegate: MapQuickItem{
-
-        //         coordinate: mouseArea_CoordGrabber.coordinate
-        //         anchorPoint: Qt.point(sourceItem.width * 0.5, sourceItem.height)
-
-        //         sourceItem: Item
-        //         {
-        //             width: lbl.width
-        //             height: iconPoint.y + iconPoint.height
-
-        //             CompLabel{
-        //                 id: lbl
-        //                 visible: false
-        //                 //text: "lat: %1; lon: %2".arg(mouseArea_CoordGrabber.coordinate.latitude).arg(mouseArea_CoordGrabber.coordinate.longitude)
-        //                 text: ""
-
-        //                 font{
-        //                     pixelSize: isDelta ? 24 : 40
-        //                 }
-
-        //                 anchors{
-        //                     top: parent.top
-        //                     horizontalCenter: parent.horizontalCenter
-        //                 }
-
-        //                 horizontalAlignment: Text.AlignHCenter
-
-        //             }
-
-        //             DropShadow{
-        //                 anchors.fill: lbl
-        //                 source: lbl
-
-        //                 horizontalOffset: 0
-        //                 verticalOffset: 0
-        //                 color: "#000000"
-        //                 radius: 4
-        //                 samples: 16
-        //                 spread: 1.0
-        //             }
-
-        //             // CompImageIcon{
-        //             //     id: iconPoint
-
-        //             //     anchors{
-        //             //         top: lbl.bottom
-        //             //         horizontalCenter: lbl.horizontalCenter
-        //             //     }
-
-        //             //     height: 32
-        //             //     width: height
-
-        //             //     source: "file:///usr/share/BeaconOS-lib-images/images/DownArrowFill.svg"
-        //             //     color: "#9287ED"
-        //             // }
-        //         }
-        //     }
-        // }
         MapItemView {
             id: mapView_Targets
             model: compMapViewerRoot.listAssets
@@ -487,7 +414,7 @@ Comp__BASE {
             //    console.log("My focus is now: "  + focus)
             //}
             assetName: modelData ? modelData.asset_name : ''
-            beaconID: modelData ? modelData.Beacon_ID : ''
+            beaconID: modelData ? modelData.beacon_id : ''
             assetState: modelData ? modelData.Asset_Status : ''
             beaconState: modelData ? modelData.status : ''
             assetType: modelData ? modelData.asset_type : ''

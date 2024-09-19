@@ -3,10 +3,7 @@ import QtQuick 2.12
 Comp__BASE {
     id: compHealthDashboardContentRoot
 
-
-
     property string searchFieldPlaceholderText: "Search all parameters"
-
     property int alertCount: 0
     property CompHealthDashboardViewNavBtn viewTabCurrent: btnViewParameters
     property string viewTabCurrentName: viewTabCurrent.tabName
@@ -17,17 +14,17 @@ Comp__BASE {
     property string mtcSortFilterString: "null"
     property string paramNameSelected: "null"
     property string floatingBreadcrumbBtntext: "null"
-    property string paramViewMode: "List"
+    property string paramViewMode: "Grid"
     property string paramViewMode_Last: paramViewMode
     property string assetType: AssetInfo.assetType
     property int galleryInstanceId: -1
     property string graphViewTarget: 'null'
     property CompHealthDashboardContentContextNav navObject: null
-
     property bool isBtnGridViewVisible: false
     property bool isBtnListViewVisible: false
     property bool isBtnGraphViewVisible: false
     property bool isDataVisible: false
+
 
     /** POSSIBLE CONTENT STATES
       * - context_nav : User is choosing contexts
@@ -41,24 +38,23 @@ Comp__BASE {
     property bool blockModelDataFilterSignal: false
     property bool contextNavCompletenessCheck: false
 
-    signal toggleViewModeClicked()
-    signal forceViewModeMaximized();
+    signal toggleViewModeClicked
+    signal forceViewModeMaximized
     signal forceViewType(string sViewType)
 
-    function setViewMode_List(){
+    function setViewMode_List() {
         paramViewMode = ('List')
     }
 
-    function setViewMode_Grid(){
+    function setViewMode_Grid() {
         paramViewMode = ('Grid')
     }
 
-    function setViewMode_Graph(){
+    function setViewMode_Graph() {
         paramViewMode = ('Graph')
     }
 
-    function setSystemTypeSelection(sSystemType)
-    {
+    function setSystemTypeSelection(sSystemType) {
         compHealthDashboardContentRoot.systemTypeSelected = sSystemType
     }
 
@@ -67,8 +63,7 @@ Comp__BASE {
     }
 
     onViewTabCurrentChanged: {
-        if(viewTabCurrent.tabName === btnViewParameters.tabName)
-        {
+        if (viewTabCurrent.tabName === btnViewParameters.tabName) {
             paramNameSelected = 'null'
             checkContextNavCompleteness()
         }
@@ -76,19 +71,15 @@ Comp__BASE {
 
     //onParamViewModeChanged: {
     //    console.log("ParamView Mode now: " + paramViewMode)
-    //
-    //
     //}
-
     onContextNavCompletenessCheckChanged: {
-        //console.log("ContextNavComplete?: " + contextNavCompletenessCheck)
 
-        if(contextNavCompletenessCheck )
-        {
-            if(systemTypeSelected === 'Camera Gallery')
+        //console.log("ContextNavComplete?: " + contextNavCompletenessCheck)
+        if (contextNavCompletenessCheck) {
+            if (systemTypeSelected === 'Camera Gallery')
                 contentState = 'gallery'
-            else if(assetType === 'CNC')
-                if(systemTypeSelected === 'Beacon Metrics')
+            else if (assetType === 'CNC')
+                if (systemTypeSelected === 'Beacon Metrics')
                     contentState = 'params'
                 else
                     contentState = 'params_mtconnect'
@@ -99,18 +90,15 @@ Comp__BASE {
         }
     }
 
-
     onFloatingBreadcrumbBtntextChanged: {
 
-        if(floatingBreadcrumbBtntext === 'null')
-        {
+        if (floatingBreadcrumbBtntext === 'null') {
             compHealthDashboardContentRoot.galleryInstanceId = -1
             compHealthDashboardContentRoot.graphViewTarget = 'null'
 
-            if(paramViewMode === "Graph"){
+            if (paramViewMode === "Graph") {
                 compHealthDashboardContentRoot.paramViewMode = paramViewMode_Last
             }
-
         }
     }
 
@@ -118,8 +106,7 @@ Comp__BASE {
 
         console.log("Content State: " + contentState)
 
-        if(contentState === 'gallery' || contentState === 'context_nav')
-        {
+        if (contentState === 'gallery' || contentState === 'context_nav') {
             setViewBtnsVisible(false)
         } else {
             setViewBtnsVisible(true)
@@ -129,14 +116,12 @@ Comp__BASE {
     onSearchFieldValueChanged: {
         checkContextNavCompleteness()
 
-        if(blockModelDataFilterSignal)
-        {
+        if (blockModelDataFilterSignal) {
 
-            return;
+            return
         }
 
         updateModelDataFilters()
-
     }
 
     onSystemTypeSelectedChanged: {
@@ -144,10 +129,9 @@ Comp__BASE {
         //console.log('System type changed to: ' + systemTypeSelected)
         btnViewParameters.clicked()
         checkContextNavCompleteness()
-        if(blockModelDataFilterSignal)
-        {
+        if (blockModelDataFilterSignal) {
             //console.log('...Blocked')
-            return;
+            return
         }
 
         blockModelDataFilterSignal = true
@@ -158,21 +142,17 @@ Comp__BASE {
 
         blockModelDataFilterSignal = false
         updateModelDataFilters()
-
-
-
     }
 
     onContext1SelectedChanged: {
 
         //console.log("Context 1 is now: " + context1Selected)
-
         btnViewParameters.clicked()
         checkContextNavCompleteness()
-        if(blockModelDataFilterSignal)
-        {
+        if (blockModelDataFilterSignal) {
             //console.log('...Blocked')
-            return;}
+            return
+        }
 
         blockModelDataFilterSignal = true
 
@@ -182,20 +162,16 @@ Comp__BASE {
 
         blockModelDataFilterSignal = false
         updateModelDataFilters()
-
-
     }
 
     onContext2SelectedChanged: {
 
         //console.log("Context 2 is now: " + context2Selected)
-
         btnViewParameters.clicked()
         checkContextNavCompleteness()
-        if(blockModelDataFilterSignal)
-        {
+        if (blockModelDataFilterSignal) {
             //console.log('...Blocked')
-            return;
+            return
         }
 
         blockModelDataFilterSignal = true
@@ -205,91 +181,85 @@ Comp__BASE {
         updateModelDataFilters()
 
         floatingBreadcrumbBtntext = "null"
-
-
     }
 
-    function setViewBtnsVisible(isVisible)
-    {
+    function setViewBtnsVisible(isVisible) {
         setListViewBtnVisible(isVisible)
         setGridViewBtnVisible(isVisible)
         setGraphViewBtnVisible(isVisible)
     }
 
-    function setListViewBtnVisible(isVisible)
-    {
+    function setListViewBtnVisible(isVisible) {
         isBtnListViewVisible = isVisible
     }
 
-    function setGridViewBtnVisible(isVisible)
-    {
+    function setGridViewBtnVisible(isVisible) {
         isBtnGridViewVisible = isVisible
     }
 
-    function setGraphViewBtnVisible(isVisible)
-    {
+    function setGraphViewBtnVisible(isVisible) {
         isBtnGraphViewVisible = isVisible
     }
 
-    function updateModelDataFilters(){
+    function updateModelDataFilters() {
 
         //void slot_SetFilters(QString sSearch, QString sMetricsType, QString sContext1, QString sContext2, QString sContext3, QString sContext4);
-        TableModelHealthDashboard.slot_SetFilters(searchFieldValue, systemTypeSelected, context1Selected, context2Selected, "null", "null")
+        TableModelHealthDashboard.slot_SetFilters(searchFieldValue,
+                                                  systemTypeSelected,
+                                                  context1Selected,
+                                                  context2Selected,
+                                                  "null", "null")
     }
 
     function checkContextNavCompleteness() {
 
         var isComplete = true
-        //console.log("Checking for nav completion: sys:" + systemTypeSelected + " aType:" + assetType + " c1:" + context1Selected + " c2:" + context2Selected + " p:" + paramNameSelected)
 
+        //console.log("Checking for nav completion: sys:" + systemTypeSelected + " aType:" + assetType + " c1:" + context1Selected + " c2:" + context2Selected + " p:" + paramNameSelected)
         isComplete &= (systemTypeSelected !== 'null')
-        if(isComplete && (systemTypeSelected === 'Camera Gallery'))
-        {
-            compHealthDashboardContentRoot.contextNavCompletenessCheck = true;
-            return;
+        if (isComplete && (systemTypeSelected === 'Camera Gallery')) {
+            compHealthDashboardContentRoot.contextNavCompletenessCheck = true
+            return
         }
 
-        if(isComplete && (systemTypeSelected === 'Asset Metrics') && (assetType === 'CNC'))
-        {
-            compHealthDashboardContentRoot.contextNavCompletenessCheck = (context1Selected !== 'null');
-            return;
+        if (isComplete && (systemTypeSelected === 'Asset Metrics')
+                && (assetType === 'CNC')) {
+            compHealthDashboardContentRoot.contextNavCompletenessCheck
+                    = (context1Selected !== 'null')
+            return
         }
 
         isComplete &= (context1Selected !== 'null')
-        if(isComplete && (systemTypeSelected === 'Beacon Metrics'))
-        {
-            compHealthDashboardContentRoot.contextNavCompletenessCheck = true;
-            return;
+        if (isComplete && (systemTypeSelected === 'Beacon Metrics')) {
+            compHealthDashboardContentRoot.contextNavCompletenessCheck = true
+            return
         }
 
-        if(isComplete && (systemTypeSelected === 'Asset Metrics') && (context1Selected === 'Tire'))
-        {
-            compHealthDashboardContentRoot.contextNavCompletenessCheck = true;
-            return;
+        if (isComplete && (systemTypeSelected === 'Asset Metrics')
+                && (context1Selected === 'Tire')) {
+            compHealthDashboardContentRoot.contextNavCompletenessCheck = true
+            return
         }
-
 
         isComplete &= (context2Selected !== 'null')
 
-
         //console.log("...returning: " + isComplete)
         compHealthDashboardContentRoot.contextNavCompletenessCheck = isComplete
-
     }
 
-    Rectangle{
+    Rectangle {
         id: groupContentBg
 
-        anchors{
+        anchors {
             fill: parent
-            topMargin:isDelta ? 95 : 400
+            topMargin: isDelta ? 95 : 400
         }
 
         color: "#14818087"
         rotation: 0
     }
 
-    CompLabel{
+    CompLabel {
 
         id: lblAssetName
         visible: !isDelta
@@ -305,14 +275,12 @@ Comp__BASE {
             bottom: groupContentBg.top
             bottomMargin: 120
         }
-
-
     }
 
     Rectangle {
         id: rectSelectedTabBg
 
-        anchors{
+        anchors {
             verticalCenter: groupContentBg.top
             left: parent.left
             leftMargin: isDelta ? -2 : 0
@@ -334,7 +302,7 @@ Comp__BASE {
         property color colorIdle: "#80177D89"
         property real iconSize: isDelta ? 32 : 90
 
-        anchors{
+        anchors {
             bottom: rectSelectedTabBg.top
             bottomMargin: 23
             left: parent.left
@@ -366,7 +334,6 @@ Comp__BASE {
 
         CompHealthDashboardViewNavBtn {
             id: btnViewParameters
-
 
             tabName: 'params'
             anchors.left: btnViewSeverity.right
@@ -409,7 +376,7 @@ Comp__BASE {
             }
         }
 
-        Rectangle{
+        Rectangle {
             id: rectSelectedTab
 
             width: btnViewParameters.width
@@ -419,33 +386,33 @@ Comp__BASE {
 
             state: "parameters"
 
-            anchors{
+            anchors {
                 //horizontalCenter: compHealthDashboardContentRoot.viewTabCurrent.horizontalCenter
                 verticalCenter: parent.bottom
                 verticalCenterOffset: parent.anchors.bottomMargin + (height * 0.5)
             }
 
             states: [
-                State{
+                State {
                     name: "alerts"
 
-                    AnchorChanges{
+                    AnchorChanges {
                         target: rectSelectedTab
                         anchors.horizontalCenter: btnViewSeverity.horizontalCenter
                     }
                 },
-                State{
+                State {
                     name: "parameters"
 
-                    AnchorChanges{
+                    AnchorChanges {
                         target: rectSelectedTab
                         anchors.horizontalCenter: btnViewParameters.horizontalCenter
                     }
                 },
-                State{
+                State {
                     name: "custom"
 
-                    AnchorChanges{
+                    AnchorChanges {
                         target: rectSelectedTab
                         anchors.horizontalCenter: btnViewCustom.horizontalCenter
                     }
@@ -453,10 +420,9 @@ Comp__BASE {
             ]
 
             transitions: [
-                Transition{
+                Transition {
 
-
-                    AnchorAnimation{
+                    AnchorAnimation {
                         duration: 250
                     }
                 }
@@ -469,20 +435,22 @@ Comp__BASE {
 
         onTextChanged: compHealthDashboardContentRoot.searchFieldValue = text
 
-        anchors{
+        anchors {
             top: rectSelectedTabBg.bottom
             topMargin: 34
             left: parent.left
             leftMargin: 34
             right: (btnGridView.visible ? btnGridView.left : (btnListView.visible ? btnListView.left : (btnGraphView.visible ? btnGraphView.left : (btnExpandShrink.visible ? btnExpandShrink.left : parent.right))))
-            rightMargin: (!btnGridView.visible && !btnListView.visible && !btnExpandShrink.visible && !btnGraphView.visible ) ? 0 : 19
+            rightMargin: (!btnGridView.visible && !btnListView.visible
+                          && !btnExpandShrink.visible
+                          && !btnGraphView.visible) ? 0 : 19
         }
 
         height: isDelta ? 48 : 100
 
         text: ""
         placeholderText: compHealthDashboardContentRoot.searchFieldPlaceholderText
-        textFontSize: isDelta ? 20: 40
+        textFontSize: isDelta ? 20 : 40
         btnClearSize: isDelta ? 23 : 60
     }
 
@@ -490,8 +458,8 @@ Comp__BASE {
         id: btnGridView
 
         visible: compHealthDashboardContentRoot.isBtnGridViewVisible
-        anchors{
-            top:txtfldSearch.top
+        anchors {
+            top: txtfldSearch.top
             bottom: txtfldSearch.bottom
             right: btnListView.left
             rightMargin: 20
@@ -509,8 +477,8 @@ Comp__BASE {
 
         visible: compHealthDashboardContentRoot.isBtnListViewVisible
 
-        anchors{
-            top:txtfldSearch.top
+        anchors {
+            top: txtfldSearch.top
             bottom: txtfldSearch.bottom
             right: isDelta ? (btnGraphView.visible ? btnGraphView.left : btnExpandShrink.left) : (btnGraphView.visible ? btnGraphView.left : parent.right)
             rightMargin: 20
@@ -528,19 +496,22 @@ Comp__BASE {
         enabled: compHealthDashboardContentRoot.paramNameSelected !== "null"
         visible: compHealthDashboardContentRoot.isBtnGraphViewVisible
         anchors {
-            top:txtfldSearch.top
+            top: txtfldSearch.top
             bottom: txtfldSearch.bottom
             right: isDelta ? btnExpandShrink.left : parent.right
             rightMargin: 20
         }
 
-        iconColor: (compHealthDashboardContentRoot.paramViewMode === "Graph") ? "White" : "#80ffffff"
+        iconColor: (compHealthDashboardContentRoot.paramViewMode
+                    === "Graph") ? "White" : "#80ffffff"
         iconUrl: "file:///usr/share/BeaconOS-lib-images/images/GraphFill.svg"
         height: isDelta ? 50 : 100
 
         onClicked: {
-            compHealthDashboardContentRoot.paramViewMode_Last = compHealthDashboardContentRoot.paramViewMode
-            compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentRoot.paramNameSelected
+            compHealthDashboardContentRoot.paramViewMode_Last
+                    = compHealthDashboardContentRoot.paramViewMode
+            compHealthDashboardContentRoot.floatingBreadcrumbBtntext
+                    = compHealthDashboardContentRoot.paramNameSelected
             compHealthDashboardContentRoot.paramViewMode = "Graph"
         }
     }
@@ -553,7 +524,7 @@ Comp__BASE {
         iconColor: "White"
         onClicked: compHealthDashboardContentRoot.toggleViewModeClicked()
 
-        anchors{
+        anchors {
             top: txtfldSearch.top
             right: parent.right
             rightMargin: 34
@@ -572,7 +543,7 @@ Comp__BASE {
 
         boundsBehavior: Flickable.StopAtBounds
 
-        anchors{
+        anchors {
             top: txtfldSearch.bottom
             topMargin: 19
             left: txtfldSearch.left
@@ -600,7 +571,7 @@ Comp__BASE {
             onClicked: {
                 compHealthDashboardContentRoot.isDataVisible = false
 
-                if(compHealthDashboardContentRoot.navObject === null)
+                if (compHealthDashboardContentRoot.navObject === null)
                     compHealthDashboardContentRoot.systemTypeSelected = "null"
                 else
                     compHealthDashboardContentRoot.navObject.systemSelected = "null"
@@ -609,7 +580,7 @@ Comp__BASE {
 
         CompIconRightFill {
             id: sep1
-            anchors{
+            anchors {
                 left: btnBreadcrumb1.right
                 leftMargin: groupBreadcrumbs.spacing
                 top: parent.top
@@ -619,12 +590,13 @@ Comp__BASE {
             visible: btnBreadcrumb2.visible
         }
 
-        CompBtnBreadcrumb{
+        CompBtnBreadcrumb {
             id: btnBreadcrumb2
 
-            visible: (compHealthDashboardContentRoot.context1Selected !== "null" && btnBreadcrumb1.visible)
+            visible: (compHealthDashboardContentRoot.context1Selected !== "null"
+                      && btnBreadcrumb1.visible)
 
-            anchors{
+            anchors {
                 top: parent.top
                 left: sep1.right
                 leftMargin: groupBreadcrumbs.spacing
@@ -634,25 +606,24 @@ Comp__BASE {
             font.pixelSize: isDelta ? 20 : 40
 
             onClicked: {
-                if(compHealthDashboardContentRoot.navObject === null)
+                if (compHealthDashboardContentRoot.navObject === null)
                     compHealthDashboardContentRoot.context1Selected = "null"
                 else
                     compHealthDashboardContentRoot.navObject.context1Selected = "null"
             }
 
-            property string contextSelected : compHealthDashboardContentRoot.context1Selected
+            property string contextSelected: compHealthDashboardContentRoot.context1Selected
 
             onContextSelectedChanged: {
-                if(contextSelected === "ENV")
-                    text = "Environmental"/*
-                else if (contextSelected === "IMU")
-                    text: "Accelerometer"*/
+                if (contextSelected === "ENV")
+                    text = "Environmental" /*
+                                    else if (contextSelected === "IMU")
+                                                        text: "Accelerometer"*/
                 else
                     text = contextSelected
             }
 
             height: parent.height
-
         }
 
         CompIconRightFill {
@@ -660,7 +631,7 @@ Comp__BASE {
 
             visible: btnBreadcrumb3.visible
 
-            anchors{
+            anchors {
                 left: btnBreadcrumb2.right
                 leftMargin: groupBreadcrumbs.spacing
                 top: parent.top
@@ -668,12 +639,13 @@ Comp__BASE {
             }
         }
 
-        CompBtnBreadcrumb{
+        CompBtnBreadcrumb {
             id: btnBreadcrumb3
 
-            visible: (compHealthDashboardContentRoot.context2Selected !== "null" && btnBreadcrumb2.visible)
+            visible: (compHealthDashboardContentRoot.context2Selected !== "null"
+                      && btnBreadcrumb2.visible)
 
-            anchors{
+            anchors {
                 top: parent.top
                 left: sep2.right
                 leftMargin: groupBreadcrumbs.spacing
@@ -684,7 +656,7 @@ Comp__BASE {
 
             onClicked: {
 
-                if(compHealthDashboardContentRoot.navObject === null)
+                if (compHealthDashboardContentRoot.navObject === null)
                     compHealthDashboardContentRoot.context2Selected = "null"
                 else
                     compHealthDashboardContentRoot.navObject.context2Selected = "null"
@@ -693,7 +665,6 @@ Comp__BASE {
             text: compHealthDashboardContentRoot.context2Selected
 
             height: parent.height
-
         }
 
         CompIconRightFill {
@@ -703,7 +674,7 @@ Comp__BASE {
 
             property CompBtnBreadcrumb leftObject: (btnBreadcrumb3.visible ? btnBreadcrumb3 : (btnBreadcrumb2.visible ? btnBreadcrumb2 : btnBreadcrumb1))
 
-            anchors{
+            anchors {
                 left: sep3.leftObject.right
                 leftMargin: groupBreadcrumbs.spacing
                 top: parent.top
@@ -711,12 +682,12 @@ Comp__BASE {
             }
         }
 
-        CompBtnBreadcrumb{
+        CompBtnBreadcrumb {
             id: btnBreadcrumb4
 
             visible: (compHealthDashboardContentRoot.floatingBreadcrumbBtntext !== "null")
 
-            anchors{
+            anchors {
                 top: parent.top
                 left: sep3.right
                 leftMargin: groupBreadcrumbs.spacing
@@ -733,19 +704,17 @@ Comp__BASE {
             text: compHealthDashboardContentRoot.floatingBreadcrumbBtntext
 
             height: parent.height
-
         }
     }
 
     Item {
         id: viewContents
 
-
         property real contentsWidth: parent.width
         property real btnWidth: ((parent.width * 0.25) - ((btnSpacing * 0.33) * 4))
         property real btnSpacing: 41
 
-        anchors{
+        anchors {
             top: groupBreadcrumbs.bottom
             topMargin: 20
             left: groupBreadcrumbs.left
@@ -756,12 +725,11 @@ Comp__BASE {
             rightMargin: isDelta ? 0 : 34
         }
 
-        Loader{
+        Loader {
             id: loaderContentNav
             active: (compHealthDashboardContentRoot.contentState === "context_nav")
-            onActiveChanged:{
-                if(active === false)
-                {
+            onActiveChanged: {
+                if (active === false) {
                     compHealthDashboardContentRoot.navObject = null
                     return
                 }
@@ -778,19 +746,23 @@ Comp__BASE {
                 isMTConnectData: (assetType === "CNC")
 
                 onSystemSelectedChanged: {
-                    compHealthDashboardContentRoot.systemTypeSelected = compHealthDashboardContentContextNav.systemSelected
+                    compHealthDashboardContentRoot.systemTypeSelected
+                            = compHealthDashboardContentContextNav.systemSelected
                 }
 
                 onContext1SelectedChanged: {
-                    compHealthDashboardContentRoot.context1Selected = compHealthDashboardContentContextNav.context1Selected
+                    compHealthDashboardContentRoot.context1Selected
+                            = compHealthDashboardContentContextNav.context1Selected
                 }
 
                 onContext2SelectedChanged: {
-                    compHealthDashboardContentRoot.context2Selected = compHealthDashboardContentContextNav.context2Selected
+                    compHealthDashboardContentRoot.context2Selected
+                            = compHealthDashboardContentContextNav.context2Selected
                 }
 
                 onMtcSortFilterStringChanged: {
-                    compHealthDashboardContentRoot.mtcSortFilterString = compHealthDashboardContentContextNav.mtcSortFilterString
+                    compHealthDashboardContentRoot.mtcSortFilterString
+                            = compHealthDashboardContentContextNav.mtcSortFilterString
                 }
 
                 Component.onCompleted: {
@@ -799,17 +771,15 @@ Comp__BASE {
                     systemSelected = compHealthDashboardContentRoot.systemTypeSelected
                     context1Selected = compHealthDashboardContentRoot.context1Selected
                     context2Selected = compHealthDashboardContentRoot.context2Selected
-
                 }
             }
         }
 
-
-
-        Loader{
+        Loader {
             id: loaderContentParams
 
-            active: (compHealthDashboardContentRoot.contentState !== "context_nav" && compHealthDashboardContentRoot.contentState !== 'params_mtconnect')
+            active: (compHealthDashboardContentRoot.contentState !== "context_nav"
+                     && compHealthDashboardContentRoot.contentState !== 'params_mtconnect')
 
             asynchronous: true
             anchors.fill: parent
@@ -823,7 +793,8 @@ Comp__BASE {
                 onForceViewType: txt => compHealthDashboardContentRoot.paramViewMode = txt
 
                 onFloatingBreadCrumbNameChanged: {
-                    compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
+                    compHealthDashboardContentRoot.floatingBreadcrumbBtntext
+                            = compHealthDashboardContentParams.floatingBreadCrumbName
                 }
 
                 onForceViewModeMaximized: {
@@ -840,34 +811,29 @@ Comp__BASE {
                                          compHealthDashboardContentRoot.isBtnListViewVisible = isVis
                                      }
 
-                Connections{
+                Connections {
                     target: compHealthDashboardContentRoot
 
-                    function onGalleryInstanceIdChanged(id)
-                    {
+                    function onGalleryInstanceIdChanged(id) {
                         compHealthDashboardContentParams.galleryInstanceId = id
                     }
 
-                    function onGraphViewTargetChanged(targ)
-                    {
+                    function onGraphViewTargetChanged(targ) {
                         compHealthDashboardContentParams.graphViewTarget = targ
                     }
                 }
             }
         }
 
-
-
-        Loader{
+        Loader {
             id: loaderContentMTConnect
 
             active: compHealthDashboardContentRoot.contentState === 'params_mtconnect'
 
             asynchronous: true
             anchors.fill: parent
-            sourceComponent:         CompHealthDashboardContentMTConnect {
+            sourceComponent: CompHealthDashboardContentMTConnect {
                 id: compHealthDashboardContentMTConnect
-
 
                 view: compHealthDashboardContentRoot.paramViewMode
                 searchFieldText: compHealthDashboardContentRoot.searchFieldValue
@@ -876,7 +842,6 @@ Comp__BASE {
                 //onFloatingBreadCrumbNameChanged: {
                 //    compHealthDashboardContentRoot.floatingBreadcrumbBtntext = compHealthDashboardContentParams.floatingBreadCrumbName
                 //}
-
                 onForceViewModeMaximized: {
                     compHealthDashboardContentRoot.forceViewModeMaximized()
                 }
@@ -892,12 +857,7 @@ Comp__BASE {
                                      }
 
                 context1Selected: compHealthDashboardContentRoot.mtcSortFilterString
-
             }
         }
-
-
-
-
     }
 }

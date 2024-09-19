@@ -9,6 +9,7 @@ Item {
 
     property var beaconIDSelected
     property var beaconIDSelectedLast
+
     // property string lat
     // property string lon
     // property string altitude
@@ -18,48 +19,39 @@ Item {
     // onBeaconIDSelectedChanged: {
     //     console.log("BEACON ID CHANGED IN SCREEN DEVICE INFO");
     // }
-
-
-
-
-    CompMapViewer{
+    CompMapViewer {
         id: devicemap
 
-        anchors{
+        anchors {
             top: parent.top
             left: parent.left
             bottom: parent.bottom
         }
-        width: 1920//drawerDeviceInfo.position === 1.0 ?  1460 : 1920
+        width: 1920 //drawerDeviceInfo.position === 1.0 ?  1460 : 1920
 
         showMapTypes: true
-
-
 
         Component.onCompleted: setZoomLevel(1.0)
         listAssets: TableModelRaptorMap
     }
 
-    CompImageIcon{
+    CompImageIcon {
         id: openDeviceInfo
         opacity: 0.6
         visible: drawerDeviceInfo.position < 0.01
 
         y: 320
 
-        anchors{
+        anchors {
             left: devicemap.left
-            //leftMargin: 48
-            //verticalCenter: parent.verticalCenter
-            //topMargin: 120
         }
 
         height: 578
         width: 48
 
         source: "file:///usr/share/BeaconOS-lib-images/images/LeftOpen.svg"
-        //color: "White"
 
+        //color: "White"
         MouseArea {
             anchors.fill: parent
 
@@ -69,8 +61,7 @@ Item {
                 if (drawerDeviceInfo.visible === true) {
                     drawerDeviceInfo.visible = false
                     drawerDeviceInfo.visible = true
-                }
-                else {
+                } else {
                     drawerDeviceInfo.visible = true
                 }
                 //drawerDeviceInfo.open()
@@ -80,71 +71,33 @@ Item {
         }
     }
 
-
-    // CompImageIcon{
-    //     id: closeDeviceInfo
-
-    //     opacity: 0.6
-    //     visible: drawerDeviceInfo.position === 1.0
-
-    //     anchors{
-    //         right: drawerDeviceInfo.left
-    //         verticalCenter: parent.verticalCenter
-    //     }
-
-    //     height: 578
-    //     width: 48
-
-    //     source: "file:///usr/share/BeaconOS-lib-images/images/Expander.svg"
-    //     color: "White"
-
-    //     MouseArea {
-    //         anchors.fill: parent
-
-    //         onClicked: {
-    //             console.log("Drawer open status:", screenDeviceInfoRoot.isDrawerOpen);
-    //             console.log("CLOSING DEVICE INFO DRAWER!!!")
-    //             drawerDeviceInfo.visible = !drawerDeviceInfo.visible
-    //             drawerDeviceInfo.close()
-    //             console.log(drawerDeviceInfo.visible)
-    //         }
-    //     }
-    // }
-
-    Drawer{
+    Drawer {
         id: drawerDeviceInfo
 
         closePolicy: Popup.NoAutoClose
         dim: false
         modal: false
 
-        height: devicemap.height - 220// - areaToolbar.height - 200
+        height: devicemap.height - 220 // - areaToolbar.height - 200
 
         width: root.width * 0.215
 
         edge: Qt.LeftEdge
         y: 200
-        //x: 200
 
+        //x: 200
         leftPadding: 10
 
-        CompBtnBreadcrumb{
-            anchors{
+        CompBtnBreadcrumb {
+            anchors {
                 fill: parent
-                // top: parent.top
-                // left: parent.left
-                // right: parent.right
-                // bottom: parent.bottom
-                // topMargin: 100
             }
-            //color: "#000000"
-            //radius: 20
         }
         background: Rectangle {
             color: "#00000000"
         }
 
-        Comp_Device_Info{
+        Comp_Device_Info {
             id: deviceInfo
 
             //compMapViewer: devicemap
@@ -159,17 +112,12 @@ Item {
             listofDevices: TableModelRaptorMap
 
             onCenterOnCoords: devicemap.centerOnPointXY(x, y)
-            onSignalBeaconIDChanged: (bid)=>{
-                //console.log("Signal " + bid + " caught")
+            onSignalBeaconIDChanged: bid => {
 
-                screenDeviceInfoRoot.beaconIDSelected = bid
-
-
-            }
-
-
+                                         //console.log("Signal " + bid + " caught")
+                                         screenDeviceInfoRoot.beaconIDSelected = bid
+                                     }
         }
-
     }
 
     Rectangle {
@@ -178,16 +126,17 @@ Item {
         //opacity: 0.5
         height: 400
         width: 700
-        x: (devicemap.width * 0.5) -250
+        x: (devicemap.width * 0.5) - 250
         y: (devicemap.height * 0.5) - (500 * 0.5)
 
-        onXChanged:{
+        onXChanged: {
             //console.log("X is now: ")
-            popupCameraFeed.mappedPoint = rectPopuoptarget.mapToItem(root.contentItem, 0,0)
+            popupCameraFeed.mappedPoint = rectPopuoptarget.mapToItem(
+                        root.contentItem, 0, 0)
         }
     }
 
-    Comp__BASE_Popup{
+    Comp__BASE_Popup {
         id: popupCameraFeed
 
         popupName: "Camera Feed"
@@ -195,10 +144,11 @@ Item {
         height: 300
         width: 500
 
-        property point mappedPoint : rectPopuoptarget.mapToItem(root.contentItem, 0,0)
+        property point mappedPoint: rectPopuoptarget.mapToItem(
+                                        root.contentItem, 0, 0)
         x: mappedPoint.x
         y: mappedPoint.y
-        onMappedPointChanged:{
+        onMappedPointChanged: {
             console.log("Mapped Point is now: " + mappedPoint)
         }
         background: Rectangle {
@@ -208,7 +158,7 @@ Item {
         anchors.centerIn: undefined
 
         onVisibleChanged: {
-            mappedPoint = rectPopuoptarget.mapToItem(root.contentItem, 0,0)
+            mappedPoint = rectPopuoptarget.mapToItem(root.contentItem, 0, 0)
         }
 
         Image {
@@ -221,6 +171,4 @@ Item {
             }
         }
     }
-
-
 }
