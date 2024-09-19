@@ -34,13 +34,33 @@ Screen_Raptor__BASE {
     property bool drawerRightVisible: drawerRaptorDroneControlQuickActions.visible
     property string beaconIDSelected: ""
     property string dispText: isDrone ? dispText_Drone : isAntenna ? dispText_Antenna : "???"
-    property int controlledDeviceType: Constants.ERaptorDeviceType_Drone
+    property int controlledDeviceType: -1
     property real batteryPercent: raptorDroneController.deviceBattery
     property var gimbal1Struct: raptorDroneController.gimbalA
     property var gimbal2Struct: raptorDroneController.gimbalB
     property var detectionInfo: raptorDroneController.detectionInfo
     property var selectedItem
     property var controllerSource: isDrone ? raptorDroneController : isAntenna ? raptorAntennaController : undefined
+
+    onControllerSourceChanged: {
+        console.debug("Controller source is now: " + controllerSource)
+
+        try {
+            if (controllerSource === raptorDroneController) {
+                raptorDroneController.connectToDevice()
+                raptorAntennaController.disconnectFromDevice()
+            } else if (controllerSource === raptorAntennaController) {
+                raptorDroneController.disconnectFromDevice()
+                raptorAntennaController.connectToDevice()
+            } else {
+                raptorDroneController.disconnectFromDevice()
+                raptorAntennaController.disconnectFromDevice()
+            }
+        } catch (ex) {
+            console.log("Something bad happened")
+            console.error("[EXCEPTION] " + ex)
+        }
+    }
 
     signal signalBeaconIDSelected(var beaconID)
     signal setShowButtonPanel(var bShowButonPanel)
@@ -65,15 +85,21 @@ Screen_Raptor__BASE {
         }
     ]
 
-    onImageProviderStringChanged: console.log(
-                                      "Image Provider String changed to: " + imageProviderString)
+    onSelectedItemChanged: {
+
+        //console.log("Selected Item is now: " + selectedItem)
+        screen_RaptorControlRoot.beaconIDSelected = selectedItem.beacon_id
+        screen_RaptorControlRoot.controlledDeviceType = selectedItem.asset_type
+        //console.log('Asset Type is: ' + screen_RaptorControlRoot.controlledDeviceType)
+        // console.log('--- Is Drone: ' + (screen_RaptorControlRoot.controlledDeviceType
+        //                                === Constants.ERaptorDeviceType_Drone))
+        //console.log('--- Is Antenna: ' + (screen_RaptorControlRoot.controlledDeviceType
+        //                                  === Constants.ERaptorDeviceType_Antenna))
+    }
 
     onBeaconIDSelectedChanged: {
-        for (var i = 0; i < TableModelRaptorMap.length; i++) {
-            if (beaconIDSelected === TableModelRaptorMap[i].Beacon_ID) {
-                selectedItem = TableModelRaptorMap[i]
-            }
-        }
+
+        //console.log('Beacon ID Selected changed to: ' + beaconIDSelected)
     }
 
     function setGimbal1Values(x_value, y_value) {
@@ -90,16 +116,19 @@ Screen_Raptor__BASE {
         new_struct.axisY_Value = y_value
     }
 
+    Component.onCompleted: {
+        console.trace()
+    }
+
     RaptorDroneController {
         id: raptorDroneController
-
-        Component.onCompleted: {
-            raptorDroneController.connectToDevice("10.2.18.97")
-        }
+        assetName: "Drone-1"
     }
 
     RaptorAntennaController {
         id: raptorAntennaController
+
+        assetName: "Antenna-1"
     }
 
     Item {
@@ -111,10 +140,14 @@ Screen_Raptor__BASE {
 
         z: miniMapToggle ? 0 : 1
 
+        Component.onCompleted: {
+            console.trace()
+        }
+
         Item {
             id: compTargetBoundingBox1
 
-            visible: raptorDroneController.watchdogOk
+            visible: screen_RaptorControlRoot.controllerSource.watchdogOk
                      && screen_RaptorControlRoot.detectionInfo.valid
                      && screen_RaptorControlRoot.hudON
 
@@ -191,6 +224,10 @@ Screen_Raptor__BASE {
                 width: 2
                 radius: 16
             }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         Comp_Raptor_Altimeter {
@@ -198,6 +235,7 @@ Screen_Raptor__BASE {
 
             visible: screen_RaptorControlRoot.hudON
                      && screen_RaptorControlRoot.beaconIDSelected !== ""
+                     && screen_RaptorControlRoot.isDrone
             height: 700
             width: 700
             anchors.centerIn: parent
@@ -227,6 +265,10 @@ Screen_Raptor__BASE {
                     attitudeMeter.rollAngle = raptorDroneController.roll
                 }
             }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         Popup_Raptor_Control_Messages {
@@ -235,30 +277,47 @@ Screen_Raptor__BASE {
             controller: raptorDroneController
             startSize: Qt.size(500, 580)
             startPoint: Qt.point(81.0, 249.0)
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         Popup_Raptor_Control_ParamSeter {
             id: popupRaptorControlParamSeter
 
             controller: raptorDroneController
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         Popup_Raptor_Control_ManualCommand {
             id: popupRaptorControlManualCommand
 
             controller: raptorDroneController
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         PopupRaptorControlParameterView {
             id: popupRaptorControlParameterView
 
             controller: raptorDroneController
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         CompLabel {
             id: lblFlightMode
 
-            visible: lblFlightModeOn //&& raptorDroneController.watchdogOk
+            visible: lblFlightModeOn && raptorDroneController.watchdogOk
+                     && screen_RaptorControlRoot.isDrone
             text: "Sys. State: " + raptorDroneController.sSystemState
                   + "; - Flight Mode: " + raptorDroneController.flightMode
                   + "; - Land State: " + raptorDroneController.sLandedState
@@ -284,6 +343,10 @@ Screen_Raptor__BASE {
 
                 color: "#80000000"
             }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         CompImageIcon {
@@ -298,6 +361,10 @@ Screen_Raptor__BASE {
             anchors {
                 right: deviceScreen.right
                 verticalCenter: parent.verticalCenter
+            }
+
+            Component.onCompleted: {
+                console.trace()
             }
 
             MouseArea {
@@ -341,6 +408,10 @@ Screen_Raptor__BASE {
             onJoystickYValueChanged: {
                 setGimbal1Values(joystickXValue, joystickYValue)
             }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         CompRaptorNavMenuItem {
@@ -361,6 +432,10 @@ Screen_Raptor__BASE {
                 screen_RaptorControlRoot.controllerSource.isEStopArmed
                         = !screen_RaptorControlRoot.isEStopArmed
             }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         Comp_Drone_Gimble {
@@ -369,6 +444,7 @@ Screen_Raptor__BASE {
             isThrottle: false
             visible: screen_RaptorControlRoot.controlON
                      && beaconIDSelected !== ""
+                     && screen_RaptorControlRoot.isDrone
             opacity: 0.3
 
             anchors {
@@ -384,6 +460,10 @@ Screen_Raptor__BASE {
 
             onJoystickYValueChanged: {
                 setGimbal2Values(joystickXValue, joystickYValue)
+            }
+
+            Component.onCompleted: {
+                console.trace()
             }
         }
 
@@ -402,6 +482,10 @@ Screen_Raptor__BASE {
                 right: parent.right
                 rightMargin: (drawerRaptorDroneControlQuickActions.position > 0.7) ? 220 : 155
                 verticalCenter: parent.verticalCenter
+            }
+
+            Component.onCompleted: {
+                console.trace()
             }
         }
 
@@ -431,6 +515,10 @@ Screen_Raptor__BASE {
                     }
                 }
             }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         DrawerRaptorDeviceInfoControl {
@@ -439,12 +527,20 @@ Screen_Raptor__BASE {
             edge: Qt.LeftEdge
             y: 140
 
+            onSignalSelectedItemChanged: model => {
+                                             screen_RaptorControlRoot.selectedItem = model
+                                         }
+
             onSignalBeaconIDChanged: bid => {
 
                                          screen_RaptorControlRoot.beaconIDSelected = bid
                                          signalBeaconIDSelected(bid)
                                          drawerRaptorDroneControlQuickActions.open()
                                      }
+
+            Component.onCompleted: {
+                console.trace()
+            }
         }
 
         DrawerRaptorDroneControlQuickActions {
@@ -455,6 +551,10 @@ Screen_Raptor__BASE {
             interactive: (beaconIDSelected === "") ? false : true
             visible: (beaconIDSelected !== "" && !miniMapToggle
                       && showButtonPanel) ? true : false
+
+            Component.onCompleted: {
+                console.trace()
+            }
 
             onVisibleChanged: {
                 if (!drawerRaptorDroneControlQuickActions.visible) {
@@ -557,12 +657,18 @@ Screen_Raptor__BASE {
         CompRaptorRadialPopoutMenu {
             id: popoutMenuLeft
 
+            visible: screen_RaptorControlRoot.isDrone
+
             orientation: 6
 
             anchors {
                 left: stick1.right
                 leftMargin: 0.5 * width
                 bottom: stick1.bottom
+            }
+
+            Component.onCompleted: {
+                console.trace()
             }
 
             model: ListModel {
@@ -636,6 +742,7 @@ Screen_Raptor__BASE {
         CompRaptorRadialPopoutMenu {
             id: popoutMenuRight
 
+            visible: screen_RaptorControlRoot.isDrone
             orientation: 4
 
             anchors {
@@ -716,6 +823,10 @@ Screen_Raptor__BASE {
         height: 216
         width: 360
 
+        Component.onCompleted: {
+            console.trace()
+        }
+
         anchors {
             bottom: parent.bottom
             bottomMargin: stick1.anchors.bottomMargin
@@ -727,9 +838,12 @@ Screen_Raptor__BASE {
         id: imageCameraFeed
 
         //visible: screen_RaptorControlRoot.beaconIDSelected !== ""
-        source: raptorDroneController.sImageProviderURL_Primary
-        onSourceChanged: {
-            console.log("My source is now: " + source)
+        cache: false
+        source: screen_RaptorControlRoot.controllerSource.sImageProviderURL_Primary
+        //onSourceChanged: console.log("Source is now: " + source)
+        sourceSize {
+            height: imageCameraFeed.height
+            width: imageCameraFeed.width
         }
         height: miniMapToggle ? areaMiniViewer.height : 1080
         width: miniMapToggle ? areaMiniViewer.width : 1920
@@ -737,6 +851,10 @@ Screen_Raptor__BASE {
         y: miniMapToggle ? areaMiniViewer.y : 0
         z: miniMapToggle ? 1 : 0
 
+        //Rectangle {
+        //    anchors.fill: parent
+        //    color: "Green"
+        //}
         Behavior on width {
             NumberAnimation {
                 duration: 250
@@ -760,6 +878,10 @@ Screen_Raptor__BASE {
                 duration: 250
             }
         }
+
+        Component.onCompleted: {
+            console.trace()
+        }
     }
 
     MouseArea {
@@ -772,6 +894,10 @@ Screen_Raptor__BASE {
 
         onClicked: {
             miniMapToggle = !miniMapToggle
+        }
+
+        Component.onCompleted: {
+            console.trace()
         }
     }
 
@@ -790,6 +916,7 @@ Screen_Raptor__BASE {
         listAssets: TableModelRaptorMap
 
         Component.onCompleted: {
+            console.trace()
             setZoomLevel(15.0)
         }
 
