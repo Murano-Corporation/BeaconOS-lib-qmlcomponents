@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-
 Comp__BASE {
     id: compAssetDashboardGridItemRoot
 
@@ -10,29 +9,52 @@ Comp__BASE {
     property string assetState: "Active"
     property string beaconState: "Active"
     property string assetType: "Vehicle"
+    property string hoursOfOperation: "OOO"
 
     width: isDelta ? 373 : 412
     height: isDelta ? 368 : 412
 
-    CompGlassRect{
+    Rectangle{
+        id: rectDevHoursOfOperation
+
+        color: "#00ff00"
+        height: 64
+        width: 200
+
+        anchors{
+            top: parent.top
+
+            horizontalCenter: parent.horizontalCenter
+
+        }
+
+        CompLabel{
+            id: lblHoursOfOperation
+
+            anchors.centerIn: parent
+
+            text: compAssetDashboardGridItemRoot.hoursOfOperation
+        }
+    }
+
+    CompGlassRect {
         id: rectBg
         anchors.fill: parent
     }
 
     MouseArea {
         anchors.fill: parent
-        
+
         onClicked: {
             SystemController.targetBeaconID = beaconID
             SingletonScreenManager.slot_GoToScreen("Health Dashboard", true)
         }
-        
     }
-    
+
     Item {
         id: assetImgRoot
 
-        anchors{
+        anchors {
             left: parent.left
             right: parent.right
             top: parent.top
@@ -53,7 +75,6 @@ Comp__BASE {
             asynchronous: true
         }
 
-
         ImgAssetCNC {
             visible: assetType === "CNC"
             anchors.fill: parent
@@ -72,7 +93,7 @@ Comp__BASE {
         }
 
         Image {
-            visible: assetType === "Antenna"
+            visible: assetType === "1"
             source: "file:///usr/share/BeaconOS-lib-images/images/Antenna.svg"
             anchors.fill: parent
             opacity: 0.8
@@ -82,7 +103,7 @@ Comp__BASE {
         }
 
         Image {
-            visible: assetType === "Drone"
+            visible: assetType === "0"
             source: "file:///usr/share/BeaconOS-lib-images/images/Drone.svg"
             anchors.fill: parent
             opacity: 0.8
@@ -121,7 +142,6 @@ Comp__BASE {
             source: "file:///usr/share/BeaconOS-lib-images/images/Help.svg"
             fillMode: Image.PreserveAspectFit
         }
-
     }
 
     Row {
@@ -180,7 +200,6 @@ Comp__BASE {
         anchors.topMargin: 7
 
         spacing: 11
-
 
         CompImageIcon {
             id: iconNanoStatus
