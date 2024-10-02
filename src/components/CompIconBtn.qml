@@ -8,15 +8,14 @@ Comp__BASE {
     property string iconUrl: "file:///usr/share/BeaconOS-lib-images/images/Img_Beacon.png"
     property color iconColor: "Black"
     property int iconHeight: height
-
+    property alias applyColoring: compImgIconRoot.applyColoring
     property alias imageIcon: compImgIconRoot
-    signal clicked()
+    signal clicked
 
     width: height
 
     opacity: enabled ? 1.0 : 0.3
 
-    
     CompImageIcon {
         id: compImgIconRoot
         anchors.fill: parent
@@ -25,11 +24,7 @@ Comp__BASE {
         color: btnCompIconRoot.iconColor
         height: btnCompIconRoot.iconHeight
         width: height
-
-
     }
-
-
 
     MouseArea {
         id: mouseArea
@@ -41,9 +36,5 @@ Comp__BASE {
         onClicked: {
             parent.clicked()
         }
-
-
-
     }
-
 }
