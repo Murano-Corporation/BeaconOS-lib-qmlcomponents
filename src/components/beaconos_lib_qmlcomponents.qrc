@@ -266,6 +266,7 @@
         <file>Screen_Gallery.qml</file>
         <file>CompTextEditor.qml</file>
         <file>CompPdfViewer.qml</file>
+        <file>Comp_Gallery_GridViewItem.qml</file>
     </qresource>
     <qresource prefix="/jesse_royal"/>
 </RCC>
