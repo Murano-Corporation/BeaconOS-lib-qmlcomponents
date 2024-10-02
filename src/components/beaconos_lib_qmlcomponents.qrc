@@ -268,5 +268,15 @@
         <file>CompPdfViewer.qml</file>
         <file>Comp_Gallery_GridViewItem.qml</file>
     </qresource>
-    <qresource prefix="/jesse_royal"/>
+    <qresource prefix="/jesse_royal">
+        <file>CompPreFlightJR.qml</file>
+        <file>CompPreFlightObjectJR.qml</file>
+        <file>CompRelayJR.qml</file>
+        <file>CompServoJR.qml</file>
+        <file>CompTelemetryLogsJR.qml</file>
+        <file>CompTelemetryLogsSpeedJR.qml</file>
+        <file>Comp_TEST_Jesse.qml</file>
+        <file>CompTestJesses.qml</file>
+        <file>CompAuxFunctionJR.qml</file>
+    </qresource>
 </RCC>

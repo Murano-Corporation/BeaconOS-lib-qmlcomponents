@@ -33,9 +33,9 @@ Screen__BASE {
 
         ///TODO - CHANGE THIS TO HAPPEN IN TOPIC BEACON ID OBJECT
         lblAllAssets.clicked()
-        MqttTopicHealth.slot_Unsubscribe()
-        MqttTopicBeaconIdDict.slot_Subscribe()
-        MqttTopicBeaconIdDict.slot_UpdateBeaconIdModelFilters()
+        //MqttTopicHealth.slot_Unsubscribe()
+        //MqttTopicBeaconIdDict.slot_Subscribe()
+        //MqttTopicBeaconIdDict.slot_UpdateBeaconIdModelFilters()
     }
 
     Item {
@@ -322,14 +322,21 @@ Screen__BASE {
                 id: gridView
 
                 boundsBehavior: Flickable.StopAtBounds
-
                 clip: true
-
-                model: TableModelAssetDashboardGridView
-
                 cellWidth: isDelta ? ((width - leftMargin) * 0.25) : 480
                 cellHeight: isDelta ? (368 + 46) : 480
 
+                model: TableModelAssetDashboardGridView
+                //model: ListModel{
+                //    ListElement{
+                //        asset_name: "Test"
+                //        beacon_id: "1234"
+                //        status: "Active"
+                //        asset_type: "CNC"
+                //        hours_of_operation: "12hr 20min"
+                //
+                //    }
+                //}
                 delegate: CompAssetDashboardGridItem {
 
                     assetName: model.asset_name
@@ -337,6 +344,7 @@ Screen__BASE {
                     beaconID: model.beacon_id
                     beaconState: model.status
                     assetType: model.asset_type
+                    hoursOfOperation: model.hours_of_operation
                 }
             }
         }

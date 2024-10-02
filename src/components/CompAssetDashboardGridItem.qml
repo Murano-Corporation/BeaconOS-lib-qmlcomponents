@@ -9,9 +9,33 @@ Comp__BASE {
     property string assetState: "Active"
     property string beaconState: "Active"
     property string assetType: "Vehicle"
+    property string hoursOfOperation: "OOO"
 
     width: isDelta ? 373 : 412
     height: isDelta ? 368 : 412
+
+    Rectangle{
+        id: rectDevHoursOfOperation
+
+        color: "#00ff00"
+        height: 64
+        width: 200
+
+        anchors{
+            top: parent.top
+
+            horizontalCenter: parent.horizontalCenter
+
+        }
+
+        CompLabel{
+            id: lblHoursOfOperation
+
+            anchors.centerIn: parent
+
+            text: compAssetDashboardGridItemRoot.hoursOfOperation
+        }
+    }
 
     CompGlassRect {
         id: rectBg
