@@ -163,6 +163,25 @@ Screen__BASE {
             }
         }
 
+        CompCustomisableTextField {
+            id: searchField
+
+            placeholderText: "Search..."
+            placeholderTextColor: "#80000000"
+            textColor: colorViewMode_Selected
+            width: 600
+            outlineRect {
+                border.color: "#80000000"
+                //color: colorViewMode_Selected
+            }
+            iconColor: colorViewMode_Selected
+            anchors {
+                top: parent.top
+                left: parent.left
+                bottom: parent.bottom
+            }
+        }
+
         Row {
             id: rowTopControls
 

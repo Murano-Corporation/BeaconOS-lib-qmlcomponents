@@ -6,8 +6,6 @@ Comp__BASE {
     height: 41
     width: 638
 
-
-    
     property alias text: txtfldSearch.text
     property alias placeholderText: txtfldSearch.placeholderText
     property alias textColor: txtfldSearch.color
@@ -16,31 +14,31 @@ Comp__BASE {
     property alias cancelColor: btnClear.iconColor
     property alias textFontSize: txtfldSearch.font.pixelSize
     property alias btnClearSize: btnClear.width
+    property alias outlineRect: rectOutline
 
-    signal enterPressed()
+    signal enterPressed
 
-    FocusScope{
+    FocusScope {
         anchors.fill: parent
 
         onFocusChanged: {
-            if(!focus)
-            {
-                return;
+            if (!focus) {
+                return
             }
-            if(parent.isPopupComponent === true)
-            {
+            if (parent.isPopupComponent === true) {
                 InputHandler.slot_OnPopupFocusChanged(popupName, focus)
             } else {
-                InputHandler.slot_OnFocusChanged(this, mapToGlobal(0,0), Qt.size(compCustomisableTextField.width, compCustomisableTextField.height))
-
+                InputHandler.slot_OnFocusChanged(
+                            this, mapToGlobal(0, 0),
+                            Qt.size(compCustomisableTextField.width,
+                                    compCustomisableTextField.height))
             }
         }
 
-
-
-        Rectangle{
+        Rectangle {
+            id: rectOutline
             anchors.fill: parent
-            border{
+            border {
                 color: "#4DE9E9E9"
             }
             radius: height * 0.5
@@ -48,9 +46,9 @@ Comp__BASE {
             color: "transparent"
         }
 
-        CompImageIcon{
+        CompImageIcon {
             id: iconSearch
-            anchors{
+            anchors {
                 top: parent.top
                 topMargin: 10
                 left: parent.left
@@ -67,8 +65,6 @@ Comp__BASE {
 
         TextField {
             id: txtfldSearch
-
-
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -98,23 +94,20 @@ Comp__BASE {
 
             onAccepted: {
 
-                if(text.length === 0)
+                if (text.length === 0)
                     return
-
 
                 compCustomisableTextField.enterPressed()
             }
 
             onActiveFocusChanged: {
-                if(!activeFocus)
-                {
+                if (!activeFocus) {
                     return
                 }
 
                 selectAll()
             }
         }
-
 
         Button {
             id: btnClear
@@ -134,22 +127,16 @@ Comp__BASE {
 
             width: 23
 
-            contentItem: CompImageIcon{
+            contentItem: CompImageIcon {
                 source: "file:///usr/share/BeaconOS-lib-images/images/CancelFill.svg"
                 color: btnClear.iconColor
                 height: btnClear.height
                 anchors.fill: parent
             }
 
-            background: Item{}
+            background: Item {}
         }
-
-
-
     }
-
-
-
 }
 
 /*##^##
@@ -157,3 +144,4 @@ Designer {
     D{i:0;formeditorColor:"#4c4e50";formeditorZoom:1.75}
 }
 ##^##*/
+
