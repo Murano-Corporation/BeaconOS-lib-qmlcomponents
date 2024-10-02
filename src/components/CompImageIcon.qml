@@ -4,16 +4,17 @@ import QtGraphicalEffects 1.15
 
 Comp__BASE {
     id: iconImageRoot
-    
+
     property alias colorOverlay: colorOverlayComp
     property alias color: colorOverlayComp.color
     property alias verticalAlignment: compImageIcon.verticalAlignment
     property real iconHeight: height
     property real iconWidth: width
+    property bool applyColoring: true
     property alias image: compImageIcon
     property alias source: compImageIcon.source
-    //property alias aspectFit: compImageIcon.fillMode
 
+    //property alias aspectFit: compImageIcon.fillMode
     Image {
         id: compImageIcon
 
@@ -26,19 +27,16 @@ Comp__BASE {
         anchors.centerIn: parent
         antialiasing: true
         smooth: true
-        visible: false
+        visible: applyColoring === false
     }
 
     ColorOverlay {
 
         id: colorOverlayComp
+        visible: applyColoring
         anchors.fill: compImageIcon
         antialiasing: true
         smooth: true
         source: compImageIcon
-
     }
 }
-
-
-
