@@ -4,7 +4,6 @@ import QtQuick3D.Materials 1.15
 import QtQuick.Controls 2.15
 import Qt.labs.qmlmodels 1.0
 
-
 FocusScope {
     id: screen_3DViewer_Root
 
@@ -26,41 +25,49 @@ FocusScope {
     property bool mouseYawInverted: true
     property bool mousePitchInverted: true
 
-
     // Pinch gesture variables
     property real initialPinchDistance: 0
     property real initialCameraDistance: 0
 
-    property var inputVector3: {"x":0, "y":0, "z":0}
-
-
-    Model{
-        id: model_NULL
+    property var inputVector3: {
+        "x": 0,
+        "y": 0,
+        "z": 0
     }
 
     onInputVector3Changed: {
         moveCamera(inputVector3.x, inputVector3.y, inputVector3.z)
     }
 
+    function loadStl(pathToStl) {}
 
     function moveCamera(x, y, z) {
         var cameraDirection = Qt.vector3d(0, 0, 0)
 
-
         if (x < 0) {
-            cameraDirection = cameraDirection.plus(Qt.vector3d(camera.forward.x, camera.forward.y, camera.forward.z))
+            cameraDirection = cameraDirection.plus(Qt.vector3d(
+                                                       camera.forward.x,
+                                                       camera.forward.y,
+                                                       camera.forward.z))
         }
 
-        if (x >  0) {
-            cameraDirection = cameraDirection.plus(Qt.vector3d(-camera.forward.x, -camera.forward.y, -camera.forward.z))
+        if (x > 0) {
+            cameraDirection = cameraDirection.plus(Qt.vector3d(
+                                                       -camera.forward.x,
+                                                       -camera.forward.y,
+                                                       -camera.forward.z))
         }
 
         if (y > 0) {
-            cameraDirection = cameraDirection.plus(Qt.vector3d(-camera.right.x, -camera.right.y, -camera.right.z))
+            cameraDirection = cameraDirection.plus(Qt.vector3d(-camera.right.x,
+                                                               -camera.right.y,
+                                                               -camera.right.z))
         }
 
         if (y < 0) {
-            cameraDirection = cameraDirection.plus(Qt.vector3d(camera.right.x, camera.right.y, camera.right.z))
+            cameraDirection = cameraDirection.plus(Qt.vector3d(camera.right.x,
+                                                               camera.right.y,
+                                                               camera.right.z))
         }
 
         if (z !== 0) {
@@ -74,25 +81,30 @@ FocusScope {
         camera.position.z += cameraDirection.z * moveSpeed
     }
 
-
     function rotateCamera(dx, dy) {
         yaw += (dx * (mouseYawInverted ? -1 : 1)) * sensitivity
         pitch += (dy * (mousePitchInverted ? -1 : 1)) * sensitivity
 
         // Clamp pitch to avoid flipping over
-        if (pitch > 89.0) pitch = 89.0
-        if (pitch < -89.0) pitch = -89.0
+        if (pitch > 89.0)
+            pitch = 89.0
+        if (pitch < -89.0)
+            pitch = -89.0
 
         // Calculate new rotation
         camera.eulerRotation.x = pitch
         camera.eulerRotation.y = yaw
     }
 
-    View3D{
-        id : view
+    Model {
+        id: model_NULL
+    }
+
+    View3D {
+        id: view
         anchors.fill: parent
 
-        environment:     SceneEnvironment{
+        environment: SceneEnvironment {
             id: sceneEnvironemtn
             clearColor: "skyblue"
             backgroundMode: SceneEnvironment.Color
@@ -101,8 +113,6 @@ FocusScope {
         PerspectiveCamera {
             id: camera
             position: Qt.vector3d(0, -200, 300)
-
-
         }
 
         // Number animations for smooth camera movement
@@ -134,144 +144,35 @@ FocusScope {
             eulerRotation.x: -90
         }
 
-        //DirectionalLight {
-        //    eulerRotation.y: 90
-        //}
+        Model {
 
+            property bool selected: screen_3DViewer_Root.selectedTarget === this
 
-        //DirectionalLight {
-        //    eulerRotation.x: -30
-        //    eulerRotation.y: -70
-        //}
-
-        //DirectionalLight {
-        //    eulerRotation.x: 30
-        //    eulerRotation.y: 70
-        //}
-
-        //DirectionalLight {
-        //    eulerRotation.x: -30
-        //    eulerRotation.y: 70
-        //}
-
-        //DirectionalLight {
-        //    eulerRotation.x: 30
-        //    eulerRotation.y: -70
-        //}
-
-        Repeater3D{
-
-
-            model: ListModel{
-                ListElement{
-                    name: "Test"
-                    type: "Lego Tractor"
-                    position_x: 0
-                    position_y: -200
-                    position_z: 0
-                    scale: 80
-                    source:"file:///home/murano/.balsam_output/lego_base/meshes/defaultobject.mesh"
-                    ally: true
-
-                }
-
-                ListElement{
-                    name: "Test"
-                    type: "Drone"
-                    position_x: 100
-                    position_y: 100
-                    position_z: 100
-                    scale: 1
-                    source:"file:///home/murano/.balsam_output/lego_base/meshes/defaultobject.mesh"
-                    ally: false
-
-                }
-
-                ListElement{
-                    name: "Test"
-                    type: "Drone"
-                    position_x: 0
-                    position_y: 100
-                    position_z: 0
-                    scale: 1
-                    source:"file:///home/murano/.balsam_output/lego_base/meshes/defaultobject.mesh"
-                    ally: true
-
-                }
+            property var meta_data: {
+                "name": model.name,
+                "type": model.type
             }
 
+            position: Qt.vector3d(model.position_x, model.position_y,
+                                  model.position_z)
+            scale: Qt.vector3d(model.scale, model.scale, model.scale)
+            source: model.source
+            pickable: true
 
-            delegate:
+            DefaultMaterial {
+                id: defaultMaterial_material
 
-            DelegateChooser{
-                id: delegateChooser
+                property color color_default: "#ffFFFFFF"
+                property color color_selected: "#ff00ff00"
+                property color color_unselected: "#ff999999"
 
-                role: "type"
-
-                // DelegateChoice{
-                //     roleValue: "Drone"
-
-                //     delegate: Drone_063 {
-
-                //         property bool selected: screen_3DViewer_Root.selectedTarget === this
-
-                //         property var meta_data: {
-                //             "name": model.name,
-                //             "type": model.type
-                //         }
-
-                //         diffuseColor: model.ally ? "green" : "red"
-
-                //         position: Qt.vector3d(model.position_x, model.position_y, model.position_z)
-                //         scale: Qt.vector3d(model.scale, model.scale, model.scale)
-                //         //source: model.source
-                //         pickable: true
-
-                //     }
-                // }
-
-                DelegateChoice{
-                    roleValue: "Lego Tractor"
-
-                    delegate: Model {
-
-                        property bool selected: screen_3DViewer_Root.selectedTarget === this
-
-                        property var meta_data: {
-                            "name": model.name,
-                            "type": model.type
-                        }
-
-                        position: Qt.vector3d(model.position_x, model.position_y, model.position_z)
-                        scale: Qt.vector3d(model.scale, model.scale, model.scale)
-                        source: model.source
-                        pickable: true
-
-
-                        DefaultMaterial {
-                            id: defaultMaterial_material
-
-                            property color color_default: "#ffFFFFFF"
-                            property color color_selected: "#ff00ff00"
-                            property color color_unselected: "#ff999999"
-
-                            diffuseColor: parent.selected ? color_selected : (screen_3DViewer_Root.selectedTarget !== model_NULL ? color_unselected : color_default)
-                        }
-
-
-                        materials: [
-                            defaultMaterial_material,
-
-                        ]
-                    }
-                }
-
+                diffuseColor: parent.selected ? color_selected : (screen_3DViewer_Root.selectedTarget !== model_NULL ? color_unselected : color_default)
             }
+
+            materials: [defaultMaterial_material]
         }
 
-
-
-        MouseArea{
+        MouseArea {
             anchors.fill: parent
 
             acceptedButtons: Qt.RightButton
@@ -301,7 +202,7 @@ FocusScope {
             }
         }
 
-        MouseArea{
+        MouseArea {
             anchors.fill: parent
 
             propagateComposedEvents: true
@@ -310,17 +211,13 @@ FocusScope {
 
             onClicked: {
 
-                var pick_result = view.pick( mouse.x, mouse.y )
-
-
+                var pick_result = view.pick(mouse.x, mouse.y)
 
                 var picked = pick_result.objectHit
-                if( !picked )
+                if (!picked)
                     return
 
-
-                if( picked === screen_3DViewer_Root.selectedTarget )
-                {
+                if (picked === screen_3DViewer_Root.selectedTarget) {
                     screen_3DViewer_Root.selectedTarget = model_NULL
                     return
                 }
@@ -328,11 +225,9 @@ FocusScope {
                 //console.log("Selected Item:")
                 //console.log("--- " + picked.meta_data.type)
                 //console.log("--- " + picked.meta_data.name)
-
                 camera.lookAt(picked)
 
                 screen_3DViewer_Root.selectedTarget = picked
-
             }
         }
     }
@@ -380,5 +275,4 @@ FocusScope {
     Component.onCompleted: {
         screen_3DViewer_Root.forceActiveFocus()
     }
-
 }
