@@ -2,43 +2,123 @@ import QtQuick 2.0
 import QtQuick.Controls 2.15
 import SyntaxHighlight_Bash 1.0
 import SyntaxHighlight_Py 1.0
+import QtLocation 5.12
+import QtPositioning 5.12
 
 Screen__BASE {
     id: screenGalleryRoot
 
-    property string viewMode: "None"
+    property string viewMode: TableModelGalleryApp.sFileTypeFilter
     property string fileName_Selected
     property string filePath_Selected
     property string fileExt_Selected
+    property color colorViewMode_Selected: "#4C8FBE"
+    property color colorViewMode_Unselected: "#A3A0A0"
+
+    property var selectedItemMapData: ""
+
+    readonly property bool shouldBottomControlsLoad: {
+        return screenGalleryRoot.viewMode !== "*"
+                && screenGalleryRoot.isFilePathValid
+    }
+
+    readonly property bool shouldDBViewerLoad: {
+        return (screenGalleryRoot.viewMode === "Database"
+                || screenGalleryRoot.viewMode === '*')
+                && screenGalleryRoot.isFilePathValid
+                && FileHandler.isDatabaseFile(filePath_Selected)
+    }
+
+    readonly property bool shouldImageViewerLoad: {
+        return (screenGalleryRoot.viewMode === "Image"
+                || screenGalleryRoot.viewMode === "*")
+                && screenGalleryRoot.isFilePathValid && FileHandler.isImageFile(
+                    filePath_Selected)
+    }
+
+    readonly property bool shouldTextViewerLoad: {
+
+        var bRet = (screenGalleryRoot.viewMode === "Document"
+                    || screenGalleryRoot.viewMode === "*")
+                && screenGalleryRoot.fileExt_Selected !== "pdf"
+                && screenGalleryRoot.isFilePathValid && FileHandler.isTextFile(
+                    filePath_Selected)
+
+        return bRet
+    }
+
+    readonly property bool shouldPdfViewerLoad: {
+
+        var bRet = (screenGalleryRoot.viewMode === "Document"
+                    || screenGalleryRoot.viewMode === "*")
+                && screenGalleryRoot.fileExt_Selected === "pdf"
+                && screenGalleryRoot.isFilePathValid && FileHandler.isTextFile(
+                    filePath_Selected)
+
+        console.log("Should PDF Viewer load? " + bRet)
+        if (bRet === false) {
+            console.log("--- ViewMode: " + viewMode)
+            console.log("--- File EXT: " + fileExt_Selected)
+            console.log("--- File Path: " + filePath_Selected)
+            console.log("----- Is valid: " + isFilePathValid)
+        }
+        return bRet
+    }
+
+    readonly property bool should3DViewerLoad: {
+        return (screenGalleryRoot.viewMode === "3D Drawing"
+                || screenGalleryRoot.viewMode === '*')
+                && screenGalleryRoot.isFilePathValid && FileHandler.is3DFile(
+                    filePath_Selected)
+    }
+
+    readonly property bool shouldAudioViewerLoad: {
+        return (screenGalleryRoot.viewMode === "Audio"
+                || screenGalleryRoot.viewMode === "*")
+                && screenGalleryRoot.isFilePathValid && FileHandler.isAudioFile(
+                    filePath_Selected)
+    }
+
+    readonly property bool shouldVideoViewerLoad: {
+        return (screenGalleryRoot.viewMode === "Video"
+                || screenGalleryRoot.viewMode === '*')
+                && screenGalleryRoot.isFilePathValid && FileHandler.isVideoFile(
+                    filePath_Selected)
+    }
+
+    readonly property bool isFilePathValid: {
+        return filePath_Selected !== ""
+    }
 
     screenName: "Gallery"
 
     signal onCloseClicked
+
+    Component.onCompleted: DatabaseController.getGalleryDocument()
+
+    onSelectedItemMapDataChanged: {
+        if (selectedItemMapData === "") {
+            loaderMapViewer.active = false
+            return
+        }
+
+        loaderMapViewer.active = true
+    }
+
+    onViewModeChanged: {
+        filePath_Selected = ""
+
+        loaderMapViewer.active = false
+    }
 
     function onFolderClicked(indexClicked) {
         var fullPath = listviewDirectoryContents.model[indexClicked].fullPath
         FileHandler.searchPath = fullPath
     }
 
-    function onItemClicked(indexClicked) {
-        filePath_Selected = listviewDirectoryContents.model[indexClicked].fullPath
-        fileExt_Selected = listviewDirectoryContents.model[indexClicked].extension
-        fileName_Selected = listviewDirectoryContents.model[indexClicked].fileName
-
-        if (FileHandler.isAudioFile(filePath_Selected)) {
-            showAudioPlayer()
-        } else if (FileHandler.isVideoFile(filePath_Selected)) {
-            showVideoPlayer()
-        } else if (FileHandler.isDatabaseFile(filePath_Selected)) {
-            showDatabaseViewer()
-        } else if (FileHandler.isTextFile(filePath_Selected)) {
-
-            showPlainTextViewer()
-        } else if (FileHandler.isImageFile(filePath_Selected)) {
-            showImageViewer()
-        } else {
-            showUnknownFileTypeViewer()
-        }
+    function onItemClicked(indexClicked, fileExt) {
+        filePath_Selected = "/home/murano/docker_data" + indexClicked
+        fileExt_Selected = fileExt
     }
 
     function onItemLongClicked(indexClicked) {
@@ -49,48 +129,17 @@ Screen__BASE {
         showFileInfoViewer()
     }
 
-    function showFileInfoViewer() {
-        screenGalleryRoot.viewMode = "File Info"
-    }
-
-    function showUnknownFileTypeViewer() {
-        screenGalleryRoot.viewMode = "Unknown"
-    }
-
-    function showDatabaseViewer() {
-        screenGalleryRoot.viewMode = "Database"
-    }
-
-    function showVideoPlayer() {
-        screenGalleryRoot.viewMode = "Video"
-    }
-
-    function showAudioPlayer() {
-        screenGalleryRoot.viewMode = "Audio"
-    }
-
-    function showImageViewer() {
-        screenGalleryRoot.viewMode = "Image"
-        imageViewer.source = "file://" + filePath_Selected
-    }
-
-    function showPlainTextViewer() {
-        screenGalleryRoot.viewMode = "Text"
-
-        FileHandler.loadText(filePath_Selected)
-    }
-
     Rectangle {
         id: rectBg
 
         anchors.fill: parent
-        color: "#80000000"
+        color: "#ffffff"
     }
 
     Rectangle {
         id: rectPopupInfo
 
-        color: "#80000000"
+        color: "#ffffff"
         height: 64
 
         anchors {
@@ -102,14 +151,86 @@ Screen__BASE {
             rightMargin: 20
         }
 
-        CompLabel {
-            id: lblTitle
+        CompIconBtn {
+            id: btnUpload
 
-            text: "Gallery - " + FileHandler.searchPath_Root
+            iconColor: "#1B4A60"
+            visible: false
             anchors {
                 top: parent.top
                 left: parent.left
                 bottom: parent.bottom
+            }
+        }
+
+        Row {
+            id: rowTopControls
+
+            layoutDirection: Qt.RightToLeft
+            spacing: 20
+            anchors {
+                top: btnUpload.top
+                left: btnUpload.right
+                right: btnClose.visible ? btnClose.left : parent.right
+                bottom: btnUpload.bottom
+            }
+
+            Repeater {
+                model: ListModel {
+                    ListElement {
+                        text: "A"
+                        filterString: "Audio"
+                        iconPath: "MicrophoneFill.svg"
+                    }
+
+                    ListElement {
+                        text: "G"
+                        filterString: "Graph"
+                        iconPath: "chart.svg"
+                    }
+
+                    ListElement {
+                        text: "3D"
+                        filterString: "3D Drawing"
+                        iconPath: "cube.svg"
+                    }
+
+                    ListElement {
+                        text: "D"
+                        filterString: "Document"
+                        iconPath: "file-pdf.svg"
+                    }
+
+                    ListElement {
+                        text: "C"
+                        filterString: "Image"
+                        iconPath: "image.svg"
+                    }
+
+                    ListElement {
+                        text: "V"
+                        filterString: "Video"
+                        iconPath: "video.svg"
+                    }
+
+                    ListElement {
+                        text: "*"
+                        filterString: "*"
+                        iconPath: "globe.svg"
+                    }
+                }
+
+                delegate: CompIconBtn {
+
+                    property bool isCurrent: screenGalleryRoot.viewMode === model.filterString
+
+                    iconColor: isCurrent ? screenGalleryRoot.colorViewMode_Selected : colorViewMode_Unselected
+                    iconUrl: "file:///usr/share/BeaconOS-lib-images/images/" + model.iconPath
+                    height: rowTopControls.height
+
+                    onClicked: TableModelGalleryApp.setFileTypeFilter(
+                                   model.filterString)
+                }
             }
         }
 
@@ -131,232 +252,317 @@ Screen__BASE {
     }
 
     Rectangle {
-        id: rectFileList
+        id: rectContents
 
-        width: 400
-        color: "#80000000"
+        color: "#ffffff"
         anchors {
             top: rectPopupInfo.bottom
             topMargin: 20
             left: rectPopupInfo.left
-            bottom: rectControls.top
-            bottomMargin: 20
+            leftMargin: 10
+            bottom: rectControls.visible ? rectControls.top : rectControls.bottom
+            right: rectPopupInfo.right
+            rightMargin: 10
+        }
+    }
+
+    Item {
+        id: comp_Gallery_GridView
+
+        visible: screenGalleryRoot.filePath_Selected === ""
+
+        anchors.fill: rectContents
+        anchors.leftMargin: 60
+        anchors.topMargin: 40
+
+        CompLabel {
+            id: lblNoresultsToDisplay
+
+            visible: gridviewContents.count === 0
+
+            anchors.centerIn: parent
+            text: "No media available"
+            font {
+                pixelSize: 40
+            }
+
+            color: "#80000000"
         }
 
-        ListView {
-            id: listviewDirectoryContents
+        GridView {
+            id: gridviewContents
 
-            property int itemHeight: 64
+            visible: count > 0
+            anchors.fill: parent
+            anchors.margins: 20
 
+            model: TableModelGalleryApp
             clip: true
             boundsBehavior: Flickable.StopAtBounds
-            anchors.fill: parent
-            anchors.margins: 10
-            spacing: 32
-            model: FileHandler.listOfDirContent
+
+            cellHeight: 400
+            cellWidth: 400
 
             delegate: Item {
-                id: compDirContentItem
 
-                property var myModel: FileHandler.listOfDirContent[index]
-                readonly property string fileName: myModel.fileName
-                readonly property string fileExtension: myModel.extension
-                readonly property string fullPath: myModel.fullPath
-                readonly property bool isDir: myModel.isDirectory
-                readonly property bool isHidden: myModel.isHidden
-                readonly property bool isSelected: screenGalleryRoot.filePath_Selected === fullPath
+                height: gridviewContents.cellHeight
+                width: gridviewContents.cellWidth
 
-                enabled: !isSelected
-                height: 90
-                width: listviewDirectoryContents.width
+                Comp_Gallery_GridViewItem {
 
-                function itemClicked() {
-                    if (isDir)
-                        screenGalleryRoot.onFolderClicked(index)
-                    else
-                        screenGalleryRoot.onItemClicked(index)
-                }
-
-                Item {
-                    id: rectItemIcon
-
-                    //color: parent.isDir ? "#00FF00" : "#00000000"
-                    width: height
-                    anchors {
-                        left: parent.left
-                        top: parent.top
-                        topMargin: 10
-                        bottom: parent.bottom
-                        bottomMargin: 10
-                    }
-                    CompImageIcon {
-
-                        readonly property string filePath_ROOT: "file:///usr/share/BeaconOS-lib-images/images/"
-                        readonly property string filePath_FolderIcon: filePath_ROOT + "Folder.svg"
-                        readonly property string filePath_Current: compDirContentItem.isDir ? filePath_FolderIcon : ""
-                        source: filePath_Current
-                        anchors.fill: parent
-                    }
-                }
-
-                CompLabel {
-                    id: lblFileName
-
-                    text: parent.fileName
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
-
-                    anchors {
-                        top: rectItemIcon.top
-                        left: rectItemIcon.right
-                        leftMargin: 20
-                        bottom: rectItemIcon.bottom
-                        right: parent.right
-                    }
-                }
-
-                MouseArea {
                     anchors.fill: parent
+                    anchors.margins: 20
 
-                    onClicked: compDirContentItem.itemClicked()
+                    messageFormat: model.MESSAGE_FORMAT
+                    fileName: model.TITLE
+                    fileAuthor: model.DISPLAY_OWNER
+                    fileViewsString: model.DISPLAY_VIEWS
+                    fileAgeString: model.DISPLAY_AGE
+                    filePathUrl: model.ELECTRONIC_DOCUMENT_FILE_LOCATION
+                    fileType: model.TAG
 
-                    onPressAndHold: screenGalleryRoot.onItemLongClicked(index)
+                    onSignalIconClicked: (filePath, fileExt) => {
+                                             screenGalleryRoot.onItemClicked(
+                                                 filePath, fileExt)
+                                         }
+
+                    onSignalMapButtonClicked: {
+                        var modelIndexMapData = {
+                            "type": model.TAG,
+                            "location": model.DISPLAY_LOCATION,
+                            "mapMode": 'STREET'
+                        }
+
+                        screenGalleryRoot.selectedItemMapData = modelIndexMapData
+                    }
+
+                    onSignalSatelliteButtonClicked: {
+                        var modelIndexMapData = {
+                            "type": model.TAG,
+                            "location": model.DISPLAY_LOCATION,
+                            "mapMode": 'SATELLITE'
+                        }
+
+                        screenGalleryRoot.selectedItemMapData = modelIndexMapData
+                    }
                 }
             }
         }
     }
 
-    Rectangle {
-        id: rectContents
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.shouldTextViewerLoad
 
-        color: "#80000000"
-        anchors {
-            top: rectFileList.top
-            left: rectFileList.right
-            leftMargin: 20
-            bottom: rectFileList.bottom
-            right: rectPopupInfo.right
+        anchors.fill: rectContents
+
+        sourceComponent: CompTextEditor {
+
+            textEdit.text: FileHandler.loadedFileText
+            fileName: screenGalleryRoot.fileName_Selected
+            fileExtension: screenGalleryRoot.fileExt_Selected
+
+            onTextEditTextChanged: popupPleaseWait.close()
         }
     }
 
-    CompTextEditor {
-        id: textEditor
+    Loader {
 
-        visible: screenGalleryRoot.viewMode === "Text"
-                 && screenGalleryRoot.fileExt_Selected !== "pdf"
-        textEdit.text: FileHandler.loadedFileText
-        fileName: screenGalleryRoot.fileName_Selected
-        fileExtension: screenGalleryRoot.fileExt_Selected
+        asynchronous: true
+        active: screenGalleryRoot.shouldPdfViewerLoad
+        onActiveChanged: "PDF Loader is active: " + active
         anchors.fill: rectContents
 
-        onTextEditTextChanged: popupPleaseWait.close()
-    }
+        sourceComponent: CompPdfViewer {
+            id: pdfView
 
-    CompPdfViewer {
-        id: pdfView
+            zoom: 2.0
+            fileUrl: screenGalleryRoot.filePath_Selected
 
-        visible: screenGalleryRoot.viewMode === "Text"
-                 && screenGalleryRoot.fileExt_Selected === "pdf"
-        fileUrl: visible ? screenGalleryRoot.filePath_Selected : "undefined"
-        anchors.fill: rectContents
+            //Rectangle {
+            //    anchors.fill: parent
 
-        //Rectangle {
-        //    anchors.fill: parent
-
-        //    color: '#80ff0000'
-        //}
-    }
-
-    Item {
-        id: compGalleryFileInfoView
-
-        visible: screenGalleryRoot.viewMode === "File Info"
-        anchors.fill: rectContents
-
-        CompLabel {
-
-            text: screenGalleryRoot.filePath_Selected
-            anchors.centerIn: parent
+            //    color: '#80ff0000'
+            //}
         }
     }
 
-    Item {
-        id: compGalleryUnknownTypeView
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.viewMode === "File Info"
+                && screenGalleryRoot.isFilePathValid
 
-        visible: screenGalleryRoot.viewMode === "Unknown"
         anchors.fill: rectContents
 
-        CompLabel {
+        sourceComponent: Item {
+            id: compGalleryFileInfoView
 
-            text: "Unknown File Type: " + screenGalleryRoot.fileExt_Selected
-            anchors.centerIn: parent
+            CompLabel {
+
+                text: screenGalleryRoot.filePath_Selected
+                anchors.centerIn: parent
+            }
         }
     }
 
-    Item {
-        id: compGalleryAudioView
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.viewMode === "Unknown"
+                && screenGalleryRoot.isFilePathValid
 
-        visible: screenGalleryRoot.viewMode === "Audio"
         anchors.fill: rectContents
 
-        CompLabel {
+        sourceComponent: Item {
+            id: compGalleryUnknownTypeView
 
-            text: "Audio File View: " + screenGalleryRoot.fileExt_Selected
-            anchors.centerIn: parent
+            CompLabel {
+
+                text: "Unknown File Type: " + screenGalleryRoot.fileExt_Selected
+                anchors.centerIn: parent
+            }
         }
     }
 
-    Item {
-        id: compGalleryVideoView
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.shouldAudioViewerLoad
 
-        visible: screenGalleryRoot.viewMode === "Video"
         anchors.fill: rectContents
 
-        CompLabel {
+        sourceComponent: Item {
+            CompLabel {
 
-            text: "Video File View: " + screenGalleryRoot.fileExt_Selected
-            anchors.centerIn: parent
+                text: "Audio File View: " + screenGalleryRoot.fileExt_Selected
+                anchors.centerIn: parent
+            }
         }
     }
 
-    Item {
-        id: compGalleryDatabaseView
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.shouldVideoViewerLoad
 
-        visible: screenGalleryRoot.viewMode === "Database"
         anchors.fill: rectContents
 
-        CompLabel {
+        sourceComponent: Item {
+            CompLabel {
 
-            text: "Database File View: " + screenGalleryRoot.fileExt_Selected
-            anchors.centerIn: parent
+                text: "Video File View: " + screenGalleryRoot.fileExt_Selected
+                anchors.centerIn: parent
+            }
         }
     }
 
-    Flickable {
-        id: flickableImageViewer
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.should3DViewerLoad
 
-        visible: screenGalleryRoot.viewMode === "Image"
-
-        clip: true
-        boundsBehavior: Flickable.StopAtBounds
         anchors.fill: rectContents
 
-        Image {
-            id: imageViewer
+        sourceComponent: Item {
 
-            asynchronous: true
-            sourceSize: Qt.size(width, height)
-            fillMode: Image.PreserveAspectFit
+            Screen_3dViewer {
+                anchors.fill: parent
+            }
+        }
+    }
 
-            onSourceChanged: {
-                height = flickableImageViewer.height
-                width = flickableImageViewer.width
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.shouldDBViewerLoad
+
+        anchors.fill: rectContents
+
+        sourceComponent: Item {
+
+            CompLabel {
+
+                text: "Database File View: " + screenGalleryRoot.fileExt_Selected
+                anchors.centerIn: parent
+            }
+        }
+    }
+
+    Loader {
+        asynchronous: true
+        active: screenGalleryRoot.shouldImageViewerLoad
+
+        anchors.fill: rectContents
+
+        sourceComponent: Flickable {
+
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            Image {
+                id: imageViewer
+
+                source: "file://" + screenGalleryRoot.filePath_Selected
+                asynchronous: true
+                sourceSize: Qt.size(width, height)
+                fillMode: Image.PreserveAspectFit
+
+                onSourceChanged: {
+                    height = parent.height
+                    width = parent.width
+                }
+            }
+        }
+    }
+
+    Loader {
+        id: loaderMapViewer
+
+        asynchronous: true
+        active: false
+
+        anchors.fill: rectContents
+
+        sourceComponent: CompMapViewer {
+
+            Component.onCompleted: {
+                var mapData = screenGalleryRoot.selectedItemMapData
+                var locationSplit = mapData.location.split(',')
+                var lat = locationSplit[0]
+                var lon = locationSplit[1]
+                var mapType = mapData.mapMode
+
+                setActiveMapTypeIndex(mapType === "STREET" ? 1 : 4)
+                addPoint_Custom(lat, lon, compCustomMapItem)
+                setZoomLevel(17.5)
+            }
+        }
+    }
+
+    Component {
+        id: compCustomMapItem
+
+        MapQuickItem {
+
+            anchorPoint: Qt.point(sourceItem.width * 0.5,
+                                  sourceItem.height * 0.5)
+
+            onCoordinateChanged: {
+                sourceItem.coords = coordinate
+                console.log("compClickableMapItem:: Coordinates now " + coordinate)
+            }
+
+            sourceItem: CompImageIcon {
+                id: imgSub
+                height: 40
+                width: 40
+
+                property var coords
+                applyColoring: false
+                source: "file:///usr/share/BeaconOS-lib-images/images/locator.png"
             }
         }
     }
 
     Rectangle {
         id: rectControls
+
+        visible: screenGalleryRoot.shouldBottomControlsLoad
 
         color: "#80000000"
         anchors {
@@ -369,18 +575,18 @@ Screen__BASE {
         height: 90
     }
 
-    PopupPleaseWait {
-        id: popupPleaseWait
-        timeoutEnabled: false
+    //PopupPleaseWait {
+    //    id: popupPleaseWait
+    //    timeoutEnabled: false
 
-        Connections {
-            target: FileHandler
+    //    Connections {
+    //        target: FileHandler
 
-            //signal_FileLoadingStarted
-            function onSignal_FileLoadingStarted() {
-                console.log("popup opening")
-                popupPleaseWait.open()
-            }
-        }
-    }
+    //        //signal_FileLoadingStarted
+    //        function onSignal_FileLoadingStarted() {
+    //            console.log("popup opening")
+    //            popupPleaseWait.open()
+    //        }
+    //    }
+    //}
 }
