@@ -77,21 +77,31 @@ Comp__BASE {
         map.zoomLevel = zoomLevel
     }
 
-    function addPoint(lat, lon, type) {
+    function addPoint_Custom(lat, lon, customMapItem) {
+        addPoint(lat, lon, customMapItem)
+    }
+
+    function addPoint_Default(lat, lon) {
+        addPoint(lat, lon, compClickableMapItem)
+    }
+
+    function addPoint(lat, lon, mapItem, addMapPoint = false) {
         var mapPoint = Qt.createQmlObject(
                     'import QtLocation 5.3; MapCircle {}', compMapViewerRoot)
         var coords = QtPositioning.coordinate(lat, lon)
-        mapPoint.center = coords
-        mapPoint.radius = 20
-        mapPoint.color = "#800000FF"
 
-        map.addMapItem(mapPoint)
+        if (addMapPoint) {
+            mapPoint.center = coords
+            mapPoint.radius = 20
+            mapPoint.color = "#800000FF"
+            map.addMapItem(mapPoint)
+        }
 
-        var toAdd = compClickableMapItem.createObject(compMapViewerRoot)
+        var toAdd = mapItem.createObject(compMapViewerRoot)
         toAdd.coordinate = coords
         map.addMapItem(toAdd)
 
-        compMapViewerRoot.centerPoint = Qt.point(lat, lon)
+        compMapViewerRoot.centerOnPoint(coords)
     }
 
     function centerOnPointXY(x, y) {
@@ -111,7 +121,7 @@ Comp__BASE {
             left: parent.left
             right: parent.right
             //bottom: parent.bottom
-            topMargin: raptorNavMenu.selectedScreen === "Raptor" ? 100 : 0
+            topMargin: 0
         }
 
         height: compMapViewerRoot.showMapTypes ? (isDelta ? 64 : 110) : 0
@@ -299,6 +309,7 @@ Comp__BASE {
 
         onZoomLevelChanged: {
             compMapViewerRoot.zoomCurrent = zoomLevel
+            console.log("Zoom Level is now: " + zoomLevel)
         }
 
         copyrightsVisible: false
