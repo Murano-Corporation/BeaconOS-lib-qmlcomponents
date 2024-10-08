@@ -20,7 +20,7 @@ Screen__BASE {
 
     property CompAlphaNumericPinBtn currentPin: emptyPin
     property CompAlphaNumericPinBtn lastPin: emptyPin
-    CompAlphaNumericPinBtn{
+    CompAlphaNumericPinBtn {
         id: emptyPin
         visible: false
         enabled: false
@@ -28,16 +28,15 @@ Screen__BASE {
     }
     Component.onCompleted: {
 
-        MqttTopicCmdBRX.slot_Subscribe()
+        //MqttTopicCmdBRX.slot_Subscribe()
         SingletonScreenManager.clearBreadcrumbs()
     }
 
     onCurrentPinChanged: {
 
-        if(currentPin.text !== lastPin.text && lastPin.text !== emptyPin.text)
-        {
-            if(tmrDelayMoveInputIndex.running)
-            {
+        if (currentPin.text !== lastPin.text
+                && lastPin.text !== emptyPin.text) {
+            if (tmrDelayMoveInputIndex.running) {
                 tmrDelayMoveInputIndex.stop()
 
                 passkeyLast = passkeyCurrent
@@ -49,18 +48,16 @@ Screen__BASE {
     }
 
     onPasskeyCurrentChanged: {
-        if(passkeyCurrent === '')
-        {
+        if (passkeyCurrent === '') {
             return
         }
         tmrDelayInputVisible.restart()
         tmrDelayMoveInputIndex.restart()
-
     }
-
 
     Connections {
         target: SingletonInterfaceLogin
+
         function onSignal_OnPasscodeAccepted() {
             //console.log('LOGIN SUCCESS')
             SingletonScreenManager.slot_GoToScreen("Home", false)
@@ -71,7 +68,8 @@ Screen__BASE {
         target: SingletonInterfaceLogin
         function onSignal_OnPasscodeRejected() {
             console.log('LOGIN DENIED')
-            SingletonOverlayManager.slot_ShowMsgBoxInfo('Failed Login Attempt', 'Please re-enter the login pin')
+            SingletonOverlayManager.slot_ShowMsgBoxInfo(
+                        'Failed Login Attempt', 'Please re-enter the login pin')
             passcodeCurrent = ""
             numPinEntry = 0
         }
@@ -84,17 +82,15 @@ Screen__BASE {
         }
     }
 
-    function onAlphaNumButtonclicked(pinBtn, passkey)
-    {
+    function onAlphaNumButtonclicked(pinBtn, passkey) {
         currentPin = pinBtn
-        if(currentPin.text === emptyPin.text)
-        {
+        if (currentPin.text === emptyPin.text) {
             currentPin = pinBtn
         }
         passkeyCurrent = passkey
     }
 
-    function updatePasscode(sPass){
+    function updatePasscode(sPass) {
         passkeyCurrent = ''
         passcodeCurrent += sPass
         numPinEntry = passcodeCurrent.length
@@ -102,7 +98,7 @@ Screen__BASE {
         lastPin = emptyPin
     }
 
-    Timer{
+    Timer {
         id: tmrDelayMoveInputIndex
 
         interval: delayMoveIndex
@@ -113,26 +109,25 @@ Screen__BASE {
         }
     }
 
-    Timer{
+    Timer {
         id: tmrDelayInputVisible
 
         interval: delayInputVisible
     }
 
-    Item{
+    Item {
 
-        anchors{
+        anchors {
             centerIn: parent
-
         }
 
         height: childrenRect.height
         width: parent.width
 
-        Image{
+        Image {
             id: imgBeaconLogo
 
-            anchors{
+            anchors {
                 top: parent.top
                 topMargin: 40
                 //verticalCenter: parent.verticalCenter
@@ -153,7 +148,6 @@ Screen__BASE {
             horizontalAlignment: Image.AlignHCenter
         }
 
-
         Label {
             id: lblEnterPin
 
@@ -173,14 +167,14 @@ Screen__BASE {
         Row {
             id: rowInputIndicators
             spacing: 32
-            anchors{
+            anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: lblEnterPin.bottom
                 topMargin: isDelta ? 20 : 38
-             }
+            }
             height: 32
 
-            Repeater{
+            Repeater {
                 model: screenLoginRoot.loginPinLength
 
                 Rectangle {
@@ -196,8 +190,7 @@ Screen__BASE {
 
                     property bool isSet: numPinEntry >= (assignedIndex + 1)
                     onIsSetChanged: {
-                        if(isSet === true)
-                        {
+                        if (isSet === true) {
                             //console.log('setting')
                             animSet.restart()
                         } else {
@@ -206,7 +199,7 @@ Screen__BASE {
                         }
                     }
 
-                    ColorAnimation on color{
+                    ColorAnimation on color {
                         id: animSet
 
                         running: false
@@ -215,38 +208,37 @@ Screen__BASE {
                         duration: 200
                     }
 
-                    ColorAnimation on color{
+                    ColorAnimation on color {
                         id: animClear
                         running: false
                         to: 'Transparent'
                         duration: 200
                     }
 
-                    CompLabel{
+                    CompLabel {
 
-                        visible: screenLoginRoot.numPinEntry === parent.assignedIndex && tmrDelayInputVisible.running
+                        visible: screenLoginRoot.numPinEntry === parent.assignedIndex
+                                 && tmrDelayInputVisible.running
 
-                        anchors{
+                        anchors {
                             centerIn: parent
                         }
 
                         text: visible ? screenLoginRoot.passkeyCurrent : ''
-                        font{
+                        font {
                             pixelSize: 18
                         }
                     }
                 }
             }
-
         }
-
 
         Grid {
             id: gridBtns
             spacing: 40
             rows: 4
             columns: 3
-            anchors{
+            anchors {
                 top: rowInputIndicators.bottom
                 topMargin: 64
                 horizontalCenter: parent.horizontalCenter
@@ -259,10 +251,9 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt) {
+                onAlphaNumPinClicked: function (txt) {
                     //console.log('Input key clicked; Text out: ' + txt)
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
-
                 }
             }
 
@@ -274,7 +265,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt) {
+                onAlphaNumPinClicked: function (txt) {
                     //console.log('Input key clicked; Text out: ' + txt)
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
@@ -288,7 +279,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     //console.log('Input key clicked; Text out: ' + txt)
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
@@ -302,9 +293,8 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
-
                 }
             }
 
@@ -316,7 +306,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
             }
@@ -329,7 +319,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
             }
@@ -342,7 +332,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
             }
@@ -355,7 +345,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                     //console.log("txt = " + txt)
                     //console.log("screenLoginRoot.currentPin = " + screenLoginRoot.currentPin)
@@ -371,7 +361,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
             }
@@ -389,7 +379,7 @@ Screen__BASE {
                 numPinEntry: screenLoginRoot.numPinEntry
                 currentPinBtn: screenLoginRoot.currentPin
 
-                onAlphaNumPinClicked: function(txt)  {
+                onAlphaNumPinClicked: function (txt) {
                     screenLoginRoot.onAlphaNumButtonclicked(this, txt)
                 }
             }
@@ -406,20 +396,14 @@ Screen__BASE {
 
                     if (passcodeCurrent.length > 0) {
 
-                        passcodeCurrent = passcodeCurrent.substring(0, passcodeCurrent.length - 1)
+                        passcodeCurrent = passcodeCurrent.substring(
+                                    0, passcodeCurrent.length - 1)
                         numPinEntry -= 1
                     }
                 }
             }
         }
-
-
-
     }
-
-
-
-
 }
 
 /*##^##
@@ -427,3 +411,4 @@ Designer {
     D{i:0;autoSize:true;formeditorColor:"#4c4e50";formeditorZoom:0.33;height:1080;width:1920}
 }
 ##^##*/
+

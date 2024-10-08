@@ -9,23 +9,15 @@ Screen__BASE {
 
     property bool isReadyToProceed: false
     property bool startProcessComplete: false
-    property int iStartupStep: -1;
+    property int iStartupStep: -1
 
     Component.onCompleted: {
         tmrDelay1.start()
         animateText1.start()
     }
 
-    Connections{
-        target: StartupController
-
-        function onSignal_Message(sMessage){
-            console.log("MSG: " + sMessage)
-        }
-    }
-
-    function startupProcesses_Start(){
-        console.log("Startup processes running...");
+    function startupProcesses_Start() {
+        console.log("Startup processes running...")
         iStartupStep = -1
 
         Processes.signal_Started.connect(onProcessStarted)
@@ -33,52 +25,46 @@ Screen__BASE {
         Processes.signal_ErrorOccurred.connect(onProcessError)
 
         //startupProcesses_Step()
-
         startupProcesses_Complete()
     }
 
-    function startupProcesses_Step(){
+    function startupProcesses_Step() {
         iStartupStep += 1
 
-        if(iStartupStep === 0)
-        {
+        if (iStartupStep === 0) {
             Processes.executeProcess(0)
-        } else if(iStartupStep === 1)
-        {
+        } else if (iStartupStep === 1) {
             Processes.executeProcess(3)
         } else {
             startupProcesses_Complete()
         }
     }
 
-    function startupProcesses_Complete(){
-        if(startProcessComplete === true)
+    function startupProcesses_Complete() {
+        if (startProcessComplete === true)
             return
 
         startProcessComplete = true
 
         tmrDelay2.running = true
         SingletonScreenManager.slot_StartupProcessesComplete(true)
-
     }
 
-    function onProcessStarted(eID)
-    {
+    function onProcessStarted(eID) {
         console.log("Process started: " + eID)
     }
 
-    function onProcessError(eID, eErr)
-    {
+    function onProcessError(eID, eErr) {
         console.log("Process errored: " + eID + " :: err: " + eErr)
     }
 
-    function onProcessFinished(eID, iExitCode, eExitState)
-    {
-        console.log("Process finished: " + eID, + " :: exit Code: " + iExitCode + " :: exit state: " + eExitState)
+    function onProcessFinished(eID, iExitCode, eExitState) {
+        console.log("Process finished: " + eID,
+                    +" :: exit Code: " + iExitCode + " :: exit state: " + eExitState)
         startupProcesses_Step()
     }
 
-    Timer{
+    Timer {
         id: tmrDelay1
         interval: 500
         onTriggered: animBeaconLogo.running = true
@@ -97,13 +83,13 @@ Screen__BASE {
         }
     }
 
-    Timer{
+    Timer {
         id: tmrDelay_StartupProcesses
         interval: 250
         onTriggered: startupProcesses_Start()
     }
 
-    Timer{
+    Timer {
         id: tmrDelay2
         interval: 250
         onTriggered: animContinueButtn.running = true
@@ -118,22 +104,21 @@ Screen__BASE {
         duration: 500
 
         onFinished: isReadyToProceed = true
-
     }
 
-    Timer{
+    Timer {
         id: tmrDelay3
         interval: 250
         onTriggered: animMuranoCorpText.running = true
     }
 
-    Timer{
+    Timer {
         id: tmrDelay4
         interval: 250
         onTriggered: animFadeOutScreen.running = true
     }
 
-    PropertyAnimation{
+    PropertyAnimation {
         id: animFadeOutScreen
         target: rootContents
         property: "opacity"
@@ -146,15 +131,16 @@ Screen__BASE {
         }
     }
 
-    Timer{
+    Timer {
         id: tmrDelay5
         interval: 1000
         onTriggered: {
-            console.log("GOING TO LOGIN SCREEN");
-            SingletonScreenManager.slot_GoToScreen("Login", false);}
+            console.log("GOING TO LOGIN SCREEN")
+            SingletonScreenManager.slot_GoToScreen("Login", false)
+        }
     }
 
-    Item{
+    Item {
         id: rootContents
 
         anchors.fill: parent
@@ -169,11 +155,10 @@ Screen__BASE {
             height: imgBeaconOs.y + imgBeaconOs.height
             opacity: 0.0
 
-
-            Image{
+            Image {
                 id: imgBeaconLog
 
-                anchors{
+                anchors {
                     top: parent.top
                     horizontalCenter: parent.horizontalCenter
                 }
@@ -188,8 +173,6 @@ Screen__BASE {
                 smooth: true
 
                 horizontalAlignment: Image.AlignHCenter
-
-
             }
 
             CompLabel {
@@ -198,10 +181,12 @@ Screen__BASE {
                 visible: false
 
                 property string beaconOsFull: "BEACON OS"
-                property string beaconOsLblCurrent: beaconOsFull.slice(0, beaconOsLblMaxVisChars)
+                property string beaconOsLblCurrent: beaconOsFull.slice(
+                                                        0,
+                                                        beaconOsLblMaxVisChars)
                 property int beaconOsLblMaxVisChars: 0
 
-                anchors{
+                anchors {
                     top: imgBeaconLog.bottom
                     topMargin: 75
                     horizontalCenter: imgBeaconLog.horizontalCenter
@@ -209,22 +194,20 @@ Screen__BASE {
 
                 text: beaconOsLblCurrent
 
-                font{
+                font {
                     family: 'ethnocentric'
                     weight: Font.Light
                     pixelSize: 80
                 }
-
-
             }
 
-            Image{
+            Image {
                 id: imgBeaconOs
                 visible: !lblBeaconOs.visible
 
                 opacity: 1.0
 
-                anchors{
+                anchors {
                     top: imgBeaconLog.bottom
                     topMargin: 60
                     horizontalCenter: parent.horizontalCenter
@@ -238,11 +221,11 @@ Screen__BASE {
             }
             CompLabel {
                 id: lblclicktoproceed
-                //y: 735
 
+                //y: 735
                 visible: true
 
-                anchors{
+                anchors {
                     top: imgBeaconOs.bottom
                     topMargin: 75
                     horizontalCenter: parent.horizontalCenter
@@ -251,27 +234,43 @@ Screen__BASE {
                 text: "Click to Proceed"
                 anchors.horizontalCenterOffset: 0
 
-                font{
+                font {
                     family: 'Lato'
                     weight: Font.Light
                     pixelSize: 30
                 }
             }
 
-            PropertyAnimation  {id: animateText1; target: lblclicktoproceed; property: "opacity"; from: 1.0; to: 0; duration: 1000; onFinished: animateText2.start()}
-            Timer{
+            PropertyAnimation {
+                id: animateText1
+                target: lblclicktoproceed
+                property: "opacity"
+                from: 1.0
+                to: 0
+                duration: 1000
+                onFinished: animateText2.start()
+            }
+            Timer {
                 id: animationDelay
                 interval: 2000
                 onTriggered: animateText1.start()
             }
-            PropertyAnimation  {id: animateText2; target: lblclicktoproceed; property: "opacity"; from: 0; to: 1.0; duration: 1000; onFinished: animationDelay.start()}
+            PropertyAnimation {
+                id: animateText2
+                target: lblclicktoproceed
+                property: "opacity"
+                from: 0
+                to: 1.0
+                duration: 1000
+                onFinished: animationDelay.start()
+            }
         }
 
         Image {
 
             id: iconNext
 
-            anchors{
+            anchors {
                 right: parent.right
                 rightMargin: 25
 
@@ -286,21 +285,19 @@ Screen__BASE {
             opacity: 0
 
             visible: false
+        }
+    }
 
+    MouseArea {
 
-        }}
+        //        Rectangle{
+        //            anchors.fill: parent
 
-    MouseArea{
-
-//        Rectangle{
-//            anchors.fill: parent
-
-//            color: "#8000ff00"
-//        }
+        //            color: "#8000ff00"
+        //        }
 
         //visible: isReadyToProceed
-
-        anchors{
+        anchors {
             fill: parent
         }
 

@@ -3,6 +3,7 @@ import CONSTANTS 1.0
 
 Item {
     readonly property int targetDevice: TARGET_DEVICE
+    readonly property string imageLocation: "file:////usr/share/BeaconOS-lib-images/images/"
 
     property bool isDelta: (targetDevice === Constants.ETargetDevice_Delta)
     property bool isOmega: (targetDevice === Constants.ETargetDevice_Omega)

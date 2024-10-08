@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import SyntaxHighlight_Bash 1.0
 import SyntaxHighlight_Py 1.0
@@ -54,14 +54,6 @@ Screen__BASE {
                 && screenGalleryRoot.fileExt_Selected === "pdf"
                 && screenGalleryRoot.isFilePathValid && FileHandler.isTextFile(
                     filePath_Selected)
-
-        console.log("Should PDF Viewer load? " + bRet)
-        if (bRet === false) {
-            console.log("--- ViewMode: " + viewMode)
-            console.log("--- File EXT: " + fileExt_Selected)
-            console.log("--- File Path: " + filePath_Selected)
-            console.log("----- Is valid: " + isFilePathValid)
-        }
         return bRet
     }
 
@@ -127,6 +119,11 @@ Screen__BASE {
         fileName_Selected = listviewDirectoryContents.model[indexClicked].fileName
 
         showFileInfoViewer()
+    }
+
+    function onEmployeeIdClicked(employeeId) {
+        popupEmpoyeeInfoViewer.open()
+        compEmployeeInfoViewer.employeeNameToSearch = employeeId
     }
 
     Rectangle {
@@ -339,6 +336,7 @@ Screen__BASE {
                     fileAgeString: model.DISPLAY_AGE
                     filePathUrl: model.ELECTRONIC_DOCUMENT_FILE_LOCATION
                     fileType: model.TAG
+                    fileRecordCreator: model.RECORD_CREATOR
 
                     onSignalIconClicked: (filePath, fileExt) => {
                                              screenGalleryRoot.onItemClicked(
@@ -364,12 +362,18 @@ Screen__BASE {
 
                         screenGalleryRoot.selectedItemMapData = modelIndexMapData
                     }
+
+                    onSignalAuthorClicked: author => {
+                                               screenGalleryRoot.onEmployeeIdClicked(
+                                                   author)
+                                           }
                 }
             }
         }
     }
 
     Loader {
+
         asynchronous: true
         active: screenGalleryRoot.shouldTextViewerLoad
 
@@ -445,30 +449,11 @@ Screen__BASE {
     Loader {
         asynchronous: true
         active: screenGalleryRoot.shouldAudioViewerLoad
-
+                || screenGalleryRoot.shouldVideoViewerLoad
         anchors.fill: rectContents
 
-        sourceComponent: Item {
-            CompLabel {
-
-                text: "Audio File View: " + screenGalleryRoot.fileExt_Selected
-                anchors.centerIn: parent
-            }
-        }
-    }
-
-    Loader {
-        asynchronous: true
-        active: screenGalleryRoot.shouldVideoViewerLoad
-
-        anchors.fill: rectContents
-
-        sourceComponent: Item {
-            CompLabel {
-
-                text: "Video File View: " + screenGalleryRoot.fileExt_Selected
-                anchors.centerIn: parent
-            }
+        sourceComponent: CompAudioVideoPlayer {
+            id: compAudioVideoPlayer
         }
     }
 
@@ -550,6 +535,40 @@ Screen__BASE {
                 addPoint_Custom(lat, lon, compCustomMapItem)
                 setZoomLevel(17.5)
             }
+        }
+    }
+
+    Comp__BASE_Popup {
+        id: popupEmpoyeeInfoViewer
+
+        popupName: "Employee Info Viewer"
+        modal: false
+        background: Rectangle {
+            color: "#80000000"
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    popupEmpoyeeInfoViewer.close()
+                }
+            }
+        }
+
+        CompPopupBG {
+            colorBG: "#ffffff"
+            anchors.fill: compEmployeeInfoViewer
+            anchors.margins: -20
+
+            MouseArea {
+                anchors.fill: parent
+            }
+        }
+
+        Comp_EmployeeInfoViewer {
+            id: compEmployeeInfoViewer
+
+            anchors.centerIn: parent
         }
     }
 

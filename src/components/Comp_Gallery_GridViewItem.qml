@@ -10,6 +10,7 @@ Comp__BASE {
     property string fileAuthor: "???"
     property string fileViewsString: "? Views"
     property string fileAgeString: "Unknown"
+    property string fileRecordCreator: ""
     property int fileButtonFlags: 0
     property string filePathUrl
     property color colorLabelName: "#000000"
@@ -24,7 +25,7 @@ Comp__BASE {
     signal signalMapButtonClicked
     signal signalSatelliteButtonClicked
     signal signalIconClicked(string filePathUrl, string fileExt)
-    signal signalAuthorClicked(string authorName)
+    signal signalAuthorClicked(string fileRecordCreator)
 
     Item {
         id: areaIcon
@@ -121,7 +122,7 @@ Comp__BASE {
                     anchors.fill: parent
 
                     onClicked: compGalleryGridItemRoot.signalAuthorClicked(
-                                   compGalleryGridItemRoot.fileAuthor)
+                                   compGalleryGridItemRoot.fileRecordCreator)
                 }
 
                 font.pixelSize: lblFileName.font.pixelSize

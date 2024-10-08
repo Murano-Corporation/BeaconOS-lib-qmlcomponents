@@ -267,16 +267,10 @@
         <file>CompTextEditor.qml</file>
         <file>CompPdfViewer.qml</file>
         <file>Comp_Gallery_GridViewItem.qml</file>
+        <file>CompAudioVideoPlayer.qml</file>
+        <file>Comp_EmployeeInfoViewer.qml</file>
+        <file>CompLabelledTextEdit_Vertical.qml</file>
+        <file>CompSectionLabel.qml</file>
     </qresource>
-    <qresource prefix="/jesse_royal">
-        <file>CompPreFlightJR.qml</file>
-        <file>CompPreFlightObjectJR.qml</file>
-        <file>CompRelayJR.qml</file>
-        <file>CompServoJR.qml</file>
-        <file>CompTelemetryLogsJR.qml</file>
-        <file>CompTelemetryLogsSpeedJR.qml</file>
-        <file>Comp_TEST_Jesse.qml</file>
-        <file>CompTestJesses.qml</file>
-        <file>CompAuxFunctionJR.qml</file>
-    </qresource>
+    <qresource prefix="/jesse_royal"/>
 </RCC>

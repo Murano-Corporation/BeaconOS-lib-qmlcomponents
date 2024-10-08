@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import CONSTANTS 1.0
 
 Screen__BASE {
     id: screenAssetDashboardRoot
@@ -22,6 +23,7 @@ Screen__BASE {
     property bool hasAnyAssets: false
 
     onSelectedAssetTypeChanged: {
+
         TableModelAssetDashboardGridView.slot_SetFilter_Type(selectedAssetType)
     }
 
@@ -334,7 +336,6 @@ Screen__BASE {
                 //        status: "Active"
                 //        asset_type: "CNC"
                 //        hours_of_operation: "12hr 20min"
-                //
                 //    }
                 //}
                 delegate: CompAssetDashboardGridItem {
@@ -344,7 +345,9 @@ Screen__BASE {
                     beaconID: model.beacon_id
                     beaconState: model.status
                     assetType: model.asset_type
-                    hoursOfOperation: model.hours_of_operation
+                    hoursOfOperation: model.asset_type
+                                      === "Vehicle" ? model.hours_of_operation : "---"
+                    executionTime: model.asset_type === "CNC" ? model.execution_time : "---"
                 }
             }
         }

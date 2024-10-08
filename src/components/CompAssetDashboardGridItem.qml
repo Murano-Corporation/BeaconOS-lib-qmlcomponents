@@ -9,31 +9,57 @@ Comp__BASE {
     property string assetState: "Active"
     property string beaconState: "Active"
     property string assetType: "Vehicle"
-    property string hoursOfOperation: "OOO"
+    property string hoursOfOperation: "---"
+    property string executionTime: "---"
 
     width: isDelta ? 373 : 412
     height: isDelta ? 368 : 412
 
-    Rectangle{
+    Rectangle {
         id: rectDevHoursOfOperation
 
-        color: "#00ff00"
+        visible: compAssetDashboardGridItemRoot.assetType === "Vehicle"
+
+        color: "#808000"
         height: 64
         width: 200
 
-        anchors{
+        anchors {
             top: parent.top
 
             horizontalCenter: parent.horizontalCenter
-
         }
 
-        CompLabel{
+        CompLabel {
             id: lblHoursOfOperation
 
             anchors.centerIn: parent
 
             text: compAssetDashboardGridItemRoot.hoursOfOperation
+        }
+    }
+
+    Rectangle {
+        id: rectExecutionTime
+
+        visible: compAssetDashboardGridItemRoot.assetType === "CNC"
+
+        color: "#80ff80"
+        height: 64
+        width: 200
+
+        anchors {
+            top: parent.top
+
+            horizontalCenter: parent.horizontalCenter
+        }
+
+        CompLabel {
+            id: lblExecutionStatus
+
+            anchors.centerIn: parent
+
+            text: compAssetDashboardGridItemRoot.executionTime
         }
     }
 
