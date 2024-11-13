@@ -285,7 +285,7 @@ Screen__BASE {
     Item {
         id: comp_Gallery_GridView
 
-        visible: screenGalleryRoot.filePath_Selected === ""
+        visible: screenGalleryRoot.filePath_Selected === "" || fileExt_Selected == "stl"
 
         anchors.fill: rectContents
         anchors.leftMargin: 60
@@ -460,15 +460,15 @@ Screen__BASE {
     Loader {
         asynchronous: true
         active: screenGalleryRoot.should3DViewerLoad
+        visible: false
+        // anchors.fill: rectContents
 
-        anchors.fill: rectContents
+        // sourceComponent: Item {
 
-        sourceComponent: Item {
-
-            Screen_3dViewer {
-                anchors.fill: parent
-            }
-        }
+        //     Screen_3dViewer {
+        //         anchors.fill: parent
+        //     }
+        // }
     }
 
     Loader {

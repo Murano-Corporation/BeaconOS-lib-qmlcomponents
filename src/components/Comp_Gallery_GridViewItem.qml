@@ -76,13 +76,19 @@ Comp__BASE {
         }
 
         MouseArea {
-            anchors.fill: parent
+                    anchors.fill: parent
 
-            onClicked: compGalleryGridItemRoot.signalIconClicked(
-                           compGalleryGridItemRoot.filePathUrl,
-                           compGalleryGridItemRoot.fileType)
-        }
-    }
+                    onClicked: {
+                                compGalleryGridItemRoot.signalIconClicked(
+                                   compGalleryGridItemRoot.filePathUrl,
+                                   compGalleryGridItemRoot.fileType)
+                        console.log("File type of clicked item is : ", compGalleryGridItemRoot.fileType)
+                        if (compGalleryGridItemRoot.fileType == "stl"){
+                            Viewer_3D_rendered.showViewer()
+                        }
+                    }
+                }
+            }
 
     Item {
         id: areaMetaData
