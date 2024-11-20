@@ -14,6 +14,15 @@ Screen__BASE {
     property string fileExt_Selected
     property color colorViewMode_Selected: "#4C8FBE"
     property color colorViewMode_Unselected: "#A3A0A0"
+    property var galleryFileESearch :[""]
+    property string searchFieldText
+    Connections {
+        target: ElasticSearchController
+
+        function onSignal_SearchResultsReady(filename_ESearch) {
+            galleryFileESearch = filename_ESearch
+        }
+    }
 
     property var selectedItemMapData: ""
 
@@ -177,6 +186,12 @@ Screen__BASE {
                 left: parent.left
                 bottom: parent.bottom
             }
+            onEnterPressed: {
+                var text = searchField.text
+                DatabaseController.getGallerySearchInformation(text)
+                ElasticSearchController.submitSearch(text)
+                searchFieldText = text
+            }
         }
 
         Row {
@@ -326,7 +341,9 @@ Screen__BASE {
 
                 Comp_Gallery_GridViewItem {
 
-                    anchors.fill: parent
+                    // anchors.fill: parent
+                    filterVisible : galleryFileESearch.some(fileNameSearch => model.ELECTRONIC_DOCUMENT_FILE_LOCATION.includes(fileNameSearch)) ? true : false
+                    anchors.fill: filterVisible ? parent : undefined
                     anchors.margins: 20
 
                     messageFormat: model.MESSAGE_FORMAT
@@ -337,6 +354,7 @@ Screen__BASE {
                     filePathUrl: model.ELECTRONIC_DOCUMENT_FILE_LOCATION
                     fileType: model.TAG
                     fileRecordCreator: model.RECORD_CREATOR
+                    searchText :  searchFieldText
 
                     onSignalIconClicked: (filePath, fileExt) => {
                                              screenGalleryRoot.onItemClicked(

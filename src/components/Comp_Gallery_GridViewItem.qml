@@ -3,7 +3,7 @@ import CONSTANTS 1.0
 
 Comp__BASE {
     id: compGalleryGridItemRoot
-
+    property string searchText
     property string messageFormat: ""
     property string fileType: ""
     property string fileName: "Unnammd"
@@ -13,6 +13,7 @@ Comp__BASE {
     property string fileRecordCreator: ""
     property int fileButtonFlags: 0
     property string filePathUrl
+    property bool filterVisible: true
     property color colorLabelName: "#000000"
     property color colorLabelAuthor: "#000000"
     property color colorLabelMetaData: "#000000"
@@ -26,7 +27,7 @@ Comp__BASE {
     signal signalSatelliteButtonClicked
     signal signalIconClicked(string filePathUrl, string fileExt)
     signal signalAuthorClicked(string fileRecordCreator)
-
+    visible: filterVisible
     Item {
         id: areaIcon
 
@@ -109,13 +110,16 @@ Comp__BASE {
 
             CompLabel {
                 id: lblFileName
-
+                textFormat: Text.RichText
+                property var regex : new RegExp(`(${searchText})`, 'gi')
                 width: parent.width
                 color: compGalleryGridItemRoot.colorLabelName
-                text: compGalleryGridItemRoot.fileName
+                text: compGalleryGridItemRoot.fileName.replace(regex,`<span style='background-color: yellow'>$1</span>`)
                 elide: Text.ElideRight
+                clip: true
 
                 font.pixelSize: compGalleryGridItemRoot.metaDataFontSize
+                Component.onCompleted: console.log("Text is" + text)
             }
 
             CompLabel {
