@@ -143,6 +143,7 @@
         <file>Screen_Reference.qml</file>
         <file>Screen_AssetDashboard.qml</file>
         <file>Screen_Configuration_View_Nano_Mosquitto.qml</file>
+        <file>Screen_SecureChat.qml</file>
         <file>Screen_Configuration_View_Nano_Netplan.qml</file>
         <file>Screen_Configuration_View_Nano_Connect.qml</file>
         <file>Screen_Configuration_View_Nano_BeaconBus.qml</file>

@@ -16,20 +16,22 @@ Screen__BASE {
 
     }
 
+    Component.onCompleted: MqttTopicHealth.slot_Subscribe();
 
-    SecureChatApp {
-        id: secureChatApp
-    }
 
-    Connections {
+    // SecureChatApp {
+    //     id: secureChatApp
+    // }
 
-        target: secureChatApp
+    // Connections {
 
-        function onSignal_OnMsgRecieved(message) {
-            console.log("Message recieved from a user")
-            chat_history.append({name: sender, chat: message})
-        }
-    }
+    //     target: secureChatApp
+
+    //     function onSignal_OnMsgRecieved(message) {
+    //         console.log("Message recieved from a user")
+    //         chat_history.append({name: sender, chat: message})
+    //     }
+    // }
 
     Row {
         anchors.fill: parent
@@ -96,6 +98,7 @@ Screen__BASE {
 
                             Repeater {
                                 model: chat_history
+
                                 Text {
                                     text: model.name + ": " + model.chat
                                     font.pixelSize: 30
@@ -123,7 +126,8 @@ Screen__BASE {
                             onAccepted: {
                                 if (messageInput.text != "") {
                                     chat_history.append({name: reciever, chat: messageInput.text})
-                                    SecureChatApp.PublishMessage(messsageInput.text) //Placeholder
+                                    var text = messageInput.text
+                                    SecureChatApp.PublishMessage(text)
                                     messageInput.text = ""
                                 }
                             }
@@ -133,12 +137,14 @@ Screen__BASE {
                             text: "Send"
                             anchors.bottom: parent.bottom
                             width: parent.width * 0.2
+                            height: parent.height
                             //TODO
                             onClicked: {
                                 var date = new Date()
                                 if (messageInput.text != "") {
                                     chat_history.append({name: reciever, chat: messageInput.text})
-                                    SecureChatApp.PublishMessage()
+                                    var text = messageInput.text
+                                    SecureChatApp.PublishMessage(text)
                                     messageInput.text = ""
                                 }
                             }
@@ -153,15 +159,23 @@ Screen__BASE {
             width: parent.width * 0.5
             height: parent.height
 
-            Text {
-                anchors.centerIn: parent
-                text: "test"
-                font.pointSize: 24
+            Screen_HealthDashboard {
+                id: screenHealthDashboardRoot
             }
+
+            Loader {
+                id: omega_health_dashboard
+                active: screenHealthDashboardRoot.isDelta
+
+                anchors.fill: parent
+
+                sourceComponent: Screen_HealthDashboard_Omega {}
+
+
+            }
+
         }
 
     }
 
 }
-
-//Set the contextproperty
