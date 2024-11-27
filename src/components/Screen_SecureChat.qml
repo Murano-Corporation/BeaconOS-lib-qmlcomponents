@@ -16,22 +16,61 @@ Screen__BASE {
 
     }
 
-    Component.onCompleted: MqttTopicHealth.slot_Subscribe();
+    // Component.onCompleted: {
+    //     //console.log("Connecting to signal!")
+    //     TableModelHealthDashboard.dataChanged.connect(onDataChanged)
+    //     console.log(TableModelHealthDashboard.data())
+    // }
+
+    // function onDataChanged(indexLeft, indexRight, role)
+    // {
+
+    //     //console.log("Data Changed!")
+    //     if(!TableModelHealthDashboard)
+    //         return
+
+    //     // if(isGpsLocation)
+    //     // {
+    //     //     //console.log("GPS Data Changed; Fetching pretty string!")
+    //     //     value1 = TableModelHealthDashboard.getGpsLocationString();
+    //     //     return;
+    //     // }
+
+    //     var dataChangedName = TableModelHealthDashboard.data(indexLeft, Constants.DataRole_ParamName)
+    //     console.log("Param Data Changed " + dataChangedName)
+    //     if(dataChangedName === paramName)
+    //     {
+    //         //console.log('My data changed!!!')
+    //         value1 = TableModelHealthDashboard.data(indexLeft, Constants.DataRole_Value)
+    //         value2 = TableModelHealthDashboard.data(indexLeft, Constants.DataRole_Unit)
+    //     }
+
+    //     console.log('DataChanged for ' + dataChangedName)
+    //     console.log('My Paramname is ' + paramName)
+    // }
+
+    // Component.onDestruction: {
+
+    //     if(!TableModelHealthDashboard)
+    //         return
+
+    //     TableModelHealthDashboard.dataChanged.disconnect(onDataChanged)
+    // }
 
 
     // SecureChatApp {
     //     id: secureChatApp
     // }
 
-    // Connections {
+    Connections {
 
-    //     target: secureChatApp
+        target: secureChatApp
 
-    //     function onSignal_OnMsgRecieved(message) {
-    //         console.log("Message recieved from a user")
-    //         chat_history.append({name: sender, chat: message})
-    //     }
-    // }
+        onSignal_OnMsgRecieved: {
+                console.log("Message received from user:", sender);
+                chat_history.append({name: sender, chat: message});
+            }
+    }
 
     Row {
         anchors.fill: parent
@@ -64,7 +103,7 @@ Screen__BASE {
                             onClicked: {
                                 // reciever: model.ID
                                 // console.log("Opening chat with User " model.ID)
-                                screenMessagesRoot.onUserSelected()
+                                // screenMessagesRoot.onUserSelected()
                                 // updateTimer.running = true
                                 chatpopup.open()
                             }
@@ -159,20 +198,25 @@ Screen__BASE {
             width: parent.width * 0.5
             height: parent.height
 
-            Screen_HealthDashboard {
-                id: screenHealthDashboardRoot
-            }
+            // Screen_HealthDashboard {
+            //     id: screenHealthDashboardRoot
+            // }
 
-            Loader {
-                id: omega_health_dashboard
-                active: screenHealthDashboardRoot.isDelta
+            // Loader {
+            //     id: omega_health_dashboard
+            //     active: screenHealthDashboardRoot.isDelta
 
-                anchors.fill: parent
+            //     anchors.fill: parent
 
-                sourceComponent: Screen_HealthDashboard_Omega {}
+            //     sourceComponent: Screen_HealthDashboard_Omega {}
+            //     // id: delta_health_dashboard
+            //     // active: screenHealthDashboardRoot.isDelta
+            //     // anchors.fill: parent
+            //     // sourceComponent: Screen_HealthDashboard_Delta{
+            //     // }
 
 
-            }
+            // }
 
         }
 
