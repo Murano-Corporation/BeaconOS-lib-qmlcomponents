@@ -66,10 +66,10 @@ Screen__BASE {
 
         target: secureChatApp
 
-        onSignal_OnMsgRecieved: {
-                console.log("Message received from user:", sender);
-                chat_history.append({name: sender, chat: message});
-            }
+        function onSignal_OnMsgRecieved(message) {
+            console.log("Message recieved from a user")
+            chat_history.append({name: sender, chat: message})
+        }
     }
 
     Row {
