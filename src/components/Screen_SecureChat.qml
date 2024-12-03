@@ -8,8 +8,11 @@ Screen__BASE {
     screenName: "Messages"
     property string sender: "user1"
     property string reciever: "user2"
+    property string sensor_data_display: "imu"
     property var list_of_users: ["user1", "user2", "user3", "user4"]
+    property var list_of_sensor_topics: ["imu", "env"]
     property var chat_history: ListModel {}
+    property var sensor_data: ListModel {}
 
     // TODO:
     // We need userID along with message
@@ -21,9 +24,17 @@ Screen__BASE {
         target: SecureChatApp
 
         // Slot for chat recieved
-        function onSignal_OnMsgRecieved(message) {
+        function onSignal_OnMsgRecieved(message, topic) {
             console.log("Message recieved from a user")
-            chat_history.append({name: sender, chat: message})
+            console.log(message)
+            if (topic === "COMM") {
+                chat_history.append({name: sender, chat: message,
+                                        time: Qt.formatTime(new Date(), "hh:mm:ss AP")})
+            }
+            else if (topic === "imu" || topic === "env") {
+                console.log(message)
+                sensor_data.append({data:message, time: Qt.formatTime(new Date(), "hh:mm:ss AP")})
+            }
         }
     }
 
@@ -43,7 +54,7 @@ Screen__BASE {
 
             // StackView to navigate between windows
             StackView {
-                id: stackView
+                id: stackViewChat
                 anchors.fill: parent
 
                 initialItem: screenUsers
@@ -54,8 +65,16 @@ Screen__BASE {
         Rectangle {
 
             id: sensorSection
+
             width: parent.width * 0.33
             height: parent.height
+
+            StackView {
+                id: stackViewSensor
+                anchors.fill: parent
+
+                initialItem: screenListOfSensors
+            }
         }
 
         // Video Section
@@ -64,6 +83,116 @@ Screen__BASE {
             id: videoSection
             width: parent.width * 0.33
             height: parent.height
+        }
+    }
+
+    Component {
+        id: screenListOfSensors
+
+        // List of sensors
+        ListView {
+            width: parent.width
+            height: parent.height
+
+            model: list_of_sensor_topics
+
+            delegate: Item {
+
+                width: parent.width
+                height: 50
+
+                Button {
+                    text: modelData
+                    width: parent.width
+                    height: parent.height
+
+                    onClicked: {
+                        stackViewSensor.push(screenSensors)
+                        screenMessagesRoot.sensor_data_display = modelData
+                        SecureChatApp.signal_toSubscribeTopic(modelData)
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    Component {
+
+        id: screenSensors
+
+        // Sensor Data display screen
+        ColumnLayout {
+
+            id: headerSensorInfo
+            spacing: 1
+
+            // Header of the Sensor Info
+            Rectangle {
+                width: parent.width
+                height:  50
+
+                Button {
+                    width: parent.width * 0.2
+                    height: parent.height
+                    anchors.left: parent.left
+                    text: "Back"
+
+                    onClicked: {
+                        stackViewSensor.pop()
+                        SecureChatApp.signal_toUnubscribeTopic(screenMessagesRoot.sensor_data_display)
+                        sensor_data.clear()
+                    }
+                }
+
+                Rectangle {
+                    width: parent.width * 0.8
+                    height: parent.height
+                    anchors.right: parent.right
+
+                    Text {
+                        text: screenMessagesRoot.sensor_data_display
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pixelSize: 20
+                        color: "black"
+                    }
+                }
+            }
+
+            // Sensor Stream
+            ListView {
+
+                id: sensorDataView
+                width: parent.width
+                height: parent.height * 0.8
+                spacing: 2
+
+                model: sensor_data
+
+                delegate: Item {
+
+                    width: parent.width
+                    height: childrenRect.height
+
+                    Column {
+                        width: parent.width
+                        Text {
+                            text: model.time
+                            Layout.alignment: Qt.AlignLeft
+                            font.pixelSize: 10
+                        }
+                        TextArea {
+                            text: model.data
+                            wrapMode: TextArea.Wrap
+                            verticalAlignment: TextArea.AlignTop
+                            font.pixelSize: 20
+                            padding: 2
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -89,7 +218,7 @@ Screen__BASE {
 
                     onClicked: {
                         screenMessagesRoot.reciever = modelData // model.ID
-                        stackView.push(screenChat)
+                        stackViewChat.push(screenChat)
                     }
                 }
             }
@@ -118,7 +247,7 @@ Screen__BASE {
                     text: "Back"
 
                     onClicked: {
-                        stackView.pop()
+                        stackViewChat.pop()
                     }
                 }
                 Rectangle {
